@@ -143,6 +143,11 @@ def ChatGPT_safe_generate_response(prompt,
 
     try: 
       curr_gpt_response = ChatGPT_request(prompt).strip()
+      # gpt_param = {"engine": "text-davinci-003", "max_tokens": 50, 
+      #          "temperature": 0.5, "top_p": 1, "stream": False,
+      #          "frequency_penalty": 0, "presence_penalty": 0, "stop": ["\n"]}
+      # curr_gpt_response = LocalLLM_request(prompt,gpt_param)
+      
       end_index = curr_gpt_response.rfind('}') + 1
       curr_gpt_response = curr_gpt_response[:end_index]
       curr_gpt_response = json.loads(curr_gpt_response)["output"]
@@ -288,8 +293,8 @@ def safe_generate_response(prompt,
     print (prompt)
 
   for i in range(repeat): 
-    curr_gpt_response = GPT_request(prompt, gpt_parameter)
-    #curr_gpt_response = LocalLLM_request(prompt, gpt_parameter)
+    #curr_gpt_response = GPT_request(prompt, gpt_parameter)
+    curr_gpt_response = LocalLLM_request(prompt, gpt_parameter)
     if func_validate(curr_gpt_response, prompt=prompt): 
       return func_clean_up(curr_gpt_response, prompt=prompt)
     if verbose: 

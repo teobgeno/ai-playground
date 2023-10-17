@@ -588,38 +588,38 @@ def _determine_action(persona, maze):
   curr_index = persona.scratch.get_f_daily_schedule_index()
   curr_index_60 = persona.scratch.get_f_daily_schedule_index(advance=60)
 
-  # * Decompose * 
-  # During the first hour of the day, we need to decompose two hours 
-  # sequence. We do that here. 
-  if curr_index == 0:
-    # This portion is invoked if it is the first hour of the day. 
-    act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index]
-    if act_dura >= 60: 
-      # We decompose if the next action is longer than an hour, and fits the
-      # criteria described in determine_decomp.
-      if determine_decomp(act_desp, act_dura): 
-        persona.scratch.f_daily_schedule[curr_index:curr_index+1] = (
-                            generate_task_decomp(persona, act_desp, act_dura))
-    if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
-      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
-      if act_dura >= 60: 
-        if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = (
-                            generate_task_decomp(persona, act_desp, act_dura))
+  # # * Decompose * 
+  # # During the first hour of the day, we need to decompose two hours 
+  # # sequence. We do that here. 
+  # if curr_index == 0:
+  #   # This portion is invoked if it is the first hour of the day. 
+  #   act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index]
+  #   if act_dura >= 60: 
+  #     # We decompose if the next action is longer than an hour, and fits the
+  #     # criteria described in determine_decomp.
+  #     if determine_decomp(act_desp, act_dura): 
+  #       persona.scratch.f_daily_schedule[curr_index:curr_index+1] = (
+  #                           generate_task_decomp(persona, act_desp, act_dura))
+  #   if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
+  #     act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
+  #     if act_dura >= 60: 
+  #       if determine_decomp(act_desp, act_dura): 
+  #         persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = (
+  #                           generate_task_decomp(persona, act_desp, act_dura))
 
-  if curr_index_60 < len(persona.scratch.f_daily_schedule):
-    # If it is not the first hour of the day, this is always invoked (it is
-    # also invoked during the first hour of the day -- to double up so we can
-    # decompose two hours in one go). Of course, we need to have something to
-    # decompose as well, so we check for that too. 
-    if persona.scratch.curr_time.hour < 23:
-      # And we don't want to decompose after 11 pm. 
-      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
-      if act_dura >= 60: 
-        if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = (
-                              generate_task_decomp(persona, act_desp, act_dura))
-  # * End of Decompose * 
+  # if curr_index_60 < len(persona.scratch.f_daily_schedule):
+  #   # If it is not the first hour of the day, this is always invoked (it is
+  #   # also invoked during the first hour of the day -- to double up so we can
+  #   # decompose two hours in one go). Of course, we need to have something to
+  #   # decompose as well, so we check for that too. 
+  #   if persona.scratch.curr_time.hour < 23:
+  #     # And we don't want to decompose after 11 pm. 
+  #     act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
+  #     if act_dura >= 60: 
+  #       if determine_decomp(act_desp, act_dura): 
+  #         persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = (
+  #                             generate_task_decomp(persona, act_desp, act_dura))
+  # # * End of Decompose * 
 
 
   persona.scratch.f_daily_schedule = [
@@ -735,21 +735,27 @@ def _determine_action(persona, maze):
 
   # Finding the target location of the action and creating action-related
   # variables.
-  act_world = maze.access_tile(persona.scratch.curr_tile)["world"]
-  # act_sector = maze.access_tile(persona.scratch.curr_tile)["sector"]
-  act_sector = generate_action_sector(act_desp, persona, maze)
-  act_arena = generate_action_arena(act_desp, persona, maze, act_world, act_sector)
-  act_address = f"{act_world}:{act_sector}:{act_arena}"
-  act_game_object = generate_action_game_object(act_desp, act_address,
-                                                persona, maze)
-  new_address = f"{act_world}:{act_sector}:{act_arena}:{act_game_object}"
-  act_pron = generate_action_pronunciatio(act_desp, persona)
-  act_event = generate_action_event_triple(act_desp, persona)
+  # act_world = maze.access_tile(persona.scratch.curr_tile)["world"]
+  # # act_sector = maze.access_tile(persona.scratch.curr_tile)["sector"]
+  # act_sector = generate_action_sector(act_desp, persona, maze)
+  # act_arena = generate_action_arena(act_desp, persona, maze, act_world, act_sector)
+  # act_address = f"{act_world}:{act_sector}:{act_arena}"
+  # act_game_object = generate_action_game_object(act_desp, act_address,
+  #                                               persona, maze)
+  # new_address = f"{act_world}:{act_sector}:{act_arena}:{act_game_object}"
+  act_game_object ="bed"
+  new_address = "the Ville:Isabella Rodriguez's apartment:main room:bed"
+  #act_pron = generate_action_pronunciatio(act_desp, persona)
+  act_pron = '🙂'
+  #act_event = generate_action_event_triple(act_desp, persona)
+  act_event = ('Isabella Rodriguez', 'is', 'sleep')
   # Persona's actions also influence the object states. We set those up here. 
-  act_obj_desp = generate_act_obj_desc(act_game_object, act_desp, persona)
-  act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
-  act_obj_event = generate_act_obj_event_triple(act_game_object, 
-                                                act_obj_desp, persona)
+  #act_obj_desp = generate_act_obj_desc(act_game_object, act_desp, persona)
+  act_obj_desp = "bed is idle"
+  # act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
+  act_obj_pron = '🙂'
+  # act_obj_event = generate_act_obj_event_triple(act_game_object, act_obj_desp, persona)
+  act_obj_event = ("bed", "is", "idle")
 
   # Adding the action to persona's queue. 
   persona.scratch.add_new_action(new_address, 
