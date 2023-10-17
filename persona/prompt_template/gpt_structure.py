@@ -8,6 +8,7 @@ import json
 import random
 import openai
 import time 
+import requests
 
 from utils import *
 
@@ -191,6 +192,30 @@ def ChatGPT_safe_generate_response_OLD(prompt,
 
 
 # ============================================================================
+# #####################[ LOCAL LLM STRUCTURE] ######################
+# ============================================================================
+def LocalLLM_request(prompt, gpt_parameter): 
+  """
+  Given a prompt and a dictionary of GPT parameters, make a request to local
+  server and returns the response. 
+  ARGS:
+    prompt: a str prompt
+    gpt_parameter: a python dictionary with the keys indicating the names of  
+                   the parameter and the values indicating the parameter 
+                   values.   
+  RETURNS: 
+    a str of GPT-3's response. 
+  """
+  temp_sleep()
+  try: 
+    response = requests.get(f'http://127.0.0.1:8000/?prompt={prompt}&max_tokens={gpt_parameter["max_tokens"]}&temperature={gpt_parameter["temperature"]}&top_p={gpt_parameter["top_p"]}')
+    return response.json()['text'].strip()
+  except: 
+    print ("TOKEN LIMIT EXCEEDED")
+    return "TOKEN LIMIT EXCEEDED"
+
+
+# ============================================================================
 # ###################[SECTION 2: ORIGINAL GPT-3 STRUCTURE] ###################
 # ============================================================================
 
@@ -264,6 +289,7 @@ def safe_generate_response(prompt,
 
   for i in range(repeat): 
     curr_gpt_response = GPT_request(prompt, gpt_parameter)
+    #curr_gpt_response = LocalLLM_request(prompt, gpt_parameter)
     if func_validate(curr_gpt_response, prompt=prompt): 
       return func_clean_up(curr_gpt_response, prompt=prompt)
     if verbose: 
