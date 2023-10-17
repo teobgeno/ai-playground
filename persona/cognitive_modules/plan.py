@@ -95,19 +95,47 @@ def generate_hourly_schedule(persona, wake_up_hour):
               "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM",
               "08:00 PM", "09:00 PM", "10:00 PM", "11:00 PM"]
   n_m1_activity = []
-  diversity_repeat_count = 3
-  for i in range(diversity_repeat_count): 
-    n_m1_activity_set = set(n_m1_activity)
-    if len(n_m1_activity_set) < 5: 
-      n_m1_activity = []
-      for count, curr_hour_str in enumerate(hour_str): 
-        if wake_up_hour > 0: 
-          n_m1_activity += ["sleeping"]
-          wake_up_hour -= 1
-        else: 
-          n_m1_activity += [run_gpt_prompt_generate_hourly_schedule(
-                          persona, curr_hour_str, n_m1_activity, hour_str)[0]]
+  # diversity_repeat_count = 3
+  # for i in range(diversity_repeat_count): 
+  #   n_m1_activity_set = set(n_m1_activity)
+  #   if len(n_m1_activity_set) < 5: 
+  #     n_m1_activity = []
+  #     for count, curr_hour_str in enumerate(hour_str): 
+  #       if wake_up_hour > 0: 
+  #         n_m1_activity += ["sleeping"]
+  #         wake_up_hour -= 1
+  #       else: 
+  #         n_m1_activity += [run_gpt_prompt_generate_hourly_schedule(persona, curr_hour_str, n_m1_activity, hour_str)[0]]
   
+
+
+  n_m1_activity +=[
+  'sleeping',
+  'sleeping',
+  'sleeping',
+  'sleeping',
+  'sleeping',
+  'sleeping',
+  'waking up and completing her morning routine',
+  'opening Hobbs Cafe',
+  'serving customers at the cafe counter',
+  'serving customers at the cafe counter',
+  'serving customers at the cafe counter',
+  'serving customers at the cafe counter',
+  'taking a lunch break',
+  'attending to guests at the cafe',
+  'attending to guests at the cafe',
+  'preparing the upcoming Valentine\'s Day party',
+  'resting and preparing other admin tasks',
+  'preparing the upcoming Valentine\'s Day party',
+  'preparing other admin tasks',
+  'watching TV',
+  'watching TV',
+  'sleeping',
+  'sleeping',
+  'sleeping',
+]
+
   # Step 1. Compressing the hourly schedule to the following format: 
   # The integer indicates the number of hours. They should add up to 24. 
   # [['sleeping', 6], ['waking up and starting her morning routine', 1], 
@@ -507,7 +535,8 @@ def _long_term_planning(persona, new_day):
   s, p, o = (persona.scratch.name, "plan", persona.scratch.curr_time.strftime('%A %B %d'))
   keywords = set(["plan"])
   thought_poignancy = 5
-  thought_embedding_pair = (thought, get_embedding(thought))
+  # thought_embedding_pair = (thought, get_embedding(thought))
+  thought_embedding_pair = (thought, [1,2,3])
   persona.a_mem.add_thought(created, expiration, s, p, o, 
                             thought, keywords, thought_poignancy, 
                             thought_embedding_pair, None)
@@ -592,12 +621,97 @@ def _determine_action(persona, maze):
                               generate_task_decomp(persona, act_desp, act_dura))
   # * End of Decompose * 
 
+
+  persona.scratch.f_daily_schedule = [
+      [
+      "sleeping",
+      360
+    ],
+    [
+      "waking up and completing her morning routine (getting out of bed)",
+      5
+    ],
+    [
+      "waking up and completing her morning routine (brushing her teeth)",
+      5
+    ],
+    [
+      "waking up and completing her morning routine (taking a shower)",
+      10
+    ],
+    [
+      "waking up and completing her morning routine (getting dressed)",
+      10
+    ],
+    [
+      "waking up and completing her morning routine (eating breakfast)",
+      10
+    ],
+    [
+      "waking up and completing her morning routine (checking emails)",
+      5
+    ],
+    [
+      "waking up and completing her morning routine (packing her bag)",
+      5
+    ],
+    [
+      "waking up and completing her morning routine (making her lunch)",
+      5
+    ],
+    [
+      "waking up and completing her morning routine (leaving for Hobbs Cafe)",
+      5
+    ],
+    [
+      "opening Hobbs Cafe",
+      60
+    ],
+    [
+      "serving customers at the cafe counter",
+      240
+    ],
+    [
+      "taking a lunch break",
+      60
+    ],
+    [
+      "attending to guests at the cafe",
+      120
+    ],
+    [
+      "preparing the upcoming Valentine's Day party",
+      60
+    ],
+    [
+      "resting and preparing other admin tasks",
+      60
+    ],
+    [
+      "preparing the upcoming Valentine's Day party",
+      60
+    ],
+    [
+      "preparing other admin tasks",
+      60
+    ],
+    [
+      "watching TV",
+      120
+    ],
+    [
+      "sleeping",
+      180
+    ]
+
+  ]
+
   # Generate an <Action> instance from the action description and duration. By
   # this point, we assume that all the relevant actions are decomposed and 
   # ready in f_daily_schedule. 
   print ("DEBUG LJSDLFSKJF")
   for i in persona.scratch.f_daily_schedule: print (i)
-  print (curr_index)
+  #print (curr_index)
   print (len(persona.scratch.f_daily_schedule))
   print (persona.scratch.name)
   print ("------")
