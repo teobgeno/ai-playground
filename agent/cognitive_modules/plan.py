@@ -35,7 +35,7 @@ def generate_wake_up_hour(persona):
     8
   """
   if debug: print ("GNS FUNCTION: <generate_wake_up_hour>")
-  return int(run_gpt_prompt_wake_up_hour(persona)[0])
+  return 6
 
 
 def generate_first_daily_plan(persona, wake_up_hour): 
@@ -65,7 +65,12 @@ def generate_first_daily_plan(persona, wake_up_hour):
      'have dinner at 6:00 pm', 'watch TV from 7:00 pm to 8:00 pm']
   """
   if debug: print ("GNS FUNCTION: <generate_first_daily_plan>")
-  return run_gpt_prompt_daily_plan(persona, wake_up_hour)[0]
+  ret = [
+      'open Hobbs Cafe at 8:00 am', 
+      'have lunch with her staff at 12:00 pm', 
+      'attend to guests at the cafe from 8:00 am to 8:00 pm', 
+      'take a long walk after closing the cafe at 8:00 pm',]
+  return ret
 
 
 def generate_hourly_schedule(persona, wake_up_hour): 
@@ -94,22 +99,8 @@ def generate_hourly_schedule(persona, wake_up_hour):
               "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", 
               "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM",
               "08:00 PM", "09:00 PM", "10:00 PM", "11:00 PM"]
-  n_m1_activity = []
-  # diversity_repeat_count = 3
-  # for i in range(diversity_repeat_count): 
-  #   n_m1_activity_set = set(n_m1_activity)
-  #   if len(n_m1_activity_set) < 5: 
-  #     n_m1_activity = []
-  #     for count, curr_hour_str in enumerate(hour_str): 
-  #       if wake_up_hour > 0: 
-  #         n_m1_activity += ["sleeping"]
-  #         wake_up_hour -= 1
-  #       else: 
-  #         n_m1_activity += [run_gpt_prompt_generate_hourly_schedule(persona, curr_hour_str, n_m1_activity, hour_str)[0]]
-  
 
-
-  n_m1_activity +=[
+  n_m1_activity =[
   'sleeping',
   'sleeping',
   'sleeping',
@@ -525,7 +516,7 @@ def _long_term_planning(persona, new_day):
                                                    .f_daily_schedule[:])
 
 
-  # Added March 4 -- adding plan to the memory.
+  # adding plan to the memory.
   thought = f"This is {persona.scratch.name}'s plan for {persona.scratch.curr_time.strftime('%A %B %d')}:"
   for i in persona.scratch.daily_req: 
     thought += f" {i},"
@@ -540,11 +531,6 @@ def _long_term_planning(persona, new_day):
   persona.a_mem.add_thought(created, expiration, s, p, o, 
                             thought, keywords, thought_poignancy, 
                             thought_embedding_pair, None)
-
-  # print("Sleeping for 20 seconds...")
-  # time.sleep(10)
-  # print("Done sleeping!")
-
 
 
 def _determine_action(persona, maze): 
@@ -587,40 +573,6 @@ def _determine_action(persona, maze):
   # any given point. 
   curr_index = persona.scratch.get_f_daily_schedule_index()
   curr_index_60 = persona.scratch.get_f_daily_schedule_index(advance=60)
-
-  # # * Decompose * 
-  # # During the first hour of the day, we need to decompose two hours 
-  # # sequence. We do that here. 
-  # if curr_index == 0:
-  #   # This portion is invoked if it is the first hour of the day. 
-  #   act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index]
-  #   if act_dura >= 60: 
-  #     # We decompose if the next action is longer than an hour, and fits the
-  #     # criteria described in determine_decomp.
-  #     if determine_decomp(act_desp, act_dura): 
-  #       persona.scratch.f_daily_schedule[curr_index:curr_index+1] = (
-  #                           generate_task_decomp(persona, act_desp, act_dura))
-  #   if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
-  #     act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
-  #     if act_dura >= 60: 
-  #       if determine_decomp(act_desp, act_dura): 
-  #         persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = (
-  #                           generate_task_decomp(persona, act_desp, act_dura))
-
-  # if curr_index_60 < len(persona.scratch.f_daily_schedule):
-  #   # If it is not the first hour of the day, this is always invoked (it is
-  #   # also invoked during the first hour of the day -- to double up so we can
-  #   # decompose two hours in one go). Of course, we need to have something to
-  #   # decompose as well, so we check for that too. 
-  #   if persona.scratch.curr_time.hour < 23:
-  #     # And we don't want to decompose after 11 pm. 
-  #     act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
-  #     if act_dura >= 60: 
-  #       if determine_decomp(act_desp, act_dura): 
-  #         persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = (
-  #                             generate_task_decomp(persona, act_desp, act_dura))
-  # # * End of Decompose * 
-
 
   persona.scratch.f_daily_schedule = [
       [
