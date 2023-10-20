@@ -533,7 +533,7 @@ def _long_term_planning(persona, new_day):
                             thought_embedding_pair, None)
 
 
-def _determine_action(persona, maze): 
+def _determine_action(persona): 
   """
   Creates the next action sequence for the persona. 
   The main goal of this function is to run "add_new_action" on the persona's 
@@ -573,6 +573,38 @@ def _determine_action(persona, maze):
   # any given point. 
   curr_index = persona.scratch.get_f_daily_schedule_index()
   curr_index_60 = persona.scratch.get_f_daily_schedule_index(advance=60)
+
+  # * Decompose * 
+  # During the first hour of the day, we need to decompose two hours 
+  # sequence. We do that here. 
+  if curr_index == 0:
+    # This portion is invoked if it is the first hour of the day. 
+    act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index]
+    if act_dura >= 60: 
+      # We decompose if the next action is longer than an hour, and fits the
+      # criteria described in determine_decomp.
+      if determine_decomp(act_desp, act_dura): 
+        persona.scratch.f_daily_schedule[curr_index:curr_index+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+    if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
+      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
+      if act_dura >= 60: 
+        if determine_decomp(act_desp, act_dura): 
+          persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+
+  if curr_index_60 < len(persona.scratch.f_daily_schedule):
+    # If it is not the first hour of the day, this is always invoked (it is
+    # also invoked during the first hour of the day -- to double up so we can
+    # decompose two hours in one go). Of course, we need to have something to
+    # decompose as well, so we check for that too. 
+    if persona.scratch.curr_time.hour < 23:
+      # And we don't want to decompose after 11 pm. 
+      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
+      if act_dura >= 60: 
+        if determine_decomp(act_desp, act_dura): 
+          persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+  # * End of Decompose * 
+
+
 
   persona.scratch.f_daily_schedule = [
       [
@@ -1000,7 +1032,7 @@ def _wait_react(persona, reaction_mode):
     act_pronunciatio, act_obj_description, act_obj_pronunciatio, act_obj_event)
 
 
-def plan(persona, maze, personas, new_day, retrieved): 
+def plan(persona, personas, new_day, retrieved): 
   """
   Main cognitive function of the chain. It takes the retrieved memory and 
   perception, as well as the maze and the first day state to conduct both 
@@ -1028,7 +1060,7 @@ def plan(persona, maze, personas, new_day, retrieved):
 
   # PART 2: If the current action has expired, we want to create a new plan.
   if persona.scratch.act_check_finished(): 
-    _determine_action(persona, maze)
+    _determine_action(persona)
 
   # PART 3: If you perceived an event that needs to be responded to (saw 
   # another persona), and retrieved relevant information. 
@@ -1054,7 +1086,7 @@ def plan(persona, maze, personas, new_day, retrieved):
     if reaction_mode: 
       # If we do want to chat, then we generate conversation 
       if reaction_mode[:9] == "chat with":
-        _chat_react(maze, persona, focused_event, reaction_mode, personas)
+        pass #_chat_react(maze, persona, focused_event, reaction_mode, personas)
       elif reaction_mode[:4] == "wait": 
         _wait_react(persona, reaction_mode)
       # elif reaction_mode == "do other things": 
