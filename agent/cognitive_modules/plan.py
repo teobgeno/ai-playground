@@ -584,12 +584,12 @@ def _determine_action(persona):
       # We decompose if the next action is longer than an hour, and fits the
       # criteria described in determine_decomp.
       if determine_decomp(act_desp, act_dura): 
-        persona.scratch.f_daily_schedule[curr_index:curr_index+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+        pass #persona.scratch.f_daily_schedule[curr_index:curr_index+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
     if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
       act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
       if act_dura >= 60: 
         if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+          pass #persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
 
   if curr_index_60 < len(persona.scratch.f_daily_schedule):
     # If it is not the first hour of the day, this is always invoked (it is
@@ -601,94 +601,9 @@ def _determine_action(persona):
       act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
       if act_dura >= 60: 
         if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
+          pass # persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = 'gen' #(generate_task_decomp(persona, act_desp, act_dura))
   # * End of Decompose * 
 
-
-
-  persona.scratch.f_daily_schedule = [
-      [
-      "sleeping",
-      360
-    ],
-    [
-      "waking up and completing her morning routine (getting out of bed)",
-      5
-    ],
-    [
-      "waking up and completing her morning routine (brushing her teeth)",
-      5
-    ],
-    [
-      "waking up and completing her morning routine (taking a shower)",
-      10
-    ],
-    [
-      "waking up and completing her morning routine (getting dressed)",
-      10
-    ],
-    [
-      "waking up and completing her morning routine (eating breakfast)",
-      10
-    ],
-    [
-      "waking up and completing her morning routine (checking emails)",
-      5
-    ],
-    [
-      "waking up and completing her morning routine (packing her bag)",
-      5
-    ],
-    [
-      "waking up and completing her morning routine (making her lunch)",
-      5
-    ],
-    [
-      "waking up and completing her morning routine (leaving for Hobbs Cafe)",
-      5
-    ],
-    [
-      "opening Hobbs Cafe",
-      60
-    ],
-    [
-      "serving customers at the cafe counter",
-      240
-    ],
-    [
-      "taking a lunch break",
-      60
-    ],
-    [
-      "attending to guests at the cafe",
-      120
-    ],
-    [
-      "preparing the upcoming Valentine's Day party",
-      60
-    ],
-    [
-      "resting and preparing other admin tasks",
-      60
-    ],
-    [
-      "preparing the upcoming Valentine's Day party",
-      60
-    ],
-    [
-      "preparing other admin tasks",
-      60
-    ],
-    [
-      "watching TV",
-      120
-    ],
-    [
-      "sleeping",
-      180
-    ]
-
-  ]
 
   # Generate an <Action> instance from the action description and duration. By
   # this point, we assume that all the relevant actions are decomposed and 
@@ -728,18 +643,18 @@ def _determine_action(persona):
   #                                               persona, maze)
   # new_address = f"{act_world}:{act_sector}:{act_arena}:{act_game_object}"
   act_game_object ="bed"
-  new_address = "the Ville:Isabella Rodriguez's apartment:main room:bed"
+  new_address = "the Ville:Isabella Rodriguez's apartment:bathroom:bathroom sink"
   #act_pron = generate_action_pronunciatio(act_desp, persona)
   act_pron = '🙂'
   #act_event = generate_action_event_triple(act_desp, persona)
-  act_event = ('Isabella Rodriguez', 'is', 'sleep')
+  act_event = (persona.name, 'brushing', 'teeth')
   # Persona's actions also influence the object states. We set those up here. 
   #act_obj_desp = generate_act_obj_desc(act_game_object, act_desp, persona)
-  act_obj_desp = "bed is idle"
+  act_obj_desp = "bathroom sink being used"
   # act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
   act_obj_pron = '🙂'
   # act_obj_event = generate_act_obj_event_triple(act_game_object, act_obj_desp, persona)
-  act_obj_event = ("bed", "is", "idle")
+  act_obj_event = ("bathroom sink", "be", "used")
 
   # Adding the action to persona's queue. 
   persona.scratch.add_new_action(new_address, 
@@ -823,9 +738,9 @@ def _should_react(persona, retrieved, personas):
         or not init_persona.scratch.act_description): 
       return False
 
-    if ("sleeping" in target_persona.scratch.act_description 
-        or "sleeping" in init_persona.scratch.act_description): 
-      return False
+    # if ("sleeping" in target_persona.scratch.act_description 
+    #     or "sleeping" in init_persona.scratch.act_description): 
+    #   return False
 
     if init_persona.scratch.curr_time.hour == 23: 
       return False
@@ -1086,7 +1001,7 @@ def plan(persona, personas, new_day, retrieved):
     if reaction_mode: 
       # If we do want to chat, then we generate conversation 
       if reaction_mode[:9] == "chat with":
-        pass #_chat_react(maze, persona, focused_event, reaction_mode, personas)
+        pass # _chat_react(maze, persona, focused_event, reaction_mode, personas)
       elif reaction_mode[:4] == "wait": 
         _wait_react(persona, reaction_mode)
       # elif reaction_mode == "do other things": 

@@ -53,16 +53,14 @@ def perceive(persona):
   percept_events_list = []
   # First, we put all events that are occuring in the nearby tiles into the
   # percept_events_list
-
+  
   tile_events = set()
-  tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:bed", "", "", ""))
-  tile_events.add(("Isabella Rodriguez", "", "", ""))
-  tile_events.add(("Klaus Mueller", "", "", ""))
-  tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:desk", "", "", ""))
-  tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:refrigerator", "", "", ""))
-  tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:closet", "", "", ""))
-  tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:shelf", "", "", ""))
-
+  if persona.name == "Isabella Rodriguez":
+     tile_events.add(("Klaus Mueller", "", "", ""))
+  
+  if persona.name == "Klaus Mueller":
+     tile_events.add(("Isabella Rodriguez", "", "", ""))
+     
   for index, event in enumerate(tile_events):
     if event not in percept_events_set: 
       percept_events_list += [[index, event]]

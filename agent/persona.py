@@ -30,11 +30,11 @@ from agent.cognitive_modules.converse import *
 class Persona: 
   def __init__(self, name):
     self.name = name
-    f_s_mem_saved = "agent/test_data/bootstrap_memory/spatial_memory.json"
+    f_s_mem_saved = f"agent/test_data/{name}/bootstrap_memory/spatial_memory.json"
     self.s_mem = MemoryTree(f_s_mem_saved)
-    f_a_mem_saved = "agent/test_data/bootstrap_memory/associative_memory"
+    f_a_mem_saved = f"agent/test_data/{name}/bootstrap_memory/associative_memory"
     self.a_mem = AssociativeMemory(f_a_mem_saved)
-    scratch_saved = "agent/test_data/bootstrap_memory/scratch.json"
+    scratch_saved = f"agent/test_data/{name}/bootstrap_memory/scratch.json"
     self.scratch = Scratch(scratch_saved)
 
 
