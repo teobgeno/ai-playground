@@ -172,7 +172,7 @@ class Persona:
     reflect(self)
 
 
-  def move(self, curr_time):
+  def move(self, curr_time, personas):
     """
     This is the main cognitive function where our main sequence is called. 
 
@@ -206,7 +206,6 @@ class Persona:
     # Main cognitive sequence begins here. 
     perceived = self.perceive()
     retrieved = self.retrieve(perceived)
-    personas = []
     plan = self.plan(personas, new_day, retrieved)
     # self.reflect()
 
@@ -216,7 +215,7 @@ class Persona:
     # <description> is a string description of the movement. e.g., 
     #   writing her next novel (editing her novel) 
     #   @ double studio:double studio:common room:sofa
-    return self.execute(maze, personas, plan)
+    # return self.execute(maze, personas, plan)
 
 
   def open_convo_session(self, convo_mode): 

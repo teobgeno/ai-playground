@@ -57,6 +57,7 @@ def perceive(persona):
   tile_events = set()
   tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:bed", "", "", ""))
   tile_events.add(("Isabella Rodriguez", "", "", ""))
+  tile_events.add(("Klaus Mueller", "", "", ""))
   tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:desk", "", "", ""))
   tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:refrigerator", "", "", ""))
   tile_events.add(("the Ville:Isabella Rodriguez's apartment:main room:closet", "", "", ""))
@@ -115,7 +116,7 @@ def perceive(persona):
       if desc_embedding_in in persona.a_mem.embeddings: 
         event_embedding = persona.a_mem.embeddings[desc_embedding_in]
       else: 
-        event_embedding = get_embedding(desc_embedding_in)
+        event_embedding = [1,2,3]#event_embedding = get_embedding(desc_embedding_in)
       event_embedding_pair = (desc_embedding_in, event_embedding)
       
       # Get event poignancy. 
