@@ -293,12 +293,12 @@ def generate_act_obj_event_triple(act_game_object, act_obj_desc, persona):
   return run_gpt_prompt_act_obj_event_triple(act_game_object, act_obj_desc, persona)[0]
 
 
-def generate_convo(maze, init_persona, target_persona): 
-  curr_loc = maze.access_tile(init_persona.scratch.curr_tile)
+def generate_convo(init_persona, target_persona): 
+  # curr_loc = maze.access_tile(init_persona.scratch.curr_tile)
 
   # convo = run_gpt_prompt_create_conversation(init_persona, target_persona, curr_loc)[0]
   # convo = agent_chat_v1(maze, init_persona, target_persona)
-  convo = agent_chat_v2(maze, init_persona, target_persona)
+  convo = agent_chat_v2(init_persona, target_persona)
   all_utt = ""
 
   for row in convo: 
@@ -876,7 +876,7 @@ def _create_react(persona, inserted_act, inserted_act_dur,
                            act_start_time)
 
 
-def _chat_react(maze, persona, focused_event, reaction_mode, personas):
+def _chat_react(persona, focused_event, reaction_mode, personas):
   # There are two personas -- the persona who is initiating the conversation
   # and the persona who is the target. We get the persona instances here. 
   init_persona = persona
@@ -884,7 +884,7 @@ def _chat_react(maze, persona, focused_event, reaction_mode, personas):
   curr_personas = [init_persona, target_persona]
 
   # Actually creating the conversation here. 
-  convo, duration_min = generate_convo(maze, init_persona, target_persona)
+  convo, duration_min = generate_convo(init_persona, target_persona)
   convo_summary = generate_convo_summary(init_persona, convo)
   inserted_act = convo_summary
   inserted_act_dur = duration_min
@@ -1001,7 +1001,7 @@ def plan(persona, personas, new_day, retrieved):
     if reaction_mode: 
       # If we do want to chat, then we generate conversation 
       if reaction_mode[:9] == "chat with":
-        pass # _chat_react(maze, persona, focused_event, reaction_mode, personas)
+        _chat_react(persona, focused_event, reaction_mode, personas)
       elif reaction_mode[:4] == "wait": 
         _wait_react(persona, reaction_mode)
       # elif reaction_mode == "do other things": 

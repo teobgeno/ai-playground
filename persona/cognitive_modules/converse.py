@@ -103,7 +103,7 @@ def agent_chat_v1(maze, init_persona, target_persona):
                       summarized_ideas[1])
 
 
-def generate_one_utterance(maze, init_persona, target_persona, retrieved, curr_chat): 
+def generate_one_utterance(init_persona, target_persona, retrieved, curr_chat): 
   # Chat version optimized for speed via batch generation
   curr_context = (f"{init_persona.scratch.name} " + 
               f"was {init_persona.scratch.act_description} " + 
@@ -115,7 +115,7 @@ def generate_one_utterance(maze, init_persona, target_persona, retrieved, curr_c
               f"{target_persona.scratch.name}.")
 
   print ("July 23 5")
-  x = run_gpt_generate_iterative_chat_utt(maze, init_persona, target_persona, retrieved, curr_context, curr_chat)[0]
+  x = run_gpt_generate_iterative_chat_utt(init_persona, target_persona, retrieved, curr_context, curr_chat)[0]
 
   print ("July 23 6")
 
@@ -123,7 +123,7 @@ def generate_one_utterance(maze, init_persona, target_persona, retrieved, curr_c
 
   return x["utterance"], x["end"]
 
-def agent_chat_v2(maze, init_persona, target_persona): 
+def agent_chat_v2(init_persona, target_persona): 
   curr_chat = []
   print ("July 23")
 
@@ -143,7 +143,7 @@ def agent_chat_v2(maze, init_persona, target_persona):
       focal_points = [f"{relationship}", 
                       f"{target_persona.scratch.name} is {target_persona.scratch.act_description}"]
     retrieved = new_retrieve(init_persona, focal_points, 15)
-    utt, end = generate_one_utterance(maze, init_persona, target_persona, retrieved, curr_chat)
+    utt, end = generate_one_utterance(init_persona, target_persona, retrieved, curr_chat)
 
     curr_chat += [[init_persona.scratch.name, utt]]
     if end:
@@ -165,7 +165,7 @@ def agent_chat_v2(maze, init_persona, target_persona):
       focal_points = [f"{relationship}", 
                       f"{init_persona.scratch.name} is {init_persona.scratch.act_description}"]
     retrieved = new_retrieve(target_persona, focal_points, 15)
-    utt, end = generate_one_utterance(maze, target_persona, init_persona, retrieved, curr_chat)
+    utt, end = generate_one_utterance(target_persona, init_persona, retrieved, curr_chat)
 
     curr_chat += [[target_persona.scratch.name, utt]]
     if end:

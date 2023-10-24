@@ -1217,8 +1217,8 @@ def run_gpt_prompt_new_decomp_schedule(persona,
                                      test_input)
   prompt = generate_prompt(prompt_input, prompt_template)
   fail_safe = get_fail_safe(main_act_dur, truncated_act_dur)
-  output = safe_generate_response(prompt, gpt_param, 5, fail_safe,
-                                   __func_validate, __func_clean_up)
+  # output = safe_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+  output = fail_safe
   
   # print ("* * * * output")
   # print (output)
@@ -1632,8 +1632,8 @@ def run_gpt_prompt_summarize_conversation(persona, conversation, test_input=None
   example_output = "conversing about what to eat for lunch" ########
   special_instruction = "The output must continue the sentence above by filling in the <fill in> tag. Don't start with 'this is a conversation about...' Just finish the sentence but do not miss any important details (including who are chatting)." ########
   fail_safe = get_fail_safe() ########
-  output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe,
-                                          __chat_func_validate, __chat_func_clean_up, True)
+  # output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe, __chat_func_validate, __chat_func_clean_up, True)
+  output = fail_safe
   if output != False: 
     return output, [output, prompt, gpt_param, prompt_input, fail_safe]
   # ChatGPT Plugin ===========================================================
@@ -2299,8 +2299,8 @@ def run_gpt_prompt_agent_chat_summarize_relationship(persona, target_persona, st
   example_output = 'Jane Doe is working on a project' ########
   special_instruction = 'The output should be a string that responds to the question.' ########
   fail_safe = get_fail_safe() ########
-  output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe,
-                                          __chat_func_validate, __chat_func_clean_up, True)
+  # output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe,__chat_func_validate, __chat_func_clean_up, True)
+  output = get_fail_safe()
   if output != False: 
     return output, [output, prompt, gpt_param, prompt_input, fail_safe]
   # ChatGPT Plugin ===========================================================
@@ -2815,8 +2815,8 @@ def extract_first_json_dict(data_str):
         return None
 
 
-def run_gpt_generate_iterative_chat_utt(maze, init_persona, target_persona, retrieved, curr_context, curr_chat, test_input=None, verbose=False): 
-  def create_prompt_input(maze, init_persona, target_persona, retrieved, curr_context, curr_chat, test_input=None):
+def run_gpt_generate_iterative_chat_utt( init_persona, target_persona, retrieved, curr_context, curr_chat, test_input=None, verbose=False): 
+  def create_prompt_input( init_persona, target_persona, retrieved, curr_context, curr_chat, test_input=None):
     persona = init_persona
     prev_convo_insert = "\n"
     if persona.a_mem.seq_chat: 
@@ -2832,8 +2832,8 @@ def run_gpt_generate_iterative_chat_utt(maze, init_persona, target_persona, retr
         prev_convo_insert = ""
     print (prev_convo_insert)
 
-    curr_sector = f"{maze.access_tile(persona.scratch.curr_tile)['sector']}"
-    curr_arena= f"{maze.access_tile(persona.scratch.curr_tile)['arena']}"
+    curr_sector = "Isabella Rodriguez's apartment"
+    curr_arena= "bathroom"
     curr_location = f"{curr_arena} in {curr_sector}"
 
     retrieved_str = ""
@@ -2893,13 +2893,13 @@ def run_gpt_generate_iterative_chat_utt(maze, init_persona, target_persona, retr
 
   print ("11")
   prompt_template = "persona/prompt_template/v3_ChatGPT/iterative_convo_v1.txt" 
-  prompt_input = create_prompt_input(maze, init_persona, target_persona, retrieved, curr_context, curr_chat) 
+  prompt_input = create_prompt_input(init_persona, target_persona, retrieved, curr_context, curr_chat) 
   print ("22")
   prompt = generate_prompt(prompt_input, prompt_template)
   print (prompt)
   fail_safe = get_fail_safe() 
-  output = ChatGPT_safe_generate_response_OLD(prompt, 3, fail_safe,
-                        __chat_func_validate, __chat_func_clean_up, verbose)
+  # output = ChatGPT_safe_generate_response_OLD(prompt, 3, fail_safe,__chat_func_validate, __chat_func_clean_up, verbose)
+  output = fail_safe
   print (output)
   
   gpt_param = {"engine": "text-davinci-003", "max_tokens": 50, 
