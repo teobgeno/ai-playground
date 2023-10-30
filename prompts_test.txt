@@ -83,7 +83,7 @@ Write down if there is anything from the conversation that Alex need to remember
 
 
 GPT : needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it."
-
+//Generate a summary of this and a list of action items.
 //In the conversation, [PLAYER] Meets Alex, the local woodcutter, inquires about his family, and bids farewell with a friendly exchange.
 --------------------------------------
 
