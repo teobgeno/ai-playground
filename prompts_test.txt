@@ -1,4 +1,4 @@
-It is Medieval Period in a fictional place near a forest where a group of malcontent people are trying to survive and create a place to live. 
+It is Medieval Period in a fictional place near a forest where a group of other people are trying to survive and create a place to live. 
 I want you to roleplaying a fictional character whose name is Alex. Alex personality traits are the following sociable,optimistic,sarcastic. Alex skills are the following Wood Cutter.
 You MUST obey the following instructions:
 Keep responses concise.
@@ -40,7 +40,7 @@ Output the response to the prompt above in json.Example output json:[{Action:'ch
 
 
 skills: Wood Cutter
-context: The player meets Alex, the local woodcutter, and requests logs for construction but declines to help, prompting Alex to gather assistance from others while engaging in conversation about their shared task in the woods..
+context: The player meets Alex, the local woodcutter, and requests logs for construction but declines to help, prompting Alex to gather assistance from others while engaging in conversation about their shared task in the woods.
 Based on the the context above is there any reference on Alex's skills ? If there is any actions what is his decision ? If there is no action to take response with no action.
 
 Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'}]
@@ -57,14 +57,50 @@ Output the response to the prompt above in json.Example output json:[{Action:'ch
 
 @@@@@
 
+
+[skills]: Wood Cutter 
 context: In the conversation, the sociable and optimistic woodcutter, Alex, enthusiastically offers to help the player gather timber and construct a storage structure, displaying a willingness to contribute to making the place cozier and safer while maintaining a friendly and positive demeanor.
-Based on the the context above what is Alex's decisions ? If there is no action to take response with no action.
+Based on the the context above if there is any actions conserning his [skills] what is his decision ? If there is no action to take response with no action.
 
 Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'}]
 
+
+[skills]: Wood Cutter 
+context: he player meets Alex, the local woodcutter, and requests logs for construction but declines to help, prompting Alex to gather assistance from others while engaging in conversation about their shared task in the woods.
+Based on the the context above if there is any actions conserning his [skills] what is his decision ? If there is no action to take response with no action.
+
+Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'}]
+
+
+
 @@@@@
 
---- generate_planning_thought_on_convo ---
+
+context:  In the conversation, the sociable and optimistic woodcutter, Alex, enthusiastically offers to help the player gather timber and construct a storage structure, displaying a willingness to contribute to making the place cozier and safer while maintaining a friendly and positive demeanor.
+Based on the the context above is there any future actions that Alex decide to take ? If there is no action to take response with no action.
+
+Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'},...]
+
+
+context: In the conversation, [PLAYER] Meets Alex, the local woodcutter, inquires about his family, and bids farewell with a friendly exchange.
+Based on the the context above is there any future actions that Alex decide to take ? If there is no action to take response with no action.
+
+Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'},...]
+
+
+context: the player meets Alex, the local woodcutter, and requests logs for construction but declines to help, prompting Alex to gather assistance from others while engaging in conversation about their shared task in the woods.
+Based on the the context above is there any future actions that Alex decide to take ? If there is no action to take response with no action.
+
+Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'},...]
+
+
+context: In the conversation, the sociable and optimistic woodcutter, Alex, denies to help the player gather timber and construct a storage structure.
+Based on the the context above is there any future actions that Alex decide to take ? If there is no action to take response with no action.
+
+Output the response to the prompt above in json.Example output json:[{Action:'chop some logs',Decision:'Positive'},...]
+
+
+*** generate_planning_thought_on_convo ***
 
 [Conversation]
 Alex:  Greetings, friend. I'm Alex, the woodcutter around these parts. You need some firewood, or maybe just a friendly chat to brighten your day? What's on your mind today?
@@ -77,7 +113,7 @@ Alex:  Of course, I'll get to work chopping some logs right away. I'll bring bac
 Alex personality traits are the following sociable,optimistic,sarcastic. Alex skills are the following Wood Cutter.
 
 
-Write down if there is anything from the conversation that Alex need to remember for her planning, from Alex's perspective, in a full sentence.
+Write down if there is anything from the conversation that Alex need to remember for his planning, from Alex's perspective, in a full sentence.
 
 "Alex
 
@@ -87,7 +123,7 @@ GPT : needs to remember that they have agreed to start chopping logs for the sto
 //In the conversation, [PLAYER] Meets Alex, the local woodcutter, inquires about his family, and bids farewell with a friendly exchange.
 --------------------------------------
 
---- generate_action_event_triple ---
+*** generate_action_event_triple ***
 
 Task: Turn the input into (subject, predicate, object). 
 
@@ -115,15 +151,15 @@ Output: (Alex,
 GPT :  plan, chopping logs for the storage project
 --------------------------------------
 
----  generate_poig_score ---
+***  generate_poig_score ***
 Here is a brief description of Alex. 
 Name: Alex
 Age: 34
 Innate traits: sociable,optimistic,sarcastic
 Skills: Wood Cutter.
-Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of malcontent people are trying to survive and create a place to live. 
+Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of other people are trying to survive and create a place to live. 
 Lifestyle: Alex goes to bed around 11pm, awakes up around 6am.
-Daily plan requirement: Survive and create a place to live.
+Daily plan requirement: Collaborate with the other settlers in the group to ensure survival and establish a place to live.
 Current Date: Monday February 13
 
 On the scale of 1 to 10, where 1 is purely mundane (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following event for Alex.
@@ -133,7 +169,7 @@ Rate (return a number between 1 to 10):
 
 --------------------------------------
 
---- generate_memo_on_convo ---
+*** generate_memo_on_convo ***
 
 [Conversation]
 Alex:  Greetings, friend. I'm Alex, the woodcutter around these parts. You need some firewood, or maybe just a friendly chat to brighten your day? What's on your mind today?
@@ -152,16 +188,54 @@ Write down if there is anything from the conversation that Alex might have found
 GPT : might have found it interesting that the player is eager to work on the storage project, reflecting their optimism and their willingness to contribute to the community's well-being."
 
 --------------------------------------
-
+*** generate_first_daily_plan ***
 Name: Alex
 Age: 34
 Innate traits: sociable,optimistic,sarcastic
 Skills: Wood Cutter.
-Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of malcontent people are trying to survive and create a place to live. 
+Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of other people are trying to survive and create a place to live. 
 Lifestyle: Alex goes to bed around 11pm, awakes up around 6am.
-Daily plan requirement: ALEX enthusiastically offers to help the player gather timber and construct a storage structure, displaying a willingness to contribute to making the place cozier and safer while maintaining a friendly and positive demeanor.
+Daily plan requirement: Collaborate with the other settlers in the group to ensure survival and establish a place to live. e. Alex needs to remember that he has agreed to gather a team of helpers to assist with log-cutting and construction for the storage house project.
 Current Date: Monday February 13
 
 
 In general, Alex goes for sleep around 11pm, awakes up around 6am.
 Today is Monday February 13. Here is Alex's plan today in broad-strokes (with the time of the day. e.g., have a lunch at 12:00 pm, watch TV from 7 to 8 pm): 1) wake up and complete the morning routine at 6:00 am, 2)
+
+
+--------------------------------------
+*** generate_task_decomp ***
+Describe subtasks in 5 min increments. 
+---
+Name: Kelly Bronson
+Age: 35
+Backstory: Kelly always wanted to be a teacher, and now she teaches kindergarten. During the week, she dedicates herself to her students, but on the weekends, she likes to try out new restaurants and hang out with friends. She is very warm and friendly, and loves caring for others.
+Personality: sweet, gentle, meticulous
+Location: Kelly is in an older condo that has the following areas: {kitchen, bedroom, dining, porch, office, bathroom, living room, hallway}.
+Currently: Kelly is a teacher during the school year. She teaches at the school but works on lesson plans at home. She is currently living alone in a single bedroom condo.
+Daily plan requirement: Kelly is planning to teach during the morning and work from home in the afternoon.
+
+Today is Saturday May 10. From 08:00am ~09:00am, Kelly is planning on having breakfast, from 09:00am ~ 12:00pm, Kelly is planning on working on the next day's kindergarten lesson plan, and from 12:00 ~ 13pm, Kelly is planning on taking a break. 
+In 5 min increments, list the subtasks Kelly does when Kelly is working on the next day's kindergarten lesson plan from 09:00am ~ 12:00pm (total duration in minutes: 180):
+1) Kelly is reviewing the kindergarten curriculum standards. (duration in minutes: 15, minutes left: 165)
+2) Kelly is brainstorming ideas for the lesson. (duration in minutes: 30, minutes left: 135)
+3) Kelly is creating the lesson plan. (duration in minutes: 30, minutes left: 105)
+4) Kelly is creating materials for the lesson. (duration in minutes: 30, minutes left: 75)
+5) Kelly is taking a break. (duration in minutes: 15, minutes left: 60)
+6) Kelly is reviewing the lesson plan. (duration in minutes: 30, minutes left: 30)
+7) Kelly is making final changes to the lesson plan. (duration in minutes: 15, minutes left: 15)
+8) Kelly is printing the lesson plan. (duration in minutes: 10, minutes left: 5)
+9) Kelly is putting the lesson plan in her bag. (duration in minutes: 5, minutes left: 0)
+---
+Name: Alex
+Age: 34
+Innate traits: sociable,optimistic,sarcastic
+Skills: Wood Cutter.
+Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of other people are trying to survive and create a place to live. 
+Lifestyle: Alex goes to bed around 11pm, awakes up around 6am.
+Daily plan requirement: Collaborate with the other settlers in the group to ensure survival and establish a place to live. Alex needs to remember that he has agreed to gather a team of helpers to assist with log-cutting and construction for the storage house project.
+Current Date: Monday February 13
+
+Today is February 13, 2023. From 00:00AM ~ 06:00AM, Alex is planning on sleeping, 06:00AM ~ 07:00AM, Alex is planning on waking up and completing her morning routine, 07:00AM ~ 08:00AM, Begin the day's work, which involves woodcutting and construction for the storage house project. Alex should remember to gather a team of helpers for this task
+In 5 min increments, list the subtasks Isabella does when Isabella is waking up and completing her morning routine from 07:00AM ~ 08:00AM (total duration in minutes 60): 
+1) Alex is

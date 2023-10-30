@@ -433,9 +433,8 @@ def run_gpt_prompt_task_decomp(persona,
 
   print ("?????")
   print (prompt)
-  output = safe_generate_response(prompt, gpt_param, 5, get_fail_safe(),
-                                   __func_validate, __func_clean_up)
-
+  # output = safe_generate_response(prompt, gpt_param, 5, get_fail_safe(),__func_validate, __func_clean_up)
+  output = fail_safe
   # TODO THERE WAS A BUG HERE... 
   # This is for preventing overflows...
   """
