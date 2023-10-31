@@ -1,3 +1,7 @@
+It is Medieval Period in a fictional place near a forest where a group of other people are trying to survive and create a place to live.
+What actions should be taken in order to achieve their goals?
+------------------------------------------------------------------
+
 It is Medieval Period in a fictional place near a forest where a group of other people are trying to survive and create a place to live. 
 I want you to roleplaying a fictional character whose name is Alex. Alex personality traits are the following sociable,optimistic,sarcastic. Alex skills are the following Wood Cutter.
 You MUST obey the following instructions:
@@ -312,10 +316,15 @@ List all the items in json list. Example output json:[{item:'stone'}]
 // please provide insights or analysis on the potential outcomes and their impact on productivity or resource extraction
 --------------------------------------
 
+⭐
 Alex's current action is chop logs
-
 Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
 List all the items in json list. Example output json:[{item:'stone'}]
+
+⭐
+Alex's current action is hunting game at the forest
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
+List all the items in json list. Example output json:[{item:'stone', description:'marble stone'}]
 
 --------------------------------------
 
