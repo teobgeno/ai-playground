@@ -121,6 +121,25 @@ Write down if there is anything from the conversation that Alex need to remember
 GPT : needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it."
 //Generate a summary of this and a list of action items.
 //In the conversation, [PLAYER] Meets Alex, the local woodcutter, inquires about his family, and bids farewell with a friendly exchange.
+
+
+----------------------------------
+
+
+Alex needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it. 
+Let's analyze the statement above step by step. List only the actions in json format.
+
+
+GPT : {
+  "Actions": [
+    "Remember",
+    "Agreed to start chopping logs",
+    "Provide assistance in building"
+  ]
+}
+
+Please note that the action "Remember" is included because it signifies the action of retaining the commitment or agreement.
+
 --------------------------------------
 
 *** generate_action_event_triple ***
@@ -145,7 +164,7 @@ Output: (Percy Liang, teach, students)
 Input: Merrie Morris is running on a treadmill. 
 Output: (Merrie Morris, run, treadmill)
 ---
-Input: Alex is For Alex's planning: needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it.
+Input: Alex agreed to start chopping logs.
 Output: (Alex,
 
 GPT :  plan, chopping logs for the storage project
@@ -237,5 +256,143 @@ Daily plan requirement: Collaborate with the other settlers in the group to ensu
 Current Date: Monday February 13
 
 Today is February 13, 2023. From 00:00AM ~ 06:00AM, Alex is planning on sleeping, 06:00AM ~ 07:00AM, Alex is planning on waking up and completing her morning routine, 07:00AM ~ 08:00AM, Begin the day's work, which involves woodcutting and construction for the storage house project. Alex should remember to gather a team of helpers for this task
-In 5 min increments, list the subtasks Isabella does when Isabella is waking up and completing her morning routine from 07:00AM ~ 08:00AM (total duration in minutes 60): 
+In 5 min increments, list the subtasks Alex does when Alex Begin the day's work, which involves woodcutting and construction for the storage house project. Alex should remember to gather a team of helpers for this task from 07:00AM ~ 08:00AM (total duration in minutes 60): 
 1) Alex is
+
+--------------------------------------
+
+Name: Alex
+Age: 34
+Innate traits: sociable,optimistic,sarcastic
+Skills: Wood Cutter.
+Currently: It is Medieval Period in a fictional place near a forest where Alex with a group of other people are trying to survive and create a place to live. 
+Lifestyle: Alex goes to bed around 11pm, awakes up around 6am.
+Daily plan requirement: Collaborate with the other settlers in the group to ensure survival and establish a place to live. e. Alex needs to remember that he has agreed to gather a team of helpers to assist with log-cutting and construction for the storage house project.
+current action: chop logs
+
+
+Alex's current action is chop logs at the forest. Is there any aspect of this action that could lead to significant production or extraction? List only the materials if any in json list.
+
+Alex's current action is hunting at the forest. Is there any aspect of this action that could lead to significant production or extraction? List only the materials if any in json list.
+
+--------------------------------------
+Name: Alex
+Age: 34
+Skills: Wood Cutter ( Significant Familiarity )
+Weather: clear
+current action: chop logs
+
+https://rimworldwiki.com/wiki/Skills
+
+Alex's current action is chop logs at the forest between 07:00AM and 09:00PM. 
+Alex has all the tools for this action.
+Alex experience as Wood Cutter is Significant Familiarity.
+Weather is sunny.
+
+Based on the previous statements what can be obtained as material from Alex's action ? 
+Based on Weather, Alex experience and time frame estimate the obtained material amount .
+The estimated obtained material amount may have the following values : Poor, average, good, excellent
+List the items in json list. Example output json:[{item:'stone', Amount:poor}]
+
+
+@@@@
+
+Alex's current action is chop logs at the forest between 07:00AM and 09:00PM. 
+Alex has all the tools for this action.
+Alex experience as Wood Cutter is Significant Familiarity.
+Weather is sunny.
+
+
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
+List all the items in json list. Example output json:[{item:'stone'}]
+
+// please provide a list of material items or resources that he could potentially obtain as a result of this activity
+// Based on the previous statements what can be obtained as material from Alex's action ? 
+// Based on the previous statements is there any aspect of Alex's action that could lead to significant production or extraction? 
+// please provide insights or analysis on the potential outcomes and their impact on productivity or resource extraction
+--------------------------------------
+
+Alex's current action is chop logs
+
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
+List all the items in json list. Example output json:[{item:'stone'}]
+
+--------------------------------------
+
+
+Write down if there is anything from this action that may result in a material production or extraction
+Rewrite the sentence above in proper english
+
+list type of trees that were used in Medieval for construction. List the results in json list.
+
+
+*** Trees ****
+
+"Oak",
+"Cedar",
+"Pine",
+"Beech",
+"Ash",
+"Fir",
+"Elm",
+"Willow",
+"Yew",
+"Poplar"
+
+*** Weather Conditions ***
+Sunny
+Cloudy
+Partly cloudy
+Overcast
+Rainy
+Showers
+Drizzle
+Thunderstorm
+Snowy
+Blizzard
+Foggy
+Hail
+Sleet
+Tornado
+Hurricane
+Windy
+Hot
+Cold
+Warm
+Freezing
+Mist
+Smog
+Sandstorm
+Ice storm
+Clear skies
+Hazy
+Humid
+Dry
+Wet
+Muggy
+
+
+Alex's current action is chop logs at the forest.
+Which criteria I should include in a prompt in order to calculate Alex productivity (logs gathered ) from his current action
+I need to create a prompt to find if Alex's current action could obtain any material items
+
+
+Which conditions should i include in a prompt in order to find 
+
+
+
+To calculate Alex's productivity (logs gathered) from his current action of chopping logs in the forest, you'll need to provide specific information and criteria in your prompt for a more accurate calculation. Here's a list of criteria you should include:
+
+Time Frame: Specify the time period over which you want to measure Alex's productivity. For example, do you want to know his logs gathered per hour, per day, or per week?
+Tools and Equipment: Are there any specific tools or equipment that Alex is using for chopping logs? Knowing this can help determine his efficiency.
+Skill Level: Consider Alex's experience and skill level in chopping logs. Productivity can vary greatly based on a person's proficiency.
+Conditions: Describe the environmental and weather conditions in the forest, as they can affect productivity. Is it raining, snowing, or sunny? Is the forest terrain rough or smooth?
+Log Size: Specify the average size or weight of the logs he is chopping. Larger or denser logs may take more time and effort to gather.
+Methodology: Describe the chopping technique Alex is using. Is he using a chainsaw, an axe, or some other method? Different methods can lead to varying productivity levels.
+Physical Condition: Consider Alex's physical fitness and stamina. This can impact how long he can sustain the chopping and gathering process.
+Breaks and Rest: Does Alex take breaks during his work? If so, how long are the breaks and how frequently does he take them?
+Supervision: Is he working alone, or is he supervised by someone? Supervision can affect motivation and productivity.
+Safety Measures: Are there any safety measures in place that might slow down the process but ensure Alex's safety?
+Measurement Units: Specify the unit of measurement for logs gathered (e.g., number of logs, weight in pounds or kilograms, volume in cubic feet).
+
+A well-constructed prompt that includes these criteria will allow for a more accurate assessment of Alex's productivity while chopping logs in the forest. For example, a prompt could be: "Calculate Alex's productivity in terms of the number of logs (each log weighs approximately 10 kilograms) he gathers in a 4-hour workday using a chainsaw, assuming good weather conditions, no breaks, and average skill level."
