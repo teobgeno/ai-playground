@@ -1,0 +1,64 @@
+
+--------------------------------------
+
+*** generate_planning_thought_on_convo ***
+
+[Conversation]
+Alex:  Greetings, friend. I'm Alex, the woodcutter around these parts. You need some firewood, or maybe just a friendly chat to brighten your day? What's on your mind today?
+Player:  Well Alex we need to build a storage for our materials. Do you have any idea how we can start ?
+Alex:  A storage, eh? Well, first things first, we'll need to gather some sturdy timber from the forest. Find some straight and solid trees that we can cut down, then get them back here. Once we have the wood, we can start crafting the storage structure. I'm happy to lend a hand with the cutting part, and we can work on the rest together. It'll be a good project to keep our spirits up!
+Player:  Do you know anything abouts constructions ?
+Alex:  A bit, not as much as a master builder, but I've picked up a thing or two over the years. If we're going to build a storage space, we'll need a plan and some basic tools. It's important to lay a strong foundation, build sturdy walls, and make sure the roof can keep out the rain. If you've got anyone with carpentry skills in the group, that'll be a big help. If not, we can muddle through together. Just let me know what you need, and we'll figure it out as we go.
+Player:  Ok can you start chopping some logs ? Will you help ?
+Alex:  Of course, I'll get to work chopping some logs right away. I'll bring back a good amount of timber to get us started on that storage project. And yes, I'm more than happy to lend a hand. Let's make this place a little cozier and safer for everyone.
+Alex personality traits are the following sociable,optimistic,sarcastic. Alex skills are the following Wood Cutter.
+
+
+Write down if there is anything from the conversation that Alex need to remember for his planning, from Alex's perspective, in a full sentence.
+
+"Alex
+
+GPT : needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it."
+
+--------------------------------------
+
+*** extract multiple actions to single line ***
+
+Alex needs to remember that they have agreed to start chopping logs for the storage project and to provide assistance in building it. 
+Let's analyze the statement above step by step. List only the actions in json format.
+
+
+GPT : {
+  "Actions": [
+    "Remember",
+    "Agreed to start chopping logs",
+    "Provide assistance in building"
+  ]
+}
+
+Please note that the action "Remember" is included because it signifies the action of retaining the commitment or agreement.
+
+
+--------------------------------------
+*** skill selection based on action ***
+[skills]
+Wood Cutter
+Carpenter
+Brewer
+
+Alex's current action is "Offered to help with construction". Which skills can contribute to this action. Do not make general assumptions if the action is not relevenant to the skill.
+Output the response to the prompt above in json. Example output json:[{skill:'Cook', contribution:'10%'},{skill:'Herbalist', contribution:'90%'},{skill:Cheese maker, contribution:'0%'}]
+
+--------------------------------------
+*** material extraction based on action ***
+⭐
+Alex's current action is chop logs
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
+List all the items in json list. Example output json:[{item:'stone'}]
+
+⭐
+Alex's current action is hunting game at the forest
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
+List all the items in json list. Example output json:[{item:'stone', description:'marble stone'}]
+
+--------------------------------------

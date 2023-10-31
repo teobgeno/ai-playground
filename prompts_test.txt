@@ -327,7 +327,18 @@ Based on the previous statements provide a list of material items or resources t
 List all the items in json list. Example output json:[{item:'stone', description:'marble stone'}]
 
 --------------------------------------
+*** skill selection ***
+[skills]
+Wood Cutter
+Carpenter
+Brewer
 
+Alex's current action is "Remember". Which skills can contribute to this action. Do not make general assumptions if the action is not relevenant to the skill.
+Output the response to the prompt above in json. Example output json:[{skill:'Cook', contribution:'10%'},{skill:'Herbalist', contribution:'90%'},{skill:Cheese maker, contribution:'0%'}]
+
+
+
+-------------------------
 
 Write down if there is anything from this action that may result in a material production or extraction
 Rewrite the sentence above in proper english
