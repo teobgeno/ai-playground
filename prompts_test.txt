@@ -416,3 +416,36 @@ Safety Measures: Are there any safety measures in place that might slow down the
 Measurement Units: Specify the unit of measurement for logs gathered (e.g., number of logs, weight in pounds or kilograms, volume in cubic feet).
 
 A well-constructed prompt that includes these criteria will allow for a more accurate assessment of Alex's productivity while chopping logs in the forest. For example, a prompt could be: "Calculate Alex's productivity in terms of the number of logs (each log weighs approximately 10 kilograms) he gathers in a 4-hour workday using a chainsaw, assuming good weather conditions, no breaks, and average skill level."
+
+
+Alex's current action is chop logs at the forest
+
+
+*** 
+Higher levels of a skill allow a dwarf to accomplish the respective task more quickly and/or more effectively 
+  Find the effective skill level 
+  Roll for item quality "points
+  Add points for physical attributes
+  Add points for mental attributes
+  Adjust points based on focus
+  Apply status penalties again ai scenario
+
+  [criteria] 
+  determine the speed at which the task is completed, 
+  determine the quality of the final product
+  determine if person will succeed in constructing something. Failing means wasting time and resources.
+  https://dwarffortresswiki.org/index.php/DF2014:Wood_cutter
+  https://dwarffortresswiki.org/index.php/DF2014:Biome
+***
+
+[criteria]
+tools and equipment: axe
+skill Level: significant familiarity
+weather conditions: sunny
+Alex's physical condition: excellent
+Alex's mood: happy
+
+
+
+Alex's current action is chop down trees at the forest. 
+On the scale of 1 to 10, where 1 is purely mundane (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following event for Alex.
