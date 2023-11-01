@@ -437,16 +437,69 @@ Higher levels of a skill allow a dwarf to accomplish the respective task more qu
   https://dwarffortresswiki.org/index.php/DF2014:Wood_cutter
   https://dwarffortresswiki.org/index.php/Labor
   https://dwarffortresswiki.org/index.php/DF2014:Biome
+
+
+
 ***
 
 [criteria]
+time period: Medieval
 tools and equipment: axe
-skill Level: significant familiarity
+skill Level: significant familiarity (5/20)
 weather conditions: sunny
-Alex's physical condition: excellent
-Alex's mood: happy
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+
+Alex's current action is "chop down trees at forest". 
+On the scale of 1 to 10, where 1 is purely disaster and 10 is excellent, rate the final result of this action.
+
+***
+
+***
+
+[criteria]
+time period: Medieval
+tools and equipment: axe
+skill Level: significant familiarity (5/20)
+weather conditions: sunny
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+additional info: As Alex enthusiastically swings his axe to chop down trees in the sunny medieval forest, he suddenly notices a massive swarm of hornets emerging from a disturbed hive hidden within the tree he's about to fell, causing him to hastily retreat and abandon his task.
+
+Alex's current action is "chop down trees at forest". 
+On the scale of 1 to 10, where 1 is purely disaster and 10 is excellent, rate the final result of this action.
+
+***
+
+[criteria]
+time period: Medieval
+tools and equipment: axe
+skill Level: significant familiarity (5/20)
+weather conditions: sunny
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+
+
+Alex's current action is "hunting game at forest".
+Create a scenario, no more than 50 words, that will have a detrimental effect on his actions.
+
+***
 
 
 
-Alex's current action is chop down trees at the forest. 
-On the scale of 1 to 10, where 1 is purely mundane (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following event for Alex.
+*** Focus Conditions ***
+Flow State: You are fully immersed in the task, and time seems to fly by. You are highly productive and find the work enjoyable and effortless.
+High Focus: You are fully engaged in the task, with minimal distractions. You are making good progress and maintaining your concentration.
+Moderate Focus: You are focused on the task, but occasional distractions may disrupt your workflow. You can still make progress, but it may require more effort.
+Low Focus: Your attention is divided, and distractions are more frequent. You are struggling to maintain focus and productivity is limited.
+Procrastination: You are actively avoiding the task and finding other things to do. You may be delaying work or feeling overwhelmed.
+Multitasking: You are attempting to work on multiple tasks simultaneously. Your focus is divided, and productivity may suffer.
+Boredom: You find the task uninteresting, and it's challenging to stay engaged. Your mind may wander frequently.
+Overwhelmed: You feel stressed or overwhelmed by the task, and it's difficult to concentrate due to the complexity or volume of work.
+Burnout: You are mentally and physically exhausted, and it's almost impossible to focus on any task. You need a break or rest.
+Distraction: You are constantly getting sidetracked and unable to make any significant progress. External factors or interruptions may be the cause.
+Hyperfocus: You are intensely focused on a task to the exclusion of everything else. While this can be productive, it may also lead to neglecting other important responsibilities.
+Daydreaming: Your mind wanders, and you're lost in thought, not paying attention to the task at hand.
+Perfectionism: You are spending excessive time on minor details and are struggling to complete the task because you're striving for perfection.
+External Interruption: You are interrupted by external factors, such as phone calls, emails, or coworkers.
+Internal Interruption: You are interrupted by your own thoughts, worries, or emotions.
