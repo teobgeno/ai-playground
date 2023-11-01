@@ -435,6 +435,7 @@ Higher levels of a skill allow a dwarf to accomplish the respective task more qu
   determine the quality of the final product
   determine if person will succeed in constructing something. Failing means wasting time and resources.
   https://dwarffortresswiki.org/index.php/DF2014:Wood_cutter
+  https://dwarffortresswiki.org/index.php/Labor
   https://dwarffortresswiki.org/index.php/DF2014:Biome
 ***
 
