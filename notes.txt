@@ -1,0 +1,17 @@
+Character
+    name
+    Age
+    skills (list)
+    traits (list)
+    associative_memory
+    scratch_memory
+    focus
+    health
+    physical condition
+    mood
+    rest //https://rimworldwiki.com/wiki/Rest#Levels_of_Rest
+    food_saturation //https://rimworldwiki.com/wiki/Saturation
+    thirsty //https://dwarffortresswiki.org/index.php/Thirst
+
+    Body attributes
+        https://dwarffortresswiki.org/index.php/DF2014:Attribute
