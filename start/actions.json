@@ -1,0 +1,60 @@
+{
+    "actions": [
+      {
+        "title": "gather wood",
+        "patterns": [
+          "Fell trees",
+          "Cut down trees",
+          "Axe trees",
+          "Bring down trees",
+          "Timber harvesting",
+          "Log trees",
+          "Harvest timber",
+          "Lumber trees",
+          "Clear-cut trees",
+          "Tree removal",
+          "Logging",
+          "Tree felling",
+          "Timber extraction",
+          "Forest clearing",
+          "Tree cutting",
+          "Tree elimination",
+          "Tree destruction",
+          "Tree removal",
+          "Timber logging"
+        ],
+        "responses": [
+    
+        ]
+      },
+      {
+        "title": "fishing",
+        "patterns": [
+            "Angling",
+            "Casting a line",
+            "Hooking",
+            "Trawling",
+            "Netting",
+            "Fly-fishing",
+            "Spearfishing",
+            "Seining",
+            "Gillnetting",
+            "Ice fishing",
+            "Freshwater fishing",
+            "Saltwater fishing",
+            "Sportfishing",
+            "Deep-sea fishing",
+            "Line fishing",
+            "Catching fish",
+            "Reeling in",
+            "Landing a catch",
+            "Noodling fishing",
+            "Jug fishing",
+            "Rod and reel fishing"
+        ],
+        "responses": [
+    
+        ]
+      }
+    ]
+  }

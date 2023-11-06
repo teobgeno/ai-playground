@@ -1,5 +1,7 @@
-It is Medieval Period in a fictional place near a forest where a group of other people are trying to survive and create a place to live.
+It is Medieval Period in a fictional place near a forest where a group of people are trying to survive and create a place to live.
+They need to gather food and water in te first place and later gather supplies to create buildings.
 What actions should be taken in order to achieve their goals?
+List the items in json list.Write one action per row. Example output json:[{action:'stone'}]
 ------------------------------------------------------------------
 
 It is Medieval Period in a fictional place near a forest where a group of other people are trying to survive and create a place to live. 
