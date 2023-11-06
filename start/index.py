@@ -1,3 +1,4 @@
+import sys
 import json
 import spacy
 from character import *
@@ -31,7 +32,9 @@ if __name__ == '__main__':
     nlp = spacy.load("en_core_web_lg")
     main = nlp("Search for suitable land for farming")
     main_no_stop_words = nlp(' '.join([str(t) for t in main if not t.is_stop]))
-    print(main_no_stop_words)
+
+    # print(main.vector_norm)
+    # sys.exit(0)
     
     with open('actions.json') as f:
         actions_data = json.load(f)
