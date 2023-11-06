@@ -19,3 +19,9 @@ if __name__ == '__main__':
     print(main_no_stop_words, "<->", doc3, main.similarity(doc3))
     print(main_no_stop_words, "<->", doc4, main.similarity(doc4))
     print(main_no_stop_words, "<->", doc5, main.similarity(doc5))
+
+
+    #https://github.com/sanjaybora04/CustomAiAssistant
+    #https://github.com/shpetimhaxhiu/agi-taskgenius-gpt/blob/master/app.py
+    #https://github.com/yoheinakajima/babyagi/tree/main
+    #https://github.com/yoheinakajima/babyagi/blob/main/classic/BabyElfAGI/tasks/task_registry.py
