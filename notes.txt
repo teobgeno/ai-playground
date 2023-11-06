@@ -18,3 +18,31 @@ Character
 
 
 
+
+
+
+
+ch decide if take action based on skills
+ch find place for this action (e.x forest:trees)
+go to place (time)
+skill selection based on action
+execute action (time)
+generate or not random event
+calculate success percentage of action's result
+get extracted materials (need fix too generic)
+calculate amount and quality of extracted materials based on skills and time
+
+ch thoughts for this action emotional statement
+ch calculate physical condition (tired)
+ch calculate needs (hunger, thirst)
+ch decide what to do with the materials
+ch transfer material to the desired spot
+
+
+------------------------
+
+ch decide when to eat
+ch decide when to drink
+
+
+

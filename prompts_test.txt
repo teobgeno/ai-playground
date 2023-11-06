@@ -503,3 +503,62 @@ Daydreaming: Your mind wanders, and you're lost in thought, not paying attention
 Perfectionism: You are spending excessive time on minor details and are struggling to complete the task because you're striving for perfection.
 External Interruption: You are interrupted by external factors, such as phone calls, emails, or coworkers.
 Internal Interruption: You are interrupted by your own thoughts, worries, or emotions.
+
+
+
+classify actions results 
+  long term obtain  (plant a seed)
+  short term obtain (cut a tree)
+
+
+
+[criteria]
+time period: Medieval
+tools and equipment: axe
+skill Level: significant familiarity (5/20)
+weather conditions: sunny
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+
+Alex's current action is "chop down trees at forest". 
+
+
+----- how much time a task will get ----
+[criteria]
+tools and equipment: axe
+weather conditions: sunny
+tree size: average
+person skill level: Skilled
+
+Based on the criteria, how much time would an average person require to chop down one unit of a tree?
+List the result in json. Example output json:[{time:'30 minutes'}]
+
+
+
+
+[criteria]
+action: chop woods
+tools and equipment: axe
+weather conditions: sunny
+tree size: average
+person skill level: Skilled
+required material: 1 firewood
+
+Based on the criteria, how much time would an average person require to get one unit of the required material?
+List the result in json. Example output json:[{time:'30 minutes'}]
+
+
+[criteria]
+action: hunting game
+tools and equipment: bow
+weather conditions: sunny
+tree size: average
+person skill level: Skilled
+required material: 1 fish
+
+Based on the criteria, how much time would an average person require to get the required material?
+List the result in json. Example output json:[{time:'30 minutes'}]
+
+
+resin
+firewood

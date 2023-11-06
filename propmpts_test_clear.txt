@@ -46,19 +46,70 @@ Wood Cutter
 Carpenter
 Brewer
 
-Alex's current action is "Offered to help with construction". Which skills can contribute to this action. Do not make general assumptions if the action is not relevenant to the skill.
+Alex's current action is "chop down trees at forest". Which skills can contribute to this action. Do not make general assumptions if the action is not relevenant to the skill.
 Output the response to the prompt above in json. Example output json:[{skill:'Cook', contribution:'10%'},{skill:'Herbalist', contribution:'90%'},{skill:Cheese maker, contribution:'0%'}]
+
+
+GPT : [
+  {
+    "skill": "Wood Cutter",
+    "contribution": "100%"
+  },
+  {
+    "skill": "Carpenter",
+    "contribution": "50%"
+  },
+  {
+    "skill": "Brewer",
+    "contribution": "0%"
+  }
+]
 
 --------------------------------------
 *** material extraction based on action ***
 ⭐
-Alex's current action is chop logs
+Alex's current action is "chop down trees at forest"
 Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
 List all the items in json list. Example output json:[{item:'stone'}]
 
 ⭐
-Alex's current action is hunting game at the forest
+Alex's current action is "chop down trees at forest"
 Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. 
 List all the items in json list. Example output json:[{item:'stone', description:'marble stone'}]
 
+Alex's current action is "chop down trees at forest"
+Based on the previous statements provide a list of material items or resources that he could potentially obtain as a result of this activity. I need to calculate also the production rate in percentage of each of the obtained items per hour
+List all the items in json list. Example output json:[{item:'stone', description:'marble stone', rate: '10%'}]
+
 --------------------------------------
+
+[criteria]
+time period: Medieval
+tools and equipment: axe
+skill Level: significant familiarity (5/20)
+weather conditions: sunny
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+
+
+Alex's current action is "chop down trees at forest".
+Create a scenario, no more than 50 words, that will have a detrimental effect on his actions.
+
+--------------------------------------
+
+[criteria]
+time period: Medieval
+tools and equipment: axe
+skill Level: significant familiarity (5/20)
+weather conditions: sunny
+Alex's physical condition: excellent (3/3)
+Alex's mood: happy (2/3)
+
+Alex's current action is "chop down trees at forest". 
+On the scale of 1 to 10, where 1 is purely disaster and 10 is excellent, rate the final result of this action.
+
+
+
+classify actions results 
+  long term obtain  (plant a seed)
+  short term obtain (cut a tree)
