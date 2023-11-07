@@ -1,6 +1,7 @@
 {
     "actions": [
       {
+        "id": 1,
         "title": "gather wood",
         "patterns": [
           "Fell trees",
@@ -23,11 +24,11 @@
           "Tree removal",
           "Timber logging"
         ],
-        "responses": [
-    
+        "factors": [{"type": "skill", "id" : 1 , "multiplier" : 0.2}
         ]
       },
       {
+        "id": 2,
         "title": "fishing",
         "patterns": [
             "Angling",

@@ -6,13 +6,48 @@ from character.character_skill import CharacterSkill
 
 if __name__ == '__main__':
 
+    # @@ vars @@
+    time_scale = 20
+    translated_actions = []
+    gpt_actions = [
+        {"action": "Hunt for game in the forest"},
+        {"action": "Fish in nearby rivers or streams"},
+        {"action": "Locate a clean water source (well, river, or spring)"},
+        {"action": "Fell trees for wood to use in building and crafting"},
+    ]
+
+    with open('actions.json') as f:
+        actions_data = json.load(f)
+
+    nlp = spacy.load("en_core_web_lg")
+
+    # @@ Helper @@
+
     def print_obj(obj):
         attrs = vars(obj)
         print(', '.join("%s: %s" % item for item in attrs.items()))
 
-    # @@@ character @@@
+    def translate_action(ai_text: str):
+        scores = []
+        text = nlp(ai_text)
+        text_no_stop_words = nlp(
+            ' '.join([str(t) for t in text if not t.is_stop]))
+        for i in actions_data['actions']:
+            for x in i['patterns']:
+                scores.append({'id': i['id'], 'action': i['title'], 'pattern': x,
+                               'score': text_no_stop_words.similarity(nlp(x))})
+
+        scores.sort(key=lambda x: x.get('score'), reverse=True)
+
+        if scores[1]['score'] >= 0.7:
+            return scores[1]['id']
+
+        return 0
+
+    # @@ character @@
     skills = []
-    skill_woodcutter = CharacterSkill.create({'title': 'Wood cutter',
+    skill_woodcutter = CharacterSkill.create({'id': 1,
+                                              'title': 'Wood cutter',
                                               'current_level': 5,
                                               'max_level': 20,
                                               'level_descr': 'Significant Familiarity',
@@ -21,15 +56,10 @@ if __name__ == '__main__':
     skills.append(skill_woodcutter)
     ch = Character.create('Alex', skills)
 
-    print_obj(ch)
+    for i in gpt_actions:
+        translate_action(i['action'])
+
     sys.exit(0)
-    # @@@ actions pool @@@
-    actions_pool = [
-        {"action": "Hunt for game in the forest"},
-        {"action": "Fish in nearby rivers or streams"},
-        {"action": "Locate a clean water source (well, river, or spring)"},
-        {"action": "Fell trees for wood to use in building and crafting"},
-    ]
 
     # https://github.com/sanjaybora04/CustomAiAssistant
     # https://github.com/shpetimhaxhiu/agi-taskgenius-gpt/blob/master/app.py
