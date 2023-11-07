@@ -3,14 +3,16 @@ import json
 import spacy
 from character.character import *
 from character.character_skill import CharacterSkill
+from task.task import Task
+from pprint import pprint
 
 if __name__ == '__main__':
 
     # @@ vars @@
     time_scale = 20
 
-    with open('actions.json') as f:
-        actions_data = json.load(f)
+    with open('tasks.json') as f:
+        tasks_data = json.load(f)
 
     nlp = spacy.load("en_core_web_lg")
 
@@ -19,25 +21,27 @@ if __name__ == '__main__':
         attrs = vars(obj)
         print(', '.join("%s: %s" % item for item in attrs.items()))
 
-    def get_gpt_actions():
+    def get_gpt_tasks():
         return [
-            {"action": "Hunt for game in the forest", "resolved_id": 0},
-            {"action": "Fish in nearby rivers or streams", "resolved_id": 0},
-            {"action": "Locate a clean water source (well, river, or spring)",
+            {"task": "Hunt for game in the forest", "resolved_id": 0},
+            {"task": "Fish in nearby rivers or streams", "resolved_id": 0},
+            {"task": "Locate a clean water source (well, river, or spring)",
              "resolved_id": 0},
-            {"action": "Fell trees for wood to use in building and crafting",
+            {"task": "Fell trees for wood to use in building and crafting",
                 "resolved_id": 0},
         ]
 
-    def translate_to_local_action(ai_text: str):
+    def translate_to_local_task(ai_text: str):
         scores = []
         text = nlp(ai_text)
         text_no_stop_words = nlp(
             ' '.join([str(t) for t in text if not t.is_stop]))
-        for i in actions_data['actions']:
+        for i in tasks_data['tasks']:
             for x in i['patterns']:
-                scores.append({'id': i['id'], 'action': i['title'], 'pattern': x,
-                               'score': text_no_stop_words.similarity(nlp(x))})
+                p = nlp(x)
+                if (p and p.vector_norm):
+                    scores.append({'id': i['id'], 'task': i['title'], 'pattern': x,
+                                   'score': text_no_stop_words.similarity(nlp(x))})
 
         scores.sort(key=lambda x: x.get('score'), reverse=True)
 
@@ -46,19 +50,21 @@ if __name__ == '__main__':
 
         return 0
 
-    def resolve_gpt_actions(gpt_actions):
-        tasks = []
-        unresolved_gpt_actions = []
-        for i in gpt_actions:
-            action_id = translate_to_local_action(i['action'])
-            if action_id > 0:
-                i['resolved_id'] = action_id
-                tasks.append([x for x in actions_data['actions']
-                              if x["id"] == action_id][0])
+    def resolve_gpt_tasks(gpt_tasks):
+        tasks: list[Task] = []
+        unresolved_gpt_tasks = []
+        for i in gpt_tasks:
+            task_id = translate_to_local_task(i['task'])
+            if task_id > 0:
+                i['resolved_id'] = task_id
+                tasks.append(Task.create([x for x in tasks_data['tasks']
+                                          if x["id"] == task_id][0]))
             else:
-                unresolved_gpt_actions.append(i['action'])
+                unresolved_gpt_tasks.append(i['task'])
+
+        return {"tasks": tasks, "unresolved_gpt_tasks": unresolved_gpt_tasks}
         # print(tasks)
-        # print(unresolved_gpt_actions)
+        # print(unresolved_gpt_tasks)
 
     # @@ character @@
     skills = []
@@ -72,7 +78,10 @@ if __name__ == '__main__':
     skills.append(skill_woodcutter)
     ch = Character.create('Alex', skills)
 
-    resolve_gpt_actions(get_gpt_actions())
+    res = resolve_gpt_tasks(get_gpt_tasks())
+    ch.selectProperTask(res["tasks"])
+
+    pprint(res["unresolved_gpt_tasks"])
 
     sys.exit(0)
 
@@ -81,23 +90,23 @@ if __name__ == '__main__':
     # https://github.com/yoheinakajima/babyagi/tree/main
     # https://github.com/yoheinakajima/babyagi/blob/main/classic/BabyElfAGI/tasks/task_registry.py
 
-    # actions = [
-    # { "action": "Fell trees for wood to use in building and crafting" },
-    # { "action": "Gather food from the forest (foraging)" },
-    # { "action": "Hunt for game in the forest" },
-    # { "action": "Fish in nearby rivers or streams" },
-    # { "action": "Collect berries, nuts, and edible plants" },
-    # { "action": "Set up traps for small animals" },
-    # { "action": "Build simple shelters or huts from available materials" },
-    # { "action": "Locate a clean water source (well, river, or spring)" },
-    # { "action": "Dig a well for a more reliable water supply" },
-    # { "action": "Create basic tools and utensils (wooden, stone, or bone)" },
-    # { "action": "Start a fire for cooking and warmth" },
-    # { "action": "Explore the forest for useful plants and herbs" },
-    # { "action": "Search for suitable land for farming" },
-    # { "action": "Clear land for agriculture (cutting trees, removing rocks)" },
-    # { "action": "Plant crops and tend to a small garden" },
-    # { "action": "Hunt or gather materials for clothing and shelter (animal hides, leaves, etc.)" },
-    # { "action": "Build storage facilities for food and supplies" },
-    # { "action": "Establish a leadership structure for organization and decision-making" }
+    # tasks = [
+    # { "task": "Fell trees for wood to use in building and crafting" },
+    # { "task": "Gather food from the forest (foraging)" },
+    # { "task": "Hunt for game in the forest" },
+    # { "task": "Fish in nearby rivers or streams" },
+    # { "task": "Collect berries, nuts, and edible plants" },
+    # { "task": "Set up traps for small animals" },
+    # { "task": "Build simple shelters or huts from available materials" },
+    # { "task": "Locate a clean water source (well, river, or spring)" },
+    # { "task": "Dig a well for a more reliable water supply" },
+    # { "task": "Create basic tools and utensils (wooden, stone, or bone)" },
+    # { "task": "Start a fire for cooking and warmth" },
+    # { "task": "Explore the forest for useful plants and herbs" },
+    # { "task": "Search for suitable land for farming" },
+    # { "task": "Clear land for agriculture (cutting trees, removing rocks)" },
+    # { "task": "Plant crops and tend to a small garden" },
+    # { "task": "Hunt or gather materials for clothing and shelter (animal hides, leaves, etc.)" },
+    # { "task": "Build storage facilities for food and supplies" },
+    # { "task": "Establish a leadership structure for organization and decision-making" }
     # ]

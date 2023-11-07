@@ -1,5 +1,5 @@
 {
-    "actions": [
+    "tasks": [
       {
         "id": 1,
         "title": "gather wood",
@@ -53,8 +53,7 @@
             "Jug fishing",
             "Rod and reel fishing"
         ],
-        "responses": [
-    
+        "factors": [{"type": "skill", "id" : 2 , "multiplier" : 0.2}
         ]
       }
     ]
