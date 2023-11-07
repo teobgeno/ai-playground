@@ -8,13 +8,6 @@ if __name__ == '__main__':
 
     # @@ vars @@
     time_scale = 20
-    translated_actions = []
-    gpt_actions = [
-        {"action": "Hunt for game in the forest"},
-        {"action": "Fish in nearby rivers or streams"},
-        {"action": "Locate a clean water source (well, river, or spring)"},
-        {"action": "Fell trees for wood to use in building and crafting"},
-    ]
 
     with open('actions.json') as f:
         actions_data = json.load(f)
@@ -22,12 +15,21 @@ if __name__ == '__main__':
     nlp = spacy.load("en_core_web_lg")
 
     # @@ Helper @@
-
     def print_obj(obj):
         attrs = vars(obj)
         print(', '.join("%s: %s" % item for item in attrs.items()))
 
-    def translate_action(ai_text: str):
+    def get_gpt_actions():
+        return [
+            {"action": "Hunt for game in the forest", "resolved_id": 0},
+            {"action": "Fish in nearby rivers or streams", "resolved_id": 0},
+            {"action": "Locate a clean water source (well, river, or spring)",
+             "resolved_id": 0},
+            {"action": "Fell trees for wood to use in building and crafting",
+                "resolved_id": 0},
+        ]
+
+    def translate_to_local_action(ai_text: str):
         scores = []
         text = nlp(ai_text)
         text_no_stop_words = nlp(
@@ -44,6 +46,20 @@ if __name__ == '__main__':
 
         return 0
 
+    def resolve_gpt_actions(gpt_actions):
+        tasks = []
+        unresolved_gpt_actions = []
+        for i in gpt_actions:
+            action_id = translate_to_local_action(i['action'])
+            if action_id > 0:
+                i['resolved_id'] = action_id
+                tasks.append([x for x in actions_data['actions']
+                              if x["id"] == action_id][0])
+            else:
+                unresolved_gpt_actions.append(i['action'])
+        # print(tasks)
+        # print(unresolved_gpt_actions)
+
     # @@ character @@
     skills = []
     skill_woodcutter = CharacterSkill.create({'id': 1,
@@ -56,8 +72,7 @@ if __name__ == '__main__':
     skills.append(skill_woodcutter)
     ch = Character.create('Alex', skills)
 
-    for i in gpt_actions:
-        translate_action(i['action'])
+    resolve_gpt_actions(get_gpt_actions())
 
     sys.exit(0)
 
@@ -65,27 +80,6 @@ if __name__ == '__main__':
     # https://github.com/shpetimhaxhiu/agi-taskgenius-gpt/blob/master/app.py
     # https://github.com/yoheinakajima/babyagi/tree/main
     # https://github.com/yoheinakajima/babyagi/blob/main/classic/BabyElfAGI/tasks/task_registry.py
-
-    nlp = spacy.load("en_core_web_lg")
-    main = nlp("Search for suitable land for farming")
-    main_no_stop_words = nlp(' '.join([str(t) for t in main if not t.is_stop]))
-
-    with open('actions.json') as f:
-        actions_data = json.load(f)
-
-    scores = []
-
-    for i in actions_data['actions']:
-        print(i['patterns'])
-        for x in i['patterns']:
-            scores.append({'action': i['title'], 'pattern': x,
-                          'score': main_no_stop_words.similarity(nlp(x))})
-            # print(main_no_stop_words, "<->", x, main_no_stop_words.similarity(nlp(x)))
-
-    scores.sort(key=lambda x: x.get('score'), reverse=True)
-
-    for i in scores:
-        print(i)
 
     # actions = [
     # { "action": "Fell trees for wood to use in building and crafting" },
