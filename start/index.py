@@ -1,10 +1,10 @@
 import sys
 import json
 import spacy
+from pprint import pprint
 from character.character import *
 from character.character_skill import CharacterSkill
 from task.task import Task
-from pprint import pprint
 
 if __name__ == '__main__':
 

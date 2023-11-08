@@ -3,7 +3,7 @@ from typing import List
 
 class CharacterSkill:
     def __init__(self, props):
-        self._id = props['id']
+        self.id = props['id']
         self._title = props['title']
         self._current_level = props['current_level']
         self._max_level = props['max_level']
