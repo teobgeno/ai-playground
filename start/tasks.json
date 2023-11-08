@@ -2,7 +2,7 @@
     "tasks": [
       {
         "id": 1,
-        "title": "gather wood",
+        "title": "gather wood from trees",
         "patterns": [
           "Fell trees",
           "Cut down trees",
@@ -25,6 +25,8 @@
           "Timber logging"
         ],
         "factors": [{"type": "skill", "id" : 1 , "multiplier" : 0.2}
+        ],
+        "resuts": [{"type": "material", "id" : 1 , "singleU_obtain_time" : 1}
         ]
       },
       {
