@@ -3,7 +3,7 @@ from typing import List
 
 class CharacterSkill:
     def __init__(self, props):
-        self.id = props['id']
+        self._id = props['id']
         self._title = props['title']
         self._current_level = props['current_level']
         self._max_level = props['max_level']
@@ -14,3 +14,7 @@ class CharacterSkill:
     @classmethod
     def create(cls, props):
         return cls(props)
+
+    @property
+    def id(self):
+        return self._id

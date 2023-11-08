@@ -4,7 +4,7 @@ import spacy
 from pprint import pprint
 from character.character import *
 from character.character_skill import CharacterSkill
-from task.task import Task
+from task import *
 
 if __name__ == '__main__':
 
@@ -76,12 +76,21 @@ if __name__ == '__main__':
                                               'current_xp': 15000,
                                               'next_xp':  21000})
     skills.append(skill_woodcutter)
-    ch = Character.create('Alex', skills)
+    ch = Character.create(1, 'Alex', skills)
 
-    res = resolve_gpt_tasks(get_gpt_tasks())
-    ch.selectProperTask(res["tasks"])
+    resolved_tasks = resolve_gpt_tasks(get_gpt_tasks())
+    selected_task = ch.selectProperTask(resolved_tasks["tasks"])
 
-    pprint(res["unresolved_gpt_tasks"])
+    ch.addTask(
+        TaskAssignment.create({
+            "id": 1,
+            "task_id": selected_task.id,
+            "character_id": ch.id,
+            "duration": 60
+        })
+    )
+
+    # pprint(res["unresolved_gpt_tasks"])
 
     sys.exit(0)
 

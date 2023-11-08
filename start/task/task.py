@@ -8,3 +8,7 @@ class Task:
     @classmethod
     def create(cls, props):
         return cls(props)
+
+    @property
+    def id(self):
+        return self._id
