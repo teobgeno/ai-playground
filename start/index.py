@@ -78,7 +78,11 @@ if __name__ == '__main__':
     skills.append(skill_woodcutter)
     ch = Character.create(1, 'Alex', skills)
 
-    resolved_tasks = resolve_gpt_tasks(get_gpt_tasks())
+    # resolved_tasks = resolve_gpt_tasks(get_gpt_tasks())
+    # resolved_tasks = [Task.create(x) for x in tasks_data['tasks']]
+    # https://www.programiz.com/python-programming/list-comprehension
+    resolved_tasks = list(map(lambda x: Task.create(x), tasks_data['tasks']))
+
     selected_task = ch.selectProperTask(resolved_tasks["tasks"])
 
     ch.addTask(
@@ -89,7 +93,6 @@ if __name__ == '__main__':
             "duration": 60
         })
     )
-
     # pprint(res["unresolved_gpt_tasks"])
 
     sys.exit(0)
@@ -98,6 +101,7 @@ if __name__ == '__main__':
     # https://github.com/shpetimhaxhiu/agi-taskgenius-gpt/blob/master/app.py
     # https://github.com/yoheinakajima/babyagi/tree/main
     # https://github.com/yoheinakajima/babyagi/blob/main/classic/BabyElfAGI/tasks/task_registry.py
+    # https://jsonpickle.github.io/
 
     # tasks = [
     # { "task": "Fell trees for wood to use in building and crafting" },

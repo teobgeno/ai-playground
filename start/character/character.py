@@ -17,7 +17,7 @@ class Character:
 
     @classmethod
     def create(cls, id: int, name: str, skills: List[CharacterSkill]):
-        return cls(name, skills)
+        return cls(id, name, skills)
 
     @property
     def id(self):
