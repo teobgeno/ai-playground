@@ -2,16 +2,16 @@ import sys
 import json
 import spacy
 from pprint import pprint
-from character.character import *
-from character.character_skill import CharacterSkill
-from task import *
+from game.character.character import *
+from game.character.character_skill import CharacterSkill
+from game.task import *
 
 if __name__ == '__main__':
 
     # @@ vars @@
     time_scale = 20
 
-    with open('tasks.json') as f:
+    with open('game/tasks.json') as f:
         tasks_data = json.load(f)
 
     nlp = spacy.load("en_core_web_lg")
@@ -81,18 +81,18 @@ if __name__ == '__main__':
     # resolved_tasks = resolve_gpt_tasks(get_gpt_tasks())
     # resolved_tasks = [Task.create(x) for x in tasks_data['tasks']]
     # https://www.programiz.com/python-programming/list-comprehension
-    resolved_tasks = list(map(lambda x: Task.create(x), tasks_data['tasks']))
 
-    selected_task = ch.selectProperTask(resolved_tasks["tasks"])
+    # resolved_tasks = list(map(lambda x: Task.create(x), tasks_data['tasks']))
+    # selected_task = ch.selectProperTask(resolved_tasks)
+    # ch.addTask(
+    #     TaskAssignment.create({
+    #         "id": 1,
+    #         "task_id": selected_task.id,
+    #         "character_id": ch.id,
+    #         "duration": 60
+    #     })
+    # )
 
-    ch.addTask(
-        TaskAssignment.create({
-            "id": 1,
-            "task_id": selected_task.id,
-            "character_id": ch.id,
-            "duration": 60
-        })
-    )
     # pprint(res["unresolved_gpt_tasks"])
 
     sys.exit(0)

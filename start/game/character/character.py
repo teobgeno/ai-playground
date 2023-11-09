@@ -1,7 +1,7 @@
 from typing import List
 from pprint import pprint
-from character.character_skill import CharacterSkill
-from task import *
+from game.character.character_skill import CharacterSkill
+from game.task import *
 
 
 class Character:
