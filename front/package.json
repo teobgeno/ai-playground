@@ -1,0 +1,14 @@
+{
+  "name": "ge-ascii-renderer",
+  "version": "1.0.0",
+  "description": "A simple example renderer for Grid Engine, rendering the grid state as ASCII characters.",
+  "scripts": {
+    "serve": "esbuild src/main.ts --servedir=. --outfile=main.js --bundle"
+  },
+  "author": "Johannes Baum",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "esbuild": "^0.18.12",
+    "grid-engine": "^2.32.0"
+  }
+}
