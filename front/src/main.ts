@@ -47,6 +47,36 @@ gridEngineHeadless.positionChangeFinished().subscribe(({ enterTile }) => {
   // }
 });
 
+
+// var data = [
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+//   [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+//   [0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
+//   [0, 1, 0, 1, 0, 0, 1, 0, 1, 0],
+//   [0, 1, 0, 1, 1, 0, 1, 0, 1, 0],
+//   [0, 1, 0, 0, 0, 21, 22, 23, 24, 0],
+//   [0, 1, 1, 1, 1, 25, 26, 27, 28, 1],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+// ]
+
+// //the m rows are horizontal and the n columns are vertical
+// function manhattanDist(x1, y1, x2, y2) {
+// let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1);
+// return dist;
+// }
+
+
+// for(var i = 0; i < data.length; i++) {
+//   var row = data[i];
+//   for(var j = 0; j < row.length; j++) {
+//     if(row[j] > 20) {
+//       console.log(row[j] + ' -- ' + manhattanDist(0,0,i,j));
+//     }
+//   }
+// }
+
 setInterval(() => {
   gridEngineHeadless.update(0, 50);
   asciiRenderer.render();
