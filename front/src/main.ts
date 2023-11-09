@@ -36,6 +36,8 @@ const asciiRenderer = new AsciiRenderer("content", gridEngineHeadless, tilemap);
 asciiRenderer.render();
 
 const targetPos = { x: 4, y: 5 };
+//console.log(gridEngineHeadless.getCharLayer('player'))
+//console.log(gridEngineHeadless.findShortestPath({position:{ x: 0, y: 0 }, charLayer:''}, {position:{ x: 4, y: 5 }, charLayer:''}));
 gridEngineHeadless.moveTo("player", targetPos);
 
 gridEngineHeadless.positionChangeFinished().subscribe(({ enterTile }) => {
