@@ -22,7 +22,7 @@ Character
 
 
 
-ch decide if take action based on factors ( skills...)
+ch decide if take action based on factors ( skills...) or manually assignment
 ch find place for this action (e.x forest:trees)
 go to place (time)
 execute action (time)
@@ -112,3 +112,88 @@ Task
     result
 
 ExecuteActions
+
+
+"tasks": [
+      {
+        "id": 1,
+        "title": "gather wood from trees",
+        "full_descr": "{CHARACTER} want to chop trees.",
+        "patterns": [
+          "Fell trees",
+          "Cut down trees",
+          "Axe trees",
+          "Bring down trees",
+          "Timber harvesting",
+          "Log trees",
+          "Harvest timber",
+          "Lumber trees",
+          "Clear-cut trees",
+          "Tree removal",
+          "Logging",
+          "Tree felling",
+          "Timber extraction",
+          "Forest clearing",
+          "Tree cutting",
+          "Tree elimination",
+          "Tree destruction",
+          "Tree removal",
+          "Timber logging"
+        ],
+        "factors": [{"type": "skill", "id" : 1 , "multiplier" : 0.2}
+        ],
+         "steps": [
+            {"action": "find", "params" : 'section/arena/gameObject'}
+            {"action": "move", "params" : 'section/arena/gameObject'}
+            {"ret": "move", "params" : 'section/arena/gameObject'}
+        ],
+        "resuts": [{"type": "material", "id" : 1 , "singleU_obtain_time" : 60}
+        ]
+      },
+
+     class baseAction
+        start_time
+        end_time
+        descr
+
+     class findAction(baseAction)
+        find_section      -> ai or existing -> ret string
+        find_arena        -> ai or existing -> ret string
+        find_game_object  -> ai or existing -> ret string
+
+     class moveAction(baseAction)
+        ret section/arena/gameObject -> front will find nearest
+        ret {x,y}
+        ret null only log to db
+
+     class takeAction(baseAction)
+        add_to_inventory
+ 
+    
+    GatherWoodTaskExecution
+        step 1:
+            retFind = decideLocationAction(task.full_descr, character) ret section/arena/gameObject (e.x tree)
+            write retFind find at task, not to hit ai all the time
+            {task_execution_id :1, id:action_id, action:find, section/arena/gameObject : tree or whatever, callback:onFinish}
+        step 2:
+            front must send (tree or whatever )
+            validate if tree or whatever is valid game object
+            interval depends on task results get minimum interval.
+            intreval depends on character skill which may increase or decrease the interval
+            ret {task_execution_id :1, id:action_id,  action:chop , section/arena/gameObject :tree or whatever, callback:{progress, interval : 60 sec}} 
+        step 3:
+            interval from previous
+                if material update store of materials at front
+
+
+db TasksExecution
+    id
+    character_id
+
+
+onFrontMove
+    send api calculate physical condition (tired)
+    log player x,y
+    log moveAction
+ 
+            
