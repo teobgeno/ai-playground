@@ -106,7 +106,7 @@ Actions (composition)
 
 Task
     Actions -> List<action>
-        find place
-        move to place
+        find place/object/person    -> ai or cached
+        move to place               -> front
     result
 
