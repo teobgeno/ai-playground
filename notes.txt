@@ -96,5 +96,17 @@ Rod and reel fishing
 
 
 
+Actions (composition)
+    move (single -> action)
+    talk
+    find
+    explore
+    think
+    doTask
 
+Task
+    Actions -> List<action>
+        find place
+        move to place
+    result
 
