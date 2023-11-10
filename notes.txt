@@ -197,3 +197,61 @@ onFrontMove
     log moveAction
  
             
+
+
+
+
+
+
+import random
+
+# Initialize a 100x100 grid with all zeros (0 represents ground)
+grid_size = 100
+grid = [["0"] * grid_size for _ in range(grid_size)]
+
+# Function to add a tree to the grid
+def add_tree(grid, x, y):
+    if 0 <= x < grid_size and 0 <= y < grid_size:
+        grid[y][x] = "🌲"
+
+# Function to add a lake to the grid
+def add_lake(grid, lake_size):
+    # Randomly choose a position for the lake
+    lake_x = random.randint(10, grid_size - 20)
+    lake_y = random.randint(10, grid_size - 20)
+
+    # Fill the area with "@" to represent the lake
+    for i in range(lake_size):
+        for j in range(lake_size):
+            x = lake_x + i
+            y = lake_y + j
+            if 0 <= x < grid_size and 0 <= y < grid_size:
+                grid[y][x] = "🌊"
+
+# Function to generate a realistic forest
+def generate_forest(grid, num_trees):
+    for _ in range(num_trees):
+        # Randomly choose a position for the tree
+        x = random.randint(0, grid_size - 1)
+        y = random.randint(0, grid_size - 1)
+
+        # Add the tree to the grid
+        add_tree(grid, x, y)
+
+        # Introduce clustering by adding a few more trees around the chosen position
+        for _ in range(random.randint(3, 7)):
+            add_tree(grid, x + random.randint(-5, 5), y + random.randint(-5, 5))
+
+# Set the number of trees in the forest and lake size
+num_trees_in_forest = 500
+lake_size = 15
+
+# Generate the lake
+add_lake(grid, lake_size)
+
+# Generate the forest
+generate_forest(grid, num_trees_in_forest)
+
+# Print the grid
+for row in grid:
+    print(" ".join(row))
