@@ -105,8 +105,10 @@ Actions (composition)
     doTask
 
 Task
+    action_pointer = 0
     Actions -> List<action>
         find place/object/person    -> ai or cached
         move to place               -> front
     result
 
+ExecuteActions
