@@ -196,9 +196,78 @@ onFrontMove
     log player x,y
     log moveAction
  
-            
 
+This is a fictional scenario for a game. 
+If the action is not available enclose the action in #.
+The probability should always be a number based on reality.
 
+actions available: {find, move, chop tree, mining, collect}
+
+Current activity: Fell trees for wood
+1) move to forest
+2) find {tree}
+3) chop {tree}
+probability of find {tree} at forest : 100%
+
+Current activity: collect {gold} 
+1) move to mining site
+2) mining {gold}
+probability of find gold at mining site : 0.2%
+
+Current activity: Gather food from the forest (foraging)
+1) move to forest
+2) collect {blackberries}
+probability of find {blackberries} at forest : 80%
+
+Current activity: Hunt for game in the forest
+1) move to forest
+2) #hunting# {rabbits}
+probability of find {rabbits} at forest : 60%
+
+Current activity: Search for suitable land for farming
+
+--------------------------------------------------------------
+
+It is Medieval Period in a fictional place near a forest where Alex is trying to survive.
+What actions should be taken in order to achieve his goals?
+List the items in json list.Write one action per row. 
+Example output json:[{action:'gather food'}]
+
+[
+  { "action": "gather food" },
+  { "action": "hunt for game" },
+  { "action": "fish in nearby rivers or streams" },
+  { "action": "forage for edible plants and mushrooms" },
+  { "action": "set up traps for small animals" },
+  { "action": "build a shelter using available resources" },
+  { "action": "find a water source and ensure it's safe to drink" },
+  { "action": "make fire for warmth and cooking" },
+  { "action": "craft basic tools for survival" },
+  { "action": "be cautious of wild animals and potential threats" }
+]
+
+-----------------------------------
+
+available actions: {find, move, chop tree, collect, mining, reeling in}. 
+If the available action is not in the available actions set always reply with none.
+Be more specific about the result if the statement is too generic.
+
+activity: fell trees for wood to use in building and crafting
+real action: fell trees
+available action : chop tree
+results: [wood logs]
+
+activity: hunt for game in the forest
+real action: hunt
+available action : none
+results: [rabbits, deers]
+
+activity: collect berries, nuts, and edible plants
+real action: collect
+available action : collect
+results: [berries, burdock, dandelion]
+
+activity: trade with other villages
 
 
 
@@ -255,3 +324,7 @@ generate_forest(grid, num_trees_in_forest)
 # Print the grid
 for row in grid:
     print(" ".join(row))
+
+
+
+
