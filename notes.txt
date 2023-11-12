@@ -228,23 +228,25 @@ Current activity: Search for suitable land for farming
 
 --------------------------------------------------------------
 
+This is a fictional scenario for a game. 
 It is Medieval Period in a fictional place near a forest where Alex is trying to survive.
-What actions should be taken in order to achieve his goals?
+Alex's inventory: axe
+What actions should be taken in order to achieve his goals? 
+Avoid generic actions try to be specific.
 List the items in json list.Write one action per row. 
-Example output json:[{action:'gather food'}]
+Example output json:[{action:'fell trees for wood', purspose:'use in building and crafting'}]
 
-[
-  { "action": "gather food" },
-  { "action": "hunt for game" },
-  { "action": "fish in nearby rivers or streams" },
-  { "action": "forage for edible plants and mushrooms" },
-  { "action": "set up traps for small animals" },
-  { "action": "build a shelter using available resources" },
-  { "action": "find a water source and ensure it's safe to drink" },
-  { "action": "make fire for warmth and cooking" },
-  { "action": "craft basic tools for survival" },
-  { "action": "be cautious of wild animals and potential threats" }
-]
+
+{ "action": "scout the forest perimeter", "purpose": "identify potential threats and resources" },
+  { "action": "inspect the axe for damage", "purpose": "ensure it's in optimal condition for use" },
+  { "action": "gather dry leaves and twigs", "purpose": "prepare for starting a fire" },
+  { "action": "locate a water source", "purpose": "ensure a sustainable water supply" },
+  { "action": "search for edible plants and berries", "purpose": "secure a food source" },
+  { "action": "set up a basic shelter using fallen branches", "purpose": "provide rudimentary protection" },
+  { "action": "listen for wildlife sounds", "purpose": "detect potential dangers or opportunities" },
+  { "action": "create a makeshift map of the immediate area", "purpose": "aid in navigation and future planning" },
+  { "action": "carve a wooden spear", "purpose": "improve personal defense capabilities" },
+  { "action": "establish a hidden storage spot for valuable items", "purpose": "protect essential belongings" }
 
 -----------------------------------
 
@@ -267,8 +269,13 @@ real action: collect
 available action : collect
 results: [berries, burdock, dandelion]
 
-activity: trade with other villages
+activity: locate a water source
+------------------------------------
+categories: food, construction
+objects: iron ore, copper ore, fish, berries
 
+classify the objects in the categories .List the items in json list.
+Example output json:[{object:'wood', categories:'construction'}]
 
 
 
