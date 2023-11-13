@@ -278,6 +278,112 @@ classify the objects in the categories .List the items in json list.
 Example output json:[{object:'wood', categories:'construction'}]
 
 
+------------------------------------
+This is a fictional scenario for a game. 
+
+activity: Fell trees for wood to use in building and crafting
+game items: [tree, dandelion]
+
+What game items could be obtained from the activity?
+If you can't find the item answer "no item available".
+Answer:
+
+
+
+
+
+
+
+
+--------------------------
+
+This is a fictional scenario for a game with a fixed number of items. 
+The items that you can gather as resources are : tree, dandelion, rabbits
+The activity is "Hunt for game in the forest"
+
+Is there any resource from the above realtive to this activity ? 
+Answer with yes or no
+
+
+What [game items] are relative to the activity?
+If the items are not listed in [game items] answer "no item available".
+Answer:
+
+
+______________________ CREATE ACTION ______________________
+
+activity: Fish in nearby rivers or streams
+classify the activity to one of the following categories : gather resources-materials, crafting-building, planting
+
+--------------------------------------------
+This is a fictional scenario for a game with a fixed number of items. 
+The items that you can gather as resources are : tree, dandelion
+
+activity: fell trees for wood to use in building and crafting
+item exist in list: yes
+existing resource : tree
+new generated resources: none
+---
+activity: hunt for game in the forest
+item exist in list: no
+existing item : none
+new generated resources: rabbit, deer
+---
+activity: Locate a clean water source
+
+Output the response only for the last activity in json.
+
+TODO:: the generated resource must be a resource (check: Locate a clean water source)
+--------------------------------------------
+activity: Gather food from the forest
+What action should a person do in order to accomplish this activity.
+We need only the verb.
+Answer:
+TODO:: the verb will be always gather as we classify the action n the first step
+--------------------------------------------
+TODO:: define the unit of the item 1 tree 1kg of stone
+TODO:: define if the item is a living thing or non-living thing
+TODO:: define if the item is moving
+TODO:: define if the item is below or above earth surface (need digging)
+TODO:: define the mass of the object how many tiles of the grid we need to place the object
+TODO:: probability of find {rabbits} at forest : 60%
+--------------------------------------------
+This is a fictional scenario for a game with items in a grid map.
+activity: chop tree
+Suppose that the resource unit is in front of us and we have the right tools. Assume that we only need 1 unit of this item. 
+On the scale of 1 to 10, where 1 is quick and 10 is extremely time consuming, rate the final result of this action.
+
+----------------------------------------------------------
+This is a fictional scenario for a game with items in a grid map.
+activity: gather clean water lake
+status: removed, removed-respawn, not removed
+Choose one from the status above to describe the tree after the activity?
+
+TODO:: find respawn time
+
+
+
+
+@@@
+This is a fictional scenario for a game with items in a grid map. 
+Propose a fictional resource gathering rate in seconds as much close to reality.
+Suppose that the resource unit is in front of us and we have the right tools.
+
+activity: fell trees for wood to use in building and crafting
+resource: tree
+action: chop
+seconds to gather 1 unit: 2000
+
+activity: extract ore
+resource: ore
+action: mining
+seconds to gather 1 unit : 3600
+
+
+activity: Collect berries, nuts, and edible plants
+resource: berries
+action: collect
+seconds to gather 1 unit :
 
 import random
 
