@@ -316,10 +316,12 @@ ______________________ STARTING THOUGHTS ______________________
 This is a fictional scenario for a game. 
 It is Medieval Period in a fictional place near a forest where Alex is trying to survive.
 Alex's inventory: axe
-What actions should be taken in order to achieve his goals? 
+Alex' status: hungry
+What actions should be taken in order to achieve his goals?
+Priority should have values from 1 to 10 where 10 is extremely important for the current situation.
 Avoid generic actions try to be specific.
 List the items in json list.Write one action per row.
-Example output json:[{action:'fell trees for wood', purspose:'use in building and crafting'}]
+Example output json:[{action:'fell trees for wood', purpose:'use in building and crafting', priority: 4}]
 
 
   { "action": "scout the forest perimeter", "purpose": "identify potential threats and resources" },
