@@ -360,11 +360,10 @@ Output the response only for the last activity in json.
 
 TODO:: the generated resource must be a resource (check: Locate a clean water source)
 --------------------------------------------
-activity: Gather food from the forest
+activity: Locate a clean water source
 What action should a person do in order to accomplish this activity.
 We need only the verb.
 Answer:
-TODO:: the verb will be always gather as we classify the action in the first step
 --------------------------------------------
 TODO:: define the unit of the item 1 tree 1kg of stone
 TODO:: define if the item is a living thing or non-living thing
@@ -377,6 +376,12 @@ This is a fictional scenario for a game with items in a grid map.
 activity: chop tree
 Suppose that the resource unit is in front of us and we have the right tools. Assume that we only need 1 unit of this item. 
 On the scale of 1 to 10, where 1 is quick and 10 is extremely time consuming, rate the final result of this action.
+Output only the result number.
+
+
+Suppose that the resource unit is in front of us and we have the right tools.
+How much time in average do a normal person needs in order to gather a berrie. 
+Output only the number in seconds
 
 ----------------------------------------------------------
 This is a fictional scenario for a game with items in a grid map.
