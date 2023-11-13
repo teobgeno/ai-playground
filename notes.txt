@@ -310,6 +310,29 @@ If the items are not listed in [game items] answer "no item available".
 Answer:
 
 
+______________________ STARTING THOUGHTS ______________________
+
+
+This is a fictional scenario for a game. 
+It is Medieval Period in a fictional place near a forest where Alex is trying to survive.
+Alex's inventory: axe
+What actions should be taken in order to achieve his goals? 
+Avoid generic actions try to be specific.
+List the items in json list.Write one action per row.
+Example output json:[{action:'fell trees for wood', purspose:'use in building and crafting'}]
+
+
+  { "action": "scout the forest perimeter", "purpose": "identify potential threats and resources" },
+  { "action": "inspect the axe for damage", "purpose": "ensure it's in optimal condition for use" },
+  { "action": "gather dry leaves and twigs", "purpose": "prepare for starting a fire" },
+  { "action": "locate a water source", "purpose": "ensure a sustainable water supply" },
+  { "action": "search for edible plants and berries", "purpose": "secure a food source" },
+  { "action": "set up a basic shelter using fallen branches", "purpose": "provide rudimentary protection" },
+  { "action": "listen for wildlife sounds", "purpose": "detect potential dangers or opportunities" },
+  { "action": "create a makeshift map of the immediate area", "purpose": "aid in navigation and future planning" },
+  { "action": "carve a wooden spear", "purpose": "improve personal defense capabilities" },
+  { "action": "establish a hidden storage spot for valuable items", "purpose": "protect essential belongings" }
+
 ______________________ CREATE ACTION ______________________
 
 activity: Fish in nearby rivers or streams
@@ -339,7 +362,7 @@ activity: Gather food from the forest
 What action should a person do in order to accomplish this activity.
 We need only the verb.
 Answer:
-TODO:: the verb will be always gather as we classify the action n the first step
+TODO:: the verb will be always gather as we classify the action in the first step
 --------------------------------------------
 TODO:: define the unit of the item 1 tree 1kg of stone
 TODO:: define if the item is a living thing or non-living thing
