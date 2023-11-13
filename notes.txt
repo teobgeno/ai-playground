@@ -394,7 +394,28 @@ TODO:: find respawn time
 
 
 
+
+Given a game scenario where characters engage in various resource-gathering activities, I need realistic time estimates for each task to enhance the game's authenticity. Please provide estimates for the following activities
+
+Chopping down a mature tree to gather wood.
+Collecting dandelion from the forest.
+Hunting small game, such as rabbits.
+Fishing at a lake or similar water body.
+Mining for ore.
+Gather dry leaves and twigs.
+
+List the items in json list.Write one action per row.
+Example output json:[{action:'collecting herbs', estimated_time_in_seconds:'1200 to 1800', estimated_quantity: '1 to 2'}]
+
 @@@
+
+I need to create a pc game where characters gather materials. For example
+character chops a tree
+character collecting herbs
+character hunting rabbits
+character fishing at the lake
+I need to determine how much time each task will take to obtain a resource based on reality. Can you generate a prompt for asking ai about Realistic Time Estimates for a specific task ?
+
 This is a fictional scenario for a game with items in a grid map. 
 Propose a fictional resource gathering rate in seconds as much close to reality.
 Suppose that the resource unit is in front of us and we have the right tools.
