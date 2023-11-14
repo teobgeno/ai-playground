@@ -316,12 +316,13 @@ ______________________ STARTING THOUGHTS ______________________
 This is a fictional scenario for a game. 
 It is Medieval Period in a fictional place near a forest where Alex is trying to survive.
 Alex's inventory: axe
-Alex' status: hungry
+Alex's saturation: fed
 What actions should be taken in order to achieve his goals?
 Priority should have values from 1 to 10 where 10 is extremely important for the current situation.
 Avoid generic actions try to be specific.
 List the items in json list.Write one action per row.
-Example output json:[{action:'fell trees for wood', purpose:'use in building and crafting', priority: 4}]
+Classify each action to the following categories : gather resources-materials, crafting-building, planting, unknown
+Example output json:[{action:'fell trees for wood', purpose:'use in building and crafting', priority: 4, category:'gather resources-materials'}]
 
 
   { "action": "scout the forest perimeter", "purpose": "identify potential threats and resources" },
@@ -359,11 +360,13 @@ activity: Locate a clean water source
 Output the response only for the last activity in json.
 
 TODO:: the generated resource must be a resource (check: Locate a clean water source)
+TODO:: use spacy to mconvert plural nouns to singular nouns
 --------------------------------------------
 activity: Locate a clean water source
 What action should a person do in order to accomplish this activity.
 We need only the verb.
 Answer:
+TODO:: use spacy to extract verb
 --------------------------------------------
 TODO:: define the unit of the item 1 tree 1kg of stone
 TODO:: define if the item is a living thing or non-living thing
@@ -372,16 +375,18 @@ TODO:: define if the item is below or above earth surface (need digging)
 TODO:: define the mass of the object how many tiles of the grid we need to place the object
 TODO:: probability of find {rabbits} at forest : 60%
 --------------------------------------------
-This is a fictional scenario for a game with items in a grid map.
-activity: chop tree
-Suppose that the resource unit is in front of us and we have the right tools. Assume that we only need 1 unit of this item. 
-On the scale of 1 to 10, where 1 is quick and 10 is extremely time consuming, rate the final result of this action.
-Output only the result number.
 
+Given a medieval-themed game scenario where characters engage in various resource-gathering activities, I need realistic time estimates for each task to enhance the game's authenticity. Please provide estimates for the following activities
 
-Suppose that the resource unit is in front of us and we have the right tools.
-How much time in average do a normal person needs in order to gather a berrie. 
-Output only the number in seconds
+chop tree.
+gather leaves and twigs.
+Hunting rabbits.
+Fishing at lake.
+Mining for ore.
+
+List the items in json list.Write one action per row.
+Example output json:[{action:'collecting water', estimated_time_in_seconds:'120 to 240', estimated_quantity: '1 to 2 @ litres'}]
+
 
 ----------------------------------------------------------
 This is a fictional scenario for a game with items in a grid map.
@@ -395,22 +400,24 @@ TODO:: find respawn time
 
 
 
-Given a game scenario where characters engage in various resource-gathering activities, I need realistic time estimates for each task to enhance the game's authenticity. Please provide estimates for the following activities
 
-Chopping down a mature tree to gather wood.
-Collecting dandelion from the forest.
-Hunting small game, such as rabbits.
-Fishing at a lake or similar water body.
-Mining for ore.
-Gather dry leaves and twigs.
-
-List the items in json list.Write one action per row.
-Example output json:[{action:'collecting herbs', estimated_time_in_seconds:'1200 to 1800', estimated_quantity: '1 to 2'}]
 
 @@@
 
+
+This is a fictional scenario for a game with items in a grid map.
+activity: chop tree
+Suppose that the resource unit is in front of us and we have the right tools. Assume that we only need 1 unit of this item. 
+On the scale of 1 to 10, where 1 is quick and 10 is extremely time consuming, rate the final result of this action.
+Output only the result number.
+
+
+Suppose that the resource unit is in front of us and we have the right tools.
+How much time in average do a normal person needs in order to gather a berrie. 
+Output only the number in seconds
+
 I need to create a pc game where characters gather materials. For example
-character chops a tree
+chops a tree
 character collecting herbs
 character hunting rabbits
 character fishing at the lake
