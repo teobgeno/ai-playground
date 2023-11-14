@@ -11,5 +11,5 @@ class GatherResourcesTask:
     def id(self):
         return self._id
 
-    def excute():
+    def execute():
         pass
