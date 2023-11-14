@@ -195,6 +195,21 @@ onFrontMove
     send api calculate physical condition (tired)
     log player x,y
     log moveAction
+
+
+
+GatherResourcesTask(thought = gather dry leaves and twigs, llm)
+    setup
+        "gather dry leaves and twigs"
+        check if task exists in db if exist execute ele create
+        retFind = decideLocationAction(task.full_descr, character) ret section/arena/gameObject (e.x tree)
+    create
+
+    execute
+
+
+
+
  
 
 This is a fictional scenario for a game. 
