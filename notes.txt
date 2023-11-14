@@ -201,7 +201,7 @@ onFrontMove
 GatherResourcesTask(thought = gather dry leaves and twigs, llm)
     setup
         "gather dry leaves and twigs"
-        check if task exists in db if exist execute else create
+        check if thought exists in db as action if exist execute else create
         retFind = decideLocationAction(task.full_descr, character) ret section/arena/gameObject (e.x tree)
     create
 

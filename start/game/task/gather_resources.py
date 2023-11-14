@@ -11,5 +11,14 @@ class GatherResourcesTask:
     def id(self):
         return self._id
 
+    def setup():
+        # query embeddings
+        pass
+
+    def create():
+        # create new action
+        pass
+
     def execute():
+        # execute created or existing action
         pass
