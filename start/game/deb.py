@@ -76,18 +76,23 @@ def test_action():
 
 
 def test_whatever():
+
+    # @@ action compose @@
+    g = GatherResourcesTask({})
+    g.create()
     # @@ character @@
-    skills = []
-    skill_woodcutter = CharacterSkill.create({'id': 1,
-                                              'title': 'Wood cutter',
-                                              'current_level': 5,
-                                              'max_level': 20,
-                                              'level_descr': 'Significant Familiarity',
-                                              'current_xp': 15000,
-                                              'next_xp':  21000})
-    skills.append(skill_woodcutter)
-    ch = Character.create(1, 'Alex', skills)
-    print('ok')
+    # skills = []
+    # skill_woodcutter = CharacterSkill.create({'id': 1,
+    #                                           'title': 'Wood cutter',
+    #                                           'current_level': 5,
+    #                                           'max_level': 20,
+    #                                           'level_descr': 'Significant Familiarity',
+    #                                           'current_xp': 15000,
+    #                                           'next_xp':  21000})
+    # skills.append(skill_woodcutter)
+    # ch = Character.create(1, 'Alex', skills)
+    # print('ok')
+
     # resolved_tasks = resolve_gpt_tasks(get_gpt_tasks())
     # resolved_tasks = [Task.create(x) for x in tasks_data['tasks']]
     # https://www.programiz.com/python-programming/list-comprehension

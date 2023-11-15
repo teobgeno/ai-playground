@@ -4,19 +4,13 @@ from game.llm import DecideLocationPrompt, OpenAIAPI
 
 class DecideLocationAction:
     def __init__(self, props):
-        self._id = props["id"]
-        self._prompt: DecideLocationPrompt = props["decide_location_prompt"]
-        self._llm: OpenAIAPI = props["llm"]
+        self._decide_location_prompt: DecideLocationPrompt = props["decide_location_prompt"]
 
     @classmethod
     def create(cls, props):
         return cls(props)
 
-    @property
-    def id(self):
-        return self._id
-
-    def execute(self, action: str):
+    def execute(self):
         # TODO:: query llm
         # map.getSectors()
         # selected_sectors = self.chooseSector(map.getSectors(), action: str)
@@ -30,10 +24,8 @@ class DecideLocationAction:
         selected_game_objects = self.getGameObjects([])
         return {"sector": selected_sectors[0], "arena": '', "game_object": selected_game_objects[0]}
 
-    def getSectors(map_sectors: List[str]):
-        # TODO:: query llm
-        return ["forest"]
+    def getSectors(self, map_sectors: List[str]):
+        return self._decide_location_prompt.chooseSectors()
 
-    def getGameObjects(map_game_objects: List[str]):
-        # TODO:: query llm
-        return ["tree"]
+    def getGameObjects(self, map_game_objects: List[str]):
+        return self._decide_location_prompt.chooseGameObjects()

@@ -511,5 +511,6 @@ for row in grid:
     print(" ".join(row))
 
 
-
-
+--- DI ---
+https://www.netguru.com/blog/dependency-injection-with-python-make-it-easy
+https://github.com/kodemore/kink

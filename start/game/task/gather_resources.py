@@ -1,7 +1,10 @@
+from game.actions.decide_location import DecideLocationAction
+from game.llm import DecideLocationPrompt, OpenAIAPI
+
 
 class GatherResourcesTask:
     def __init__(self, props):
-        self._id = props["id"]
+        self._id = 1
 
     @classmethod
     def create(cls, props):
@@ -11,13 +14,15 @@ class GatherResourcesTask:
     def id(self):
         return self._id
 
-    def setup():
+    def setup(self):
         # query embeddings
         pass
 
-    def create():
+    def create(self):
         # create new action
-        pass
+        a_loc = DecideLocationAction(
+            {'decide_location_prompt': DecideLocationPrompt({'llm': OpenAIAPI()})})
+        print(a_loc.execute())
 
     def execute():
         # execute created or existing action
