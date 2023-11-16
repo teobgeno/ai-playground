@@ -30,7 +30,7 @@ class DecideLocationAction:
         ret_obj = []
         selected_sections = self.get_selected_sections()
         if len(selected_sections) > 0:
-            for section in self.selected_sections:
+            for section in selected_sections:
                 selected_game_objects = self.get_selected_game_objects(
                     [e["id"] for e in self._game_objects if e["section_id"] == section["id"]])
                 ret_obj.append(
