@@ -14,10 +14,6 @@ class DecideLocationPrompt:
         # TODO:: query llm
         return ["forest"]
 
-    def chooseArena(map_sectors: List[str]):
-        # TODO:: query llm
-        return []
-
     def chooseGameObjects(map_sectors: List[str]):
         # TODO:: query llm
         return ["tree"]
