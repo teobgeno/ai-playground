@@ -198,19 +198,8 @@ onFrontMove
 
 
 
-GatherResourcesTask(thought = gather dry leaves and twigs, llm)
-    setup
-        "gather dry leaves and twigs"
-        check if thought exists in db as action if exist execute else create
-        retFind = decideLocationAction(task.full_descr, character) ret section/arena/gameObject (e.x tree)
-    create
-
-    execute
 
 
-
-
- 
 
 This is a fictional scenario for a game. 
 If the action is not available enclose the action in #.
@@ -350,12 +339,13 @@ Example output json:[{action:'fell trees for wood', purpose:'use in building and
   { "action": "carve a wooden spear", "purpose": "improve personal defense capabilities" },
   { "action": "establish a hidden storage spot for valuable items", "purpose": "protect essential belongings" }
 
-______________________ CREATE ACTION ______________________
-
+______________________ CREATE ACTION LLM  ______________________
+1)
 activity: Fish in nearby rivers or streams
 classify the activity to one of the following categories : gather resources-materials, crafting-building, planting
 
 --------------------------------------------
+2)
 This is a fictional scenario for a game with a fixed number of items. 
 The items that you can gather as resources are : tree, dandelion
 
@@ -376,12 +366,14 @@ Output the response only for the last activity in json.
 TODO:: the generated resource must be a resource (check: Locate a clean water source)
 TODO:: use spacy to mconvert plural nouns to singular nouns
 --------------------------------------------
+3)
 activity: Locate a clean water source
 What action should a person do in order to accomplish this activity.
 We need only the verb.
 Answer:
 TODO:: use spacy to extract verb
 --------------------------------------------
+4)
 TODO:: define the unit of the item 1 tree 1kg of stone
 TODO:: define if the item is a living thing or non-living thing
 TODO:: define if the item is moving
@@ -389,7 +381,7 @@ TODO:: define if the item is below or above earth surface (need digging)
 TODO:: define the mass of the object how many tiles of the grid we need to place the object
 TODO:: probability of find {rabbits} at forest : 60%
 --------------------------------------------
-
+5)
 Given a medieval-themed game scenario where characters engage in various resource-gathering activities, I need realistic time estimates for each task to enhance the game's authenticity. Please provide estimates for the following activities
 
 chop tree.
@@ -412,8 +404,27 @@ TODO:: find respawn time
 
 
 
+______________________ FRONT/API CREATE ACTION ______________________
+
+fell trees for wood to use in building and crafting
+CREATE ACTION LLM -> 1
+IF category == gather resources-materials
+
+GatherResourcesTask(thought = fell trees for wood to use in building and crafting, llm)
+    create
+        get_selected_sections() -> llm find appropriate place-section
+        get_selected_game_objects() -> get game objects from selected sections and CREATE ACTION LLM -> 2
+        [{"sector": 1, "game_objects": [4]}]  where 1 = forest, 4 = tree
+        if retured game_objects does not exist CREATE ACTION LLM -> 4 create new material
+        CREATE ACTION LLM -> 3. create synonyms for the action and take embeddings
+        save new action
+    update
+        when new thought much with embeddings action and the thought does not exists as synonym
+        when new sections in the game
+        when new game objects at selected sections of the action
 
 
+   
 
 
 @@@
