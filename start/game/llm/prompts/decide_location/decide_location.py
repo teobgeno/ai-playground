@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 from game.llm import OpenAIAPI
 
 
@@ -10,10 +10,13 @@ class DecideLocationPrompt:
     def create(cls, props):
         return cls(props)
 
-    def chooseSectors(map_sectors: List[str]):
+    def choose_sections(self, map_sections: List[Any]):
         # TODO:: query llm
-        return ["forest"]
+        if map_sections[0]["keyword"] == "house":
+            return []
+        else:
+            return [{'id': 1, 'parent_id': 0, 'keyword': 'forest'}]
 
-    def chooseGameObjects(map_sectors: List[str]):
+    def choose_game_objects(self, map_sections: List[str]):
         # TODO:: query llm
-        return ["tree"]
+        return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]

@@ -22,7 +22,7 @@ class GatherResourcesTask:
         # create new action
         a_loc = DecideLocationAction(
             {'decide_location_prompt': DecideLocationPrompt({'llm': OpenAIAPI()})})
-        print(a_loc.execute())
+        a_loc.execute()
 
     def execute():
         # execute created or existing action

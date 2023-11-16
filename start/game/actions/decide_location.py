@@ -5,13 +5,13 @@ from game.llm import DecideLocationPrompt
 class DecideLocationAction:
     def __init__(self, props):
         self._decide_location_prompt: DecideLocationPrompt = props["decide_location_prompt"]
-        self._sections = [{'id': 1, 'parent_id': 0, 'type': 'forest'},
-                          {'id': 2, 'parent_id': 0, 'type': 'lake'},
-                          {'id': 3, 'parent_id': 0, 'type': 'village'},
-                          {'id': 4, 'parent_id': 1, 'type': 'house'}]
+        self._sections = [{'id': 1, 'parent_id': 0, 'keyword': 'forest'},
+                          {'id': 2, 'parent_id': 0, 'keyword': 'lake'},
+                          {'id': 3, 'parent_id': 0, 'keyword': 'village'},
+                          {'id': 4, 'parent_id': 1, 'keyword': 'house'}]
 
         self._game_objects = [
-            {'id': 1, 'section_id': 1, 'parent_id': 0, 'type': 'tree'}]
+            {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
 
     @classmethod
     def create(cls, props):
@@ -20,23 +20,35 @@ class DecideLocationAction:
     def execute(self):
         # TODO:: query llm
         # map.getSectors()
-        # selected_sectors = self.chooseSector(map.getSectors(depth = 0), action: str)
-        # selected_game_objects = map.getGameObjects(selected_sectors[0].id)
+        # selected_sections = self.chooseSector(map.getSectors(depth = 0), action: str)
+        # selected_game_objects = map.getGameObjects(selected_sections[0].id)
         # foreach sector get game objects
         # output [
         #   {sector: 'forest', game_objects : ['tree', 'herbs']}
-        #   sectors can be nested e.x forest -> house
+        #   sections can be nested e.x forest -> house
         #   game_object can be nested e.x cupboard -> book
-        selected_sectors = self.getSelectedSectors([])
-        selected_game_objects = self.getGameObjects([])
-        return [{"sector": selected_sectors[0], "game_object": selected_game_objects[0]}]
+        ret_obj = []
+        selected_sections = self.get_selected_sections()
+        if len(selected_sections) > 0:
+            for section in self.selected_sections:
+                selected_game_objects = self.get_selected_game_objects(
+                    [e["id"] for e in self._game_objects if e["section_id"] == section["id"]])
+                ret_obj.append(
+                    {"sector": section["id"], "game_objects": [e["id"] for e in selected_game_objects]})
 
-    def getSelectedObjects(self, parent_id=0, obj=[]):
+        return ret_obj
 
-        pass
+    def get_selected_sections(self, parent_ids=[0], selected_sections=[]):
+        child_sections = [
+            e for e in self._sections if parent_ids.count(e["parent_id"])]
+        chosen_sections = self._decide_location_prompt.choose_sections(
+            child_sections)
+        if len(chosen_sections) > 0:
+            selected_sections = chosen_sections
+            current_parent_ids = [e["id"] for e in selected_sections]
+            self.get_selected_sections(current_parent_ids, selected_sections)
 
-    def getSelectedSectors(self, map_sectors: List[str]):
-        return self._decide_location_prompt.chooseSectors()
+        return selected_sections
 
-    def getGameObjects(self, map_game_objects: List[str]):
-        return self._decide_location_prompt.chooseGameObjects()
+    def get_selected_game_objects(self, selected_game_objects):
+        return self._decide_location_prompt.choose_game_objects(selected_game_objects)
