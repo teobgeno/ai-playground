@@ -365,6 +365,13 @@ Output the response only for the last activity in json.
 
 TODO:: the generated resource must be a resource (check: Locate a clean water source)
 TODO:: use spacy to mconvert plural nouns to singular nouns
+
+--------------------------------------------
+2.1)
+action : hunt for game in the forest
+what resource can be gathered from the action above. 
+if the resource is too generic be more specific.
+Example output json:{resource:'deer'}
 --------------------------------------------
 3)
 activity: Locate a clean water source
@@ -417,10 +424,10 @@ GatherResourcesTask(thought = fell trees for wood to use in building and craftin
         [{"sector": 1, "game_objects": [4]}]  where 1 = forest, 4 = tree
         if sector does not exist return error cannot find place or the charachter should explore new areas
         if retured game_objects does not exist CREATE ACTION LLM -> 4 create new material
-        CREATE ACTION LLM -> 3. create synonyms for the action and take embeddings
+        CREATE ACTION LLM -> 3. create synonyms for the action and create embeddings
         save new action
     update
-        when new thought much with embeddings action and the thought does not exists as synonym
+        when new thought match with embeddings action and the thought does not exists as synonym
         when new sections in the game
         when new game objects at selected sections of the action
 
@@ -521,6 +528,68 @@ generate_forest(grid, num_trees_in_forest)
 # Print the grid
 for row in grid:
     print(" ".join(row))
+
+
+
+
+
+
+
+
+
+
+Resources in the Middle Ages can be classified into several categories based on their nature, utility, and significance in the socio-economic context of that time. Here are some broad categories:
+
+Land:
+
+Agricultural land: The primary source of sustenance and wealth.
+Pasture land: Used for grazing livestock.
+Forests: Provided wood for construction and fuel, as well as hunting grounds.
+Labor:
+
+Serfs/Peasants: The workforce bound to the land, providing labor in exchange for protection.
+Craftsmen: Skilled workers who produced goods such as tools, clothing, and household items.
+Guildsmen: Members of guilds, organized groups of craftsmen that regulated and protected their trade.
+Minerals and Metals:
+
+Iron, copper, tin, and other metals for tools and weapons.
+Stone for construction.
+Crops and Food Resources:
+
+Grains (wheat, barley, oats): Staple food sources.
+Livestock (cattle, sheep, pigs): Provided meat, milk, leather, and wool.
+Water Resources:
+
+Rivers and streams for transportation, irrigation, and milling.
+Wells and springs for drinking water.
+Trade and Commerce:
+
+Trade routes: Controlled access to valuable goods and facilitated economic exchange.
+Marketplaces: Hubs for buying and selling goods.
+Human Capital:
+
+Intellectual resources: Scholars, monks, and scribes who preserved knowledge.
+Military strength: Soldiers and knights for defense and conquest.
+Buildings and Infrastructure:
+
+Castles and fortifications for defense.
+Churches and monasteries for religious and cultural purposes.
+Roads and bridges for transportation.
+Knowledge and Education:
+
+Manuscripts and books: Preserved knowledge in religious, scientific, and literary works.
+Monastic schools: Centers of education and scholarship.
+Money and Currency:
+
+Coins: Used for trade and transactions.
+Social and Political Resources:
+
+Nobility: Landowners and rulers who held political power.
+Monarchy: Centralized political authority.
+These categories illustrate the diverse range of resources that were essential for survival, economic prosperity, and societal organization during the Middle Ages. Keep in mind that the significance of each resource varied across different regions and time periods within the Middle Ages.
+
+
+
 
 
 --- DI ---

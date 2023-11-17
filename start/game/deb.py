@@ -80,13 +80,15 @@ def test_whatever():
 
     # @@ action compose @@
 
+    # fell trees for wood to use in building and crafting
     a_loc = DecideLocationAction(
         {'decide_location_prompt': DecideLocationPrompt({'llm': OpenAIAPI()})})
-    a_loc.execute()
+    t = a_loc.execute()
+    print(t)
 
     # g = GatherResourcesTask({})
     # g.create()
-    
+
     # @@ character @@
     # skills = []
     # skill_woodcutter = CharacterSkill.create({'id': 1,
