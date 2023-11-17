@@ -415,6 +415,7 @@ GatherResourcesTask(thought = fell trees for wood to use in building and craftin
         get_selected_sections() -> llm find appropriate place-section
         get_selected_game_objects() -> get game objects from selected sections and CREATE ACTION LLM -> 2
         [{"sector": 1, "game_objects": [4]}]  where 1 = forest, 4 = tree
+        if sector does not exist return error cannot find place or the charachter should explore new areas
         if retured game_objects does not exist CREATE ACTION LLM -> 4 create new material
         CREATE ACTION LLM -> 3. create synonyms for the action and take embeddings
         save new action

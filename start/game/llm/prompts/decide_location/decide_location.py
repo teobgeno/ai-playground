@@ -20,4 +20,6 @@ class DecideLocationPrompt:
     def choose_game_objects(self, map_sections: List[Any]):
         # TODO:: query llm
         # llm will return comma seperated strings like rabbit, deer
+        # if item exist {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}
+        # if item not exist {'id': 0, 'section_id': 0, 'parent_id': 0, 'keyword': 'rabbit'}
         return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
