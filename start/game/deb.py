@@ -5,6 +5,7 @@ from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.task import *
+from game.llm import DecideLocationPrompt, OpenAIAPI
 
 
 # @@ vars @@
@@ -78,8 +79,14 @@ def test_action():
 def test_whatever():
 
     # @@ action compose @@
-    g = GatherResourcesTask({})
-    g.create()
+
+    a_loc = DecideLocationAction(
+        {'decide_location_prompt': DecideLocationPrompt({'llm': OpenAIAPI()})})
+    a_loc.execute()
+
+    # g = GatherResourcesTask({})
+    # g.create()
+    
     # @@ character @@
     # skills = []
     # skill_woodcutter = CharacterSkill.create({'id': 1,

@@ -10,13 +10,14 @@ class DecideLocationPrompt:
     def create(cls, props):
         return cls(props)
 
-    def choose_sections(self, map_sections: List[Any]):
+    def choose_sections(self, sections: List[Any]):
         # TODO:: query llm
-        if map_sections[0]["keyword"] == "house":
+        if sections[0]["keyword"] == "house":
             return []
         else:
             return [{'id': 1, 'parent_id': 0, 'keyword': 'forest'}]
 
-    def choose_game_objects(self, map_sections: List[str]):
+    def choose_game_objects(self, map_sections: List[Any]):
         # TODO:: query llm
+        # llm will return comma seperated strings like rabbit, deer
         return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]

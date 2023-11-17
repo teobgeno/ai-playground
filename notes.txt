@@ -351,12 +351,12 @@ The items that you can gather as resources are : tree, dandelion
 
 activity: fell trees for wood to use in building and crafting
 item exist in list: yes
-existing resource : tree
+existing resources : tree
 new generated resources: none
 ---
 activity: hunt for game in the forest
 item exist in list: no
-existing item : none
+existing resources : none
 new generated resources: rabbit, deer
 ---
 activity: Locate a clean water source
