@@ -366,10 +366,8 @@ TODO:: the generated resource must be a resource (check: Locate a clean water so
 TODO:: use spacy to mconvert plural nouns to singular nouns
 
 --------------------------------------------
-2.1)
-
-This is a fictional scenario for a game with a fixed number of items. 
-The items that you can use to gather the resources are : tree, dandelion
+2.1) ⭐
+The items that you can use to gather the required resources are : tree, dandelion
 
 activity: fell trees for wood to use in building and crafting
 existing items : tree
@@ -381,13 +379,13 @@ new generated items: rabbit, deer
 activity: Locate a clean water source
 Output the response only for the last activity in json.
 
-2.2)
+2.2) ⭐
 action: fell trees for wood to use in building and crafting
-what item can be gathered from the action above.
-The item must be directly related to the action. 
-The item must be a tangible material that can be transferred and stored in a warehouse.
+what resource should be gathered from tree to complete the action above.
+The resource must be directly related to the action. 
+The resource must be a tangible material that can be transferred and stored in a warehouse.
 List one item per row.
-Example output json:[{resource:'fish'}]
+Example output json:{resource:'fish'}
 
 
 Any natural substance that humans use can be considered a natural resource
@@ -396,11 +394,10 @@ On the basis of tier availability, resources can be classified into two types: R
 Resources are divided into two categories based on their origin: biotic and abiotic resources.
 --------------------------------------------
 3)
-activity: Locate a clean water source
-What action should a person do in order to accomplish this activity.
+action: fell trees for wood to use in building and crafting
+What action should be executed at tree to gather logs.
 We need only the verb.
 Answer:
-TODO:: use spacy to extract verb
 --------------------------------------------
 4)
 TODO:: define the unit of the item 1 tree 1kg of stone
