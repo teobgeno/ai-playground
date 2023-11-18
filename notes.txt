@@ -352,7 +352,6 @@ The items that you can gather as resources are : tree, dandelion
 activity: fell trees for wood to use in building and crafting
 item exist in list: yes
 existing resources : tree
-new generated resources: none
 ---
 activity: hunt for game in the forest
 item exist in list: no
@@ -368,10 +367,33 @@ TODO:: use spacy to mconvert plural nouns to singular nouns
 
 --------------------------------------------
 2.1)
-action : hunt for game in the forest
-what resource can be gathered from the action above. 
-if the resource is too generic be more specific.
-Example output json:{resource:'deer'}
+
+This is a fictional scenario for a game with a fixed number of items. 
+The items that you can use to gather the resources are : tree, dandelion
+
+activity: fell trees for wood to use in building and crafting
+existing items : tree
+---
+activity: hunt for game in the forest
+existing items : none
+new generated items: rabbit, deer
+---
+activity: Locate a clean water source
+Output the response only for the last activity in json.
+
+2.2)
+action: fell trees for wood to use in building and crafting
+what item can be gathered from the action above.
+The item must be directly related to the action. 
+The item must be a tangible material that can be transferred and stored in a warehouse.
+List one item per row.
+Example output json:[{resource:'fish'}]
+
+
+Any natural substance that humans use can be considered a natural resource
+A resource is any physical material that is a part of our planet, earth, that humans value or require. 
+On the basis of tier availability, resources can be classified into two types: Renewable and nonrenewable resources. 
+Resources are divided into two categories based on their origin: biotic and abiotic resources.
 --------------------------------------------
 3)
 activity: Locate a clean water source
