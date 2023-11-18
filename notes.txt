@@ -393,7 +393,7 @@ A resource is any physical material that is a part of our planet, earth, that hu
 On the basis of tier availability, resources can be classified into two types: Renewable and nonrenewable resources. 
 Resources are divided into two categories based on their origin: biotic and abiotic resources.
 --------------------------------------------
-3)
+3) ⭐
 action: fell trees for wood to use in building and crafting
 What action should be executed at tree to gather logs.
 We need only the verb.
