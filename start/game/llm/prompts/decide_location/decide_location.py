@@ -42,15 +42,18 @@ class DecideLocationPrompt:
 
     def get_valid_responce(self, response):
         try:
+            ret = None
             parsed_response = json.loads(response)
             if isinstance(parsed_response, list):
                 validated_response = DecideLocationResponse.model_validate(
                     {"res": parsed_response})
+                ret = parsed_response
             else:
                 validated_response = DecideLocationResponse.model_validate(
                     {"res": [parsed_response]})
+                ret = [parsed_response]
 
-            return parsed_response
+            return ret
         except ValidationError as e:
             print("Unable to validate LLM response.")
             return None
