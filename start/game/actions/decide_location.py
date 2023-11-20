@@ -5,10 +5,15 @@ from game.llm import DecideLocationPrompt
 class DecideLocationAction:
     def __init__(self, props):
         self._decide_location_prompt: DecideLocationPrompt = props["decide_location_prompt"]
-        self._sections = [{'id': 1, 'parent_id': 0, 'keyword': 'forest'},
+        self._sections = [{'id': 1, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 1'},
                           {'id': 2, 'parent_id': 0, 'keyword': 'lake'},
                           {'id': 3, 'parent_id': 0, 'keyword': 'village'},
-                          {'id': 4, 'parent_id': 1, 'keyword': 'house'}]
+                          {'id': 4, 'parent_id': 1, 'keyword': 'house'},
+                          {'id': 5, 'parent_id': 0,
+                              'keyword': 'forest', 'title': 'Forest 2'}
+                          ]
+
+        self._keywords = set([e["keyword"] for e in self._sections])
 
         self._game_objects = [
             {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
@@ -39,12 +44,13 @@ class DecideLocationAction:
         return ret_obj
 
     def get_selected_sections(self, parent_ids=[0], selected_sections=[]):
-        child_sections = [
-            e for e in self._sections if parent_ids.count(e["parent_id"])]
+        child_sections = set([
+            e["keyword"] for e in self._sections if parent_ids.count(e["parent_id"])])
         chosen_sections = self._decide_location_prompt.choose_sections(
             child_sections)
         if len(chosen_sections) > 0:
-            selected_sections = chosen_sections
+            selected_sections = [
+                e for e in self._sections if parent_ids.count(e["parent_id"]) and chosen_sections.count(e["keyword"])]
             current_parent_ids = [e["id"] for e in selected_sections]
             self.get_selected_sections(current_parent_ids, selected_sections)
 

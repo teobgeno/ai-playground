@@ -22,7 +22,7 @@ class PromptParser:
         f.close()
         for count in curr_input:
             prompt = prompt.replace(
-                f"!<INPUT {count["keyword"]}>!", count["value"])
+                f"!<INPUT {count['keyword']}>!", count["value"])
         if "<commentblockmarker>###</commentblockmarker>" in prompt:
             prompt = prompt.split(
                 "<commentblockmarker>###</commentblockmarker>")[1]

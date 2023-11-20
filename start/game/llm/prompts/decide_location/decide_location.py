@@ -2,7 +2,7 @@ from typing import List, Any
 from pydantic import BaseModel, ValidationError
 import json
 from game.llm import LLMProvider
-from game.llm.prompt_parser import PromptParser
+from game.llm import PromptParser
 
 
 class DecideLocationItem(BaseModel):
@@ -23,16 +23,16 @@ class DecideLocationPrompt:
 
     def choose_sections(self, sections: List[Any]):
         # TODO:: query llm
-        sections_str = ','.join([e["keyword"] for e in sections])
+        sections_str = ','.join([e for e in sections])
 
         prompt_data = []
         prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
         prompt_file = "game/llm/prompts/decide_location/action_section.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
-        parsed_response = self.get_valid_responce(response)
+        parsed_response = self.get_valid_response(response)
         if parsed_response is not None:
-            parsed_response = json.loads(response)
+            return [e["section"] for e in parsed_response]
             if sections[0]["keyword"] == "house":
                 return []
             else:
@@ -40,7 +40,7 @@ class DecideLocationPrompt:
 
         return []
 
-    def get_valid_responce(self, response):
+    def get_valid_response(self, response):
         try:
             ret = None
             parsed_response = json.loads(response)

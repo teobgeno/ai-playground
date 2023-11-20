@@ -8,5 +8,7 @@ class MockAIAPI:
 
     def request(self, llm_params, prompt):
         if prompt.find('Area options') != -1:
-            return '{"section": "forest"}'
-        pass
+            if prompt.find('house') != -1:
+                return '{}'
+            else:
+                return '{"section": "forest"}'
