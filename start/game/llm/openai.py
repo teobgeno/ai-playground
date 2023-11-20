@@ -6,6 +6,9 @@ class OpenAIAPI:
     ):
         self.api_key = api_key
 
+    def request():
+        pass
+
     # prompt = 'GPT-3 Prompt:\n"""\n' + prompt + '\n"""\n'
     # prompt += f"Output the response to the prompt above in json. {special_instruction}\n"
     # prompt += "Example output json:\n"
