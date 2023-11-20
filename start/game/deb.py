@@ -5,7 +5,7 @@ from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.task import *
-from game.llm import DecideLocationPrompt, OpenAIAPI
+from game.llm import DecideLocationPrompt, LLMProvider
 
 
 # @@ vars @@
@@ -82,9 +82,8 @@ def test_whatever():
 
     # fell trees for wood to use in building and crafting
     a_loc = DecideLocationAction(
-        {'decide_location_prompt': DecideLocationPrompt({'llm': OpenAIAPI()})})
+        {'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})})
     t = a_loc.execute()
-    print(t)
 
     # g = GatherResourcesTask({})
     # g.create()

@@ -6,5 +6,7 @@ class MockAIAPI:
     ):
         self.api_key = api_key
 
-    def request():
+    def request(self, llm_params, prompt):
+        if prompt.find('Area options') != -1:
+            return '{"section": "forest"}'
         pass

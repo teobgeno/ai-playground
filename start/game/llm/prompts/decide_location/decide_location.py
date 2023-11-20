@@ -1,12 +1,16 @@
 from typing import List, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
+import json
 from game.llm import LLMProvider
 from game.llm.prompt_parser import PromptParser
 
 
+class DecideLocationItem(BaseModel):
+    section: str
+
+
 class DecideLocationResponse(BaseModel):
-    thought: str
-    answer: str
+    res: List[DecideLocationItem]
 
 
 class DecideLocationPrompt:
@@ -25,12 +29,31 @@ class DecideLocationPrompt:
         prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
         prompt_file = "game/llm/prompts/decide_location/action_section.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
-        # self._llm.request()
+        response = self._llm.request(self.get_llm_params(), prompt)
+        parsed_response = self.get_valid_responce(response)
+        if parsed_response is not None:
+            parsed_response = json.loads(response)
+            if sections[0]["keyword"] == "house":
+                return []
+            else:
+                return [{'id': 1, 'parent_id': 0, 'keyword': 'forest'}]
 
-        if sections[0]["keyword"] == "house":
-            return []
-        else:
-            return [{'id': 1, 'parent_id': 0, 'keyword': 'forest'}]
+        return []
+
+    def get_valid_responce(self, response):
+        try:
+            parsed_response = json.loads(response)
+            if isinstance(parsed_response, list):
+                validated_response = DecideLocationResponse.model_validate(
+                    {"res": parsed_response})
+            else:
+                validated_response = DecideLocationResponse.model_validate(
+                    {"res": [parsed_response]})
+
+            return parsed_response
+        except ValidationError as e:
+            print("Unable to validate LLM response.")
+            return None
 
     def choose_game_objects(self, game_objects: List[Any]):
         # TODO:: query llm
@@ -40,15 +63,13 @@ class DecideLocationPrompt:
         game_objects_str = ','.join([e["keyword"] for e in game_objects])
         return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
 
-    def get_llm_params():
-        return {"max_tokens": 1000,
-                "temperature": 0, "top_p": 1, "stream": False,
-                "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
+    def get_llm_params(self):
+        return {"max_tokens": 1000, "temperature": 0, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
 
     def parse_prompt(self, prompt_file, prompt_data):
         parser = PromptParser()
         parsed_prompt = parser.generate_prompt(prompt_file, prompt_data)
-        parser.print_run_prompts(parsed_prompt)
+        # parser.print_run_prompts(parsed_prompt)
         return parsed_prompt
 
 

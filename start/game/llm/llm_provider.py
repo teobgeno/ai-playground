@@ -7,5 +7,5 @@ class LLMProvider:
     ):
         self._api = MockAIAPI()
 
-    def request(self):
-        self._api.request()
+    def request(self, llm_params, prompt):
+        return self._api.request(llm_params, prompt)
