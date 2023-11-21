@@ -82,7 +82,7 @@ def test_whatever():
 
     # fell trees for wood to use in building and crafting
     a_loc = DecideLocationAction(
-        {'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})})
+        {'action_descr': 'fell trees for wood to use in building and crafting', 'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})})
     t = a_loc.execute()
 
     # g = GatherResourcesTask({})
