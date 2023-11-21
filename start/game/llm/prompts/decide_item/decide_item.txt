@@ -2,6 +2,7 @@ The items that you can use to gather the required resources are : {!<INPUT ITEMS
 
 action: fell trees for wood to use in building and crafting
 existing items : tree
+new generated items: none
 ---
 action: hunt for game in the forest
 existing items : none

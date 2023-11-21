@@ -40,7 +40,7 @@ class DecideLocationAction:
         #         ret_obj.append(
         #             {"section": section["id"], "game_objects": [e for e in selected_game_objects]})
 
-        return selected_sections
+        return [e["id"] for e in selected_sections]
 
     def get_selected_sections(self, parent_ids=[0], selected_sections=[]):
         child_sections = set([

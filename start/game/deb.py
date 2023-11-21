@@ -5,7 +5,8 @@ from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.task import *
-from game.llm import DecideLocationPrompt, LLMProvider
+from game.llm import DecideLocationPrompt, DecideItemPrompt, LLMProvider
+from game.actions import DecideLocationAction, DecideItemAction
 
 
 # @@ vars @@
@@ -82,8 +83,18 @@ def test_whatever():
 
     # fell trees for wood to use in building and crafting
     a_loc = DecideLocationAction(
-        {'action_descr': 'fell trees for wood to use in building and crafting', 'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})})
-    t = a_loc.execute()
+        {'action_descr': 'fell trees for wood to use in building and crafting',
+         'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})}
+    )
+    retLoc = a_loc.execute()
+
+    a_it = DecideItemAction(
+        {'action_descr': 'fell trees for wood to use in building and crafting',
+         'selected_sections': retLoc,
+         'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})}
+    )
+
+    itLoc = a_it.execute()
 
     # g = GatherResourcesTask({})
     # g.create()
