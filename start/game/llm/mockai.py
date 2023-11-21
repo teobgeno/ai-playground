@@ -12,3 +12,6 @@ class MockAIAPI:
                 return '{}'
             else:
                 return '{"section": "forest"}'
+
+        if prompt.find('new generated items') != -1:
+            return '{"existing_items" : "tree", "new_generated_items": "none"}'

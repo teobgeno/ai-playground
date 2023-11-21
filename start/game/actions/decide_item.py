@@ -15,8 +15,10 @@ class DecideItemAction:
         return cls(props)
 
     def execute(self):
-        selected_game_objects = self.get_selected_game_objects()
-        return selected_game_objects
+        selected_game_objects = self.get_selected_game_objects(
+            self._selected_sections)
+
+        return [e["id"] for e in selected_game_objects]
         # ret_obj = []
         # selected_sections = self.get_selected_sections()
         # if len(selected_sections) > 0:
@@ -28,5 +30,16 @@ class DecideItemAction:
 
         # return ret_obj
 
-    def get_selected_game_objects(self, selected_game_objects):
-        return self._decide_item_prompt.choose_game_objects(selected_game_objects)
+    def get_selected_game_objects(self, section_ids):
+        selected_game_objects = []
+        game_objects = set([
+            e["keyword"] for e in self._game_objects if section_ids.count(e["section_id"])])
+        chosen_game_objects = self._decide_item_prompt.choose_game_objects(
+            self._action_descr, game_objects)
+        if len(chosen_game_objects["existing_objects"]) > 0:
+            selected_game_objects = [
+                e for e in self._game_objects if section_ids.count(e["section_id"]) and chosen_game_objects["existing_objects"].count(e["keyword"])]
+
+        return selected_game_objects
+
+        # return self._decide_item_prompt.choose_game_objects(selected_game_objects)

@@ -7,7 +7,7 @@ from game.llm import PromptParser
 
 class DecideItemModel(BaseModel):
     existing_items: str
-    new_items: str
+    new_generated_items: str
 
 
 class DecideItemResponse(BaseModel):
@@ -32,10 +32,18 @@ class DecideItemPrompt:
         prompt_file = "game/llm/prompts/decide_item/decide_item.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
-        parsed_response = self.get_valid_response(response)
+        parsed_response: DecideItemModel = self.get_valid_response(response)
+        ret = {"existing_objects": [], "new_objects": []}
         if parsed_response is not None:
-            return [e["section"] for e in parsed_response]
-            return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
+            if parsed_response[0]["existing_items"] != "none":
+                ret["existing_objects"] = parsed_response[0]["existing_items"].split(
+                    ",")
+
+            if parsed_response[0]["new_generated_items"] != "none":
+                ret["new_objects"] = parsed_response[0]["new_generated_items"].split(
+                    ",")
+
+            return ret
 
         return []
 

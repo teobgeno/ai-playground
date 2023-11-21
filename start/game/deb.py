@@ -95,7 +95,7 @@ def test_whatever():
     )
 
     itLoc = a_it.execute()
-
+    print("ok")
     # g = GatherResourcesTask({})
     # g.create()
 
