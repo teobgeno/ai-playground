@@ -84,14 +84,16 @@ def test_whatever():
     # fell trees for wood to use in building and crafting
     a_loc = DecideLocationAction(
         {'action_descr': 'fell trees for wood to use in building and crafting',
-         'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})}
+         'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})
+         }
     )
     retLoc = a_loc.execute()
 
     a_it = DecideItemAction(
         {'action_descr': 'fell trees for wood to use in building and crafting',
          'selected_sections': retLoc,
-         'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})}
+         'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})
+         }
     )
 
     itLoc = a_it.execute()
@@ -137,7 +139,7 @@ def test_whatever():
     # decoded_team = Team(**json.loads(json_data))
     # print(decoded_team)
 
-
+# https://github.com/cpacker/MemGPT/tree/main
 # https://gamedev.stackexchange.com/questions/37680/pattern-for-performing-game-actions
 
 # https://github.com/sanjaybora04/CustomAiAssistant

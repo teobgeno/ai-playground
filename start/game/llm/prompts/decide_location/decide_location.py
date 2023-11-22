@@ -58,6 +58,9 @@ class DecideLocationPrompt:
         except ValidationError as e:
             print("Unable to validate LLM response.")
             return None
+        except Exception as e:
+            print(f"unhandled : {e}")
+            return None
 
     def choose_game_objects(self, game_objects: List[Any]):
         # TODO:: query llm

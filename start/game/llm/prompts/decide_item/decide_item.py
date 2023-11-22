@@ -64,6 +64,9 @@ class DecideItemPrompt:
         except ValidationError as e:
             print("Unable to validate LLM response.")
             return None
+        except Exception as e:
+            print(f"unhandled : {e}")
+            return None
 
     def get_llm_params(self):
         return {"max_tokens": 1000, "temperature": 0, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}

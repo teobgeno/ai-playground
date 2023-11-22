@@ -18,7 +18,13 @@ class DecideItemAction:
         selected_game_objects = self.get_selected_game_objects(
             self._selected_sections)
 
-        return [e["id"] for e in selected_game_objects]
+        ret = []
+        for gm in selected_game_objects:
+            ret.append({"id": gm["id"], "section_id": gm["section_id"]})
+
+        return ret
+
+        # https://stackoverflow.com/questions/46524760/create-a-list-comprehension-with-two-or-more-properties
         # ret_obj = []
         # selected_sections = self.get_selected_sections()
         # if len(selected_sections) > 0:
