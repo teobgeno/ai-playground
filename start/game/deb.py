@@ -97,6 +97,11 @@ def test_whatever():
     )
 
     itLoc = a_it.execute()
+    ret = {
+        'sections': retLoc,
+        'game_objects': itLoc
+    }
+    return ret
     print("ok")
     # g = GatherResourcesTask({})
     # g.create()

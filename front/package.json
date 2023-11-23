@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "A simple example renderer for Grid Engine, rendering the grid state as ASCII characters.",
   "scripts": {
-    "serve": "esbuild src/main.ts --servedir=. --outfile=main.js --bundle"
+    "serve": "esbuild src/main.ts --servedir=. --outfile=main.js --bundle",
+    "generate-noidea": "openapi --input http://127.0.0.1:8000/openapi.json --output ./src/no-idea-client --client axios --name NoIdeaClient"
   },
   "author": "Johannes Baum",
   "license": "Apache-2.0",
   "dependencies": {
+    "axios": "^1.5.0",
     "esbuild": "^0.18.12",
     "grid-engine": "^2.32.0"
+  },
+  "devDependencies": {
+    "openapi-typescript-codegen": "^0.25.0"
   }
 }

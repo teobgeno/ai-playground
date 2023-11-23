@@ -2,17 +2,22 @@ import {
   GridEngineHeadless,
   ArrayTilemap,
   CollisionStrategy,
-} from "grid-engine"
-import { AsciiRenderer } from "./AsciiRenderer"
+} from "grid-engine";
+import { AsciiRenderer } from "./AsciiRenderer";
+import { NoIdeaClient } from "./no-idea-client";
 
 export class App {
   private gridEngineHeadless: GridEngineHeadless;
   private asciiRenderer: AsciiRenderer;
   private tilemap: ArrayTilemap;
-  constructor(
-   
-  ) {
-    this.gridEngineHeadless = new GridEngineHeadless()
+  private noIdeaClient: NoIdeaClient;
+  private moveInterval: any;
+
+  constructor() {
+    this.gridEngineHeadless = new GridEngineHeadless();
+    this.noIdeaClient = new NoIdeaClient({
+      BASE: "http://localhost:8000",
+    });
   }
 
   public initMap() {
@@ -48,34 +53,39 @@ export class App {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ],
       },
-    })
+    });
     this.gridEngineHeadless.create(this.tilemap, {
       characters: [{ id: "player" }],
       characterCollisionStrategy: CollisionStrategy.BLOCK_ONE_TILE_AHEAD,
-    })
+    });
 
     this.asciiRenderer = new AsciiRenderer(
       "content",
       this.gridEngineHeadless,
       this.tilemap
-    )
-    this.asciiRenderer.render()
+    );
+    this.asciiRenderer.render();
   }
 
   public moveCharacter() {
-    const targetPos = { x: 1, y: 8 }
+    const targetPos = { x: 1, y: 8 };
     //console.log(gridEngineHeadless.getCharLayer('player'))
     //console.log(gridEngineHeadless.findShortestPath({position:{ x: 0, y: 0 }, charLayer:''}, {position:{ x: 4, y: 5 }, charLayer:''}));
-    this.gridEngineHeadless.moveTo("player", targetPos)
 
+    this.gridEngineHeadless.moveTo("player", targetPos);
     this.gridEngineHeadless
       .positionChangeFinished()
       .subscribe(({ enterTile }) => {
-        // if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
-        //   gridEngineHeadless.setPosition("player", { x: 0, y: 0 });
-        //   gridEngineHeadless.moveTo("player", targetPos);
-        // }
-      })
+        if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
+          console.log("ok");
+          clearInterval(this.moveInterval);
+        }
+      });
+
+    this.moveInterval = setInterval(() => {
+      this.gridEngineHeadless.update(0, 50);
+      this.asciiRenderer.render();
+    }, 100);
 
     // //the m rows are horizontal and the n columns are vertical
     // function manhattanDist(x1, y1, x2, y2) {
@@ -93,6 +103,11 @@ export class App {
     // }
   }
 
+  public getApiData() {
+    const t = this.noIdeaClient.default.testTestGet();
+    console.log(t);
+  }
+
   public update() {
     this.gridEngineHeadless.update(0, 50);
     this.gridEngineHeadless.update(0, 50);
@@ -100,7 +115,10 @@ export class App {
 }
 
 const app = new App();
+app.getApiData();
 app.initMap();
+app.moveCharacter();
+
 // setInterval(() => {
 //   gridEngineHeadless.update(0, 50);
 //   asciiRenderer.render();
