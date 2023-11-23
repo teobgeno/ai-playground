@@ -13,6 +13,7 @@ export class AsciiRenderer {
 
   /** Render the current state of Grid Engine. */
   render(): void {
+    console.log(this.tilemap)
     const strArr: string[] = [];
     // Iterate through all tiles of the map.
     for (let r = 0; r < this.tilemap.getHeight(); r++) {
@@ -20,17 +21,18 @@ export class AsciiRenderer {
         const pos = { x: c, y: r };
         if (this.gridEngine.getCharactersAt(pos).length > 0) {
           // tile is occupied by a character
-          strArr.push("c");
-        } else if (this.gridEngine.isTileBlocked(pos)) {
-          // tile is blocked
-          strArr.push("#");
+          strArr.push("⛄");
+        }  else if((this.tilemap as any).map.treesLayer.data[pos.y][pos.x] === 2) {
+          strArr.push("🌳");
         } else {
-          // tile is free
-          strArr.push(".");
+          strArr.push("⚀");
         }
+
       }
       strArr.push("\n");
     }
+
+    //else if (this.gridEngine.isTileBlocked(pos))
 
     this.renderStr(strArr.join(""));
   }

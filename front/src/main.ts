@@ -11,17 +11,32 @@ const gridEngineHeadless = new GridEngineHeadless();
 // 0 = non-blocking
 // 1 = blocking
 const tilemap = new ArrayTilemap({
-  someLayer: {
+  collisions: {
+    data: [
+
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+  },
+  treesLayer: {
     data: [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-      [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-      [0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
-      [0, 1, 0, 1, 0, 0, 1, 0, 1, 0],
-      [0, 1, 0, 1, 1, 0, 1, 0, 1, 0],
-      [0, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-      [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 2, 2, 2, 2, 0, 0, 0, 0],
+      [2, 0, 2, 2, 2, 2, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
   },
@@ -35,7 +50,7 @@ gridEngineHeadless.create(tilemap, {
 const asciiRenderer = new AsciiRenderer("content", gridEngineHeadless, tilemap);
 asciiRenderer.render();
 
-const targetPos = { x: 4, y: 5 };
+const targetPos = { x: 4, y: 9 };
 //console.log(gridEngineHeadless.getCharLayer('player'))
 //console.log(gridEngineHeadless.findShortestPath({position:{ x: 0, y: 0 }, charLayer:''}, {position:{ x: 4, y: 5 }, charLayer:''}));
 gridEngineHeadless.moveTo("player", targetPos);
@@ -77,7 +92,7 @@ gridEngineHeadless.positionChangeFinished().subscribe(({ enterTile }) => {
 //   }
 // }
 
-setInterval(() => {
-  gridEngineHeadless.update(0, 50);
-  asciiRenderer.render();
-}, 50);
+// setInterval(() => {
+//   gridEngineHeadless.update(0, 50);
+//   asciiRenderer.render();
+// }, 50);
