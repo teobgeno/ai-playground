@@ -13,7 +13,6 @@ export class AsciiRenderer {
 
   /** Render the current state of Grid Engine. */
   render(): void {
-    console.log(this.tilemap)
     const strArr: string[] = [];
     // Iterate through all tiles of the map.
     for (let r = 0; r < this.tilemap.getHeight(); r++) {
