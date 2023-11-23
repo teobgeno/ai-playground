@@ -6,19 +6,20 @@ import {
 import { AsciiRenderer } from "./AsciiRenderer"
 
 export class App {
+  private gridEngineHeadless: GridEngineHeadless;
+  private asciiRenderer: AsciiRenderer;
+  private tilemap: ArrayTilemap;
   constructor(
-    private gridEngineHeadless: GridEngineHeadless,
-    private asciiRenderer: AsciiRenderer,
-    private tilemap: ArrayTilemap
+   
   ) {
     this.gridEngineHeadless = new GridEngineHeadless()
   }
 
-  private initMap() {
+  public initMap() {
     // A simple example tilemap created from an array.
     // 0 = non-blocking
     // 1 = blocking
-    const tilemap = new ArrayTilemap({
+    this.tilemap = new ArrayTilemap({
       collisions: {
         data: [
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -48,20 +49,20 @@ export class App {
         ],
       },
     })
-    this.gridEngineHeadless.create(tilemap, {
+    this.gridEngineHeadless.create(this.tilemap, {
       characters: [{ id: "player" }],
       characterCollisionStrategy: CollisionStrategy.BLOCK_ONE_TILE_AHEAD,
     })
 
-    const asciiRenderer = new AsciiRenderer(
+    this.asciiRenderer = new AsciiRenderer(
       "content",
       this.gridEngineHeadless,
-      tilemap
+      this.tilemap
     )
-    asciiRenderer.render()
+    this.asciiRenderer.render()
   }
 
-  private moveCharacter() {
+  public moveCharacter() {
     const targetPos = { x: 1, y: 8 }
     //console.log(gridEngineHeadless.getCharLayer('player'))
     //console.log(gridEngineHeadless.findShortestPath({position:{ x: 0, y: 0 }, charLayer:''}, {position:{ x: 4, y: 5 }, charLayer:''}));
@@ -91,8 +92,15 @@ export class App {
     //   }
     // }
   }
+
+  public update() {
+    this.gridEngineHeadless.update(0, 50);
+    this.gridEngineHeadless.update(0, 50);
+  }
 }
 
+const app = new App();
+app.initMap();
 // setInterval(() => {
 //   gridEngineHeadless.update(0, 50);
 //   asciiRenderer.render();
