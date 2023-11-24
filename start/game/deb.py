@@ -79,16 +79,17 @@ def test_action():
 
 def test_whatever():
 
-    # @@ action compose @@
+    # @@ task gather materials compose @@
 
     # fell trees for wood to use in building and crafting
+    # find section(s)
     a_loc = DecideLocationAction(
         {'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})
          }
     )
     retLoc = a_loc.execute()
-
+    # find section(s)'s game object(s)
     a_it = DecideItemAction(
         {'action_descr': 'fell trees for wood to use in building and crafting',
          'selected_sections': retLoc,
@@ -97,6 +98,13 @@ def test_whatever():
     )
 
     itLoc = a_it.execute()
+    # create game object(s) if not exist
+    # find resource(s) gathered from game object(s)
+    # get action verb
+    # create relation between action - game object - resource
+    # get and calculate action execution time
+    # get game object(s) status after action
+
     ret = {
         'sections': retLoc,
         'game_objects': itLoc

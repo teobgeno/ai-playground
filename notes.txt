@@ -344,6 +344,25 @@ ______________________ CREATE ACTION LLM  ______________________
 activity: Fish in nearby rivers or streams
 classify the activity to one of the following categories : gather resources-materials, crafting-building, planting
 
+1.1)
+
+action: fell trees for wood to use in building and crafting
+what resource should be gathered to complete the action above.
+The resource must be directly related to the action. 
+The resource must be a tangible material that can be transferred and stored in a warehouse.
+Output the response in json.
+Example output json:{resource:'fish'}
+
+search in resources embeddings for similar or by exact string. if similar repeat the saved action.
+ask ai from the existing resources knowledge list
+
+1.2)
+action: fell trees for wood to use in building and crafting
+What action should be executed at tree to gather logs.
+
+search in actions embeddings for similar or by exact string. if similar repeat the saved action.
+ask ai from the existing resources actions list
+
 --------------------------------------------
 2)
 This is a fictional scenario for a game with a fixed number of items. 

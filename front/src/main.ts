@@ -141,7 +141,6 @@ export class App {
       t.hasOwnProperty(value.x)
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
         if(t[value.y][value.x] !== 1){
-          
           value.distance = this.manhattanDist(0, 0, value.y, value.x);
           freeTiles.push(value);
         }
