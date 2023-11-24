@@ -25,7 +25,7 @@ export class AsciiRenderer {
         }  else if((this.tilemap as any).map.forestLayer.data[pos.y][pos.x] === 2) {
           strArr.push('<div class="tile">🌳</div>');
         } else {
-          strArr.push('<div class="tile">⚀</div>');
+          strArr.push('<div class="tile"></div>');
         }
 
       }
@@ -44,6 +44,6 @@ export class AsciiRenderer {
       console.error(`Container ${this.containerId} could not be found.`);
       return;
     }
-    container.innerHTML = `<pre>${str}</pre>`;
+    container.innerHTML = `<div class="map-cont">${str}</div>`;
   }
 }
