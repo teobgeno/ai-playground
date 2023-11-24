@@ -123,14 +123,24 @@ export class App {
   }
 
   private findAroundGameObject(gameObject) {
-    const top = { x: gameObject.x, y: gameObject.y - 1 }
-    const topLeft = { x: gameObject.x - 1, y: gameObject.y - 1 }
-    const topRight = { x: gameObject.x + 1, y: gameObject.y - 1 }
-    const left = { x: gameObject.x - 1, y: gameObject.y }
-    const right = { x: gameObject.x + 1, y: gameObject.y }
-    const bottom = { x: gameObject.x, y: gameObject.y + 1 }
-    const bottomLeft = { x: gameObject.x - 1, y: gameObject.y + 1 }
-    const bottomRight = { x: gameObject.x + 1, y: gameObject.y + 1 }
+    const neighbourTiles = {
+      top: { x: gameObject.x, y: gameObject.y - 1 },
+      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1 },
+      topRight: { x: gameObject.x + 1, y: gameObject.y - 1 },
+      left: { x: gameObject.x - 1, y: gameObject.y },
+      right: { x: gameObject.x + 1, y: gameObject.y },
+      bottom: { x: gameObject.x, y: gameObject.y + 1 },
+      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1 },
+      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1 },
+    }
+
+    for (const [key, value] of Object.entries(neighbourTiles)) {
+      console.log(`${key}: ${value}`);
+      // if (a[1] == undefined && a[1][2] == undefined) {
+      // }
+    }
+
+    
 
     return { x: gameObject.x, y: gameObject.y - 1 }
   }
