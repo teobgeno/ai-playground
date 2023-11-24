@@ -16,19 +16,20 @@ export class AsciiRenderer {
     const strArr: string[] = [];
     // Iterate through all tiles of the map.
     for (let r = 0; r < this.tilemap.getHeight(); r++) {
+      strArr.push('<div style="display:flex">');
       for (let c = 0; c < this.tilemap.getWidth(); c++) {
         const pos = { x: c, y: r };
         if (this.gridEngine.getCharactersAt(pos).length > 0) {
           // tile is occupied by a character
-          strArr.push("⛄");
-        }  else if((this.tilemap as any).map.treesLayer.data[pos.y][pos.x] === 2) {
-          strArr.push("🌳");
+          strArr.push('<div class="tile">⛄</div>');
+        }  else if((this.tilemap as any).map.forestLayer.data[pos.y][pos.x] === 2) {
+          strArr.push('<div class="tile">🌳</div>');
         } else {
-          strArr.push("⚀");
+          strArr.push('<div class="tile">⚀</div>');
         }
 
       }
-      strArr.push("\n");
+      strArr.push('</div>');
     }
 
     //else if (this.gridEngine.isTileBlocked(pos))
