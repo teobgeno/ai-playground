@@ -123,25 +123,34 @@ export class App {
   }
 
   private findAroundGameObject(gameObject) {
+    let t = (this.tilemap as any).map.collisions.data
     const neighbourTiles = {
-      top: { x: gameObject.x, y: gameObject.y - 1 },
-      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1 },
-      topRight: { x: gameObject.x + 1, y: gameObject.y - 1 },
-      left: { x: gameObject.x - 1, y: gameObject.y },
-      right: { x: gameObject.x + 1, y: gameObject.y },
-      bottom: { x: gameObject.x, y: gameObject.y + 1 },
-      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1 },
-      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1 },
+      top: { x: gameObject.x, y: gameObject.y - 1, distance: 0},
+      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1, distance: 0},
+      topRight: { x: gameObject.x + 1, y: gameObject.y - 1, distance: 0},
+      left: { x: gameObject.x - 1, y: gameObject.y, distance: 0},
+      right: { x: gameObject.x + 1, y: gameObject.y, distance: 0},
+      bottom: { x: gameObject.x, y: gameObject.y + 1, distance: 0},
+      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1, distance: 0},
+      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1, distance: 0},
     }
 
+
+    let freeTiles:any = [];
     for (const [key, value] of Object.entries(neighbourTiles)) {
-      console.log(`${key}: ${value}`);
-      // if (a[1] == undefined && a[1][2] == undefined) {
-      // }
+      t.hasOwnProperty(value.x)
+      if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
+        if(t[value.y][value.x] !== 1){
+          
+          value.distance = this.manhattanDist(0, 0, value.y, value.x);
+          freeTiles.push(value);
+        }
+      }
     }
 
     
-
+    console.log(freeTiles)
+    return freeTiles[2]
     return { x: gameObject.x, y: gameObject.y - 1 }
   }
 
