@@ -123,6 +123,15 @@ export class App {
   }
 
   private findAroundGameObject(gameObject) {
+    const top = { x: gameObject.x, y: gameObject.y - 1 }
+    const topLeft = { x: gameObject.x - 1, y: gameObject.y - 1 }
+    const topRight = { x: gameObject.x + 1, y: gameObject.y - 1 }
+    const left = { x: gameObject.x - 1, y: gameObject.y }
+    const right = { x: gameObject.x + 1, y: gameObject.y }
+    const bottom = { x: gameObject.x, y: gameObject.y + 1 }
+    const bottomLeft = { x: gameObject.x - 1, y: gameObject.y + 1 }
+    const bottomRight = { x: gameObject.x + 1, y: gameObject.y + 1 }
+
     return { x: gameObject.x, y: gameObject.y - 1 }
   }
 
@@ -156,6 +165,7 @@ export class App {
   }
 
   private manhattanDist(x1, y1, x2, y2) {
+    //https://gamedev.stackexchange.com/questions/31546/find-nearest-tile-of-type-x
     let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1)
     return dist
   }
