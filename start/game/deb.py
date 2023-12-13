@@ -115,12 +115,16 @@ def test_whatever():
         'material': '',
         'steps': [
             {
-                'action': 'find',
-                'sections': retLoc,
-                'game_objects': itLoc
+                'action': 'findNearestGameObject',
+                'params': {'sections': retLoc, 'game_objects': itLoc}
             },
             {
-                'action': 'move'
+                'action': 'findAroundGameObject',
+                'params': 'pipeline',
+            },
+            {
+                'action': 'moveCharacter',
+                'params': 'pipeline',
             }
         ]
     }
