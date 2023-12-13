@@ -109,6 +109,22 @@ def test_whatever():
         'sections': retLoc,
         'game_objects': itLoc
     }
+
+    ret = {
+        'task': 'chop tree',
+        'material': '',
+        'steps': [
+            {
+                'action': 'find',
+                'sections': retLoc,
+                'game_objects': itLoc
+            },
+            {
+                'action': 'move'
+            }
+        ]
+    }
+
     return ret
     print("ok")
     # g = GatherResourcesTask({})
