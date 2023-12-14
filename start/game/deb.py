@@ -106,27 +106,12 @@ def test_whatever():
     # get game object(s) status after action
 
     ret = {
-        'sections': retLoc,
-        'game_objects': itLoc
-    }
-
-    ret = {
         'task': 'chop tree',
-        'material': '',
-        'steps': [
-            {
-                'action': 'findNearestGameObject',
-                'params': {'sections': retLoc, 'game_objects': itLoc}
-            },
-            {
-                'action': 'findAroundGameObject',
-                'params': 'pipeline',
-            },
-            {
-                'action': 'moveCharacter',
-                'params': 'pipeline',
-            }
-        ]
+        'type': 'gather-material',
+        'resource': 'wood logs',
+        'action': 'chop',
+        'params': {'sections': retLoc, 'game_objects': itLoc},
+        'action_duration': 1800
     }
 
     return ret

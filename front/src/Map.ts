@@ -4,20 +4,14 @@ import {
   CollisionStrategy,
 } from "grid-engine"
 import { AsciiRenderer } from "./AsciiRenderer"
-import { NoIdeaClient } from "./no-idea-client"
 
-export class App {
+export class Map {
   private gridEngineHeadless: GridEngineHeadless
   private asciiRenderer: AsciiRenderer
   private tilemap: ArrayTilemap
-  private noIdeaClient: NoIdeaClient
-  private moveInterval: any
 
   constructor() {
     this.gridEngineHeadless = new GridEngineHeadless()
-    this.noIdeaClient = new NoIdeaClient({
-      BASE: "http://localhost:8000",
-    })
   }
 
   public initMap() {
@@ -65,62 +59,6 @@ export class App {
       this.tilemap
     )
     this.asciiRenderer.render()
-  }
-
-  public moveCharacter(targetPos) {
-    //const targetPos = { x: 1, y: 8 }
-    //console.log(gridEngineHeadless.getCharLayer('player'))
-    //console.log(gridEngineHeadless.findShortestPath({position:{ x: 0, y: 0 }, charLayer:''}, {position:{ x: 4, y: 5 }, charLayer:''}));
-
-    this.gridEngineHeadless.moveTo("player", targetPos)
-    this.gridEngineHeadless
-      .positionChangeFinished()
-      .subscribe(({ enterTile }) => {
-        if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
-          console.log("ok")
-          clearInterval(this.moveInterval)
-        }
-      })
-
-    this.moveInterval = setInterval(() => {
-      this.gridEngineHeadless.update(0, 50)
-      this.asciiRenderer.render()
-    }, 100)
-
-    // //the m rows are horizontal and the n columns are vertical
-    // function manhattanDist(x1, y1, x2, y2) {
-    // let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1);
-    // return dist;
-    // }
-
-    // for(var i = 0; i < data.length; i++) {
-    //   var row = data[i];
-    //   for(var j = 0; j < row.length; j++) {
-    //     if(row[j] > 20) {
-    //       console.log(row[j] + ' -- ' + manhattanDist(0,0,i,j));
-    //     }
-    //   }
-    // }
-  }
-
-
-  public getTask() {
-    const t = this.noIdeaClient.default.testTestGet()
-    console.log(t)
-  }
-
-  public getApiData() {
-    const t = this.noIdeaClient.default.testTestGet()
-    
-  }
-
-  public locateAction() {
-    const sectionTiles = this.findSection(1)
-    const gameObject = this.findNearestGameObject(sectionTiles, 2)
-    const nearGameObject = this.findAroundGameObject(gameObject)
-    this.moveCharacter(nearGameObject)
-    console.log(gameObject)
-    console.log(nearGameObject)
   }
 
   private findSection(sectionCode) {
@@ -208,9 +146,3 @@ export class App {
     return objs.sort((a, b) => a[property] - b[property])
   }
 }
-
-const app = new App()
-//app.getApiData();
-app.initMap()
-//app.moveCharacter();
-app.locateAction()
