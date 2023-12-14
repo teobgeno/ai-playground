@@ -1,13 +1,16 @@
 export class Action {
-    private execFunc: Function
+    private funcExec: Function
+    private funcParams: any
 
-    constructor(func: Function) {
-        this.execFunc = (params) => {
+    constructor(func: Function,params : any) {
+        this.funcExec = (params) => {
             func(params)
         };
+        this.funcParams = params;
     }
     
     public execute(){
-        return this.execFunc();
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+        //return this.execFunc();
     }
 }

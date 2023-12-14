@@ -8,6 +8,7 @@ import { NoIdeaClient } from "./no-idea-client"
 import { Task } from "./Task"
 import { Action } from "./Action"
 import { Map } from "./Map"
+import { Character } from "./Character"
 
 export class App {
   private gridEngineHeadless: GridEngineHeadless
@@ -111,10 +112,12 @@ export class App {
     const t = this.noIdeaClient.default.testTestGet();
     let task = new Task();
     let map = new Map();
+    let character = new Character();
 
-    task.addAction(new Action(map.findSection));
-    task.addAction(new Action(map.findNearestGameObject));
-    task.addAction(new Action(map.findAroundGameObject));
+    task.addAction(new Action(map.findSection,[1]));
+    task.addAction(new Action(map.findNearestGameObject,['[0]',2]));
+    task.addAction(new Action(map.findAroundGameObject,['[1]']));
+    task.addAction(new Action(character.move,['[1]']));
     //task.addAction(new Action(map.findNearestGameObject(1)))
     
     console.log(t)
