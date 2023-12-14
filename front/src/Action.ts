@@ -1,8 +1,10 @@
 export class Action {
     private execFunc: Function
 
-    constructor(execFunc: Function) {
-        this.execFunc = execFunc;
+    constructor(func: Function) {
+        this.execFunc = (params) => {
+            func(params)
+        };
     }
     
     public execute(){
