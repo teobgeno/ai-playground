@@ -9,9 +9,17 @@ export class Map {
   private gridEngineHeadless: GridEngineHeadless
   private asciiRenderer: AsciiRenderer
   private tilemap: ArrayTilemap
+  private layers: any
+  private gameObjects: any
 
   constructor() {
     this.gridEngineHeadless = new GridEngineHeadless()
+    this.layers = [
+      { layer: "forestLayer", sectionCode: 2 },
+      { layer: "forestLayer2", sectionCode: 2 },
+    ]
+
+    this.gameObjects = [{ title: "tree", mapCode: 2 }]
   }
 
   public initMap() {
@@ -69,29 +77,27 @@ export class Map {
   public findAroundGameObject(gameObject) {
     let t = (this.tilemap as any).map.collisions.data
     const neighbourTiles = {
-      top: { x: gameObject.x, y: gameObject.y - 1, distance: 0},
-      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1, distance: 0},
-      topRight: { x: gameObject.x + 1, y: gameObject.y - 1, distance: 0},
-      left: { x: gameObject.x - 1, y: gameObject.y, distance: 0},
-      right: { x: gameObject.x + 1, y: gameObject.y, distance: 0},
-      bottom: { x: gameObject.x, y: gameObject.y + 1, distance: 0},
-      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1, distance: 0},
-      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1, distance: 0},
+      top: { x: gameObject.x, y: gameObject.y - 1, distance: 0 },
+      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1, distance: 0 },
+      topRight: { x: gameObject.x + 1, y: gameObject.y - 1, distance: 0 },
+      left: { x: gameObject.x - 1, y: gameObject.y, distance: 0 },
+      right: { x: gameObject.x + 1, y: gameObject.y, distance: 0 },
+      bottom: { x: gameObject.x, y: gameObject.y + 1, distance: 0 },
+      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1, distance: 0 },
+      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1, distance: 0 },
     }
 
-
-    let freeTiles:any = [];
+    let freeTiles: any = []
     for (const [key, value] of Object.entries(neighbourTiles)) {
       t.hasOwnProperty(value.x)
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
-        if(t[value.y][value.x] !== 1){
-          value.distance = this.manhattanDist(0, 0, value.y, value.x);
-          freeTiles.push(value);
+        if (t[value.y][value.x] !== 1) {
+          value.distance = this.manhattanDist(0, 0, value.y, value.x)
+          freeTiles.push(value)
         }
       }
     }
 
-    
     console.log(freeTiles)
     return freeTiles[2]
     return { x: gameObject.x, y: gameObject.y - 1 }

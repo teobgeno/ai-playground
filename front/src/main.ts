@@ -227,4 +227,5 @@ const app = new App()
 //app.getApiData();
 app.initMap()
 //app.moveCharacter();
-app.locateAction()
+//app.locateAction()
+app.createTask();

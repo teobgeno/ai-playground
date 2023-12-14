@@ -4,6 +4,7 @@ export class Task {
     private actionPointer: number;
 
     constructor() {
+        this.actions = [];
         this.actionPointer = 0;
     }
 
