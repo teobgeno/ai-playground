@@ -112,7 +112,9 @@ export class App {
     let task = new Task();
     let map = new Map();
 
-    task.addAction(new Action(map.findSection(1)));
+    task.addAction(new Action(map.findSection));
+    task.addAction(new Action(map.findNearestGameObject));
+    task.addAction(new Action(map.findAroundGameObject));
     //task.addAction(new Action(map.findNearestGameObject(1)))
     
     console.log(t)

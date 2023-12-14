@@ -66,7 +66,7 @@ export class Map {
     return s
   }
 
-  private findAroundGameObject(gameObject) {
+  public findAroundGameObject(gameObject) {
     let t = (this.tilemap as any).map.collisions.data
     const neighbourTiles = {
       top: { x: gameObject.x, y: gameObject.y - 1, distance: 0},
