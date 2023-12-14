@@ -5,6 +5,9 @@ import {
 } from "grid-engine"
 import { AsciiRenderer } from "./AsciiRenderer"
 import { NoIdeaClient } from "./no-idea-client"
+import { Task } from "./Task"
+import { Action } from "./Action"
+import { Map } from "./Map"
 
 export class App {
   private gridEngineHeadless: GridEngineHeadless
@@ -104,8 +107,14 @@ export class App {
   }
 
 
-  public getTask() {
-    const t = this.noIdeaClient.default.testTestGet()
+  public createTask() {
+    const t = this.noIdeaClient.default.testTestGet();
+    let task = new Task();
+    let map = new Map();
+
+    task.addAction(new Action(map.findSection(1)));
+    //task.addAction(new Action(map.findNearestGameObject(1)))
+    
     console.log(t)
   }
 

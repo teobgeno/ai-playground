@@ -61,7 +61,7 @@ export class Map {
     this.asciiRenderer.render()
   }
 
-  private findSection(sectionCode) {
+  public findSection(sectionCode) {
     let s = (this.tilemap as any).map.forestLayer.data
     return s
   }
@@ -97,7 +97,7 @@ export class Map {
     return { x: gameObject.x, y: gameObject.y - 1 }
   }
 
-  private findNearestGameObject(s, objCode) {
+  public findNearestGameObject(s, objCode) {
     let distances: any = []
     const instances = this.countGameObjectInstances(s)
     if (instances[objCode] > 1) {

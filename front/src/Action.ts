@@ -1,3 +1,11 @@
 export class Action {
-    private moveInterval: any
+    private execFunc: Function
+
+    constructor(execFunc: Function) {
+        this.execFunc = execFunc;
+    }
+    
+    public execute(){
+        return this.execFunc();
+    }
 }
