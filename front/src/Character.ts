@@ -1,8 +1,21 @@
+import { GridEngineHeadless } from "grid-engine";
 export class Character {
-    private posX: number;
-    private posY: number;
+  private gridEngineHeadless: GridEngineHeadless;
+  private posX: number;
+  private posY: number;
 
-    public move(){
-        
-    }
+  constructor(gridEngineHeadless) {
+    this.gridEngineHeadless = gridEngineHeadless;
+  }
+
+  public move(targetPos, cb) {
+    this.gridEngineHeadless.moveTo("player", targetPos);
+    this.gridEngineHeadless
+      .positionChangeFinished()
+      .subscribe(({ enterTile }) => {
+        if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
+          cb();
+        }
+      });
+  }
 }

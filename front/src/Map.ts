@@ -16,9 +16,10 @@ export class Map {
   private tilemap: ArrayTilemap;
   private sections: any;
   private gameObjects: any;
+  private gameLoopInterval: any
 
-  constructor() {
-    this.gridEngineHeadless = new GridEngineHeadless();
+  constructor(gridEngineHeadless) {
+    this.gridEngineHeadless = gridEngineHeadless;
     this.sections = [
       { layer: "forestLayer", sectionId: 1 }
     ];
@@ -68,10 +69,15 @@ export class Map {
       this.tilemap
     );
     this.asciiRenderer.render();
+
+    this.gameLoopInterval = setInterval(() => {
+      this.gridEngineHeadless.update(0, 50)
+      this.asciiRenderer.render()
+    }, 100)
   }
 
-  public findNearestSections(sectionIds: Array<number>) {
-    return this.sections.filter(x=> sectionIds.includes(x.sectionId));
+  public findNearestSections(sectionsIds: Array<number>) {
+    return this.sections.filter(x=> sectionsIds.includes(x.sectionId));
   }
 
   public getNearestSections(sections:Array<any>) {
@@ -81,35 +87,35 @@ export class Map {
     return null;
   }
 
-  public findNearestGameObject(selectedSections, gameObjectIds) {
-    const sectionIds = selectedSections.map((e) => e.sectionId);
-    const gameObjectsIds = gameObjectIds.filter(x=> sectionIds.includes(x.section_id)).map((e) => e.id);
-    return this.gameObjects.filter(x=> gameObjectsIds.includes(x.id));
+  public findNearestGameObject(selectedSections, gameObjectsIds) {
+    const selectedSectionsIds = selectedSections.map((e) => e.sectionId);
+    const selectedGameObjectsIds = gameObjectsIds.filter(x=> selectedSectionsIds.includes(x.section_id)).map((e) => e.id);
+    return this.gameObjects.filter(x=> selectedGameObjectsIds.includes(x.id));
   }
 
-  public getNearestGameObject(section, objCode) {
+  public getNearestGameObject(layer, objCode) {
     let distances: any = [];
-    const instances = countInstances(section);
+    const instances = countInstances(layer);
     if (instances[objCode] > 1) {
       distances = sortObjsByProperty(
-        this.calcGameObjectsDistances(section, objCode),
+        this.calcGameObjectsDistances(layer, objCode),
         "distance"
       );
     }
     return distances[0];
   }
 
-  public findAroundGameObject(gameObject) {
+  public findAroundGameObject(mapGameObject) {
     let t = (this.tilemap as any).map.collisions.data;
     const neighbourTiles = {
-      top: { x: gameObject.x, y: gameObject.y - 1, distance: 0 },
-      topLeft: { x: gameObject.x - 1, y: gameObject.y - 1, distance: 0 },
-      topRight: { x: gameObject.x + 1, y: gameObject.y - 1, distance: 0 },
-      left: { x: gameObject.x - 1, y: gameObject.y, distance: 0 },
-      right: { x: gameObject.x + 1, y: gameObject.y, distance: 0 },
-      bottom: { x: gameObject.x, y: gameObject.y + 1, distance: 0 },
-      bottomLeft: { x: gameObject.x - 1, y: gameObject.y + 1, distance: 0 },
-      bottomRight: { x: gameObject.x + 1, y: gameObject.y + 1, distance: 0 },
+      top: { x: mapGameObject.x, y: mapGameObject.y - 1, distance: 0 },
+      topLeft: { x: mapGameObject.x - 1, y: mapGameObject.y - 1, distance: 0 },
+      topRight: { x: mapGameObject.x + 1, y: mapGameObject.y - 1, distance: 0 },
+      left: { x: mapGameObject.x - 1, y: mapGameObject.y, distance: 0 },
+      right: { x: mapGameObject.x + 1, y: mapGameObject.y, distance: 0 },
+      bottom: { x: mapGameObject.x, y: mapGameObject.y + 1, distance: 0 },
+      bottomLeft: { x: mapGameObject.x - 1, y: mapGameObject.y + 1, distance: 0 },
+      bottomRight: { x: mapGameObject.x + 1, y: mapGameObject.y + 1, distance: 0 },
     };
 
     let freeTiles: any = [];
@@ -123,17 +129,15 @@ export class Map {
       }
     }
 
-    console.log(freeTiles);
-    return freeTiles[2];
-    return { x: gameObject.x, y: gameObject.y - 1 };
+    return freeTiles[0];
   }
 
-  private calcGameObjectsDistances(s, objCode) {
+  private calcGameObjectsDistances(layer, objCode) {
     let distances: any = [];
-    for (let i = 0; i < s.length; i++) {
-      let row = s[i];
+    for (let i = 0; i < layer.length; i++) {
+      let row = layer[i];
       for (let j = 0; j < row.length; j++) {
-        if (row[j] == 2) {
+        if (row[j] === objCode) {
           distances.push({
             x: j,
             y: i,

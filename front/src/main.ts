@@ -22,6 +22,17 @@ export class App {
   }
 
 
+  public async createTask() {
+    const t:any = await this.noIdeaClient.default.testTestGet();
+    this.gridEngineHeadless = new GridEngineHeadless();
+    let map = new Map(this.gridEngineHeadless);
+    map.initMap();
+    let character = new Character(this.gridEngineHeadless);
+    let taskGather = new TaskGather(map, character, t);
+    taskGather.execute();
+   
+  }
+
   public moveCharacter(targetPos) {
     //const targetPos = { x: 1, y: 8 }
     //console.log(gridEngineHeadless.getCharLayer('player'))
@@ -58,34 +69,6 @@ export class App {
     // }
   }
 
-
-  public async createTask() {
-    const t:any = await this.noIdeaClient.default.testTestGet();
-    let map = new Map();
-    map.initMap();
-    let character = new Character();
-    let taskGather = new TaskGather(map, character, t);
-    taskGather.execute();
-
-    // task.addAction(new Action(map.findNearestSection,[t.params.sections]));
-    // task.addAction(new Action(map.findNearestGameObject,['[0]',2]));
-    // task.addAction(new Action(map.findAroundGameObject,['[1]']));
-    // task.addAction(new Action(character.move,['[1]']));
-    // console.log(t)
-    // console.log(map.findNearestSection(t.params.sections))
-    //task.addAction(new Action(map.findNearestGameObject(1)))
-    
-   
-  }
-
-  public locateAction() {
-    // const sectionTiles = this.findSection(1)
-    // const gameObject = this.findNearestGameObject(sectionTiles, 2)
-    // const nearGameObject = this.findAroundGameObject(gameObject)
-    // this.moveCharacter(nearGameObject)
-    // console.log(gameObject)
-    // console.log(nearGameObject)
-  }
 }
 
 const app = new App()
