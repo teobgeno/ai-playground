@@ -4,6 +4,7 @@ import {
 import { AsciiRenderer } from "./AsciiRenderer"
 import { NoIdeaClient } from "./no-idea-client"
 import { Task } from "./Task"
+import { TaskGather } from "./TaskGather"
 import { Action } from "./Action"
 import { Map } from "./Map"
 import { Character } from "./Character"
@@ -60,17 +61,18 @@ export class App {
 
   public async createTask() {
     const t:any = await this.noIdeaClient.default.testTestGet();
-    let task = new Task();
     let map = new Map();
     map.initMap();
     let character = new Character();
+    let taskGather = new TaskGather(map, character, t);
+    taskGather.execute();
 
-    task.addAction(new Action(map.findNearestSection,[t.params.sections]));
-    task.addAction(new Action(map.findNearestGameObject,['[0]',2]));
-    task.addAction(new Action(map.findAroundGameObject,['[1]']));
-    task.addAction(new Action(character.move,['[1]']));
-    console.log(t)
-    console.log(map.findNearestSection(t.params.sections))
+    // task.addAction(new Action(map.findNearestSection,[t.params.sections]));
+    // task.addAction(new Action(map.findNearestGameObject,['[0]',2]));
+    // task.addAction(new Action(map.findAroundGameObject,['[1]']));
+    // task.addAction(new Action(character.move,['[1]']));
+    // console.log(t)
+    // console.log(map.findNearestSection(t.params.sections))
     //task.addAction(new Action(map.findNearestGameObject(1)))
     
    
