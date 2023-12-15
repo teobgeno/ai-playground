@@ -23,7 +23,7 @@ export class Map {
       { layer: "forestLayer", sectionId: 1 }
     ];
 
-    this.gameObjects = [{ title: "tree", mapCode: 2 }];
+    this.gameObjects = [{ title: "tree", id:1, mapCode: 2 }];
   }
 
   public initMap() {
