@@ -79,12 +79,12 @@ export class Map {
     }
   }
 
-  public findNearestGameObject(s, objCode) {
+  public findNearestGameObject(section, objCode) {
     let distances: any = [];
-    const instances = countInstances(s);
+    const instances = countInstances(section);
     if (instances[objCode] > 1) {
       distances = sortObjsByProperty(
-        this.calcGameObjectsDistances(s, objCode),
+        this.calcGameObjectsDistances(section, objCode),
         "distance"
       );
     }
