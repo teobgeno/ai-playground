@@ -14,12 +14,12 @@ export class Map {
   private gridEngineHeadless: GridEngineHeadless;
   private asciiRenderer: AsciiRenderer;
   private tilemap: ArrayTilemap;
-  private layers: any;
+  private sections: any;
   private gameObjects: any;
 
   constructor() {
     this.gridEngineHeadless = new GridEngineHeadless();
-    this.layers = [
+    this.sections = [
       { layer: "forestLayer", sectionId: 1 }
     ];
 
@@ -71,7 +71,7 @@ export class Map {
   }
 
   public findNearestSections(sectionIds: Array<number>) {
-    return this.layers.filter(x=> sectionIds.includes(x.sectionId));
+    return this.sections.filter(x=> sectionIds.includes(x.sectionId));
   }
 
   public getNearestSections(sections:Array<any>) {
@@ -81,7 +81,13 @@ export class Map {
     return null;
   }
 
-  public findNearestGameObject(section, objCode) {
+  public findNearestGameObject(selectedSections, gameObjectIds) {
+    const sectionIds = selectedSections.map((e) => e.sectionId);
+    const gameObjectsIds = gameObjectIds.filter(x=> sectionIds.includes(x.section_id)).map((e) => e.id);
+    return this.gameObjects.filter(x=> gameObjectsIds.includes(x.id));
+  }
+
+  public getNearestGameObject(section, objCode) {
     let distances: any = [];
     const instances = countInstances(section);
     if (instances[objCode] > 1) {
