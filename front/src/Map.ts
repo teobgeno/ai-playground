@@ -4,6 +4,7 @@ import {
   CollisionStrategy,
 } from "grid-engine";
 import { AsciiRenderer } from "./AsciiRenderer";
+import { Character } from "./Character";
 
 import {
   countInstances,
@@ -86,6 +87,14 @@ export class Map {
     }
     return null;
   }
+  
+  public removeGameObject(sections:Array<any>, mapGameObject) {
+    (this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][mapGameObject.x] = 0;
+    (this.tilemap as any).map['collisions'].data[mapGameObject.y][mapGameObject.x] = 0;
+    this.gridEngineHeadless.rebuildTileCollisionCache(mapGameObject.x, mapGameObject.y, 0, 0)
+    console.log((this.tilemap as any).map);
+    
+  }
 
   public findNearestGameObject(selectedSections, gameObjectsIds) {
     const selectedSectionsIds = selectedSections.map((e) => e.sectionId);
@@ -93,19 +102,20 @@ export class Map {
     return this.gameObjects.filter(x=> selectedGameObjectsIds.includes(x.id));
   }
 
-  public getNearestGameObject(layer, objCode) {
+  public getNearestGameObject(layer, objCode, character: Character) {
     let distances: any = [];
     const instances = countInstances(layer);
     if (instances[objCode] > 1) {
       distances = sortObjsByProperty(
-        this.calcGameObjectsDistances(layer, objCode),
+        this.calcGameObjectsDistances(layer, objCode, character),
         "distance"
       );
     }
+   
     return distances[0];
   }
 
-  public findAroundGameObject(mapGameObject) {
+  public findAroundGameObject(mapGameObject, character: Character) {
     let t = (this.tilemap as any).map.collisions.data;
     const neighbourTiles = {
       top: { x: mapGameObject.x, y: mapGameObject.y - 1, distance: 0 },
@@ -123,25 +133,30 @@ export class Map {
       t.hasOwnProperty(value.x);
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
         if (t[value.y][value.x] !== 1) {
-          value.distance = this.manhattanDist(0, 0, value.y, value.x);
+          value.distance = this.manhattanDist(character.posX, character.posY, value.x, value.y);
           freeTiles.push(value);
         }
       }
     }
-
+    freeTiles = sortObjsByProperty(
+      freeTiles,
+      "distance"
+    );
+    console.log( freeTiles[0])
     return freeTiles[0];
   }
 
-  private calcGameObjectsDistances(layer, objCode) {
+  private calcGameObjectsDistances(layer, objCode, character: Character) {
     let distances: any = [];
     for (let i = 0; i < layer.length; i++) {
       let row = layer[i];
       for (let j = 0; j < row.length; j++) {
         if (row[j] === objCode) {
+          //console.log(character.posX, character.posY, j, i)
           distances.push({
             x: j,
             y: i,
-            distance: this.manhattanDist(0, 0, i, j),
+            distance: this.manhattanDist(character.posX, character.posY, j, i),
           });
         }
       }

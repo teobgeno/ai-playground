@@ -111,7 +111,7 @@ def test_whatever():
         'resource': 'wood logs',
         'action': 'chop',
         'params': {'sections': retLoc, 'game_objects': itLoc},
-        'action_duration': 1800
+        'action_duration': 1000
     }
 
     return ret

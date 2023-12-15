@@ -44,8 +44,11 @@ export class TaskGather {
       case 7:
         this.startAction();
         break;
+      case 8:
+        this.endAction();
+        break;
     }
-  }
+  };
   private findNearestSections() {
     this.selectedSections = this.map.findNearestSections(
       this.data.params.sections
@@ -66,20 +69,37 @@ export class TaskGather {
   private getNearestGameObject() {
     this.selectedMapGameObject = this.map.getNearestGameObject(
       this.selectedLayers,
-      this.selectedGameObjects[0].mapCode
+      this.selectedGameObjects[0].mapCode,
+      this.character
     );
     this.next();
   }
 
   private findAroundGameObject() {
-    this.selectedMapCloseTile = this.selectedMapGameObject =
-      this.map.findAroundGameObject(this.selectedMapGameObject);
+    this.selectedMapCloseTile = this.map.findAroundGameObject(
+      this.selectedMapGameObject,
+      this.character
+    );
     this.next();
   }
   private moveCharacter() {
     this.character.move(this.selectedMapCloseTile, this.next);
   }
   private startAction() {
-    console.log("Execute " + this.data.action);
+    console.log(
+      "Execute " + this.data.action + " for " + this.data.action_duration
+    );
+    setTimeout(() => {
+      this.next();
+    }, this.data.action_duration);
+  }
+  private endAction() {
+    console.log("finish action");
+    this.map.removeGameObject(
+      this.selectedSections,
+      this.selectedMapGameObject
+    );
+    this.pointer = 0;
+    this.next();
   }
 }
