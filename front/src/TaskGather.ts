@@ -6,7 +6,8 @@ export class TaskGather {
   private character: Character
   private data: any
   private pointer: number = 0
-  private selectedSections: any
+  private selectedSectionsIds: any
+  private selectedLayers: any
   private selectedGameObjects: any
 
   constructor(map: Map, character: Character, data: any) {
@@ -21,22 +22,31 @@ export class TaskGather {
     this.pointer++;
     switch (this.pointer) {
       case 1:
-        this.findNearestSection();
+        this.findNearestSections();
         break
       case 2:
-        this.findNearestGameObject();
+        this.getNearestSections();
+        break
+        case 3:
+        //this.findNearestGameObject();
         break
     }
   }
-  private findNearestSection() {
-    this.selectedSections = this.map.findNearestSection(
+  private findNearestSections() {
+    this.selectedSectionsIds = this.map.findNearestSections(
       this.data.params.sections
+    )
+    this.next()
+  }
+  private getNearestSections() {
+    this.selectedLayers = this.map.getNearestSections(
+      this.selectedSectionsIds,
     )
     this.next()
   }
   private findNearestGameObject() {
     this.selectedGameObjects = this.map.findNearestGameObject(
-      this.selectedSections,
+      this.selectedLayers,
       2
     )
     this.next()

@@ -70,13 +70,15 @@ export class Map {
     this.asciiRenderer.render();
   }
 
-  public findNearestSection(sectionIds: Array<number>) {
-    const findSections = this.layers.filter(x=> sectionIds.includes(x.sectionId));
-    //if findSections.length > 1 more than one layer merge to one array
-    console.log(findSections)
-    if(findSections.length === 1) {
-      return (this.tilemap as any).map[findSections[0].layer].data;
+  public findNearestSections(sectionIds: Array<number>) {
+    return this.layers.filter(x=> sectionIds.includes(x.sectionId));
+  }
+
+  public getNearestSections(sections:Array<any>) {
+    if(sections.length === 1) {
+      return (this.tilemap as any).map[sections[0].layer].data;
     }
+    return null;
   }
 
   public findNearestGameObject(section, objCode) {
