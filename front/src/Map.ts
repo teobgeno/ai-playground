@@ -91,9 +91,8 @@ export class Map {
   public removeGameObject(sections:Array<any>, mapGameObject) {
     (this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][mapGameObject.x] = 0;
     (this.tilemap as any).map['collisions'].data[mapGameObject.y][mapGameObject.x] = 0;
-    this.gridEngineHeadless.rebuildTileCollisionCache(mapGameObject.x, mapGameObject.y, 0, 0)
-    console.log((this.tilemap as any).map);
-    
+    (this.tilemap.getLayers()[0] as any).tiles[mapGameObject.y][mapGameObject.x].isBlocking = false;
+    //console.log(this.gridEngineHeadless.isTileBlocked({ x: mapGameObject.x, y:mapGameObject.y }));
   }
 
   public findNearestGameObject(selectedSections, gameObjectsIds) {
@@ -105,14 +104,15 @@ export class Map {
   public getNearestGameObject(layer, objCode, character: Character) {
     let distances: any = [];
     const instances = countInstances(layer);
-    if (instances[objCode] > 1) {
+    if (instances[objCode] > 0) {
       distances = sortObjsByProperty(
         this.calcGameObjectsDistances(layer, objCode, character),
         "distance"
       );
+      return distances[0];
     }
-   
-    return distances[0];
+    
+    return null;
   }
 
   public findAroundGameObject(mapGameObject, character: Character) {

@@ -72,7 +72,12 @@ export class TaskGather {
       this.selectedGameObjects[0].mapCode,
       this.character
     );
-    this.next();
+    if(this.selectedMapGameObject) {
+      this.next();
+    } else {
+      console.log('cannot find ' + this.selectedGameObjects[0].title)
+    }
+   
   }
 
   private findAroundGameObject() {
