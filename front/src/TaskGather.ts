@@ -24,7 +24,7 @@ export class TaskGather {
     this.pointer++;
     switch (this.pointer) {
       case 1:
-        this.findNearestSections();
+        this.findProperSections();
         break;
       case 2:
         this.getNearestSections();
@@ -49,7 +49,7 @@ export class TaskGather {
         break;
     }
   };
-  private findNearestSections() {
+  private findProperSections() {
     this.selectedSections = this.map.findProperSections(
       this.data.params.sections
     );
