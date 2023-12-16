@@ -77,7 +77,7 @@ export class Map {
     }, 100)
   }
 
-  public findNearestSections(sectionsIds: Array<number>) {
+  public findProperSections(sectionsIds: Array<number>) {
     return this.sections.filter(x=> sectionsIds.includes(x.sectionId));
   }
 
@@ -95,7 +95,7 @@ export class Map {
     //console.log(this.gridEngineHeadless.isTileBlocked({ x: mapGameObject.x, y:mapGameObject.y }));
   }
 
-  public findNearestGameObject(selectedSections, gameObjectsIds) {
+  public findProperGameObject(selectedSections, gameObjectsIds) {
     const selectedSectionsIds = selectedSections.map((e) => e.sectionId);
     const selectedGameObjectsIds = gameObjectsIds.filter(x=> selectedSectionsIds.includes(x.section_id)).map((e) => e.id);
     return this.gameObjects.filter(x=> selectedGameObjectsIds.includes(x.id));

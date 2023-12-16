@@ -30,7 +30,7 @@ export class TaskGather {
         this.getNearestSections();
         break;
       case 3:
-        this.findNearestGameObject();
+        this.findProperGameObject();
         break;
       case 4:
         this.getNearestGameObject();
@@ -50,7 +50,7 @@ export class TaskGather {
     }
   };
   private findNearestSections() {
-    this.selectedSections = this.map.findNearestSections(
+    this.selectedSections = this.map.findProperSections(
       this.data.params.sections
     );
     this.next();
@@ -59,8 +59,8 @@ export class TaskGather {
     this.selectedLayers = this.map.getNearestSections(this.selectedSections);
     this.next();
   }
-  private findNearestGameObject() {
-    this.selectedGameObjects = this.map.findNearestGameObject(
+  private findProperGameObject() {
+    this.selectedGameObjects = this.map.findProperGameObject(
       this.selectedSections,
       this.data.params.game_objects
     );
