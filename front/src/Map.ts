@@ -77,6 +77,10 @@ export class Map {
     }, 100)
   }
 
+  public getTileMap() {
+    this.tilemap.getTileAt(7,0);
+  }
+
   public findProperSections(sectionsIds: Array<number>) {
     return this.sections.filter(x=> sectionsIds.includes(x.sectionId));
   }
@@ -142,7 +146,7 @@ export class Map {
       freeTiles,
       "distance"
     );
-    console.log( freeTiles[0])
+    //console.log( freeTiles[0])
     return freeTiles[0];
   }
 

@@ -27,7 +27,7 @@ export class App {
     this.gridEngineHeadless = new GridEngineHeadless();
     let map = new Map(this.gridEngineHeadless);
     map.initMap();
-    let character = new Character(this.gridEngineHeadless);
+    let character = new Character(this.gridEngineHeadless, map);
     let taskGather = new TaskGather(map, character, t);
     taskGather.execute();
    
