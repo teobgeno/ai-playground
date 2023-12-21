@@ -29,7 +29,7 @@ export class App {
     map.initMap();
     let character = new Character(this.gridEngineHeadless, map);
     let taskGather = new TaskGather(map, character, t);
-    taskGather.execute();
+    //taskGather.execute();
    
   }
 

@@ -8,7 +8,8 @@ export class AsciiRenderer {
   constructor(
     private containerId: string,
     private gridEngine: GridEngineHeadless,
-    private tilemap: Tilemap
+    private tilemap: Tilemap,
+    private exploredMap :any
   ) {}
 
   /** Render the current state of Grid Engine. */
@@ -19,15 +20,23 @@ export class AsciiRenderer {
       strArr.push('<div style="display:flex">');
       for (let c = 0; c < this.tilemap.getWidth(); c++) {
         const pos = { x: c, y: r };
+        let tile = '<div class="tile"></div>';
         if (this.gridEngine.getCharactersAt(pos).length > 0) {
-          // tile is occupied by a character
-          strArr.push('<div class="tile">⛄</div>');
-        }  else if((this.tilemap as any).map.forestLayer.data[pos.y][pos.x] === 2) {
-          strArr.push('<div class="tile">🌳</div>');
-        } else {
-          strArr.push('<div class="tile"></div>');
-        }
+          tile = '<div class="tile">⛄</div>';
+        } 
 
+        for (const [key, value] of Object.entries((this.tilemap as any).map)) {
+          if(key !== 'collisions') {
+            if((this.tilemap as any).map[key].data[pos.y][pos.x] === 2){
+              tile = '<div class="tile">🌳</div>';
+            }
+
+            if(this.exploredMap[key].data[pos.y][pos.x] === 0) {
+              tile = '<div class="tile" style="background-color:#adadad"></div>';
+            }
+            strArr.push(tile);
+          }
+        }
       }
       strArr.push('</div>');
     }
