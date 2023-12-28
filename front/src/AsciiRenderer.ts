@@ -31,7 +31,7 @@ export class AsciiRenderer {
               tile = '<div class="tile">🌳</div>';
             }
 
-            if(this.exploredMap[key].data[pos.y][pos.x] === 0) {
+            if(this.exploredMap[pos.y][pos.x] === 0) {
               tile = '<div class="tile" style="background-color:#adadad"></div>';
             }
             strArr.push(tile);

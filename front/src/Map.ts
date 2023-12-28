@@ -9,8 +9,17 @@ import { Character } from "./Character"
 import { countInstances, sortObjsByProperty } from "./Utils"
 
 interface Section {
-  layer : string;
+  layer: string
   sectionId: number
+}
+interface Coords {
+  x: number
+  y: number
+}
+interface Distance {
+  x: number
+  y: number
+  distance: number
 }
 export class Map {
   private gridEngineHeadless: GridEngineHeadless
@@ -29,22 +38,35 @@ export class Map {
   }
 
   public initMap() {
-    this.exploredMap = {
-      forestLayer: {
-        data: [
-          [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ],
-      },
-    }
+    // this.exploredMap = {
+    //   forestLayer: {
+    //     data: [
+    //       [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //     ],
+    //   },
+    // }
+
+    this.exploredMap = [
+      [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
 
     this.tilemap = new ArrayTilemap({
       collisions: {
@@ -111,8 +133,20 @@ export class Map {
   }
 
   public getSectionBorders(section: Section) {
-    (this.tilemap as any).map[section.layer].data
-    return null
+    let borders: Array<{ x: number; y: number }> = []
+    const layer = (this.tilemap as any).map[section.layer].data
+    for (let i = 0; i < layer.length; i++) {
+      let row = layer[i]
+      for (let j = 0; j < row.length; j++) {
+        if (row[j] === 3) {
+          borders.push({
+            x: j,
+            y: i,
+          })
+        }
+      }
+    }
+    return borders
   }
 
   public removeGameObject(sections: Array<any>, mapGameObject) {
@@ -136,12 +170,14 @@ export class Map {
     return this.gameObjects.filter((x) => selectedGameObjectsIds.includes(x.id))
   }
 
-  public getNearestGameObject(layer, objCode, character: Character) {
+  public getNearestGameObject(layer, objCode: number, character: Character) {
     let distances: any = []
     const instances = countInstances(layer)
     if (instances[objCode] > 0) {
+      
+      const exploredGameObjects = this.getExploredGameObjects(layer, objCode);
       distances = sortObjsByProperty(
-        this.calcGameObjectsDistances(layer, objCode, character),
+        this.calcGameObjectsDistances(layer, exploredGameObjects, character),
         "distance"
       )
       return distances[0]
@@ -191,22 +227,33 @@ export class Map {
     return freeTiles[0]
   }
 
-  private calcGameObjectsDistances(layer, objCode, character: Character) {
-    let distances: any = []
+  private calcGameObjectsDistances(layer, exploredGameObjects:  Array<Coords>, character: Character) {
+    let distances: Array<Distance> = []
+    for (let exploreGameObject of exploredGameObjects) {
+      distances.push({
+        x: exploreGameObject.x,
+        y: exploreGameObject.y,
+        distance: this.manhattanDist(character.posX, character.posY, exploreGameObject.x, exploreGameObject.y),
+      })
+    }
+    return distances
+  }
+
+  private getExploredGameObjects(layer, objCode) {
+    let exploredGameObjects: Array<Coords> = []
     for (let i = 0; i < layer.length; i++) {
       let row = layer[i]
       for (let j = 0; j < row.length; j++) {
-        if (row[j] === objCode) {
-          //console.log(character.posX, character.posY, j, i)
-          distances.push({
+        if (row[j] === objCode && this.exploredMap[i][j] === 1) {
+          exploredGameObjects.push({
             x: j,
             y: i,
-            distance: this.manhattanDist(character.posX, character.posY, j, i),
           })
         }
       }
     }
-    return distances
+
+    return exploredGameObjects;
   }
 
   private manhattanDist(x1, y1, x2, y2) {

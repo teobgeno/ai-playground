@@ -36,7 +36,7 @@ export class TaskGather {
         this.findProperGameObject();
         break;
       case 4:
-        this.getNearestGameObject();
+        this.getNearestDestination();
         break;
       case 5:
         this.findAroundGameObject();
@@ -69,17 +69,26 @@ export class TaskGather {
     );
     this.next();
   }
+
+  private getNearestDestination() {
+    this. getNearestGameObject();
+    if(!this.selectedMapGameObject) {
+    }
+    console.log('HERE')
+    console.log(this.selectedMapGameObject)
+  }
+
   private getNearestGameObject() {
     this.selectedMapGameObject = this.map.getNearestGameObject(
       this.selectedLayers,
       this.selectedGameObjects[0].mapCode,
       this.character
     );
-    if(this.selectedMapGameObject) {
-      this.next();
-    } else {
-      console.log('cannot find ' + this.selectedGameObjects[0].title)
-    }
+    // if(this.selectedMapGameObject) {
+    //   this.next();
+    // } else {
+    //   console.log('cannot find ' + this.selectedGameObjects[0].title)
+    // }
    
   }
 
