@@ -28,8 +28,8 @@ export class App {
     let map = new Map(this.gridEngineHeadless);
     map.initMap();
     let character = new Character(this.gridEngineHeadless, map);
-    let taskGather = new TaskGather(map, character, t);
-    //taskGather.execute();
+    let taskGather = new TaskGather(this.gridEngineHeadless, map, character, t);
+    taskGather.execute();
    
   }
 

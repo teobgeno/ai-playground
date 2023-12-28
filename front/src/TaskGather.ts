@@ -1,7 +1,9 @@
+import { GridEngineHeadless } from "grid-engine"
 import { Map } from "./Map";
 import { Character } from "./Character";
 
 export class TaskGather {
+  private gridEngineHeadless: GridEngineHeadless
   private map: Map;
   private character: Character;
   private data: any;
@@ -12,7 +14,8 @@ export class TaskGather {
   private selectedMapGameObject: any;
   private selectedMapCloseTile: any;
 
-  constructor(map: Map, character: Character, data: any) {
+  constructor(gridEngineHeadless: GridEngineHeadless, map: Map, character: Character, data: any) {
+    this.gridEngineHeadless = gridEngineHeadless;
     this.map = map;
     this.character = character;
     this.data = data;
@@ -88,7 +91,10 @@ export class TaskGather {
     this.next();
   }
   private moveCharacter() {
-    this.character.move(this.selectedMapCloseTile, this.next);
+    // const charPos = this.character.getPos();
+    // console.log(this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''}))
+
+    //this.character.move(this.selectedMapCloseTile, this.next);
   }
   private startAction() {
     console.log(

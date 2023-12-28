@@ -633,3 +633,7 @@ These categories illustrate the diverse range of resources that were essential f
 --- DI ---
 https://www.netguru.com/blog/dependency-injection-with-python-make-it-easy
 https://github.com/kodemore/kink
+
+
+--- libs ---
+https://github.com/mroderick/PubSubJS

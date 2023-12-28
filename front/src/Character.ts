@@ -1,5 +1,6 @@
 import { GridEngineHeadless } from "grid-engine"
 import { Map } from "./Map"
+import PubSub from 'pubsub-js'
 export class Character {
   private gridEngineHeadless: GridEngineHeadless
   public posX: number = 0

@@ -2,35 +2,33 @@ import {
   GridEngineHeadless,
   ArrayTilemap,
   CollisionStrategy,
-} from "grid-engine";
-import { AsciiRenderer } from "./AsciiRenderer";
-import { Character } from "./Character";
+} from "grid-engine"
+import { AsciiRenderer } from "./AsciiRenderer"
+import { Character } from "./Character"
 
-import {
-  countInstances,
-  sortObjsByProperty
-} from "./Utils";
+import { countInstances, sortObjsByProperty } from "./Utils"
 
+interface Section {
+  layer : string;
+  sectionId: number
+}
 export class Map {
-  private gridEngineHeadless: GridEngineHeadless;
-  private asciiRenderer: AsciiRenderer;
-  private tilemap: ArrayTilemap;
-  private sections: any;
-  private gameObjects: any;
+  private gridEngineHeadless: GridEngineHeadless
+  private asciiRenderer: AsciiRenderer
+  private tilemap: ArrayTilemap
+  private sections: Array<Section>
+  private gameObjects: any
   private gameLoopInterval: any
-  private exploredMap: any;
+  private exploredMap: any
 
   constructor(gridEngineHeadless) {
-    this.gridEngineHeadless = gridEngineHeadless;
-    this.sections = [
-      { layer: "forestLayer", sectionId: 1 }
-    ];
+    this.gridEngineHeadless = gridEngineHeadless
+    this.sections = [{ layer: "forestLayer", sectionId: 1 }]
 
-    this.gameObjects = [{ title: "tree", id:1, mapCode: 2 }];
+    this.gameObjects = [{ title: "tree", id: 1, mapCode: 2 }]
   }
 
   public initMap() {
-
     this.exploredMap = {
       forestLayer: {
         data: [
@@ -77,19 +75,19 @@ export class Map {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ],
       },
-    });
+    })
     this.gridEngineHeadless.create(this.tilemap, {
       characters: [{ id: "player" }],
       characterCollisionStrategy: CollisionStrategy.BLOCK_ONE_TILE_AHEAD,
-    });
+    })
 
     this.asciiRenderer = new AsciiRenderer(
       "content",
       this.gridEngineHeadless,
       this.tilemap,
-      this.exploredMap,
-    );
-    this.asciiRenderer.render();
+      this.exploredMap
+    )
+    this.asciiRenderer.render()
 
     // this.gameLoopInterval = setInterval(() => {
     //   this.gridEngineHeadless.update(0, 50)
@@ -98,49 +96,62 @@ export class Map {
   }
 
   public getTileMap() {
-    this.tilemap.getTileAt(7,0);
+    this.tilemap.getTileAt(7, 0)
   }
 
   public findProperSections(sectionsIds: Array<number>) {
-    return this.sections.filter(x=> sectionsIds.includes(x.sectionId));
+    return this.sections.filter((x) => sectionsIds.includes(x.sectionId))
   }
 
-  public getNearestSections(sections:Array<any>) {
-    if(sections.length === 1) {
-      return (this.tilemap as any).map[sections[0].layer].data;
+  public getNearestSections(sections: Array<Section>) {
+    if (sections.length === 1) {
+      return (this.tilemap as any).map[sections[0].layer].data
     }
-    return null;
+    return null
   }
-  
-  public removeGameObject(sections:Array<any>, mapGameObject) {
-    (this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][mapGameObject.x] = 0;
-    (this.tilemap as any).map['collisions'].data[mapGameObject.y][mapGameObject.x] = 0;
-    (this.tilemap.getLayers()[0] as any).tiles[mapGameObject.y][mapGameObject.x].isBlocking = false;
+
+  public getSectionBorders(section: Section) {
+    (this.tilemap as any).map[section.layer].data
+    return null
+  }
+
+  public removeGameObject(sections: Array<any>, mapGameObject) {
+    ;(this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][
+      mapGameObject.x
+    ] = 0
+    ;(this.tilemap as any).map["collisions"].data[mapGameObject.y][
+      mapGameObject.x
+    ] = 0
+    ;(this.tilemap.getLayers()[0] as any).tiles[mapGameObject.y][
+      mapGameObject.x
+    ].isBlocking = false
     //console.log(this.gridEngineHeadless.isTileBlocked({ x: mapGameObject.x, y:mapGameObject.y }));
   }
 
   public findProperGameObject(selectedSections, gameObjectsIds) {
-    const selectedSectionsIds = selectedSections.map((e) => e.sectionId);
-    const selectedGameObjectsIds = gameObjectsIds.filter(x=> selectedSectionsIds.includes(x.section_id)).map((e) => e.id);
-    return this.gameObjects.filter(x=> selectedGameObjectsIds.includes(x.id));
+    const selectedSectionsIds = selectedSections.map((e) => e.sectionId)
+    const selectedGameObjectsIds = gameObjectsIds
+      .filter((x) => selectedSectionsIds.includes(x.section_id))
+      .map((e) => e.id)
+    return this.gameObjects.filter((x) => selectedGameObjectsIds.includes(x.id))
   }
 
   public getNearestGameObject(layer, objCode, character: Character) {
-    let distances: any = [];
-    const instances = countInstances(layer);
+    let distances: any = []
+    const instances = countInstances(layer)
     if (instances[objCode] > 0) {
       distances = sortObjsByProperty(
         this.calcGameObjectsDistances(layer, objCode, character),
         "distance"
-      );
-      return distances[0];
+      )
+      return distances[0]
     }
-    
-    return null;
+
+    return null
   }
 
   public findAroundGameObject(mapGameObject, character: Character) {
-    let t = (this.tilemap as any).map.collisions.data;
+    let t = (this.tilemap as any).map.collisions.data
     const neighbourTiles = {
       top: { x: mapGameObject.x, y: mapGameObject.y - 1, distance: 0 },
       topLeft: { x: mapGameObject.x - 1, y: mapGameObject.y - 1, distance: 0 },
@@ -148,32 +159,42 @@ export class Map {
       left: { x: mapGameObject.x - 1, y: mapGameObject.y, distance: 0 },
       right: { x: mapGameObject.x + 1, y: mapGameObject.y, distance: 0 },
       bottom: { x: mapGameObject.x, y: mapGameObject.y + 1, distance: 0 },
-      bottomLeft: { x: mapGameObject.x - 1, y: mapGameObject.y + 1, distance: 0 },
-      bottomRight: { x: mapGameObject.x + 1, y: mapGameObject.y + 1, distance: 0 },
-    };
+      bottomLeft: {
+        x: mapGameObject.x - 1,
+        y: mapGameObject.y + 1,
+        distance: 0,
+      },
+      bottomRight: {
+        x: mapGameObject.x + 1,
+        y: mapGameObject.y + 1,
+        distance: 0,
+      },
+    }
 
-    let freeTiles: any = [];
+    let freeTiles: any = []
     for (const [key, value] of Object.entries(neighbourTiles)) {
-      t.hasOwnProperty(value.x);
+      t.hasOwnProperty(value.x)
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
         if (t[value.y][value.x] !== 1) {
-          value.distance = this.manhattanDist(character.posX, character.posY, value.x, value.y);
-          freeTiles.push(value);
+          value.distance = this.manhattanDist(
+            character.posX,
+            character.posY,
+            value.x,
+            value.y
+          )
+          freeTiles.push(value)
         }
       }
     }
-    freeTiles = sortObjsByProperty(
-      freeTiles,
-      "distance"
-    );
+    freeTiles = sortObjsByProperty(freeTiles, "distance")
     //console.log( freeTiles[0])
-    return freeTiles[0];
+    return freeTiles[0]
   }
 
   private calcGameObjectsDistances(layer, objCode, character: Character) {
-    let distances: any = [];
+    let distances: any = []
     for (let i = 0; i < layer.length; i++) {
-      let row = layer[i];
+      let row = layer[i]
       for (let j = 0; j < row.length; j++) {
         if (row[j] === objCode) {
           //console.log(character.posX, character.posY, j, i)
@@ -181,16 +202,16 @@ export class Map {
             x: j,
             y: i,
             distance: this.manhattanDist(character.posX, character.posY, j, i),
-          });
+          })
         }
       }
     }
-    return distances;
+    return distances
   }
 
   private manhattanDist(x1, y1, x2, y2) {
     //https://gamedev.stackexchange.com/questions/31546/find-nearest-tile-of-type-x
-    let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1);
-    return dist;
+    let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1)
+    return dist
   }
 }
