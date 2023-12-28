@@ -6,7 +6,7 @@ import {
 import { AsciiRenderer } from "./AsciiRenderer"
 import { Character } from "./Character"
 
-import { countInstances, sortObjsByProperty } from "./Utils"
+import { sortObjsByProperty } from "./Utils"
 
 interface Section {
   layer: string
@@ -15,6 +15,7 @@ interface Section {
 interface Coords {
   x: number
   y: number
+  mapCode?:number
 }
 interface Distance {
   x: number
@@ -90,11 +91,11 @@ export class Map {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-          [0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [2, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+          [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+          [2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+          [2, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+          [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
         ],
       },
     })
@@ -127,21 +128,23 @@ export class Map {
 
   public getNearestSections(sections: Array<Section>) {
     if (sections.length === 1) {
-      return (this.tilemap as any).map[sections[0].layer].data
+      //return (this.tilemap as any).map[sections[0].layer].data
+      return this.getSectionArea(sections[0])
     }
     return null
   }
 
-  public getSectionBorders(section: Section) {
-    let borders: Array<{ x: number; y: number }> = []
+  public getSectionArea(section: Section) {
+    let borders: Array<Coords> = []
     const layer = (this.tilemap as any).map[section.layer].data
     for (let i = 0; i < layer.length; i++) {
       let row = layer[i]
       for (let j = 0; j < row.length; j++) {
-        if (row[j] === 3) {
+        if (row[j] > 0) {
           borders.push({
             x: j,
             y: i,
+            mapCode: row[j]
           })
         }
       }
@@ -170,20 +173,23 @@ export class Map {
     return this.gameObjects.filter((x) => selectedGameObjectsIds.includes(x.id))
   }
 
-  public getNearestGameObject(layer, objCode: number, character: Character) {
+  public getNearestGameObject(sectionArea: Array<Coords>, objCode: number, character: Character) {
     let distances: any = []
-    const instances = countInstances(layer)
+    const instances = this.countInstances(sectionArea)
     if (instances[objCode] > 0) {
       
-      const exploredGameObjects = this.getExploredGameObjects(layer, objCode);
-      distances = sortObjsByProperty(
-        this.calcGameObjectsDistances(layer, exploredGameObjects, character),
-        "distance"
-      )
-      return distances[0]
+      const exploredGameObjects = this.getExploredGameObjects(sectionArea, objCode);
+      if(exploredGameObjects.length ) {
+        distances = sortObjsByProperty(
+          this.calcGameObjectsDistances(exploredGameObjects, character),
+          "distance"
+        )
+        return distances[0]
+      }
+     
     }
 
-    return null
+    return distances
   }
 
   public findAroundGameObject(mapGameObject, character: Character) {
@@ -227,7 +233,7 @@ export class Map {
     return freeTiles[0]
   }
 
-  private calcGameObjectsDistances(layer, exploredGameObjects:  Array<Coords>, character: Character) {
+  private calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
     let distances: Array<Distance> = []
     for (let exploreGameObject of exploredGameObjects) {
       distances.push({
@@ -239,20 +245,18 @@ export class Map {
     return distances
   }
 
-  private getExploredGameObjects(layer, objCode) {
+  private getExploredGameObjects(sectionArea: Array<Coords>, objCode) {
+
     let exploredGameObjects: Array<Coords> = []
-    for (let i = 0; i < layer.length; i++) {
-      let row = layer[i]
-      for (let j = 0; j < row.length; j++) {
-        if (row[j] === objCode && this.exploredMap[i][j] === 1) {
-          exploredGameObjects.push({
-            x: j,
-            y: i,
-          })
-        }
+
+    for (let item of sectionArea) {
+      if (item.mapCode === objCode && this.exploredMap[item.y][item.x] === 1) {
+        exploredGameObjects.push({
+          x: item.x,
+          y: item.y,
+        })
       }
     }
-
     return exploredGameObjects;
   }
 
@@ -260,5 +264,14 @@ export class Map {
     //https://gamedev.stackexchange.com/questions/31546/find-nearest-tile-of-type-x
     let dist = Math.abs(x2 - x1) + Math.abs(y2 - y1)
     return dist
+  }
+
+  private countInstances (sectionArea: Array<Coords>) {
+    return sectionArea.reduce((acc, arr) => {
+      if(arr.mapCode) {
+        acc[arr.mapCode] = acc[arr.mapCode] !== undefined ? acc[arr.mapCode] + 1 : 1
+      }
+      return acc
+    }, {})
   }
 }

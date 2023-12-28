@@ -73,6 +73,9 @@ export class TaskGather {
   private getNearestDestination() {
     this. getNearestGameObject();
     if(!this.selectedMapGameObject) {
+       //if the area is full explored and no selectedMapGameObject find other section
+       //if char not in section area find nearest path to enter
+       //if char in area move to nearest tile to explore
     }
     console.log('HERE')
     console.log(this.selectedMapGameObject)
