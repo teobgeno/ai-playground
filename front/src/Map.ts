@@ -194,7 +194,7 @@ export class Map {
      
     }
 
-    return distances
+    return null
   }
 
   public findAroundGameObject(mapGameObject, character: Character) {
@@ -253,7 +253,7 @@ export class Map {
     return exploredGameObjects;
   }
 
-  private calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
+  public calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
     let distances: Array<Distance> = []
     for (let exploreGameObject of exploredGameObjects) {
       distances.push({

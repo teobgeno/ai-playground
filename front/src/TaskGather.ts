@@ -73,12 +73,13 @@ export class TaskGather {
   private getNearestDestination() {
     this.getNearestGameObject();
     if(!this.selectedMapGameObject) {
-      const isInTargetSection = this.map.isInSection(this.selectedSections, {x: this.character.posX, y: this.character.posY});
+      const isInTargetSection = this.map.isInSection(this.selectedSections[0], {x: this.character.posX, y: this.character.posY});
       if(isInTargetSection) {
-
+       
       }
       if(!isInTargetSection) {
-
+    
+        console.log(this.map.calcGameObjectsDistances(this.selectedSectionArea, this.character))
       }
        //if the area is full explored and no selectedMapGameObject find other section
        //if char not in section area find nearest path to enter
