@@ -86,11 +86,12 @@ export class TaskGather {
        //if the area is full explored and no selectedMapGameObject find other section
        //if char not in section area find nearest path to enter
        //if char in area move to nearest tile to explore
-      //  move
-			// 	char.move +1
-			// 	map update exploredMap
-			// 	char.view -> check for game object
-			// 	if game 0bject ++
+       // create path  this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''})
+      //  while path end
+			// 	  char.move +1
+			// 	  map update exploredMap
+			// 	  char.view -> check for game object
+			// 	if game object found create path to object ++
 			// 	else
 			// 		-- getNearestDestination 
     }
