@@ -152,6 +152,14 @@ export class Map {
     return borders
   }
 
+  public isInSection(section: Section, position: Coords) {
+    const layer = (this.tilemap as any).map[section.layer].data;
+    if(layer[position.y][position.x] !== 0){
+      return true;
+    }
+    return false;
+  }
+
   public removeGameObject(sections: Array<any>, mapGameObject) {
     ;(this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][
       mapGameObject.x
@@ -233,18 +241,6 @@ export class Map {
     return freeTiles[0]
   }
 
-  private calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
-    let distances: Array<Distance> = []
-    for (let exploreGameObject of exploredGameObjects) {
-      distances.push({
-        x: exploreGameObject.x,
-        y: exploreGameObject.y,
-        distance: this.manhattanDist(character.posX, character.posY, exploreGameObject.x, exploreGameObject.y),
-      })
-    }
-    return distances
-  }
-
   private getExploredGameObjects(sectionArea: Array<Coords>, objCode) {
 
     let exploredGameObjects: Array<Coords> = []
@@ -258,6 +254,18 @@ export class Map {
       }
     }
     return exploredGameObjects;
+  }
+
+  private calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
+    let distances: Array<Distance> = []
+    for (let exploreGameObject of exploredGameObjects) {
+      distances.push({
+        x: exploreGameObject.x,
+        y: exploreGameObject.y,
+        distance: this.manhattanDist(character.posX, character.posY, exploreGameObject.x, exploreGameObject.y),
+      })
+    }
+    return distances
   }
 
   private manhattanDist(x1, y1, x2, y2) {
