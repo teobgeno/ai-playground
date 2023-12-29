@@ -17,9 +17,7 @@ interface Coords {
   y: number
   mapCode?:number
 }
-interface Distance {
-  x: number
-  y: number
+interface Distance extends Coords{
   distance: number
 }
 export class Map {
@@ -29,12 +27,11 @@ export class Map {
   private sections: Array<Section>
   private gameObjects: any
   private gameLoopInterval: any
-  private exploredMap: any
+  private exploredMap:number[][]
 
   constructor(gridEngineHeadless) {
     this.gridEngineHeadless = gridEngineHeadless
     this.sections = [{ layer: "forestLayer", sectionId: 1 }]
-
     this.gameObjects = [{ title: "tree", id: 1, mapCode: 2 }]
   }
 
@@ -118,9 +115,9 @@ export class Map {
     // }, 100)
   }
 
-  public getTileMap() {
-    this.tilemap.getTileAt(7, 0)
-  }
+  // public getTileMap() {
+  //   this.tilemap.getTileAt(7, 0)
+  // }
 
   public findProperSections(sectionsIds: Array<number>) {
     return this.sections.filter((x) => sectionsIds.includes(x.sectionId))
@@ -135,13 +132,13 @@ export class Map {
   }
 
   public getSectionArea(section: Section) {
-    let borders: Array<Coords> = []
+    let area: Array<Coords> = []
     const layer = (this.tilemap as any).map[section.layer].data
     for (let i = 0; i < layer.length; i++) {
       let row = layer[i]
       for (let j = 0; j < row.length; j++) {
         if (row[j] > 0) {
-          borders.push({
+          area.push({
             x: j,
             y: i,
             mapCode: row[j]
@@ -149,7 +146,7 @@ export class Map {
         }
       }
     }
-    return borders
+    return area
   }
 
   public isInSection(section: Section, position: Coords) {
@@ -182,7 +179,7 @@ export class Map {
   }
 
   public getNearestGameObject(sectionArea: Array<Coords>, objCode: number, character: Character) {
-    let distances: any = []
+    let distances: Array<Distance> = []
     const instances = this.countInstances(sectionArea)
     if (instances[objCode] > 0) {
       
@@ -221,7 +218,7 @@ export class Map {
       },
     }
 
-    let freeTiles: any = []
+    let freeTiles: Array<Distance> = []
     for (const [key, value] of Object.entries(neighbourTiles)) {
       t.hasOwnProperty(value.x)
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {

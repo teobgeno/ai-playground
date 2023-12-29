@@ -9,7 +9,7 @@ export class TaskGather {
   private data: any;
   private pointer: number = 0;
   private selectedSections: any;
-  private selectedLayers: any;
+  private selectedSectionArea: any;
   private selectedGameObjects: any;
   private selectedMapGameObject: any;
   private selectedMapCloseTile: any;
@@ -59,7 +59,7 @@ export class TaskGather {
     this.next();
   }
   private getNearestSections() {
-    this.selectedLayers = this.map.getNearestSections(this.selectedSections);
+    this.selectedSectionArea = this.map.getNearestSections(this.selectedSections);
     this.next();
   }
   private findProperGameObject() {
@@ -90,7 +90,7 @@ export class TaskGather {
 
   private getNearestGameObject() {
     this.selectedMapGameObject = this.map.getNearestGameObject(
-      this.selectedLayers,
+      this.selectedSectionArea,
       this.selectedGameObjects[0].mapCode,
       this.character
     );
