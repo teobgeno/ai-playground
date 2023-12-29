@@ -83,6 +83,13 @@ export class TaskGather {
        //if the area is full explored and no selectedMapGameObject find other section
        //if char not in section area find nearest path to enter
        //if char in area move to nearest tile to explore
+      //  move
+			// 	char.move +1
+			// 	map update exploredMap
+			// 	char.view -> check for game object
+			// 	if game 0bject ++
+			// 	else
+			// 		-- getNearestDestination 
     }
     console.log('HERE')
     console.log(this.selectedMapGameObject)
