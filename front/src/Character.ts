@@ -42,7 +42,6 @@ export class Character {
       .subscribe(({ enterTile }) => {
         // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
         //this.gridEngineHeadless.stopMovement("player")
-        console.log(this.map.getTileMap())
         this.posX = enterTile.x
         this.posY = enterTile.y
         if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
