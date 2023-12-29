@@ -136,7 +136,7 @@ export class TaskGather {
   private endAction() {
     console.log("finish action");
     this.map.removeGameObject(
-      this.selectedSections,
+      this.selectedSection,
       this.selectedMapGameObject
     );
     this.pointer = 0;
