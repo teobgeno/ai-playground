@@ -8,7 +8,8 @@ export class TaskGather {
   private character: Character;
   private data: any;
   private pointer: number = 0;
-  private selectedSections: any;
+  private properSections: any;
+  private selectedSection: any;
   private selectedSectionArea: any;
   private selectedGameObjects: any;
   private selectedMapGameObject: any;
@@ -30,7 +31,7 @@ export class TaskGather {
         this.findProperSections();
         break;
       case 2:
-        this.getNearestSections();
+        this.getNearestSection();
         break;
       case 3:
         this.findProperGameObject();
@@ -53,18 +54,19 @@ export class TaskGather {
     }
   };
   private findProperSections() {
-    this.selectedSections = this.map.findProperSections(
+    this.properSections = this.map.findProperSections(
       this.data.params.sections
     );
     this.next();
   }
-  private getNearestSections() {
-    this.selectedSectionArea = this.map.getNearestSections(this.selectedSections);
+  private getNearestSection() {
+    this.selectedSection = this.map.getNearestSection(this.properSections);
+    this.selectedSectionArea = this.map.getSectionArea(this.selectedSection);
     this.next();
   }
   private findProperGameObject() {
     this.selectedGameObjects = this.map.findProperGameObject(
-      this.selectedSections,
+      this.properSections,
       this.data.params.game_objects
     );
     this.next();
@@ -73,7 +75,7 @@ export class TaskGather {
   private getNearestDestination() {
     this.getNearestGameObject();
     if(!this.selectedMapGameObject) {
-      const isInTargetSection = this.map.isInSection(this.selectedSections[0], {x: this.character.posX, y: this.character.posY});
+      const isInTargetSection = this.map.isInSection(this.selectedSection, {x: this.character.posX, y: this.character.posY});
       if(isInTargetSection) {
        
       }

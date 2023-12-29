@@ -123,10 +123,11 @@ export class Map {
     return this.sections.filter((x) => sectionsIds.includes(x.sectionId))
   }
 
-  public getNearestSections(sections: Array<Section>) {
+  public getNearestSection(sections: Array<Section>) {
     if (sections.length === 1) {
       //return (this.tilemap as any).map[sections[0].layer].data
-      return this.getSectionArea(sections[0])
+      return sections[0];
+      //return this.getSectionArea(sections[0])
     }
     return null
   }
@@ -170,7 +171,7 @@ export class Map {
     //console.log(this.gridEngineHeadless.isTileBlocked({ x: mapGameObject.x, y:mapGameObject.y }));
   }
 
-  public findProperGameObject(selectedSections, gameObjectsIds) {
+  public findProperGameObject(selectedSections: Array<Section>, gameObjectsIds) {
     const selectedSectionsIds = selectedSections.map((e) => e.sectionId)
     const selectedGameObjectsIds = gameObjectsIds
       .filter((x) => selectedSectionsIds.includes(x.section_id))
