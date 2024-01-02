@@ -14,7 +14,7 @@ export class TaskGather implements Task{
   private selectedSection: any;
   private selectedSectionArea: Array<GameObjectCode>;
   private selectedGameObjects: any;
-  private selectedMapGameObject: any;
+  private selectedMapGameObject: GameObjectDistance | null;
   private currentMovePath: Array<Coords> = []
   private selectedMapCloseTile: any;
 
