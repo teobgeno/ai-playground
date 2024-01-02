@@ -6,7 +6,7 @@ import {
 import { AsciiRenderer } from "./AsciiRenderer"
 import { Character } from "./Character"
 
-import { sortObjsByProperty } from "./Utils"
+import { Utils } from "./Utils"
 
 interface Section {
   layer: string
@@ -15,9 +15,13 @@ interface Section {
 interface Coords {
   x: number
   y: number
+}
+interface GameObjectCode extends Coords{
+  x: number
+  y: number
   mapCode?:number
 }
-interface Distance extends Coords{
+interface GameObjectDistance extends Coords{
   distance: number
 }
 export class Map {
@@ -133,7 +137,7 @@ export class Map {
   }
 
   public getSectionArea(section: Section) {
-    let area: Array<Coords> = []
+    let area: Array<GameObjectCode> = []
     const layer = (this.tilemap as any).map[section.layer].data
     for (let i = 0; i < layer.length; i++) {
       let row = layer[i]
@@ -179,14 +183,14 @@ export class Map {
     return this.gameObjects.filter((x) => selectedGameObjectsIds.includes(x.id))
   }
 
-  public getNearestGameObject(sectionArea: Array<Coords>, objCode: number, character: Character) {
-    let distances: Array<Distance> = []
+  public getNearestGameObject(sectionArea: Array<GameObjectCode>, objCode: number, character: Character) {
+    let distances: Array<GameObjectDistance> = []
     const instances = this.countInstances(sectionArea)
     if (instances[objCode] > 0) {
       
       const exploredGameObjects = this.getExploredGameObjects(sectionArea, objCode);
       if(exploredGameObjects.length ) {
-        distances = sortObjsByProperty(
+        distances = Utils.sortObjsByProperty(
           this.calcGameObjectsDistances(exploredGameObjects, character),
           "distance"
         )
@@ -219,7 +223,7 @@ export class Map {
       },
     }
 
-    let freeTiles: Array<Distance> = []
+    let freeTiles: Array<GameObjectDistance> = []
     for (const [key, value] of Object.entries(neighbourTiles)) {
       t.hasOwnProperty(value.x)
       if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
@@ -234,16 +238,17 @@ export class Map {
         }
       }
     }
-    freeTiles = sortObjsByProperty(freeTiles, "distance")
+    freeTiles = Utils.sortObjsByProperty(freeTiles, "distance")
     //console.log( freeTiles[0])
     return freeTiles[0]
   }
 
-  private getExploredGameObjects(sectionArea: Array<Coords>, objCode) {
+  private getExploredGameObjects(sectionArea: Array<GameObjectCode>, objCode) {
 
-    let exploredGameObjects: Array<Coords> = []
+    let exploredGameObjects: Array<GameObjectCode> = []
 
     for (let item of sectionArea) {
+      //TODO:: item.mapCode in array objCode should be array
       if (item.mapCode === objCode && this.exploredMap[item.y][item.x] === 1) {
         exploredGameObjects.push({
           x: item.x,
@@ -254,13 +259,13 @@ export class Map {
     return exploredGameObjects;
   }
 
-  public calcGameObjectsDistances(exploredGameObjects: Array<Coords>, character: Character) {
-    let distances: Array<Distance> = []
-    for (let exploreGameObject of exploredGameObjects) {
+  public calcGameObjectsDistances(gameObjects: Array<GameObjectCode>, character: Character) {
+    let distances: Array<GameObjectDistance> = []
+    for (let gameObject of gameObjects) {
       distances.push({
-        x: exploreGameObject.x,
-        y: exploreGameObject.y,
-        distance: this.manhattanDist(character.posX, character.posY, exploreGameObject.x, exploreGameObject.y),
+        x: gameObject.x,
+        y: gameObject.y,
+        distance: this.manhattanDist(character.posX, character.posY, gameObject.x, gameObject.y),
       })
     }
     return distances
@@ -272,7 +277,7 @@ export class Map {
     return dist
   }
 
-  private countInstances (sectionArea: Array<Coords>) {
+  private countInstances (sectionArea: Array<GameObjectCode>) {
     return sectionArea.reduce((acc, arr) => {
       if(arr.mapCode) {
         acc[arr.mapCode] = acc[arr.mapCode] !== undefined ? acc[arr.mapCode] + 1 : 1

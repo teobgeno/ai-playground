@@ -2,6 +2,7 @@ import { GridEngineHeadless } from "grid-engine"
 import { Map } from "./Map";
 import { Character } from "./Character";
 import { Task } from "./Task";
+import { Utils } from "./Utils"
 
 export class TaskGather implements Task{
   private gridEngineHeadless: GridEngineHeadless
@@ -83,7 +84,6 @@ export class TaskGather implements Task{
        
       }
       if(!isInTargetSection) {
-    
         console.log(this.map.calcGameObjectsDistances(this.selectedSectionArea, this.character))
       }
        //if the area is full explored and no selectedMapGameObject find other section
