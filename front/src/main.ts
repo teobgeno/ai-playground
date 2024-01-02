@@ -1,6 +1,4 @@
-import {
-  GridEngineHeadless,
-} from "grid-engine"
+import { GridEngineHeadless } from "grid-engine"
 import { AsciiRenderer } from "./AsciiRenderer"
 import { NoIdeaClient } from "./no-idea-client"
 import { Task } from "./Task"
@@ -21,16 +19,15 @@ export class App {
     })
   }
 
-
   public async createTask() {
-    const t:any = await this.noIdeaClient.default.testTestGet();
-    this.gridEngineHeadless = new GridEngineHeadless();
-    let map = new Map(this.gridEngineHeadless);
-    map.initMap();
-    let character = new Character(this.gridEngineHeadless, map);
-    let taskGather = new TaskGather(this.gridEngineHeadless, map, character, t);
-    taskGather.execute();
-   
+    const apiData: any = await this.noIdeaClient.default.testTestGet()
+    this.gridEngineHeadless = new GridEngineHeadless()
+    let map = new Map(this.gridEngineHeadless)
+    map.initMap()
+    let character = new Character()
+    let taskGather = new TaskGather(this.gridEngineHeadless, map, apiData)
+    character.addTask(taskGather)
+    character.startTask()
   }
 
   public moveCharacter(targetPos) {
@@ -68,8 +65,7 @@ export class App {
     //   }
     // }
   }
-
 }
 
 const app = new App()
-app.createTask();
+app.createTask()

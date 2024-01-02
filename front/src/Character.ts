@@ -1,17 +1,12 @@
-import { GridEngineHeadless } from "grid-engine"
-import { Map } from "./Map"
-import PubSub from 'pubsub-js'
+import { Task } from "./Task"
+import PubSub from "pubsub-js"
 export class Character {
-  private gridEngineHeadless: GridEngineHeadless
   public posX: number = 0
   public posY: number = 0
-  private map: Map
   private fovDistance = 1
+  private tasks: Array<Task>
 
-  constructor(gridEngineHeadless: GridEngineHeadless, map: Map) {
-    this.gridEngineHeadless = gridEngineHeadless
-    this.map = map
-  }
+  constructor() {}
 
   public getPos() {
     return { x: this.posX, y: this.posY }
@@ -23,7 +18,7 @@ export class Character {
   }
 
   public getFovDistance() {
-    return this.fovDistance;
+    return this.fovDistance
   }
 
   public fov() {
@@ -31,22 +26,30 @@ export class Character {
   }
 
   public move(targetPos, cb) {
-    if (this.posX === targetPos.x && this.posY === targetPos.y) {
-      cb()
-      return
-    }
+    // if (this.posX === targetPos.x && this.posY === targetPos.y) {
+    //   cb()
+    //   return
+    // }
+    // this.gridEngineHeadless.moveTo("player", targetPos)
+    // this.gridEngineHeadless
+    //   .positionChangeFinished()
+    //   .subscribe(({ enterTile }) => {
+    //     // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
+    //     //this.gridEngineHeadless.stopMovement("player")
+    //     this.posX = enterTile.x
+    //     this.posY = enterTile.y
+    //     if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
+    //       cb()
+    //     }
+    //   })
+  }
 
-    this.gridEngineHeadless.moveTo("player", targetPos)
-    this.gridEngineHeadless
-      .positionChangeFinished()
-      .subscribe(({ enterTile }) => {
-        // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
-        //this.gridEngineHeadless.stopMovement("player")
-        this.posX = enterTile.x
-        this.posY = enterTile.y
-        if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
-          cb()
-        }
-      })
+  public addTask(task: Task) {
+    task.addOwner(this)
+    this.tasks.push(task)
+  }
+
+  public startTask() {
+    this.tasks[0].execute();
   }
 }

@@ -1,8 +1,9 @@
 import { GridEngineHeadless } from "grid-engine"
 import { Map } from "./Map";
 import { Character } from "./Character";
+import { Task } from "./Task";
 
-export class TaskGather {
+export class TaskGather implements Task{
   private gridEngineHeadless: GridEngineHeadless
   private map: Map;
   private character: Character;
@@ -15,16 +16,18 @@ export class TaskGather {
   private selectedMapGameObject: any;
   private selectedMapCloseTile: any;
 
-  constructor(gridEngineHeadless: GridEngineHeadless, map: Map, character: Character, data: any) {
+  constructor(gridEngineHeadless: GridEngineHeadless, map: Map, data: any) {
     this.gridEngineHeadless = gridEngineHeadless;
     this.map = map;
-    this.character = character;
     this.data = data;
   }
   public execute() {
     this.next();
   }
-  next = () => {
+  public addOwner(character: Character) {
+    this.character = character;
+  }
+  public next = () => {
     this.pointer++;
     switch (this.pointer) {
       case 1:
