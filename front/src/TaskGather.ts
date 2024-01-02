@@ -24,13 +24,13 @@ export class TaskGather implements Task{
     this.data = data;
   }
   public execute() {
+    this.pointer = 1;
     this.next();
   }
   public addOwner(character: Character) {
     this.character = character;
   }
   public next = () => {
-    this.pointer++;
     switch (this.pointer) {
       case 1:
         this.findProperSections();
@@ -62,11 +62,13 @@ export class TaskGather implements Task{
     this.properSections = this.map.findProperSections(
       this.data.params.sections
     );
+    this.pointer = 2;
     this.next();
   }
   private getNearestSection() {
     this.selectedSection = this.map.getNearestSection(this.properSections);
     this.selectedSectionArea = this.map.getSectionArea(this.selectedSection);
+    this.pointer = 3;
     this.next();
   }
   private findProperGameObject() {
@@ -74,6 +76,7 @@ export class TaskGather implements Task{
       this.properSections,
       this.data.params.game_objects
     );
+    this.pointer = 4;
     this.next();
   }
 
@@ -84,15 +87,17 @@ export class TaskGather implements Task{
       if(isInTargetSection) {
        
       }
+      
       if(!isInTargetSection) {
-        
         const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea, this.character)
         const pathFinder = this.gridEngineHeadless.findShortestPath({position:{ x: this.character.posX, y: this.character.posY }, charLayer:''}, {position:{ x: nearestSectionTile.x, y: nearestSectionTile.y }, charLayer:''})
         for (let item of pathFinder.path) {
           this.currentMovePath.push(item.position)
         }
-
-        console.log(this.currentMovePath)
+        this.currentMovePath.shift()
+        this.pointer = 6;
+        this.next();
+       
       }
 
        //if the area is full explored and no selectedMapGameObject find other section
@@ -107,8 +112,8 @@ export class TaskGather implements Task{
 			// 	else
 			// 		-- getNearestDestination 
     }
-    console.log('HERE')
-    console.log(this.selectedMapGameObject)
+    //console.log('HERE')
+    //console.log(this.selectedMapGameObject)
   }
 
   private getNearestGameObject() {
@@ -133,6 +138,11 @@ export class TaskGather implements Task{
     this.next();
   }
   private moveCharacter() {
+    const nextPath = this.currentMovePath.shift()
+    if(nextPath) {
+      this.character.move(nextPath);
+    }
+
     // const charPos = this.character.getPos();
     // console.log(this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''}))
 

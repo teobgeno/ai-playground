@@ -1,5 +1,6 @@
 import { Task } from "./Task"
 import PubSub from "pubsub-js"
+import {Coords, GameObjectCode, GameObjectDistance } from "./Map";
 export class Character {
   public posX: number = 0
   public posY: number = 0
@@ -25,7 +26,8 @@ export class Character {
     // https://math.stackexchange.com/questions/859760/calculating-size-of-an-object-based-on-distance
   }
 
-  public move(targetPos, cb) {
+  public move(targetPos: Coords) {
+    PubSub.publish('on-character-move', {targetPos: targetPos, fovDistance:this.fovDistance, cb:this.moveFinish});
     // if (this.posX === targetPos.x && this.posY === targetPos.y) {
     //   cb()
     //   return
@@ -42,6 +44,12 @@ export class Character {
     //       cb()
     //     }
     //   })
+  }
+
+  moveFinish = () => {
+    console.log('move finished')
+    this.tasks[0].next();
+    
   }
 
   public addTask(task: Task) {

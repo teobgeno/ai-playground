@@ -4,8 +4,8 @@ import {
   CollisionStrategy,
 } from "grid-engine"
 import { AsciiRenderer } from "./AsciiRenderer"
+import PubSub from "pubsub-js"
 import { Character } from "./Character"
-
 import { Utils } from "./Utils"
 
 interface Section {
@@ -30,11 +30,14 @@ export class Map {
   private gameObjects: any
   private gameLoopInterval: any
   private exploredMap:number[][]
+  private isRendering : boolean
 
   constructor(gridEngineHeadless) {
     this.gridEngineHeadless = gridEngineHeadless
     this.sections = [{ layer: "forestLayer", sectionId: 1 }]
     this.gameObjects = [{ title: "tree", id: 1, mapCode: 2 }]
+    this.isRendering = false;
+    PubSub.subscribe('on-character-move', this.moveCharacter);
   }
 
   public initMap() {
@@ -111,15 +114,61 @@ export class Map {
     )
     this.asciiRenderer.render()
 
-    // this.gameLoopInterval = setInterval(() => {
-    //   this.gridEngineHeadless.update(0, 50)
-    //   this.asciiRenderer.render()
-    // }, 100)
+    this.gameLoopInterval = setInterval(() => {
+      if(this.isRendering) {
+        this.gridEngineHeadless.update(0, 50)
+        this.asciiRenderer.render()
+      }
+    
+    }, 100)
   }
 
   // public getTileMap() {
   //   this.tilemap.getTileAt(7, 0)
   // }
+
+  moveCharacter = (msg, data) => {
+    console.log(data.targetPos)
+    this.isRendering = true;
+    this.gridEngineHeadless.moveTo("player", data.targetPos)
+    this.fovCharacter(data.targetPos, data.fovDistance)
+    this.gridEngineHeadless
+      .positionChangeFinished()
+      .subscribe(({ enterTile }) => {
+        // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
+        //this.gridEngineHeadless.stopMovement("player")
+        if (enterTile.x == data.targetPos.x && enterTile.y == data.targetPos.y) {
+          data.cb()
+          this.isRendering = false;
+        }
+      })
+  }
+
+  fovCharacter = (currentPos, fovDistance) => {
+    const fovTiles = {
+      top: { x: currentPos.x, y: currentPos.y - fovDistance },
+      topLeft: { x: currentPos.x - fovDistance, y: currentPos.y - fovDistance },
+      topRight: { x: currentPos.x + fovDistance, y: currentPos.y - fovDistance },
+      left: { x: currentPos.x - fovDistance, y: currentPos.y },
+      right: { x: currentPos.x + fovDistance, y: currentPos.y },
+      bottom: { x: currentPos.x, y: currentPos.y + fovDistance },
+      bottomLeft: {
+        x: currentPos.x - fovDistance,
+        y: currentPos.y + fovDistance
+      },
+      bottomRight: {
+        x: currentPos.x + fovDistance,
+        y: currentPos.y + fovDistance
+      },
+    }
+
+    for (const [key, value] of Object.entries(fovTiles)) {
+      this.exploredMap.hasOwnProperty(value.x)
+      if (this.exploredMap.hasOwnProperty(value.y) && this.exploredMap[value.y].hasOwnProperty(value.x)) {
+        this.exploredMap [value.y][value.x] = 1;
+      }
+    }
+  }
 
   public findProperSections(sectionsIds: Array<number>) {
     return this.sections.filter((x) => sectionsIds.includes(x.sectionId))
