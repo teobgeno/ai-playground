@@ -1,5 +1,5 @@
 import { GridEngineHeadless } from "grid-engine"
-import { Map } from "./Map";
+import { Map, Coords, GameObjectCode, GameObjectDistance } from "./Map";
 import { Character } from "./Character";
 import { Task } from "./Task";
 import { Utils } from "./Utils"
@@ -12,9 +12,10 @@ export class TaskGather implements Task{
   private pointer: number = 0;
   private properSections: any;
   private selectedSection: any;
-  private selectedSectionArea: any;
+  private selectedSectionArea: Array<GameObjectCode>;
   private selectedGameObjects: any;
   private selectedMapGameObject: any;
+  private currentMovePath: Array<Coords> = []
   private selectedMapCloseTile: any;
 
   constructor(gridEngineHeadless: GridEngineHeadless, map: Map, data: any) {
@@ -41,7 +42,7 @@ export class TaskGather implements Task{
         this.findProperGameObject();
         break;
       case 4:
-        this.getNearestDestination();
+        this.getNextDestination();
         break;
       case 5:
         this.findAroundGameObject();
@@ -76,7 +77,7 @@ export class TaskGather implements Task{
     this.next();
   }
 
-  private getNearestDestination() {
+  private getNextDestination() {
     this.getNearestGameObject();
     if(!this.selectedMapGameObject) {
       const isInTargetSection = this.map.isInSection(this.selectedSection, {x: this.character.posX, y: this.character.posY});
@@ -84,8 +85,16 @@ export class TaskGather implements Task{
        
       }
       if(!isInTargetSection) {
-        console.log(this.map.calcGameObjectsDistances(this.selectedSectionArea, this.character))
+        
+        const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea, this.character)
+        const pathFinder = this.gridEngineHeadless.findShortestPath({position:{ x: this.character.posX, y: this.character.posY }, charLayer:''}, {position:{ x: nearestSectionTile.x, y: nearestSectionTile.y }, charLayer:''})
+        for (let item of pathFinder.path) {
+          this.currentMovePath.push(item.position)
+        }
+
+        console.log(this.currentMovePath)
       }
+
        //if the area is full explored and no selectedMapGameObject find other section
        //if char not in section area find nearest path to enter
        //if char in area move to nearest tile to explore

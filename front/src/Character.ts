@@ -4,7 +4,7 @@ export class Character {
   public posX: number = 0
   public posY: number = 0
   private fovDistance = 1
-  private tasks: Array<Task>
+  private tasks: Array<Task> = []
 
   constructor() {}
 

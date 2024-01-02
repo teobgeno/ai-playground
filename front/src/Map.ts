@@ -12,16 +12,14 @@ interface Section {
   layer: string
   sectionId: number
 }
-interface Coords {
+export interface Coords {
   x: number
   y: number
 }
-interface GameObjectCode extends Coords{
-  x: number
-  y: number
+export interface GameObjectCode extends Coords{
   mapCode?:number
 }
-interface GameObjectDistance extends Coords{
+export interface GameObjectDistance extends Coords{
   distance: number
 }
 export class Map {
@@ -162,6 +160,12 @@ export class Map {
     return false;
   }
 
+  public getNearestEntryInSection(sectionArea: Array<GameObjectCode>, character: Character) {
+    const sectionAreaDistances = Utils.sortObjsByProperty(this.calcGameObjectsDistances(this.getFreeTilesFromCollection(sectionArea), character), "distance")
+    return sectionAreaDistances[0]
+
+  }
+
   public removeGameObject(sections: Array<any>, mapGameObject) {
     ;(this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][
       mapGameObject.x
@@ -269,6 +273,22 @@ export class Map {
       })
     }
     return distances
+  }
+
+  private getFreeTilesFromCollection(tiles: Array<GameObjectCode | GameObjectDistance>) {
+    let t = (this.tilemap as any).map.collisions.data
+    let freeTiles: Array<GameObjectCode| GameObjectDistance> = []
+    for (const [key, value] of Object.entries(tiles)) {
+      t.hasOwnProperty(value.x)
+      if (t.hasOwnProperty(value.y) && t[value.y].hasOwnProperty(value.x)) {
+        if (t[value.y][value.x] !== 1) {
+          freeTiles.push(value)
+        }
+      }
+    }
+    freeTiles = Utils.sortObjsByProperty(freeTiles, "distance")
+
+    return freeTiles
   }
 
   private manhattanDist(x1, y1, x2, y2) {
