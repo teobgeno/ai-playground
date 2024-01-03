@@ -85,16 +85,19 @@ export class TaskGather implements Task{
     if(!this.selectedMapGameObject) {
       const isInTargetSection = this.map.isInSection(this.selectedSection, {x: this.character.posX, y: this.character.posY});
       if(isInTargetSection) {
-       
+        //TODO:: explore area. Keep track  of visited tiles
       }
       
       if(!isInTargetSection) {
-        const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea, this.character)
-        const pathFinder = this.gridEngineHeadless.findShortestPath({position:{ x: this.character.posX, y: this.character.posY }, charLayer:''}, {position:{ x: nearestSectionTile.x, y: nearestSectionTile.y }, charLayer:''})
-        for (let item of pathFinder.path) {
-          this.currentMovePath.push(item.position)
+        if(this.currentMovePath.length === 0) {
+          const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea, this.character)
+          const pathFinder = this.gridEngineHeadless.findShortestPath({position:{ x: this.character.posX, y: this.character.posY }, charLayer:''}, {position:{ x: nearestSectionTile.x, y: nearestSectionTile.y }, charLayer:''})
+          for (let item of pathFinder.path) {
+            this.currentMovePath.push(item.position)
+          }
+          this.currentMovePath.shift()
         }
-        this.currentMovePath.shift()
+       
         this.pointer = 6;
         this.next();
        
@@ -111,6 +114,9 @@ export class TaskGather implements Task{
 			// 	if game object found create path to object ++
 			// 	else
 			// 		-- getNearestDestination 
+    }
+    if(this.selectedMapGameObject) {
+      console.log('item found')
     }
     //console.log('HERE')
     //console.log(this.selectedMapGameObject)
@@ -142,7 +148,7 @@ export class TaskGather implements Task{
     if(nextPath) {
       this.character.move(nextPath);
     }
-
+    this.pointer = 4;
     // const charPos = this.character.getPos();
     // console.log(this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''}))
 
