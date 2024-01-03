@@ -14,7 +14,7 @@ export class TaskGather implements Task{
   private selectedSection: any;
   private selectedSectionArea: Array<GameObjectCode>;
   private selectedGameObjects: any;
-  private selectedMapGameObject: GameObjectDistance | null;
+  private selectedMapGameObject: GameObjectDistance;
   private currentMovePath: Array<Coords> = []
   private selectedMapCloseTile: any;
 
@@ -45,10 +45,10 @@ export class TaskGather implements Task{
         this.getNextDestination();
         break;
       case 5:
-        this.findAroundGameObject();
+        this.moveCharacter();
         break;
       case 6:
-        this.moveCharacter();
+        this.findAroundGameObject();
         break;
       case 7:
         this.startAction();
@@ -82,10 +82,11 @@ export class TaskGather implements Task{
 
   private getNextDestination() {
     this.getNearestGameObject();
-    if(!this.selectedMapGameObject) {
+    if(!Object.keys(this.selectedMapGameObject).length) {
       const isInTargetSection = this.map.isInSection(this.selectedSection, {x: this.character.posX, y: this.character.posY});
       if(isInTargetSection) {
         //TODO:: explore area. Keep track  of visited tiles
+        console.log('in area')
       }
       
       if(!isInTargetSection) {
@@ -98,7 +99,7 @@ export class TaskGather implements Task{
           this.currentMovePath.shift()
         }
        
-        this.pointer = 6;
+        this.pointer = 5;
         this.next();
        
       }
@@ -114,12 +115,25 @@ export class TaskGather implements Task{
 			// 	if game object found create path to object ++
 			// 	else
 			// 		-- getNearestDestination 
-    }
-    if(this.selectedMapGameObject) {
+    } else {
       console.log('item found')
+      this.pointer = 6;
+      this.next();
     }
     //console.log('HERE')
     //console.log(this.selectedMapGameObject)
+  }
+
+  private moveCharacter() {
+    const nextPath = this.currentMovePath.shift()
+    if(nextPath) {
+      this.character.move(nextPath);
+    }
+    this.pointer = 4;
+    // const charPos = this.character.getPos();
+    // console.log(this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''}))
+
+    //this.character.move(this.selectedMapCloseTile, this.next);
   }
 
   private getNearestGameObject() {
@@ -141,24 +155,16 @@ export class TaskGather implements Task{
       this.selectedMapGameObject,
       this.character
     );
+    this.pointer = 7;
     this.next();
   }
-  private moveCharacter() {
-    const nextPath = this.currentMovePath.shift()
-    if(nextPath) {
-      this.character.move(nextPath);
-    }
-    this.pointer = 4;
-    // const charPos = this.character.getPos();
-    // console.log(this.gridEngineHeadless.findShortestPath({position:{ x: charPos.x, y: charPos.y }, charLayer:''}, {position:{ x: this.selectedMapCloseTile.x, y: this.selectedMapCloseTile.y }, charLayer:''}))
-
-    //this.character.move(this.selectedMapCloseTile, this.next);
-  }
+  
   private startAction() {
     console.log(
       "Execute " + this.data.action + " for " + this.data.action_duration
     );
     setTimeout(() => {
+      this.pointer = 8;
       this.next();
     }, this.data.action_duration);
   }
@@ -168,7 +174,11 @@ export class TaskGather implements Task{
       this.selectedSection,
       this.selectedMapGameObject
     );
-    this.pointer = 0;
+    let t = this.selectedSectionArea.find(i=> i.x ===  this.selectedMapGameObject.x && i.y === this.selectedMapGameObject.y);
+    if(t) {
+      t.mapCode = 0;
+    }
+    this.pointer = 4;
     this.next();
   }
 }

@@ -138,7 +138,7 @@ export class Map {
         // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
         //this.gridEngineHeadless.stopMovement("player")
         if (enterTile.x == data.targetPos.x && enterTile.y == data.targetPos.y) {
-          data.cb()
+          data.cb(data.targetPos)
           this.isRendering = false;
         }
       })
@@ -180,7 +180,7 @@ export class Map {
       return sections[0];
       //return this.getSectionArea(sections[0])
     }
-    return null
+    return {} as Section
   }
 
   public getSectionArea(section: Section) {
@@ -215,16 +215,14 @@ export class Map {
 
   }
 
-  public removeGameObject(sections: Array<any>, mapGameObject) {
-    ;(this.tilemap as any).map[sections[0].layer].data[mapGameObject.y][
-      mapGameObject.x
-    ] = 0
-    ;(this.tilemap as any).map["collisions"].data[mapGameObject.y][
-      mapGameObject.x
-    ] = 0
-    ;(this.tilemap.getLayers()[0] as any).tiles[mapGameObject.y][
-      mapGameObject.x
-    ].isBlocking = false
+  public removeGameObject(section: Section, mapGameObject) {
+    this.isRendering = true;
+    (this.tilemap as any).map[section.layer].data[mapGameObject.y][mapGameObject.x] = 0;
+    (this.tilemap as any).map["collisions"].data[mapGameObject.y][mapGameObject.x] = 0;
+    (this.tilemap.getLayers()[0] as any).tiles[mapGameObject.y][mapGameObject.x].isBlocking = false
+    setTimeout(() => {
+      this.isRendering = false;
+    }, 100);
     //console.log(this.gridEngineHeadless.isTileBlocked({ x: mapGameObject.x, y:mapGameObject.y }));
   }
 
@@ -252,7 +250,7 @@ export class Map {
      
     }
 
-    return null
+    return {} as GameObjectDistance
   }
 
   public findAroundGameObject(mapGameObject, character: Character) {

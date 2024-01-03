@@ -13,9 +13,9 @@ export class Character {
     return { x: this.posX, y: this.posY }
   }
 
-  public setPos(x: number, y: number) {
-    this.posX = x
-    this.posY = y
+  public setPos(targetPos: Coords) {
+    this.posX = targetPos.x
+    this.posY = targetPos.y
   }
 
   public getFovDistance() {
@@ -46,8 +46,9 @@ export class Character {
     //   })
   }
 
-  moveFinish = () => {
+  moveFinish = (targetPos: Coords) => {
     console.log('move finished')
+    this.setPos(targetPos)
     this.tasks[0].next();
     
   }
