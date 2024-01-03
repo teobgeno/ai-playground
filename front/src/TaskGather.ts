@@ -175,7 +175,7 @@ export class TaskGather implements Task{
     );
     let t = this.selectedSectionArea.find(i=> i.x ===  this.selectedMapGameObject.x && i.y === this.selectedMapGameObject.y);
     if(t) {
-      t.mapCode = 0;
+      t.mapCode = 3;
     }
     this.pointer = 4;
     this.next();
