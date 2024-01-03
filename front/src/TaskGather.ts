@@ -92,26 +92,15 @@ export class TaskGather implements Task{
   private getNextDestination() {
     this.getNearestGameObject();
     if(!Object.keys(this.selectedMapGameObject).length) {
-      const isInTargetSection = this.map.isInSection(this.selectedSection, {x: this.character.posX, y: this.character.posY});
-      if(isInTargetSection) {
-        //TODO:: explore area. Keep track  of visited tiles
-        const t = this.selectedSectionArea.find(i=>i.x === this.character.posX && i.y === this.character.posY)
-        if(t) {
-          t.isVisited = true;
-        }
-        
-        const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea.filter(i=>!i.isVisited), this.character)
-        this.createMovementPath(nearestSectionTile)
-        this.moveCharacter(4);
-      }
-      
-      if(!isInTargetSection) {
-        if(this.currentMovePath.length === 0) {
-          const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea, this.character)
-          this.createMovementPath(nearestSectionTile)
-        }
-        this.moveCharacter(4);
-      }
+       //TODO:: explore area. Keep track  of visited tiles
+       const item = this.selectedSectionArea.find(i=>i.x === this.character.posX && i.y === this.character.posY)
+       if(item) {
+        item.isVisited = true;
+       }
+       
+       const nearestSectionTile = this.map.getNearestEntryInSection(this.selectedSectionArea.filter(i=>!i.isVisited), this.character)
+       this.createMovementPath(nearestSectionTile)
+       this.moveCharacter(4);
 
        //if the area is full explored and no selectedMapGameObject find other section
        //if char not in section area find nearest path to enter
