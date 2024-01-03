@@ -18,6 +18,7 @@ export interface Coords {
 }
 export interface GameObjectCode extends Coords{
   mapCode?:number
+  isVisited?: boolean
 }
 export interface GameObjectDistance extends Coords{
   distance: number
@@ -31,6 +32,7 @@ export class Map {
   private gameLoopInterval: any
   private exploredMap:number[][]
   private isRendering : boolean
+  private moveData:any
 
   constructor(gridEngineHeadless) {
     this.gridEngineHeadless = gridEngineHeadless
@@ -115,12 +117,26 @@ export class Map {
     this.asciiRenderer.render()
 
     this.gameLoopInterval = setInterval(() => {
+      this.isRendering = true;
       if(this.isRendering) {
         this.gridEngineHeadless.update(0, 50)
         this.asciiRenderer.render()
       }
     
     }, 100)
+
+    this.gridEngineHeadless
+      .positionChangeFinished()
+      .subscribe(({ enterTile }) => {
+        // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
+        //this.gridEngineHeadless.stopMovement("player")
+        if (enterTile.x == this.moveData.targetPos.x && enterTile.y == this.moveData.targetPos.y) {
+          this.moveData.cb(this.moveData.targetPos)
+          this.isRendering = false;
+        }
+    })
+
+
   }
 
   // public getTileMap() {
@@ -129,19 +145,21 @@ export class Map {
 
   moveCharacter = (msg, data) => {
     console.log(data.targetPos)
+    this.moveData = data;
     this.isRendering = true;
     this.gridEngineHeadless.moveTo("player", data.targetPos)
     this.fovCharacter(data.targetPos, data.fovDistance)
-    this.gridEngineHeadless
-      .positionChangeFinished()
-      .subscribe(({ enterTile }) => {
-        // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
-        //this.gridEngineHeadless.stopMovement("player")
-        if (enterTile.x == data.targetPos.x && enterTile.y == data.targetPos.y) {
-          data.cb(data.targetPos)
-          this.isRendering = false;
-        }
-      })
+    
+    // this.gridEngineHeadless
+    //   .positionChangeFinished()
+    //   .subscribe(({ enterTile }) => {
+    //     // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
+    //     //this.gridEngineHeadless.stopMovement("player")
+    //     if (enterTile.x == data.targetPos.x && enterTile.y == data.targetPos.y) {
+    //       data.cb(data.targetPos)
+    //       this.isRendering = false;
+    //     }
+    // })
   }
 
   fovCharacter = (currentPos, fovDistance) => {
@@ -319,7 +337,7 @@ export class Map {
         distance: this.manhattanDist(character.posX, character.posY, gameObject.x, gameObject.y),
       })
     }
-    return distances
+    return distances.filter(x=> x.distance > 0)
   }
 
   private getFreeTilesFromCollection(tiles: Array<GameObjectCode | GameObjectDistance>) {

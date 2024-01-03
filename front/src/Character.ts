@@ -27,6 +27,7 @@ export class Character {
   }
 
   public move(targetPos: Coords) {
+    this.setPos(targetPos)
     PubSub.publish('on-character-move', {targetPos: targetPos, fovDistance:this.fovDistance, cb:this.moveFinish});
     // if (this.posX === targetPos.x && this.posY === targetPos.y) {
     //   cb()
@@ -48,7 +49,7 @@ export class Character {
 
   moveFinish = (targetPos: Coords) => {
     console.log('move finished')
-    this.setPos(targetPos)
+    
     this.tasks[0].next();
     
   }

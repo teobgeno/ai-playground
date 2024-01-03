@@ -638,3 +638,5 @@ https://github.com/kodemore/kink
 --- libs ---
 https://github.com/mroderick/PubSubJS
 https://game-icons.net/
+Dijkstra's algorithm
+https://www.google.com/search?q=dijkstra+visit+all+nodes&rlz=1C1GCEU_enGR928GR928&oq=dijgstra+visit+all&gs_lcrp=EgZjaHJvbWUqCAgBEAAYFhgeMgYIABBFGDkyCAgBEAAYFhgeMggIAhAAGBYYHjIICAMQABgWGB4yDQgEEAAYhgMYgAQYigUyDQgFEAAYhgMYgAQYigUyDQgGEAAYhgMYgAQYigUyDQgHEAAYhgMYgAQYigUyDQgIEAAYhgMYgAQYigXSAQkxMjQxM2owajeoAgCwAgA&sourceid=chrome&ie=UTF-8
