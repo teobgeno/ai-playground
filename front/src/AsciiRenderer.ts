@@ -16,12 +16,14 @@ export class AsciiRenderer {
   render(): void {
     const strArr: string[] = [];
     // Iterate through all tiles of the map.
+    let posChar = false;
     for (let r = 0; r < this.tilemap.getHeight(); r++) {
       strArr.push('<div style="display:flex">');
       for (let c = 0; c < this.tilemap.getWidth(); c++) {
         const pos = { x: c, y: r };
         let tile = '<div class="tile"></div>';
-        if (this.gridEngine.getCharactersAt(pos).length > 0) {
+        if (this.gridEngine.getCharactersAt(pos).length > 0 && !posChar) {
+          posChar = true;
           tile = '<div class="tile">⛄</div>';
         } 
 
@@ -35,18 +37,19 @@ export class AsciiRenderer {
               tile = '<div class="tile" style="background-color:#275bfb"></div>';
             }
 
-            if(this.exploredMap[pos.y][pos.x] === 0) {
-              //tile = '<div class="tile" style="background-color:#adadad"></div>';
-            }
-            strArr.push(tile);
+            // if(this.exploredMap[pos.y][pos.x] === 0) {
+            //   tile = '<div class="tile" style="background-color:#adadad"></div>';
+            // }
+           
           }
         }
+        strArr.push(tile);
       }
       strArr.push('</div>');
     }
 
     //else if (this.gridEngine.isTileBlocked(pos))
-
+    console.log(strArr)
     this.renderStr(strArr.join(""));
   }
 

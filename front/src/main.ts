@@ -27,7 +27,7 @@ export class App {
     let character = new Character()
     let taskGather = new TaskGather(this.gridEngineHeadless, map, apiData)
     character.addTask(taskGather)
-    character.startTask()
+    //character.startTask()
   }
 
   public moveCharacter(targetPos) {

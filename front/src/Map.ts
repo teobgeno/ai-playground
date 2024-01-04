@@ -36,8 +36,8 @@ export class Map {
 
   constructor(gridEngineHeadless) {
     this.gridEngineHeadless = gridEngineHeadless
-    this.sections = [{ layer: "forestLayer", sectionId: 1 }]
-    this.gameObjects = [{ title: "tree", id: 1, mapCode: 2 }]
+    this.sections = [{ layer: "forestLayer", sectionId: 1 },{ layer: "lakeLayer", sectionId: 2 }]
+    this.gameObjects = [{ title: "tree", id: 1, mapCode: 2 }, { title: "water", id: 2, mapCode: 4 }, { title: "fish", id: 3, mapCode: 4 }]
     this.isRendering = false;
     PubSub.subscribe('on-character-move', this.moveCharacter);
   }
@@ -95,12 +95,27 @@ export class Map {
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-          [0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3],
-          [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3],
+          [0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 3, 3, 3],
+          [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 3, 3, 3],
           [2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
           [2, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
           [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
         ],
+      },
+      lakeLayer: {
+        data: [
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ],
+        
       },
     })
     this.gridEngineHeadless.create(this.tilemap, {
@@ -117,7 +132,7 @@ export class Map {
     this.asciiRenderer.render()
 
     this.gameLoopInterval = setInterval(() => {
-      this.isRendering = true;
+      this.isRendering = false;
       if(this.isRendering) {
         this.gridEngineHeadless.update(0, 50)
         this.asciiRenderer.render()
