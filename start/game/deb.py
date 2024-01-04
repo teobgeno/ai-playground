@@ -7,7 +7,8 @@ from game.character.character_skill import CharacterSkill
 from game.task import *
 from game.llm import DecideLocationPrompt, DecideItemPrompt, LLMProvider
 from game.actions import DecideLocationAction, DecideItemAction
-
+from game.map import GameObjects
+from game.map import Sections
 
 # @@ vars @@
 time_scale = 20
@@ -77,14 +78,18 @@ def test_action():
     pass
 
 
-def test_whatever():
+def test_whatever(db):
 
     # @@ task gather materials compose @@
 
     # fell trees for wood to use in building and crafting
     # find section(s)
+    sections = Sections({'db': db})
+    game_objects = GameObjects({'db': db})
     a_loc = DecideLocationAction(
-        {'action_descr': 'fell trees for wood to use in building and crafting',
+        {'sections': sections.getGameSections(),
+         'game_objects': game_objects.getGameObjects(),
+         'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})
          }
     )

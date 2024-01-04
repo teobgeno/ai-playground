@@ -1,21 +1,15 @@
 from typing import List
 from game.llm import DecideLocationPrompt
+from game.map import GameObjects
+from game.map import Sections
 
 
 class DecideLocationAction:
     def __init__(self, props):
+        self._sections: List[Sections] = props["sections"]
+        self._game_objects: List[GameObjects] = props["game_objects"]
+        self._action_descr: str = props["action_descr"]
         self._decide_location_prompt: DecideLocationPrompt = props["decide_location_prompt"]
-        self._action_descr = props["action_descr"]
-        self._sections = [{'id': 1, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 1'},
-                          {'id': 2, 'parent_id': 0, 'keyword': 'lake'},
-                          {'id': 3, 'parent_id': 0, 'keyword': 'village'},
-                          {'id': 4, 'parent_id': 1, 'keyword': 'house'},
-                          {'id': 5, 'parent_id': 0,
-                              'keyword': 'forest', 'title': 'Forest 2'}
-                          ]
-
-        self._game_objects = [
-            {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
 
     @classmethod
     def create(cls, props):

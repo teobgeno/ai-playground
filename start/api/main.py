@@ -1,9 +1,28 @@
+import configparser
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+from core.db.json_db_manager import JsonDBManager
 from game.deb import test_whatever
+from api.router import test_handler
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # db = MySqlDBManager('root', '123456', '127.0.0.1')
+    db = JsonDBManager()
+    # parser = configparser.ConfigParser()
+    # parser.read("config.ini")
+
+    yield {
+        "db": db,
+    }
+
+    # await db.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost",
@@ -18,15 +37,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/test")
-async def test():
-    return test_whatever()
+app.include_router(test_handler.router)
 
 
 def init():
