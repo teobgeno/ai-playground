@@ -6,4 +6,4 @@ class Sections:
         self._db: JsonDBManager = props["db"]
 
     def getGameSections(self):
-        return self._db.getGameSectionsDb()
+        return self._db.getGameSections()

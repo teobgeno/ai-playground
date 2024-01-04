@@ -1,5 +1,5 @@
 class JsonDBManager:
-    def getGameSectionsDb(self):
+    def getGameSections(self):
         return [{'id': 1, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 1'},
                 {'id': 2, 'parent_id': 0, 'keyword': 'lake'},
                 {'id': 3, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 2'},
