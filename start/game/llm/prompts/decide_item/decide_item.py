@@ -2,7 +2,7 @@ from typing import List, Any
 from pydantic import BaseModel, ValidationError
 import json
 from game.llm import LLMProvider
-from game.llm import PromptParser
+from game.llm import BasePrompt
 
 
 class DecideItemModel(BaseModel):
@@ -14,7 +14,7 @@ class DecideItemResponse(BaseModel):
     res: List[DecideItemModel]
 
 
-class DecideItemPrompt:
+class DecideItemPrompt(BasePrompt):
     def __init__(self, props):
         self._llm: LLMProvider = props["llm"]
 
@@ -70,9 +70,3 @@ class DecideItemPrompt:
 
     def get_llm_params(self):
         return {"max_tokens": 1000, "temperature": 0, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
-
-    def parse_prompt(self, prompt_file, prompt_data):
-        parser = PromptParser()
-        parsed_prompt = parser.generate_prompt(prompt_file, prompt_data)
-        # parser.print_run_prompts(parsed_prompt)
-        return parsed_prompt
