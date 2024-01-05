@@ -1,14 +1,14 @@
 from typing import List
-from game.llm import DecideItemPrompt
-from game.map import GameObjects
+from game.llm import DecideResourcePrompt
 
 
-class DecideItemAction:
+class DecideResourceAction:
     def __init__(self, props):
+        self._decide_item_prompt: DecideResourcePrompt = props["decide_item_prompt"]
+        self._action_descr = props["action_descr"]
         self._selected_sections = props["selected_sections"]
-        self._game_objects: List[GameObjects] = props["game_objects"]
-        self._action_descr: str = props["action_descr"]
-        self._decide_item_prompt: DecideItemPrompt = props["decide_item_prompt"]
+        self._game_objects = [
+            {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
 
     @classmethod
     def create(cls, props):
@@ -24,6 +24,18 @@ class DecideItemAction:
 
         return ret
 
+        # https://stackoverflow.com/questions/46524760/create-a-list-comprehension-with-two-or-more-properties
+        # ret_obj = []
+        # selected_sections = self.get_selected_sections()
+        # if len(selected_sections) > 0:
+        #     for section in selected_sections:
+        #         selected_game_objects = self.get_selected_game_objects(
+        #             [e for e in self._game_objects if e["section_id"] == section["id"]])
+        #         ret_obj.append(
+        #             {"section": section["id"], "game_objects": [e for e in selected_game_objects]})
+
+        # return ret_obj
+
     def get_selected_game_objects(self, section_ids):
         selected_game_objects = []
         game_objects = set([
@@ -35,3 +47,5 @@ class DecideItemAction:
                 e for e in self._game_objects if section_ids.count(e["section_id"]) and chosen_game_objects["existing_objects"].count(e["keyword"])]
 
         return selected_game_objects
+
+        # return self._decide_item_prompt.choose_game_objects(selected_game_objects)

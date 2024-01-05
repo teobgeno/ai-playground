@@ -16,24 +16,7 @@ class DecideLocationAction:
         return cls(props)
 
     def execute(self):
-        # TODO:: query llm
-        # map.getSectors()
-        # selected_sections = self.chooseSector(map.getSectors(depth = 0), action: str)
-        # selected_game_objects = map.getGameObjects(selected_sections[0].id)
-        # foreach sector get game objects
-        # output [
-        #   {sector: 'forest', game_objects : ['tree', 'herbs']}
-        #   sections can be nested e.x forest -> house
-        #   game_object can be nested e.x cupboard -> book
-        ret_obj = []
         selected_sections = self.get_selected_sections()
-        # if len(selected_sections) > 0:
-        #     for section in selected_sections:
-        #         selected_game_objects = self.get_selected_game_objects(
-        #             [e for e in self._game_objects if e["section_id"] == section["id"]])
-        #         ret_obj.append(
-        #             {"section": section["id"], "game_objects": [e for e in selected_game_objects]})
-
         return [e["id"] for e in selected_sections]
 
     def get_selected_sections(self, parent_ids=[0], selected_sections=[]):

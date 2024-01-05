@@ -96,11 +96,14 @@ def test_whatever(db):
     retLoc = a_loc.execute()
     # find section(s)'s game object(s)
     a_it = DecideItemAction(
-        {'action_descr': 'fell trees for wood to use in building and crafting',
-         'selected_sections': retLoc,
+        {'selected_sections': retLoc,
+         'game_objects': game_objects.getGameObjects(),
+         'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})
          }
     )
+
+    # find resource(s) gathered from game object(s)
 
     itLoc = a_it.execute()
     # create game object(s) if not exist

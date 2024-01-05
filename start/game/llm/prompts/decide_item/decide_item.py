@@ -76,6 +76,3 @@ class DecideItemPrompt:
         parsed_prompt = parser.generate_prompt(prompt_file, prompt_data)
         # parser.print_run_prompts(parsed_prompt)
         return parsed_prompt
-
-
-# https://xebia.com/blog/enforce-and-validate-llm-output-with-pydantic/
