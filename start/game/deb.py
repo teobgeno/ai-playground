@@ -5,8 +5,8 @@ from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.task import *
-from game.llm import DecideLocationPrompt, DecideItemPrompt, LLMProvider
-from game.actions import DecideLocationAction, DecideItemAction
+from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
+from game.actions import DecideLocationAction, DecideItemAction, DecideResourceAction
 from game.map import GameObjects
 from game.map import Sections
 
@@ -93,23 +93,35 @@ def test_whatever(db):
          }
     )
     retLoc = a_loc.execute()
+    sectionIds = [e["id"] for e in retLoc]
     # find section(s)'s game object(s)
     a_it = DecideItemAction(
-        {'selected_sections': [e["id"] for e in retLoc],
+        {'selected_sections': sectionIds,
          'game_objects': game_objects.getGameObjects(),
          'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})
          }
     )
 
-    # find resource(s) gathered from game object(s)
     itLoc = a_it.execute()
     mItLoc = []
     for gm in itLoc:
-        ret.append({"id": gm["id"], "section_id": gm["section_id"]})
+        mItLoc.append({"id": gm["id"], "section_id": gm["section_id"]})
+
+    # find resource(s) gathered from game object(s)
+    trLoc = []
+    for gm in itLoc:
+        a_res = DecideResourceAction(
+            {
+                'selected_game_object': gm["keyword"],
+                'action_descr': 'fell trees for wood to use in building and crafting',
+                'decide_resource_prompt': DecideResourcePrompt({'llm': LLMProvider()})
+            }
+        )
+        res = a_res.execute()
+        trLoc = trLoc + res
 
     # create game object(s) if not exist
-    # find resource(s) gathered from game object(s)
     # get action verb
     # create relation between action - game object - resource
     # get and calculate action execution time
@@ -118,9 +130,9 @@ def test_whatever(db):
     ret = {
         'task': 'chop tree',
         'type': 'gather-material',
-        'resource': 'wood logs',
+        'resources': trLoc,
         'action': 'chop',
-        'params': {'sections': retLoc, 'game_objects': mItLoc},
+        'params': {'sections': sectionIds, 'game_objects': mItLoc},
         'action_duration': 1000
     }
 

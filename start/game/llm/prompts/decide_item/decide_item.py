@@ -21,7 +21,7 @@ class DecideItemPrompt(BasePrompt):
     def create(cls, props):
         return cls(props)
 
-    def choose_game_objects(self, action_descr: str, game_objects: List[str]):
+    def execute(self, action_descr: str, game_objects: List[str]):
         # TODO:: query llm
         game_objects_str = ','.join([e for e in game_objects])
 

@@ -17,3 +17,7 @@ class MockAIAPI:
         # decide item
         if prompt.find('Item Options Available') != -1:
             return '{"item" : "tree"}'
+
+         # decide Resource
+        if prompt.find("{resource:'fish'}") != -1:
+            return '{"resource" : "wood logs"}'

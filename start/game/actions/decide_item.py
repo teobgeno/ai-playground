@@ -1,12 +1,12 @@
-from typing import List
+from typing import List, Set
 from game.llm import DecideItemPrompt
-from game.map import GameObjects
+from game.map import GameObjectsDef
 
 
 class DecideItemAction:
     def __init__(self, props):
-        self._selected_sections = props["selected_sections"]
-        self._game_objects: List[GameObjects] = props["game_objects"]
+        self._selected_sections: List[int] = props["selected_sections"]
+        self._game_objects: List[GameObjectsDef] = props["game_objects"]
         self._action_descr: str = props["action_descr"]
         self._decide_item_prompt: DecideItemPrompt = props["decide_item_prompt"]
 
@@ -20,11 +20,11 @@ class DecideItemAction:
 
         return selected_game_objects
 
-    def get_selected_game_objects(self, section_ids):
+    def get_selected_game_objects(self, section_ids: List[int]):
         selected_game_objects = []
-        game_objects = set([
+        game_objects: Set[str] = set([
             e["keyword"] for e in self._game_objects if section_ids.count(e["section_id"])])
-        chosen_game_objects = self._decide_item_prompt.choose_game_objects(
+        chosen_game_objects: List[str] = self._decide_item_prompt.execute(
             self._action_descr, game_objects)
         if len(chosen_game_objects) > 0:
             selected_game_objects = [

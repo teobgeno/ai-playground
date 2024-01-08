@@ -21,7 +21,7 @@ class DecideLocationPrompt(BasePrompt):
     def create(cls, props):
         return cls(props)
 
-    def choose_sections(self, action_descr: str, sections: List[str]):
+    def execute(self, action_descr: str, sections: List[str]):
 
         sections_str = ','.join([e for e in sections])
 

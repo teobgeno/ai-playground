@@ -1,8 +1,13 @@
+from pydantic import BaseModel
 from core.db.json_db_manager import JsonDBManager
 
 
-class GameObjectsDef:
-    pass
+class GameObjectsDef(BaseModel):
+    id: int
+    section_id: int
+    parent_id: int
+    keyword: str
+    title: str
 
 
 class GameObjects:

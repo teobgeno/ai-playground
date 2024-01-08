@@ -21,7 +21,7 @@ class DecideResourcePrompt:
     def create(cls, props):
         return cls(props)
 
-    def choose_resources(self, action_descr: str, game_object: str):
+    def execute(self, action_descr: str, game_object: str):
 
         prompt_data = []
         prompt_data.append({"keyword": "ACTION", "value": action_descr})
