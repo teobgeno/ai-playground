@@ -28,7 +28,7 @@ class DecideLocationPrompt(BasePrompt):
         prompt_data = []
         prompt_data.append({"keyword": "ACTION", "value": action_descr})
         prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
-        prompt_file = "game/llm/prompts/decide_location/action_section.txt"
+        prompt_file = "game/llm/prompts/decide_location/decide_location.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
         parsed_response = self.get_valid_response(response)

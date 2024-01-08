@@ -6,8 +6,7 @@ from game.llm import BasePrompt
 
 
 class DecideItemModel(BaseModel):
-    existing_items: str
-    new_generated_items: str
+    item: str
 
 
 class DecideItemResponse(BaseModel):
@@ -29,7 +28,7 @@ class DecideItemPrompt(BasePrompt):
         prompt_data = []
         prompt_data.append({"keyword": "ACTION", "value": action_descr})
         prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
-        prompt_file = "game/llm/prompts/decide_item/decide_item.txt"
+        prompt_file = "game/llm/prompts/decide_item/decide_resource_item.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
         parsed_response: DecideItemModel = self.get_valid_response(response)
