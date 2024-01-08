@@ -1,12 +1,6 @@
-The items that you can use to gather the required resources are : {!<INPUT ITEMS>!}
-
-action: fell trees for wood to use in building and crafting
-existing items : tree
-new generated items: none
----
-action: hunt for game in the forest
-existing items : none
-new generated items: rabbit, deer
----
-action:  {!<INPUT ACTION>!}
-Output the response only for the last action in json.
+This is a classification task -- choose an appropriate item from the item options for a task at hand. 
+Item Options Available (Class label):  {!<INPUT GAMEOBJECTS>!}.
+Classification Task: !<INPUT ACTION>!.
+Choose one or more options from the provided Item options to collect the necessary resources for the given Classification Task.
+If there is no appropriate item do not choose anything.
+Output the response in json in the following format : [{item:'tree'}]

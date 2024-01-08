@@ -3,6 +3,6 @@ Sam is currently in {camp}.
 Stay in the current area if the activity can be done there. Only go out if the activity needs to take place in another place.
 Area Options Available (Class label): {!<INPUT SECTIONS>!}.
 Classification Task: !<INPUT ACTION>!.
-Pick one or more of the choices given in the Area options that sam should go to.
+Choose one or more of the choices given in the Area options that sam should go to.
 If there is no appropriate area do not choose anything.
 Output the response in json in the following format : [{section:'city'}]
