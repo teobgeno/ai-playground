@@ -650,3 +650,10 @@ https://www.algorithms-and-technologies.com/dijkstra/javascript
 
 --- etc --- 
 https://abagames.github.io/joys-of-small-game-development-en/tools/for_handheld.html
+
+
+--- dynamic generation --- 
+https://blog.pbbg.com/dynamic-and-repeatable-tilemap-generation/
+https://github.com/Descrout/2D-Terrain-Generator
+https://github.com/leodeslf/perlin-noise
+https://github.com/thetarby/noise-js
