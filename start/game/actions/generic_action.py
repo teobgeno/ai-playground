@@ -3,10 +3,10 @@ from typing import List, Any
 
 class GenericAction:
     def __init__(self, props):
-        pass
+        self._action_descr: str = props["action_descr"]
 
     def get_verb(self):
-        pass
+        return "chop"
 
     def get_execution_duration(self):
-        pass
+        return 1000

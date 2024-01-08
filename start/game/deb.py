@@ -6,7 +6,7 @@ from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
-from game.actions import DecideLocationAction, DecideItemAction, DecideResourceAction
+from game.actions import GenericAction, DecideLocationAction, DecideItemAction, DecideResourceAction
 from game.map import GameObjects
 from game.map import Sections
 
@@ -83,12 +83,13 @@ def test_whatever(db):
     # @@ task gather materials compose @@
 
     # fell trees for wood to use in building and crafting
+    action_descr = 'fell trees for wood to use in building and crafting'
     # find section(s)
     sections = Sections({'db': db})
     game_objects = GameObjects({'db': db})
     a_loc = DecideLocationAction(
         {'sections': sections.getGameSections(),
-         'action_descr': 'fell trees for wood to use in building and crafting',
+         'action_descr': action_descr,
          'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})
          }
     )
@@ -98,7 +99,7 @@ def test_whatever(db):
     a_it = DecideItemAction(
         {'selected_sections': sectionIds,
          'game_objects': game_objects.getGameObjects(),
-         'action_descr': 'fell trees for wood to use in building and crafting',
+         'action_descr': action_descr,
          'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})
          }
     )
@@ -114,26 +115,34 @@ def test_whatever(db):
         a_res = DecideResourceAction(
             {
                 'selected_game_object': gm["keyword"],
-                'action_descr': 'fell trees for wood to use in building and crafting',
+                'action_descr': action_descr,
                 'decide_resource_prompt': DecideResourcePrompt({'llm': LLMProvider()})
             }
         )
         res = a_res.execute()
         trLoc = trLoc + res
 
-    # create game object(s) if not exist
     # get action verb
-    # create relation between action - game object - resource
     # get and calculate action execution time
+    a_gen = GenericAction(
+        {'action_descr': action_descr}
+    )
+
+    action_duration = a_gen.get_execution_duration()
+    action_verb = a_gen.get_execution_duration()
+
+    # create game object(s) if not exist
+    # create relation between action - game object - resource
+
     # get game object(s) status after action
 
     ret = {
-        'task': 'chop tree',
+        'task': action_descr,
         'type': 'gather-material',
         'resources': trLoc,
-        'action': 'chop',
+        'action': action_verb,
         'params': {'sections': sectionIds, 'game_objects': mItLoc},
-        'action_duration': 1000
+        'action_duration': action_duration
     }
 
     return ret
