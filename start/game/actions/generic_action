@@ -1,0 +1,12 @@
+from typing import List, Any
+
+
+class GenericAction:
+    def __init__(self, props):
+        pass
+
+    def get_verb(self):
+        pass
+
+    def get_execution_duration(self):
+        pass
