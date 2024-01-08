@@ -30,8 +30,8 @@ class DecideItemAction:
             e["keyword"] for e in self._game_objects if section_ids.count(e["section_id"])])
         chosen_game_objects = self._decide_item_prompt.choose_game_objects(
             self._action_descr, game_objects)
-        if len(chosen_game_objects["existing_objects"]) > 0:
+        if len(chosen_game_objects) > 0:
             selected_game_objects = [
-                e for e in self._game_objects if section_ids.count(e["section_id"]) and chosen_game_objects["existing_objects"].count(e["keyword"])]
+                e for e in self._game_objects if section_ids.count(e["section_id"]) and chosen_game_objects.count(e["keyword"])]
 
         return selected_game_objects

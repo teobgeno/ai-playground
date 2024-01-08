@@ -7,7 +7,6 @@ from game.map import Sections
 class DecideLocationAction:
     def __init__(self, props):
         self._sections: List[Sections] = props["sections"]
-        self._game_objects: List[GameObjects] = props["game_objects"]
         self._action_descr: str = props["action_descr"]
         self._decide_location_prompt: DecideLocationPrompt = props["decide_location_prompt"]
 
@@ -17,7 +16,7 @@ class DecideLocationAction:
 
     def execute(self):
         selected_sections = self.get_selected_sections()
-        return [e["id"] for e in selected_sections]
+        return selected_sections
 
     def get_selected_sections(self, parent_ids=[0], selected_sections=[]):
         child_sections = set([

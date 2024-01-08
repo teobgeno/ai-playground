@@ -21,28 +21,20 @@ class DecideItemPrompt(BasePrompt):
     def create(cls, props):
         return cls(props)
 
-    def choose_game_objects(self, action_descr: str, sections: List[str]):
+    def choose_game_objects(self, action_descr: str, game_objects: List[str]):
         # TODO:: query llm
-        sections_str = ','.join([e for e in sections])
+        game_objects_str = ','.join([e for e in game_objects])
 
         prompt_data = []
         prompt_data.append({"keyword": "ACTION", "value": action_descr})
-        prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
+        prompt_data.append(
+            {"keyword": "GAMEOBJECTS", "value": game_objects_str})
         prompt_file = "game/llm/prompts/decide_item/decide_resource_item.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
         parsed_response: DecideItemModel = self.get_valid_response(response)
-        ret = {"existing_objects": [], "new_objects": []}
         if parsed_response is not None:
-            if parsed_response[0]["existing_items"] != "none":
-                ret["existing_objects"] = parsed_response[0]["existing_items"].split(
-                    ",")
-
-            if parsed_response[0]["new_generated_items"] != "none":
-                ret["new_objects"] = parsed_response[0]["new_generated_items"].split(
-                    ",")
-
-            return ret
+            return [e["item"] for e in parsed_response]
 
         return []
 

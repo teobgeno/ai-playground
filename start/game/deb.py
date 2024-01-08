@@ -88,7 +88,6 @@ def test_whatever(db):
     game_objects = GameObjects({'db': db})
     a_loc = DecideLocationAction(
         {'sections': sections.getGameSections(),
-         'game_objects': game_objects.getGameObjects(),
          'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_location_prompt': DecideLocationPrompt({'llm': LLMProvider()})
          }
@@ -96,7 +95,7 @@ def test_whatever(db):
     retLoc = a_loc.execute()
     # find section(s)'s game object(s)
     a_it = DecideItemAction(
-        {'selected_sections': retLoc,
+        {'selected_sections': [e["id"] for e in retLoc],
          'game_objects': game_objects.getGameObjects(),
          'action_descr': 'fell trees for wood to use in building and crafting',
          'decide_item_prompt': DecideItemPrompt({'llm': LLMProvider()})
@@ -104,8 +103,11 @@ def test_whatever(db):
     )
 
     # find resource(s) gathered from game object(s)
-
     itLoc = a_it.execute()
+    mItLoc = []
+    for gm in itLoc:
+        ret.append({"id": gm["id"], "section_id": gm["section_id"]})
+
     # create game object(s) if not exist
     # find resource(s) gathered from game object(s)
     # get action verb
@@ -118,7 +120,7 @@ def test_whatever(db):
         'type': 'gather-material',
         'resource': 'wood logs',
         'action': 'chop',
-        'params': {'sections': retLoc, 'game_objects': itLoc},
+        'params': {'sections': retLoc, 'game_objects': mItLoc},
         'action_duration': 1000
     }
 
