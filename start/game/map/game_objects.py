@@ -1,6 +1,10 @@
 from core.db.json_db_manager import JsonDBManager
 
 
+class GameObjectsDef:
+    pass
+
+
 class GameObjects:
     def __init__(self, props):
         self._db: JsonDBManager = props["db"]
