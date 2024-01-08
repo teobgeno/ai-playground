@@ -18,11 +18,7 @@ class DecideItemAction:
         selected_game_objects = self.get_selected_game_objects(
             self._selected_sections)
 
-        ret = []
-        for gm in selected_game_objects:
-            ret.append({"id": gm["id"], "section_id": gm["section_id"]})
-
-        return ret
+        return selected_game_objects
 
     def get_selected_game_objects(self, section_ids):
         selected_game_objects = []

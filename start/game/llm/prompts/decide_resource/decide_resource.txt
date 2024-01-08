@@ -1,5 +1,5 @@
 Action: !<INPUT ACTION>!.
-what resource should be gathered from {!<INPUT GAMEOBJECT>!} to complete the Action above.
-The resource must be directly related to the action. 
-The resource must be a tangible material that can be transferred and stored in a warehouse.
+what resources should be gathered from {!<INPUT GAMEOBJECT>!} to complete the Action above.
+The resources must be directly related to the action. 
+The resources must be a tangible materials that can be transferred and stored in a warehouse.
 Output the response in json in the following format : [{resource:'fish'}]

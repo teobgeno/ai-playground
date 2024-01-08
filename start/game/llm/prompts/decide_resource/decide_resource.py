@@ -6,7 +6,7 @@ from game.llm import PromptParser
 
 
 class DecideResourceModel(BaseModel):
-    section: str
+    resource: str
 
 
 class DecideResourceResponse(BaseModel):
@@ -21,23 +21,17 @@ class DecideResourcePrompt:
     def create(cls, props):
         return cls(props)
 
-    def choose_sections(self, action_descr: str, sections: List[str]):
-        # TODO:: query llm
-        sections_str = ','.join([e for e in sections])
+    def choose_resources(self, action_descr: str, game_object: str):
 
         prompt_data = []
         prompt_data.append({"keyword": "ACTION", "value": action_descr})
-        prompt_data.append({"keyword": "SECTIONS", "value": sections_str})
-        prompt_file = "game/llm/prompts/decide_location/action_section.txt"
+        prompt_data.append({"keyword": "GAMEOBJECT", "value": game_object})
+        prompt_file = "game/llm/prompts/decide_resource/decide_resource.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
         response = self._llm.request(self.get_llm_params(), prompt)
         parsed_response = self.get_valid_response(response)
         if parsed_response is not None:
-            return [e["section"] for e in parsed_response]
-            if sections[0]["keyword"] == "house":
-                return []
-            else:
-                return [{'id': 1, 'parent_id': 0, 'keyword': 'forest'}]
+            return [e["resource"] for e in parsed_response]
 
         return []
 
@@ -61,14 +55,6 @@ class DecideResourcePrompt:
         except Exception as e:
             print(f"unhandled : {e}")
             return None
-
-    def choose_game_objects(self, game_objects: List[Any]):
-        # TODO:: query llm
-        # llm will return comma seperated strings like rabbit, deer
-        # if item exist {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}
-        # if item not exist {'id': 0, 'section_id': 0, 'parent_id': 0, 'keyword': 'rabbit'}
-        game_objects_str = ','.join([e["keyword"] for e in game_objects])
-        return [{'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
 
     def get_llm_params(self):
         return {"max_tokens": 1000, "temperature": 0, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}

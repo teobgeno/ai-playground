@@ -4,48 +4,20 @@ from game.llm import DecideResourcePrompt
 
 class DecideResourceAction:
     def __init__(self, props):
-        self._decide_item_prompt: DecideResourcePrompt = props["decide_item_prompt"]
+        self._decide_resource_prompt: DecideResourcePrompt = props["decide_resource_prompt"]
         self._action_descr = props["action_descr"]
-        self._selected_sections = props["selected_sections"]
-        self._game_objects = [
-            {'id': 1, 'section_id': 1, 'parent_id': 0, 'keyword': 'tree'}]
+        self._selected_game_object = props["_selected_game_object"]
 
     @classmethod
     def create(cls, props):
         return cls(props)
 
     def execute(self):
-        selected_game_objects = self.get_selected_game_objects(
+        selected_resources = self.get_selected_resources(
             self._selected_sections)
 
-        ret = []
-        for gm in selected_game_objects:
-            ret.append({"id": gm["id"], "section_id": gm["section_id"]})
+        return selected_resources
 
-        return ret
-
-        # https://stackoverflow.com/questions/46524760/create-a-list-comprehension-with-two-or-more-properties
-        # ret_obj = []
-        # selected_sections = self.get_selected_sections()
-        # if len(selected_sections) > 0:
-        #     for section in selected_sections:
-        #         selected_game_objects = self.get_selected_game_objects(
-        #             [e for e in self._game_objects if e["section_id"] == section["id"]])
-        #         ret_obj.append(
-        #             {"section": section["id"], "game_objects": [e for e in selected_game_objects]})
-
-        # return ret_obj
-
-    def get_selected_game_objects(self, section_ids):
-        selected_game_objects = []
-        game_objects = set([
-            e["keyword"] for e in self._game_objects if section_ids.count(e["section_id"])])
-        chosen_game_objects = self._decide_item_prompt.choose_game_objects(
-            self._action_descr, game_objects)
-        if len(chosen_game_objects["existing_objects"]) > 0:
-            selected_game_objects = [
-                e for e in self._game_objects if section_ids.count(e["section_id"]) and chosen_game_objects["existing_objects"].count(e["keyword"])]
-
-        return selected_game_objects
-
-        # return self._decide_item_prompt.choose_game_objects(selected_game_objects)
+    def get_selected_resources(self, section_ids):
+        selected_resources = []
+        return self._decide_resource_prompt.choose_resources(self._action_descr, self._selected_game_object)
