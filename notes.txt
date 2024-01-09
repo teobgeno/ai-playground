@@ -441,11 +441,21 @@ Example output json:[{action:'collecting water', estimated_time_in_seconds:'120 
 
 ----------------------------------------------------------
 This is a fictional scenario for a game with items in a grid map.
-activity: gather clean water lake
+Action: Collect berries, nuts, and edible plants
 status: removed, removed-respawn, not removed
 Choose one from the status above to describe the tree after the activity?
 
 TODO:: find respawn time
+
+
+⭐
+This is a classification task -- choose an appropriate item from the item options for a task at hand.
+Game Object: plant.
+Status Options Available (Class label):  {removed, removed-respawn, not removed}.
+Classification Task: Collect berries, nuts, and edible plants.
+Choose one or more options from the provided Status options to  describe the status of the Game Object after the activity?
+If there is no appropriate status do not choose anything.
+Output the response in json in the following format : {status:'removed'}
 
 
 
