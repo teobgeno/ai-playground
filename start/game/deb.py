@@ -133,9 +133,8 @@ def test_whatever(db):
 
     # create game object(s) if not exist
     # create relation between action - game object - resource
-
     # get game object(s) status after action
-
+    # define game object(s) cases (e.x animal hunt (movable, flying), fishing or underwater, mining (percentage of find))
     ret = {
         'task': action_descr,
         'type': 'gather-material',
