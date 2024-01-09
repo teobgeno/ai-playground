@@ -114,13 +114,13 @@ def test_whatever(db):
     for gm in itLoc:
         a_res = DecideResourceAction(
             {
-                'selected_game_object': gm["keyword"],
+                'selected_game_object': gm,
                 'action_descr': action_descr,
                 'decide_resource_prompt': DecideResourcePrompt({'llm': LLMProvider()})
             }
         )
         res = a_res.execute()
-        trLoc = trLoc + res
+        trLoc.append(res)
 
     # get action verb
     # get and calculate action execution time
