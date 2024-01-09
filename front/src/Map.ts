@@ -134,7 +134,7 @@ export class Map {
     this.gameLoopInterval = setInterval(() => {
       this.isRendering = false;
       if(this.isRendering) {
-        this.gridEngineHeadless.update(0, 50)
+        this.gridEngineHeadless.update(0, 100)
         this.asciiRenderer.render()
       }
     
