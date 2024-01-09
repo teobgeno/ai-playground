@@ -634,6 +634,8 @@ These categories illustrate the diverse range of resources that were essential f
 https://www.netguru.com/blog/dependency-injection-with-python-make-it-easy
 https://github.com/kodemore/kink
 
+--- react ---
+https://najm-eddine-zaga.medium.com/react-render-multiple-layouts-with-react-router-dom-v6-7a42bd984acf
 
 --- libs ---
 https://annoraaq.github.io/grid-engine/
@@ -651,6 +653,8 @@ https://www.algorithms-and-technologies.com/dijkstra/javascript
 
 --- etc --- 
 https://abagames.github.io/joys-of-small-game-development-en/tools/for_handheld.html
+https://gamedev.stackexchange.com/questions/184767/what-is-the-unity-way-to-approach-tech-design-for-a-2d-game-like-this
+https://rory.itch.io/modern-mmorpg-ui
 
 
 --- dynamic generation --- 
