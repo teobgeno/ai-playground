@@ -460,9 +460,18 @@ Output the response in json in the following format : {status:'removed'}
 
 ⭐
 Item Options Available (Class label): Boxwood, Boxelder, oak tree, Butterfly flower, Black cherry, Coffee plant, Golden buttons.
-Given a 2d tiled game with each tile to represent 1x1 meters in real scale calculate realisticly how much space in tiles for each from the item options
-Output the response in json in the following format : [{tree:'2x2'}]
+Categories Options Available (Class label): Windflowers, Thistle, Flowers, Mushrooms, Weed, Fern, Reeds, Bamboo, Ivy, Moss, Grass, Palm Tree, Corn, Tree, Bush, Shrub, Cattails, Herbs.
+Given a 2d tiled game with each tile to represent 1x1 meters in real scale calculate realisticly how much space in tiles for each from the item options.
+Also Categorize each item from the the item options into the provided Categories Options Available.
+Output the response in json in the following format : [apple tree: {size:'2x2', category: 'tree'}]
 
+
+
+https://leverageedu.com/blog/plants/
+
+⭐
+For each from the item options categorize it from the provided Categories Options.
+Rewrite the sentence above in proper english
 ______________________ FRONT/API CREATE ACTION ______________________
 
 fell trees for wood to use in building and crafting
