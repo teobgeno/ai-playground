@@ -1,5 +1,3 @@
-# from api.main import init
-from game.deb import test_whatever
 from api import main
 import noise
 import numpy as np
