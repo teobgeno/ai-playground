@@ -39,3 +39,8 @@ async def getSections(db: JsonDBManager = Depends(get_db)):
 @router.get("/getGameObjects", response_model=list[GameObjectDef])
 async def getGameObjects(db: JsonDBManager = Depends(get_db)):
     return db.getGameObjects()
+
+
+@router.get("/getWorldMap/{x}/{y}")
+async def getWorldMap(x: int, y: int, db: JsonDBManager = Depends(get_db)):
+    return db.getWorldMap(x, y)
