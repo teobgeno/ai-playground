@@ -27,7 +27,7 @@ export class Player extends Actor {
     });
 
     this.hpValue = new Text(this.scene, this.x, this.y - this.height, this.hp.toString()).setFontSize(12).setOrigin(0.8, 0.5);
-
+    
     // PHYSICS
     this.getBody().setSize(32, 64);
     //this.getBody().setOffset(8, 0);
@@ -38,11 +38,29 @@ export class Player extends Actor {
     this.on('destroy', () => {
       this.keySpace.removeAllListeners();
     });
+
+    this.scene.input.on('pointerup', (pointer:any) => {
+      // Get the WORLD x and y position of the pointer
+      const {worldX, worldY} = pointer;
+      console.log(pointer)
+      // Assign the world x and y to our vector
+      let target ={x:0,y:0};
+      target.x = worldX;
+      target.y = worldY;
+
+      // // Position the arrow at our world x and y
+      // this.arrow.body.reset(worldX, worldY);
+      // this.arrow.setVisible(true);
+
+      // // Start moving our cat towards the target
+      //this.setPosition(128, 256);
+      this.scene.physics.moveToObject(this, pointer, 200);
+    });
   }
 
   update(): void {
     this.getBody().setVelocity(0);
-
+  
     if (this.keyW?.isDown) {
       this.body.velocity.y = -110;
       !this.anims.isPlaying && this.anims.play('hero_move_up', true);
