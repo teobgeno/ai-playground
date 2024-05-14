@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
-import { GridEngine } from 'grid-engine';
+import { GridEngine } from "grid-engine";
+import Character from "../character";
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -8,6 +9,7 @@ export class Game extends Scene {
 
     gameText: Phaser.GameObjects.Text;
     gridEngine: GridEngine;
+    hero: Character;
     // private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     // private treesLayer!: Tilemaps.TilemapLayer;
@@ -42,7 +44,44 @@ export class Game extends Scene {
 
     create() {
         const map = this.initMap();
+       
+
+        this.hero = this.add.existing(new Character(this, 'hero', this.gridEngine, map));
+        //const playerSprite = this.add.sprite(0, 0, "player");
+
+        const gridEngineConfig = {
+            characters: [
+                {
+                    id: "hero",
+                    sprite: this.hero,
+                    walkingAnimationMapping: 6,
+                    startPosition: { x: 15, y: 10 },
+                },
+            ],
+        };
+
+        this.gridEngine.create(map, gridEngineConfig);
+
         this.initCamera(map);
+        
+        this.add.text(10, 10, "Move the mouse", {
+            font: "16px Courier",
+            color: "#00ff00",
+        });
+
+        // const gridEngineConfig: gridEngineType = {
+        //     characters: [
+        //       {
+
+        //       },
+        //       {
+
+        //       },
+        //     ],
+        //     numberOfDirections: 4
+        //   };
+
+        // this.gridEngine.create(map, gridEngineConfig);
 
         // this.camera = this.cameras.main;
         // this.camera.setBackgroundColor(0x00ff00);
@@ -65,9 +104,17 @@ export class Game extends Scene {
             tileWidth: 32,
             tileHeight: 32,
         });
-        map.addTilesetImage("farm", "tiles");
-        map.createLayer("Ground", this.tileset, 0, 0);
-        map.createLayer("Trees", this.tileset, 0, 0);
+        const tilesets = map.addTilesetImage("farm", "tiles");
+        if(tilesets) {
+            for (let i = 0; i < map.layers.length; i++) {
+                map.createLayer(i, tilesets, 0, 0);
+              }
+        }
+        
+
+
+        // map.createLayer("Ground", this.tileset, 0, 0);
+        // map.createLayer("Trees", this.tileset, 0, 0);
         //treesLayer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(
             0,
@@ -75,14 +122,14 @@ export class Game extends Scene {
             map.widthInPixels,
             map.heightInPixels
         );
-        this.add.text(10, 10, 'Move the mouse', { font: '16px Courier', color: '#00ff00' });
+
         return map;
         //this.gridEngine.create(map, {});
         //this.showDebugWalls();
     }
 
-    private initCamera(map:Tilemaps.Tilemap): void {
-        //this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+    private initCamera(map: Tilemaps.Tilemap): void {
+        this.cameras.main.startFollow(this.hero, true, 0.09, 0.09);
         this.cameras.main.setBounds(
             0,
             0,
@@ -94,12 +141,11 @@ export class Game extends Scene {
         //this.cameras.main.setZoom(1);
     }
 
-    update(): void {
-        
-    }
+    update(): void {}
 
     changeScene() {
-        this.scene.start("GameOver");
+        //this.scene.start("GameOver");
+        console.log("chang scene from react");
     }
 }
 
