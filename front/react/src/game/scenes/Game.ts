@@ -10,6 +10,7 @@ export class Game extends Scene {
     gameText: Phaser.GameObjects.Text;
     gridEngine: GridEngine;
     hero: Character;
+    cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     // private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     // private treesLayer!: Tilemaps.TilemapLayer;
@@ -44,9 +45,9 @@ export class Game extends Scene {
 
     create() {
         const map = this.initMap();
-       
-
-        this.hero = this.add.existing(new Character(this, 'hero', this.gridEngine, map));
+        this.hero = this.add.existing(
+            new Character(this, "hero", this.gridEngine, map)
+        );
         //const playerSprite = this.add.sprite(0, 0, "player");
 
         const gridEngineConfig = {
@@ -54,16 +55,37 @@ export class Game extends Scene {
                 {
                     id: "hero",
                     sprite: this.hero,
-                    walkingAnimationMapping: 6,
+                    //walkingAnimationMapping: 14,
                     startPosition: { x: 15, y: 10 },
+                    // walkingAnimationMapping: {
+                    //     up: {
+                    //         leftFoot: 104,
+                    //         standing: 40,
+                    //         rightFoot: 112,
+                    //     },
+                    //     down: {
+                    //         leftFoot: 130,
+                    //         standing: 4,
+                    //         rightFoot: 138,
+                    //     },
+                    //     left: {
+                    //         leftFoot: 117,
+                    //         standing: 16,
+                    //         rightFoot: 121,
+                    //     },
+                    //     right: {
+                    //         leftFoot: 143,
+                    //         standing: 28,
+                    //         rightFoot: 147,
+                    //     },
+                    // },
                 },
             ],
         };
-
         this.gridEngine.create(map, gridEngineConfig);
 
         this.initCamera(map);
-        
+
         this.add.text(10, 10, "Move the mouse", {
             font: "16px Courier",
             color: "#00ff00",
@@ -105,13 +127,11 @@ export class Game extends Scene {
             tileHeight: 32,
         });
         const tilesets = map.addTilesetImage("farm", "tiles");
-        if(tilesets) {
+        if (tilesets) {
             for (let i = 0; i < map.layers.length; i++) {
                 map.createLayer(i, tilesets, 0, 0);
-              }
+            }
         }
-        
-
 
         // map.createLayer("Ground", this.tileset, 0, 0);
         // map.createLayer("Trees", this.tileset, 0, 0);
@@ -128,6 +148,8 @@ export class Game extends Scene {
         //this.showDebugWalls();
     }
 
+    private initHero() {}
+
     private initCamera(map: Tilemaps.Tilemap): void {
         this.cameras.main.startFollow(this.hero, true, 0.09, 0.09);
         this.cameras.main.setBounds(
@@ -141,7 +163,9 @@ export class Game extends Scene {
         //this.cameras.main.setZoom(1);
     }
 
-    update(): void {}
+    update(): void {
+        this.hero.update();
+    }
 
     changeScene() {
         //this.scene.start("GameOver");
