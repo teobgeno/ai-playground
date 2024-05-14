@@ -1,8 +1,8 @@
-# Phaser React Template
+# Phaser React TypeScript Template
 
 This is a Phaser 3 project template that uses the React framework and Vite for bundling. It includes a bridge for React to Phaser game communication, hot-reloading for quick development workflow and scripts to generate production-ready builds.
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-react-ts)**
+**[This Template is also available as a JavaScript version.](https://github.com/phaserjs/template-react)**
 
 ### Versions
 
@@ -11,6 +11,7 @@ This template has been updated for:
 - [Phaser 3.80.1](https://github.com/phaserjs/phaser)
 - [React 18.2.0](https://github.com/facebook/react)
 - [Vite 5.1.4](https://github.com/vitejs/vite)
+- [TypeScript 5.3.3](https://github.com/microsoft/TypeScript)
 
 ![screenshot](screenshot.png)
 
@@ -40,19 +41,20 @@ We have provided a default project structure to get you started. This is as foll
 
 - `index.html` - A basic HTML page to contain the game.
 - `src` - Contains the React client source code.
-- `src/main.jsx` - The main **React** entry point. This bootstraps the React application.
-- `src/App.jsx` - The main React component.
-- `src/game/PhaserGame.jsx` - The React component that initializes the Phaser Game and serve like a bridge between React and Phaser.
-- `src/game/EventBus.js` - A simple event bus to communicate between React and Phaser.
+- `src/main.tsx` - The main **React** entry point. This bootstraps the React application.
+- `src/vite-env.d.ts` - Global TypeScript declarations, provide types information.
+- `src/App.tsx` - The main React component.
+- `src/game/PhaserGame.tsx` - The React component that initializes the Phaser Game and serve like a bridge between React and Phaser.
+- `src/game/EventBus.ts` - A simple event bus to communicate between React and Phaser.
 - `src/game` - Contains the game source code.
-- `src/game/main.jsx` - The main **game** entry point. This contains the game configuration and start the game.
+- `src/game/main.tsx` - The main **game** entry point. This contains the game configuration and start the game.
 - `src/game/scenes/` - The Phaser Scenes are in this folder.
 - `public/style.css` - Some simple CSS rules to help with page layout.
 - `public/assets` - Contains the static assets used by the game.
 
 ## React Bridge
 
-The `PhaserGame.jsx` component is the bridge between React and Phaser. It initializes the Phaser game and passes events between the two.
+The `PhaserGame.tsx` component is the bridge between React and Phaser. It initializes the Phaser game and passes events between the two.
 
 To communicate between React and Phaser, you can use the **EventBus.js** file. This is a simple event bus that allows you to emit and listen for events from both React and Phaser.
 
@@ -83,7 +85,7 @@ You can get the current Phaser Scene from the component event `"current-active-s
 **Important**: When you add a new Scene to your game, make sure you expose to React by emitting the `"current-scene-ready"` event via the `EventBus`, like this:
 
 
-```js
+```ts
 class MyScene extends Phaser.Scene
 {
     constructor ()
@@ -107,15 +109,16 @@ You don't have to emit this event if you don't need to access the specific scene
 
 Here's an example of how to access Phaser data for use in a React Component:
 
-```js
+```ts
 import { useRef } from 'react';
+import { IRefPhaserGame } from "./game/PhaserGame";
 
 // In a parent component
 const ReactComponent = () => {
 
-    const phaserRef = useRef(); // you can access to this ref from phaserRef.current
+    const phaserRef = useRef<IRefPhaserGame>(); // you can access to this ref from phaserRef.current
 
-    const onCurrentActiveScene = (scene) => {
+    const onCurrentActiveScene = (scene: Phaser.Scene) => {
     
         // This is invoked
 

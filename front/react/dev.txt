@@ -1,1 +1,2 @@
 https://github.com/phaserjs/template-react
+https://github.com/slysnek/rs-clone/blob/develop/src/game/entity.ts
