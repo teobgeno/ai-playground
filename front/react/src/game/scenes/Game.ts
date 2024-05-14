@@ -1,11 +1,13 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
+import { GridEngine } from 'grid-engine';
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
 
     gameText: Phaser.GameObjects.Text;
+    gridEngine: GridEngine;
     // private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     // private treesLayer!: Tilemaps.TilemapLayer;
@@ -39,8 +41,8 @@ export class Game extends Scene {
     }
 
     create() {
-        this.initMap();
-        this.initCamera();
+        const map = this.initMap();
+        this.initCamera(map);
 
         // this.camera = this.cameras.main;
         // this.camera.setBackgroundColor(0x00ff00);
@@ -57,7 +59,7 @@ export class Game extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
-    private initMap(): void {
+    private initMap() {
         const map = this.make.tilemap({
             key: "farm",
             tileWidth: 32,
@@ -73,20 +75,27 @@ export class Game extends Scene {
             map.widthInPixels,
             map.heightInPixels
         );
+        this.add.text(10, 10, 'Move the mouse', { font: '16px Courier', color: '#00ff00' });
+        return map;
+        //this.gridEngine.create(map, {});
         //this.showDebugWalls();
     }
 
-    private initCamera(): void {
-        // this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
-        // this.cameras.main.setBounds(
-        //     0,
-        //     0,
-        //     this.map.widthInPixels,
-        //     this.map.heightInPixels
-        // );
-        this.cameras.main.setSize(1024, 768);
+    private initCamera(map:Tilemaps.Tilemap): void {
+        //this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+        this.cameras.main.setBounds(
+            0,
+            0,
+            map.widthInPixels,
+            map.heightInPixels
+        );
+        //this.cameras.main.setSize(1024, 768);
         //this.cameras.main.setSize(this.map.widthInPixels, this.map.heightInPixels);
         //this.cameras.main.setZoom(1);
+    }
+
+    update(): void {
+        
     }
 
     changeScene() {
