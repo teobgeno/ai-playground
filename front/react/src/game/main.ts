@@ -16,7 +16,7 @@ import GridEngine from "grid-engine";
 // const TILE_HEIGHT = 32;
 
 const config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     width: 1024,
     height: 768,
     parent: "game-container",

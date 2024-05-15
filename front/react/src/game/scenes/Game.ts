@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../character";
+import { Actor } from './actor';
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -44,10 +45,13 @@ export class Game extends Scene {
     }
 
     create() {
-        const map = this.initMap();
         this.hero = this.add.existing(
-            new Character(this, "hero", this.gridEngine, map)
+            new Character(this, "hero", this.gridEngine)
         );
+        const map = this.initMap();
+       
+        this.physics.add.existing(this.hero);
+        this.hero.getBody().setCollideWorldBounds(true);
 
         const gridEngineConfig = {
             characters: [
@@ -81,7 +85,7 @@ export class Game extends Scene {
                 },
             ],
         };
-        this.gridEngine.create(map, gridEngineConfig);
+        //this.gridEngine.create(map, gridEngineConfig);
 
         this.initCamera(map);
 
