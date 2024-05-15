@@ -48,14 +48,13 @@ export class Game extends Scene {
         this.hero = this.add.existing(
             new Character(this, "hero", this.gridEngine, map)
         );
-        //const playerSprite = this.add.sprite(0, 0, "player");
 
         const gridEngineConfig = {
             characters: [
                 {
                     id: "hero",
                     sprite: this.hero,
-                    //walkingAnimationMapping: 14,
+                    walkingAnimationMapping: 14,
                     startPosition: { x: 15, y: 10 },
                     // walkingAnimationMapping: {
                     //     up: {
@@ -91,18 +90,6 @@ export class Game extends Scene {
             color: "#00ff00",
         });
 
-        // const gridEngineConfig: gridEngineType = {
-        //     characters: [
-        //       {
-
-        //       },
-        //       {
-
-        //       },
-        //     ],
-        //     numberOfDirections: 4
-        //   };
-
         // this.gridEngine.create(map, gridEngineConfig);
 
         // this.camera = this.cameras.main;
@@ -128,9 +115,35 @@ export class Game extends Scene {
         });
         const tilesets = map.addTilesetImage("farm", "tiles");
         if (tilesets) {
-            for (let i = 0; i < map.layers.length; i++) {
-                map.createLayer(i, tilesets, 0, 0);
+            map.createLayer("Ground", tilesets, 0, 0);
+            const trees = map.createLayer("Trees", tilesets, 0, 0);
+            trees?.setCollisionByProperty({ collides: true });
+            if (trees) {
+                this.physics.add.collider(this.hero, trees);
             }
+
+            // trees?.setInteractive(
+            //     new Phaser.Geom.Rectangle(0, 0, 32, 64),
+            //     Phaser.Geom.Rectangle.Contains
+            // );
+            // trees?.on("pointerdown", function () {
+            //     console.log("arxidia");
+            // });
+
+            // for (let i = 0; i < map.layers.length; i++) {
+            //     console.log(map.layers[i].name)
+            //     const layer = map.createLayer(i, tilesets, 0, 0);
+            //     if(map.layers[i].name === 'Trees'){
+            //         layer?.setCollisionByProperty({ collides: true });
+            //         layer?.setInteractive(new Phaser.Geom.Rectangle(0, 0, 32, 64), Phaser.Geom.Rectangle.Contains);
+            //         layer?.on('pointerdown', function () {
+            //          console.log('arxidia');
+
+            //         })
+
+            //     }
+
+            // }
         }
 
         // map.createLayer("Ground", this.tileset, 0, 0);

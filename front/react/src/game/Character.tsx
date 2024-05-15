@@ -33,20 +33,20 @@ class Character extends Physics.Arcade.Sprite {
     update(): void {
 
         if (this.keyW?.isDown) {
-            console.log('W')
+            //console.log('W')
             this.gridEngine.move("hero", Direction.UP);
         }
         if (this.keyA?.isDown) {
-            console.log('A')
+            //console.log('A')
             this.gridEngine.move("hero", Direction.LEFT);
         }
 
         if (this.keyS?.isDown) {
-            console.log('S')
+            //console.log('S')
             this.gridEngine.move("hero", Direction.DOWN);
         }
         if (this.keyD?.isDown) {
-            console.log('D')
+           // console.log('D')
             this.gridEngine.move("hero", Direction.RIGHT);
         }
         
