@@ -1,8 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import Character from "../character";
-import { Actor } from './actor';
+import Character from "../Character";
+
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -85,7 +85,7 @@ export class Game extends Scene {
                 },
             ],
         };
-        //this.gridEngine.create(map, gridEngineConfig);
+        this.gridEngine.create(map, gridEngineConfig);
 
         this.initCamera(map);
 
@@ -107,6 +107,26 @@ export class Game extends Scene {
         //     stroke: '#000000', strokeThickness: 8,
         //     align: 'center'
         // }).setOrigin(0.5).setDepth(100);
+
+        this.input.on('pointerup', (pointer:any) => {
+            // Get the WORLD x and y position of the pointer
+            const {worldX, worldY} = pointer;
+            console.log(pointer)
+            const t = this.add.sprite(worldX, worldY, 'items', 'basic_axe');
+            t.setDepth(1)
+            // Assign the world x and y to our vector
+            // const target ={x:0,y:0};
+            // target.x = worldX;
+            // target.y = worldY;
+      
+            // // Position the arrow at our world x and y
+            // this.arrow.body.reset(worldX, worldY);
+            // this.arrow.setVisible(true);
+      
+            // // Start moving our cat towards the target
+            //this.setPosition(128, 256);
+            //this.scene.physics.moveToObject(this, pointer, 200);
+          });
 
         EventBus.emit("current-scene-ready", this);
     }

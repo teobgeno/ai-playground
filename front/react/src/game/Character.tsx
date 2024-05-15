@@ -25,23 +25,7 @@ class Character extends Physics.Arcade.Sprite {
         
         this.gridEngine = gridEngine;
 
-        // this.scene.input.on('pointerup', (pointer:any) => {
-        //     // Get the WORLD x and y position of the pointer
-        //     const {worldX, worldY} = pointer;
-        //     console.log(pointer)
-        //     // Assign the world x and y to our vector
-        //     const target ={x:0,y:0};
-        //     target.x = worldX;
-        //     target.y = worldY;
-      
-        //     // // Position the arrow at our world x and y
-        //     // this.arrow.body.reset(worldX, worldY);
-        //     // this.arrow.setVisible(true);
-      
-        //     // // Start moving our cat towards the target
-        //     //this.setPosition(128, 256);
-        //     this.scene.physics.moveToObject(this, pointer, 200);
-        //   });
+       
     }
 
    
@@ -49,7 +33,7 @@ class Character extends Physics.Arcade.Sprite {
         return this.body as Physics.Arcade.Body;
       }
 
-    updateOld(): void {
+    update(): void {
         //this.getBody().setSize(32, 64);
         if (this.keyW?.isDown) {
             //console.log('W')
@@ -134,43 +118,43 @@ class Character extends Physics.Arcade.Sprite {
       }
 
 
-      update(): void {
-        this.getBody().setVelocity(0);
+      // update(): void {
+      //   this.getBody().setVelocity(0);
       
-        if (this.keyW?.isDown) {
-          this.body.velocity.y = -110;
-          !this.anims.isPlaying && this.anims.play('up', true);
-        }
+      //   if (this.keyW?.isDown) {
+      //     this.body.velocity.y = -110;
+      //     !this.anims.isPlaying && this.anims.play('up', true);
+      //   }
     
-        if (this.keyA?.isDown) {
-          this.body.velocity.x = -110;
-        //   this.checkFlip();
-        //   this.getBody().setOffset(48, 15);
-          !this.anims.isPlaying && this.anims.play('left', true);
-        }
+      //   if (this.keyA?.isDown) {
+      //     this.body.velocity.x = -110;
+      //   //   this.checkFlip();
+      //   //   this.getBody().setOffset(48, 15);
+      //     !this.anims.isPlaying && this.anims.play('left', true);
+      //   }
     
-        if (this.keyS?.isDown) {
-          this.body.velocity.y = 110;
-          !this.anims.isPlaying && this.anims.play('down', true);
-        }
+      //   if (this.keyS?.isDown) {
+      //     this.body.velocity.y = 110;
+      //     !this.anims.isPlaying && this.anims.play('down', true);
+      //   }
     
-        if (this.keyD?.isDown) {
-          this.body.velocity.x = 110;
-        //   this.checkFlip();
-        //   this.getBody().setOffset(15, 15);
-          !this.anims.isPlaying && this.anims.play('right', true);
-        }
+      //   if (this.keyD?.isDown) {
+      //     this.body.velocity.x = 110;
+      //   //   this.checkFlip();
+      //   //   this.getBody().setOffset(15, 15);
+      //     !this.anims.isPlaying && this.anims.play('right', true);
+      //   }
     
-      }
+      // }
 
 
-      public checkFlip(): void {
-        if (this.body.velocity.x < 0) {
-          this.scaleX = -1;
-        } else {
-          this.scaleX = 1;
-        }
-      }
+      // public checkFlip(): void {
+      //   if (this.body.velocity.x < 0) {
+      //     this.scaleX = -1;
+      //   } else {
+      //     this.scaleX = 1;
+      //   }
+      // }
 
 }
 export default Character;

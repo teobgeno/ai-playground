@@ -167,7 +167,8 @@
   </tile>
   <tile id="32">
    <properties>
-    <property name="collides" type="bool" value="true"/>
+    <property name="collides" type="bool" value="false"/>
+    <property name="ge_collide" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="33">
