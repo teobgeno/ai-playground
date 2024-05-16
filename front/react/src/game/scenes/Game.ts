@@ -216,7 +216,7 @@ export class Game extends Scene {
     }
 
     update(): void {
-
+        //https://labs.phaser.io/edit.html?src=src/input\camera\world%20coordinates.js
         const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
 
         // Rounds down to nearest tile
