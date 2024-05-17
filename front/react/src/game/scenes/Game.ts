@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
-import { GridEngine } from "grid-engine";
+import { GridEngine, PathBlockedStrategy } from "grid-engine";
 import Character from "../Character";
 
 
@@ -54,20 +54,21 @@ export class Game extends Scene {
     }
 
     create() {
-        this.hero = this.add.existing(
-            new Character(this, "hero", this.gridEngine)
-        );
+      
         this.map = this.initMap();
-       
+
+        this.hero = new Character(this, "hero", this.gridEngine);
         this.physics.add.existing(this.hero);
+        this.add.existing(this.hero);
         this.hero.getBody().setCollideWorldBounds(true);
+        this.hero.createMovementAnimations();
 
         const gridEngineConfig = {
             characters: [
                 {
                     id: "hero",
                     sprite: this.hero,
-                    walkingAnimationMapping: 14,
+                    //walkingAnimationMapping: 14,
                     startPosition: { x: 15, y: 10 },
                     // walkingAnimationMapping: {
                     //     up: {
@@ -95,6 +96,19 @@ export class Game extends Scene {
             ],
         };
         this.gridEngine.create(this.map, gridEngineConfig);
+
+        this.gridEngine.movementStarted().subscribe(({ direction }) => {
+            this.hero.anims.play(direction);
+          });
+        
+          this.gridEngine.movementStopped().subscribe(({ direction }) => {
+            this.hero.anims.stop();
+            this.hero.setFrame(this.hero.getStopFrame(direction));
+          });
+        
+          this.gridEngine.directionChanged().subscribe(({ direction }) => {
+            this.hero.setFrame(this.hero.getStopFrame(direction));
+          });
 
         this.initCamera(this.map);
 
@@ -141,8 +155,8 @@ export class Game extends Scene {
         this.marker = this.add.graphics();
         this.marker.lineStyle(2, 0x000000, 1);
         this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
-        
-
+        this.marker.setDepth(1);
+       
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -154,12 +168,13 @@ export class Game extends Scene {
         });
         const tilesets = map.addTilesetImage("farm", "tiles");
         if (tilesets) {
+            
             map.createLayer("Ground", tilesets, 0, 0);
-            const trees = map.createLayer("Trees", tilesets, 0, 0);
-            trees?.setCollisionByProperty({ collides: true });
-            if (trees) {
-                this.physics.add.collider(this.hero, trees);
-            }
+            map.createLayer("Trees", tilesets, 0, 0);
+            // trees?.setCollisionByProperty({ collides: true });
+            // if (trees) {
+            //     this.physics.add.collider(this.hero, trees);
+            // }
 
             // trees?.setInteractive(
             //     new Phaser.Geom.Rectangle(0, 0, 32, 64),
@@ -200,8 +215,6 @@ export class Game extends Scene {
         //this.showDebugWalls();
     }
 
-    private initHero() {}
-
     private initCamera(map: Tilemaps.Tilemap): void {
         this.cameras.main.startFollow(this.hero, true, 0.09, 0.09);
         this.cameras.main.setBounds(
@@ -230,19 +243,29 @@ export class Game extends Scene {
         this.marker.y = this.map.tileToWorldY(pointerTileY);
 
 
-        if (this.input.manager.activePointer.isDown)
-        {
-            const tile = this.map.getTileAt(pointerTileX, pointerTileY);
+        // if (this.input.manager.activePointer.isDown)
+        // {
+        //     //get tile from all leyer if ground is clear continue
+        //     const tileGround = this.map.getTileAt(pointerTileX, pointerTileY, false, 'Ground');
+        //     const tileTree = this.map.getTileAt(pointerTileX, pointerTileY, false, 'Trees');
 
-            if (tile)
-            {
-                // Note: JSON.stringify will convert the object tile properties to a string
-                this.propertiesText.setText(`Properties: ${JSON.stringify(tile.properties)}`);
-                tile.properties.viewed = true;
-            }
+        //     if (tileGround && !tileTree)
+        //     {
+               
+        //         // Note: JSON.stringify will convert the object tile properties to a string
+        //         this.propertiesText.setText(`Properties: ${JSON.stringify(tileGround.properties)}`);
+        //         //tile.properties.viewed = true;
+        //         const t = this.add.sprite(tileGround.pixelX+16, tileGround.pixelY+16, 'items', 'wheat');
+        //         t.setDepth(1)
+        //         console.log(tileGround.x +'---'+tileGround.y)
+        //         this.gridEngine.moveTo('hero', { x: tileGround.x, y:tileGround.y });
 
-            //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
-        }
+        //         //pixelX
+                
+        //     }
+
+        //     //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
+        // }
 
         this.hero.update();
     }

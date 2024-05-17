@@ -7,7 +7,7 @@ class Character extends Physics.Arcade.Sprite {
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
     private gridEngine:GridEngine;
-
+    
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -15,79 +15,48 @@ class Character extends Physics.Arcade.Sprite {
         //map: Tilemaps.Tilemap
     ) {
         super(scene, 0, 0, texture);
-        
-        this.keyW = this.scene.input.keyboard.addKey("W");
-        this.keyA = this.scene.input.keyboard.addKey("A");
-        this.keyS = this.scene.input.keyboard.addKey("S");
-        this.keyD = this.scene.input.keyboard.addKey("D");
-
-        this.createHumanoidAnimations('hero');
-        
-        this.gridEngine = gridEngine;
-
+        if(this.scene.input.keyboard) {
+          this.keyW = this.scene.input.keyboard.addKey("W");
+          this.keyA = this.scene.input.keyboard.addKey("A");
+          this.keyS = this.scene.input.keyboard.addKey("S");
+          this.keyD = this.scene.input.keyboard.addKey("D");
+        }
        
+        this.createHumanoidAnimations('hero');
+        this.gridEngine = gridEngine;
     }
 
    
     public getBody(): Physics.Arcade.Body {
         return this.body as Physics.Arcade.Body;
-      }
+    }
 
     update(): void {
         //this.getBody().setSize(32, 64);
         if (this.keyW?.isDown) {
-            //console.log('W')
             this.gridEngine.move("hero", Direction.UP);
         }
         if (this.keyA?.isDown) {
-            //console.log('A')
             this.gridEngine.move("hero", Direction.LEFT);
         }
 
         if (this.keyS?.isDown) {
-            //console.log('S')
             this.gridEngine.move("hero", Direction.DOWN);
         }
         if (this.keyD?.isDown) {
-           // console.log('D')
             this.gridEngine.move("hero", Direction.RIGHT);
         }
-        
-
-        // this.getBody().setVelocity(0);
-
-        // if (this.keyW?.isDown) {
-        //     this.body.velocity.y = -110;
-        //     !this.anims.isPlaying && this.anims.play("hero_move_up", true);
-        // }
-
-        // if (this.keyA?.isDown) {
-        //     this.body.velocity.x = -110;
-        //     //   this.checkFlip();
-        //     //   this.getBody().setOffset(48, 15);
-        //     !this.anims.isPlaying && this.anims.play("hero_move_left", true);
-        // }
-
-        // if (this.keyS?.isDown) {
-        //     this.body.velocity.y = 110;
-        //     !this.anims.isPlaying && this.anims.play("hero_move_down", true);
-        // }
-
-        // if (this.keyD?.isDown) {
-        //     this.body.velocity.x = 110;
-        //     !this.anims.isPlaying && this.anims.play("hero_move_right", true);
-        // }
+    }
+    
+    public createMovementAnimations() {
+      this.createAnimation.call(this, 'right', 'hero', 143, 147, 15, 10, true);
+      this.createAnimation.call(this,'up', 'hero', 104, 112, 15, 10, true);
+      this.createAnimation.call(this,'down', 'hero', 130, 138, 15, 10, true);
+      this.createAnimation.call(this,'left', 'hero', 117, 121, 15, 10, true);
     }
 
     public createHumanoidAnimations(key: string) {
         const texture = key;
-        // TODO: don't hardcode, store in JSON of find a way to infer it
-        // (standardize all spritesheets?)
-        this.createAnimation.call(this, 'right', texture, 143, 147, 15, 10, true);
-        this.createAnimation.call(this,'up', texture, 104, 112, 15, 10, true);
-        this.createAnimation.call(this,'down', texture, 130, 138, 15, 10, true);
-        this.createAnimation.call(this,'left', texture, 117, 121, 15, 10, true);
-    
         this.createAnimation(key + '_attack_right', texture, 195, 200, 15, false, true);
         this.createAnimation(key + '_attack_down', texture, 182, 187, 15, false, true);
         this.createAnimation(key + '_attack_left', texture, 169, 174, 15, false, true);
@@ -104,17 +73,31 @@ class Character extends Physics.Arcade.Sprite {
         this.createAnimation(key + '_rest_up', texture, 104, 104, null, null, null);
       }
     
-      public createAnimation(key: any, texture: any, start: any, end: any, rate: any, loop: any, revert: any) {
+      public createAnimation(key: string, texture: string, start: number, end: number, rate: number | null, repeat: boolean | null, revert: any) {
         rate = rate || 10;
         const config = {
           key: key,
           frames: this.scene.anims.generateFrameNumbers(texture, { start: start, end: end }),
           frameRate: rate,
-        //   repeat: 0,
+          repeat: 0,
         };
-        //if (loop) config.repeat = -1;
+        if (repeat) config.repeat = -1;
         //if (revert) config.frames.push({ key: texture, frame: start });
         this.scene.anims.create(config);
+      }
+
+      public getStopFrame(direction:string) {
+        switch (direction) {
+          case 'up':
+            return -1;
+          case 'right':
+            return -1;
+          case 'down':
+            return -1;
+          case 'left':
+            return -1;
+        }
+        return -1;
       }
 
 
