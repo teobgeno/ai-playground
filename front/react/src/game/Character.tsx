@@ -7,12 +7,13 @@ class Character extends Physics.Arcade.Sprite {
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
     private gridEngine:GridEngine;
-    
+    private id:string;
     constructor(
         scene: Phaser.Scene,
         texture: string,
         gridEngine: GridEngine,
         //map: Tilemaps.Tilemap
+        id: string,
     ) {
         super(scene, 0, 0, texture);
         if(this.scene.input.keyboard) {
@@ -21,8 +22,8 @@ class Character extends Physics.Arcade.Sprite {
           this.keyS = this.scene.input.keyboard.addKey("S");
           this.keyD = this.scene.input.keyboard.addKey("D");
         }
-       
-        this.createHumanoidAnimations('hero');
+        this.id = id;
+        this.createHumanoidAnimations(this.id);
         this.gridEngine = gridEngine;
     }
 
@@ -34,25 +35,25 @@ class Character extends Physics.Arcade.Sprite {
     update(): void {
         //this.getBody().setSize(32, 64);
         if (this.keyW?.isDown) {
-            this.gridEngine.move("hero", Direction.UP);
+            this.gridEngine.move(this.id, Direction.UP);
         }
         if (this.keyA?.isDown) {
-            this.gridEngine.move("hero", Direction.LEFT);
+            this.gridEngine.move(this.id, Direction.LEFT);
         }
 
         if (this.keyS?.isDown) {
-            this.gridEngine.move("hero", Direction.DOWN);
+            this.gridEngine.move(this.id, Direction.DOWN);
         }
         if (this.keyD?.isDown) {
-            this.gridEngine.move("hero", Direction.RIGHT);
+            this.gridEngine.move(this.id, Direction.RIGHT);
         }
     }
     
     public createMovementAnimations() {
-      this.createAnimation.call(this, 'right', 'hero', 143, 147, 15, 10, true);
-      this.createAnimation.call(this,'up', 'hero', 104, 112, 15, 10, true);
-      this.createAnimation.call(this,'down', 'hero', 130, 138, 15, 10, true);
-      this.createAnimation.call(this,'left', 'hero', 117, 121, 15, 10, true);
+      this.createAnimation('right', this.id, 143, 147, 15, true, true);
+      this.createAnimation('up', this.id, 104, 112, 15, true, true);
+      this.createAnimation('down', this.id, 130, 138, 15, true, true);
+      this.createAnimation('left', this.id, 117, 121, 15, 10,true, true);
     }
 
     public createHumanoidAnimations(key: string) {

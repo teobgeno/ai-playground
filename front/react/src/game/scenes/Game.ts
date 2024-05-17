@@ -57,9 +57,10 @@ export class Game extends Scene {
       
         this.map = this.initMap();
 
-        this.hero = new Character(this, "hero", this.gridEngine);
+        this.hero = new Character(this, "hero", this.gridEngine, "hero");
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
+        this.hero.getBody().setSize(32, 64);
         this.hero.getBody().setCollideWorldBounds(true);
         this.hero.createMovementAnimations();
 
@@ -68,45 +69,22 @@ export class Game extends Scene {
                 {
                     id: "hero",
                     sprite: this.hero,
-                    //walkingAnimationMapping: 14,
                     startPosition: { x: 15, y: 10 },
-                    // walkingAnimationMapping: {
-                    //     up: {
-                    //         leftFoot: 104,
-                    //         standing: 40,
-                    //         rightFoot: 112,
-                    //     },
-                    //     down: {
-                    //         leftFoot: 130,
-                    //         standing: 4,
-                    //         rightFoot: 138,
-                    //     },
-                    //     left: {
-                    //         leftFoot: 117,
-                    //         standing: 16,
-                    //         rightFoot: 121,
-                    //     },
-                    //     right: {
-                    //         leftFoot: 143,
-                    //         standing: 28,
-                    //         rightFoot: 147,
-                    //     },
-                    // },
                 },
             ],
         };
         this.gridEngine.create(this.map, gridEngineConfig);
 
-        this.gridEngine.movementStarted().subscribe(({ direction }) => {
+        this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
             this.hero.anims.play(direction);
           });
         
-          this.gridEngine.movementStopped().subscribe(({ direction }) => {
+          this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
             this.hero.anims.stop();
             this.hero.setFrame(this.hero.getStopFrame(direction));
           });
         
-          this.gridEngine.directionChanged().subscribe(({ direction }) => {
+          this.gridEngine.directionChanged().subscribe(({ charId, direction }) => {
             this.hero.setFrame(this.hero.getStopFrame(direction));
           });
 
