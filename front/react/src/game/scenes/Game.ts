@@ -1,8 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
-import { GridEngine, PathBlockedStrategy } from "grid-engine";
+import { GridEngine } from "grid-engine";
 import Character from "../Character";
-
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -13,11 +12,10 @@ export class Game extends Scene {
     hero: Character;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
-    private tileset!: Tilemaps.Tileset;
-    private marker;
-    private propertiesText: Phaser.GameObjects.Text;
-    // private treesLayer!: Tilemaps.TilemapLayer;
-
+    private marker: Phaser.GameObjects.Graphics;
+    private charToolsMap: Map<number, object>;
+    private activeTool: number;
+    private propertiesText;
     constructor() {
         super("Game");
     }
@@ -54,48 +52,27 @@ export class Game extends Scene {
     }
 
     create() {
-      
         this.initMap();
         this.initHero();
-
-        const gridEngineConfig = {
-            characters: [
-                {
-                    id: "hero",
-                    sprite: this.hero,
-                    startPosition: { x: 15, y: 10 },
-                },
-            ],
-        };
-        this.gridEngine.create(this.map, gridEngineConfig);
-
-        this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
-            this.hero.anims.play(direction);
-          });
-        
-          this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
-            this.hero.anims.stop();
-            this.hero.setFrame(this.hero.getStopFrame(direction));
-          });
-        
-          this.gridEngine.directionChanged().subscribe(({ charId, direction }) => {
-            this.hero.setFrame(this.hero.getStopFrame(direction));
-          });
-
+        this.initGridEngine();
         this.initCamera(this.map);
 
-        this.propertiesText = this.add.text(16, 16, 'Click on a tile to view its properties.', {
-            font: '20px Arial',
-            color: '#000'
+        this.propertiesText = this.add.text(16, 16, "Click on a tile to view its properties.", {
+            font: "20px Arial",
+            color: "#000",
         });
 
         this.marker = this.add.graphics();
         this.marker.lineStyle(2, 0x000000, 1);
         this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
         this.marker.setDepth(1);
+        this.marker.setAlpha(0);
+
+        this.charToolsMap = new Map();
+        this.charToolsMap.set(1, { id: 1, title: "hoe" });
 
         EventBus.emit("current-scene-ready", this);
-      
+
         // this.input.on('pointerup', (pointer:any) => {
         //     // Get the WORLD x and y position of the pointer
         //     const {worldX, worldY} = pointer;
@@ -106,13 +83,11 @@ export class Game extends Scene {
         //     // const target ={x:0,y:0};
         //     // target.x = worldX;
         //     // target.y = worldY;
-      
+
         //     // // Position the arrow at our world x and y
         //     // this.arrow.body.reset(worldX, worldY);
         //     // this.arrow.setVisible(true);
         // });
-
-        
     }
 
     private initMap() {
@@ -121,9 +96,8 @@ export class Game extends Scene {
             tileWidth: 32,
             tileHeight: 32,
         });
-        const tilesets =  this.map.addTilesetImage("farm", "tiles");
+        const tilesets = this.map.addTilesetImage("farm", "tiles");
         if (tilesets) {
-            
             this.map.createLayer("Ground", tilesets, 0, 0);
             this.map.createLayer("Trees", tilesets, 0, 0);
             // trees?.setCollisionByProperty({ collides: true });
@@ -176,6 +150,34 @@ export class Game extends Scene {
         this.hero.createMovementAnimations();
     }
 
+    private initGridEngine() {
+        const gridEngineConfig = {
+            characters: [
+                {
+                    id: "hero",
+                    sprite: this.hero,
+                    startPosition: { x: 15, y: 10 },
+                },
+            ],
+        };
+        this.gridEngine.create(this.map, gridEngineConfig);
+
+        this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
+            this.hero.anims.play(direction);
+        });
+
+        this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
+            this.hero.anims.stop();
+            this.hero.setFrame(this.hero.getStopFrame(direction));
+        });
+
+        this.gridEngine
+            .directionChanged()
+            .subscribe(({ charId, direction }) => {
+                this.hero.setFrame(this.hero.getStopFrame(direction));
+            });
+    }
+
     private initCamera(map: Tilemaps.Tilemap): void {
         this.cameras.main.startFollow(this.hero, true, 0.09, 0.09);
         this.cameras.main.setBounds(
@@ -184,56 +186,84 @@ export class Game extends Scene {
             map.widthInPixels,
             map.heightInPixels
         );
-        //this.cameras.main.setSize(1024, 768);
-        //this.cameras.main.setSize(this.map.widthInPixels, this.map.heightInPixels);
-        //this.cameras.main.setZoom(1);
+        // this.cameras.main.setSize(
+        //     this.map.widthInPixels,
+        //     this.map.heightInPixels
+        // );
+    }
+
+    private checkActiveTool() {
+        if (this.activeTool === 1) {
+            //https://labs.phaser.io/edit.html?src=src/input\camera\world%20coordinates.js
+            const worldPoint = this.input.activePointer.positionToCamera(
+                this.cameras.main
+            );
+
+            // Rounds down to nearest tile
+            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
+            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
+
+            // Snap to tile coordinates, but in world space
+            this.marker.x = this.map.tileToWorldX(pointerTileX) || 0;
+            this.marker.y = this.map.tileToWorldY(pointerTileY) || 0;
+
+            this.marker.setAlpha(1);
+
+            if (this.input.manager.activePointer.isDown) {
+                //get tile from all leyer if ground is clear continue
+                const tileGround = this.map.getTileAt(
+                    pointerTileX,
+                    pointerTileY,
+                    false,
+                    "Ground"
+                );
+                const tileTree = this.map.getTileAt(
+                    pointerTileX,
+                    pointerTileY,
+                    false,
+                    "Trees"
+                );
+
+                if (tileGround && !tileTree) {
+                    // Note: JSON.stringify will convert the object tile properties to a string
+                    this.propertiesText.setText(
+                        `Properties: ${JSON.stringify(tileGround.properties)}`
+                    );
+                    //tile.properties.viewed = true;
+                    const t = this.add.sprite(
+                        tileGround.pixelX + 16,
+                        tileGround.pixelY + 16,
+                        "items",
+                        "wheat"
+                    );
+                    t.setDepth(1);
+                    console.log(tileGround.x + "---" + tileGround.y);
+                    this.gridEngine.moveTo("hero", {
+                        x: tileGround.x,
+                        y: tileGround.y,
+                    });
+
+                    //pixelX
+                }
+
+                //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
+            }
+        }
     }
 
     update(): void {
-        //https://labs.phaser.io/edit.html?src=src/input\camera\world%20coordinates.js
-        const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
-
-        // Rounds down to nearest tile
-        const pointerTileX = this.map.worldToTileX(worldPoint.x);
-        const pointerTileY = this.map.worldToTileY(worldPoint.y);
-
-        
-
-        // Snap to tile coordinates, but in world space
-        this.marker.x = this.map.tileToWorldX(pointerTileX);
-        this.marker.y = this.map.tileToWorldY(pointerTileY);
-
-
-        // if (this.input.manager.activePointer.isDown)
-        // {
-        //     //get tile from all leyer if ground is clear continue
-        //     const tileGround = this.map.getTileAt(pointerTileX, pointerTileY, false, 'Ground');
-        //     const tileTree = this.map.getTileAt(pointerTileX, pointerTileY, false, 'Trees');
-
-        //     if (tileGround && !tileTree)
-        //     {
-               
-        //         // Note: JSON.stringify will convert the object tile properties to a string
-        //         this.propertiesText.setText(`Properties: ${JSON.stringify(tileGround.properties)}`);
-        //         //tile.properties.viewed = true;
-        //         const t = this.add.sprite(tileGround.pixelX+16, tileGround.pixelY+16, 'items', 'wheat');
-        //         t.setDepth(1)
-        //         console.log(tileGround.x +'---'+tileGround.y)
-        //         this.gridEngine.moveTo('hero', { x: tileGround.x, y:tileGround.y });
-
-        //         //pixelX
-                
-        //     }
-
-        //     //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
-        // }
-
+        this.checkActiveTool();
         this.hero.update();
     }
 
-    changeScene() {
+    setActiveTool(tool: number) {
         //this.scene.start("GameOver");
         console.log("chang scene from react");
+        if(this.activeTool && this.activeTool === tool) {
+            this.activeTool = 0;
+        } else {
+            this.activeTool = tool;
+        }
+        
     }
 }
-
