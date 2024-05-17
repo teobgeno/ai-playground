@@ -55,14 +55,8 @@ export class Game extends Scene {
 
     create() {
       
-        this.map = this.initMap();
-
-        this.hero = new Character(this, "hero", this.gridEngine, "hero");
-        this.physics.add.existing(this.hero);
-        this.add.existing(this.hero);
-        this.hero.getBody().setSize(32, 64);
-        this.hero.getBody().setCollideWorldBounds(true);
-        this.hero.createMovementAnimations();
+        this.initMap();
+        this.initHero();
 
         const gridEngineConfig = {
             characters: [
@@ -94,22 +88,14 @@ export class Game extends Scene {
             font: '20px Arial',
             color: '#000'
         });
+
+        this.marker = this.add.graphics();
+        this.marker.lineStyle(2, 0x000000, 1);
+        this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
+        this.marker.setDepth(1);
+
+        EventBus.emit("current-scene-ready", this);
       
-
-        // this.gridEngine.create(map, gridEngineConfig);
-
-        // this.camera = this.cameras.main;
-        // this.camera.setBackgroundColor(0x00ff00);
-
-        // this.background = this.add.image(512, 384, 'background');
-        // this.background.setAlpha(0.5);
-
-        // this.gameText = this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-        //     fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-        //     stroke: '#000000', strokeThickness: 8,
-        //     align: 'center'
-        // }).setOrigin(0.5).setDepth(100);
-
         // this.input.on('pointerup', (pointer:any) => {
         //     // Get the WORLD x and y position of the pointer
         //     const {worldX, worldY} = pointer;
@@ -124,31 +110,22 @@ export class Game extends Scene {
         //     // // Position the arrow at our world x and y
         //     // this.arrow.body.reset(worldX, worldY);
         //     // this.arrow.setVisible(true);
-      
-        //     // // Start moving our cat towards the target
-        //     //this.setPosition(128, 256);
-        //     //this.scene.physics.moveToObject(this, pointer, 200);
         // });
 
-        this.marker = this.add.graphics();
-        this.marker.lineStyle(2, 0x000000, 1);
-        this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
-        this.marker.setDepth(1);
-       
-        EventBus.emit("current-scene-ready", this);
+        
     }
 
     private initMap() {
-        const map = this.make.tilemap({
+        this.map = this.make.tilemap({
             key: "farm",
             tileWidth: 32,
             tileHeight: 32,
         });
-        const tilesets = map.addTilesetImage("farm", "tiles");
+        const tilesets =  this.map.addTilesetImage("farm", "tiles");
         if (tilesets) {
             
-            map.createLayer("Ground", tilesets, 0, 0);
-            map.createLayer("Trees", tilesets, 0, 0);
+            this.map.createLayer("Ground", tilesets, 0, 0);
+            this.map.createLayer("Trees", tilesets, 0, 0);
             // trees?.setCollisionByProperty({ collides: true });
             // if (trees) {
             //     this.physics.add.collider(this.hero, trees);
@@ -184,13 +161,19 @@ export class Game extends Scene {
         this.physics.world.setBounds(
             0,
             0,
-            map.widthInPixels,
-            map.heightInPixels
+            this.map.widthInPixels,
+            this.map.heightInPixels
         );
-
-        return map;
-        //this.gridEngine.create(map, {});
         //this.showDebugWalls();
+    }
+
+    private initHero() {
+        this.hero = new Character(this, "hero", this.gridEngine, "hero");
+        this.physics.add.existing(this.hero);
+        this.add.existing(this.hero);
+        this.hero.getBody().setSize(32, 64);
+        this.hero.getBody().setCollideWorldBounds(true);
+        this.hero.createMovementAnimations();
     }
 
     private initCamera(map: Tilemaps.Tilemap): void {
