@@ -175,7 +175,19 @@ export class Game extends Scene {
             .directionChanged()
             .subscribe(({ charId, direction }) => {
                 //this.hero.setFrame(this.hero.getStopFrame(direction));
-            });
+        });
+
+        this.gridEngine
+          .positionChangeFinished()
+          .subscribe(({ enterTile }) => {
+            // // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
+            // //this.gridEngineHeadless.stopMovement("player")
+            // this.posX = enterTile.x
+            // this.posY = enterTile.y
+            // if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
+            //   cb()
+            // }
+        })
     }
 
     private initCamera(map: Tilemaps.Tilemap): void {
