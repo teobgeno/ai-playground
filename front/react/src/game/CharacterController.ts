@@ -4,22 +4,25 @@ import StateMachine from "./StateMachine";
 
 export default class CharacterController {
     private scene: Phaser.Scene;
-    private sprite: Phaser.Physics.Matter.Sprite;
+    private sprite: Phaser.Physics.Arcade.Sprite;
     private gridEngine: GridEngine;
     private stateMachine: StateMachine;
     private keyW: Input.Keyboard.Key;
     private keyA: Input.Keyboard.Key;
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
+    private id:string;
 
     constructor(
         scene: Phaser.Scene,
-        sprite: Phaser.Physics.Matter.Sprite,
-        gridEngine: GridEngine
+        sprite: Phaser.Physics.Arcade.Sprite,
+        gridEngine: GridEngine,
+        id: string
     ) {
         this.scene = scene;
         this.sprite = sprite;
         this.gridEngine = gridEngine;
+        this.id = id;
         this.stateMachine = new StateMachine(this, "hero");
 
         if (this.scene.input.keyboard) {
@@ -47,37 +50,33 @@ export default class CharacterController {
     }
 
     private idleOnEnter() {
-        this.sprite.play("player-idle");
+        //this.sprite.play("player-idle");
     }
 
     private idleOnUpdate() {
-        // if (this.cursors.left.isDown || this.cursors.right.isDown)
-        // {
-        // 	this.stateMachine.setState('walk')
-        // }
-        // const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space)
-        // if (spaceJustPressed)
-        // {
-        // 	this.stateMachine.setState('jump')
-        // }
+        if (this.keyW?.isDown || this.keyA?.isDown || this.keyS?.isDown || this.keyD?.isDown) {
+            this.stateMachine.setState('walk')
+        }
     }
-
     private walkOnEnter() {
-        // if (this.keyW?.isDown) {
-        //     this.gridEngine.move(this.id, Direction.UP);
-        // }
-        // if (this.keyA?.isDown) {
-        //     this.gridEngine.move(this.id, Direction.LEFT);
-        // }
-        // if (this.keyS?.isDown) {
-        //     this.gridEngine.move(this.id, Direction.DOWN);
-        // }
-        // if (this.keyD?.isDown) {
-        //     this.gridEngine.move(this.id, Direction.RIGHT);
-        // }
+        
     }
-
-    private walkOnUpdate() {}
+    private walkOnUpdate() {
+        if (this.keyW?.isDown) {
+            this.gridEngine.move(this.id, Direction.UP);
+        }
+        else if (this.keyA?.isDown) {
+            this.gridEngine.move(this.id, Direction.LEFT);
+        }
+        else if (this.keyS?.isDown) {
+            this.gridEngine.move(this.id, Direction.DOWN);
+        }
+        else if (this.keyD?.isDown) {
+            this.gridEngine.move(this.id, Direction.RIGHT);
+        } else {
+            this.stateMachine.setState('idle')
+        }
+    }
 
     private walkOnExit() {}
 }

@@ -145,9 +145,9 @@ export class Game extends Scene {
         this.hero = new Character(this, "hero", this.gridEngine, "hero");
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
-        this.hero.getBody().setSize(32, 64);
-        this.hero.getBody().setCollideWorldBounds(true);
-        this.hero.createMovementAnimations();
+        this.hero.init();
+        
+       
     }
 
     private initGridEngine() {
@@ -251,9 +251,9 @@ export class Game extends Scene {
         }
     }
 
-    update(): void {
+    update(t: number, dt: number): void {
         this.checkActiveTool();
-        this.hero.update();
+        this.hero.update(dt);
     }
 
     setActiveTool(tool: number) {
