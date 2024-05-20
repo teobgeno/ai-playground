@@ -2,14 +2,12 @@ import Phaser, { Tilemaps } from "phaser";
 import { Direction, GridEngine } from "grid-engine";
 import { Input, Physics } from "phaser";
 import CharacterController from "./CharacterController";
+import StateMachine from "./StateMachine";
 class Character extends Physics.Arcade.Sprite {
-    private keyW: Input.Keyboard.Key;
-    private keyA: Input.Keyboard.Key;
-    private keyS: Input.Keyboard.Key;
-    private keyD: Input.Keyboard.Key;
     private gridEngine: GridEngine;
     private id: string;
     private characterController: CharacterController;
+    private stateMachine: StateMachine;
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -26,12 +24,14 @@ class Character extends Physics.Arcade.Sprite {
         // }
         this.gridEngine = gridEngine;
         this.id = id;
+        this.stateMachine = new StateMachine(this, this.id);
         this.characterController = new CharacterController(
             this.scene,
-            this,
             this.gridEngine,
+            this.stateMachine,
             this.id
         );
+        
     }
 
     public init() {
@@ -39,24 +39,29 @@ class Character extends Physics.Arcade.Sprite {
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
         this.getBody().setCollideWorldBounds(true);
+       
     }
 
-    public getBody(): Physics.Arcade.Body {
-        return this.body as Physics.Arcade.Body;
+    public setCharState(state: string) {
+        this.stateMachine.setState(state);
+    }
+
+    public getId() {
+        return this.id;
     }
 
     update(dt: number): void {
         this.characterController.update(dt);
     }
 
-    public createMovementAnimations() {
+    private createMovementAnimations() {
         this.createAnimation("right", this.id, 143, 147, 15, true, true);
         this.createAnimation("up", this.id, 104, 112, 15, true, true);
         this.createAnimation("down", this.id, 130, 138, 15, true, true);
         this.createAnimation("left", this.id, 117, 121, 15, 10, true, true);
     }
 
-    public createHumanoidAnimations(key: string) {
+    private createHumanoidAnimations(key: string) {
         const texture = key;
         this.createAnimation(
             key + "_attack_right",
@@ -170,7 +175,7 @@ class Character extends Physics.Arcade.Sprite {
         );
     }
 
-    public createAnimation(
+    private createAnimation(
         key: string,
         texture: string,
         start: number,
@@ -206,6 +211,10 @@ class Character extends Physics.Arcade.Sprite {
                 return -1;
         }
         return -1;
+    }
+
+    public getBody(): Physics.Arcade.Body {
+        return this.body as Physics.Arcade.Body;
     }
 }
 export default Character;

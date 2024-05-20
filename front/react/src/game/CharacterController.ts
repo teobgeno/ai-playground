@@ -4,27 +4,24 @@ import StateMachine from "./StateMachine";
 
 export default class CharacterController {
     private scene: Phaser.Scene;
-    private sprite: Phaser.Physics.Arcade.Sprite;
     private gridEngine: GridEngine;
-    private stateMachine: StateMachine;
     private keyW: Input.Keyboard.Key;
     private keyA: Input.Keyboard.Key;
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
-    private id:string;
+    private stateMachine: StateMachine;
+    private id: string;
 
     constructor(
         scene: Phaser.Scene,
-        sprite: Phaser.Physics.Arcade.Sprite,
         gridEngine: GridEngine,
-        id: string
+        stateMachine: StateMachine,
+        id:string
     ) {
         this.scene = scene;
-        this.sprite = sprite;
         this.gridEngine = gridEngine;
+        this.stateMachine = stateMachine;
         this.id = id;
-        this.stateMachine = new StateMachine(this, "hero");
-
         if (this.scene.input.keyboard) {
             this.keyW = this.scene.input.keyboard.addKey("W");
             this.keyA = this.scene.input.keyboard.addKey("A");
@@ -53,7 +50,7 @@ export default class CharacterController {
         //this.sprite.play("player-idle");
     }
 
-    private idleOnUpdate() {
+    private idleOnUpdate = () => {
         if (this.keyW?.isDown || this.keyA?.isDown || this.keyS?.isDown || this.keyD?.isDown) {
             this.stateMachine.setState('walk')
         }
@@ -61,7 +58,7 @@ export default class CharacterController {
     private walkOnEnter() {
         
     }
-    private walkOnUpdate() {
+    private walkOnUpdate = () => {
         if (this.keyW?.isDown) {
             this.gridEngine.move(this.id, Direction.UP);
         }

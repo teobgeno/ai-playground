@@ -208,7 +208,6 @@ export class Game extends Scene {
             this.marker.y = this.map.tileToWorldY(pointerTileY) || 0;
 
             this.marker.setAlpha(1);
-
             if (this.input.manager.activePointer.isDown) {
                 //get tile from all leyer if ground is clear continue
                 const tileGround = this.map.getTileAt(
