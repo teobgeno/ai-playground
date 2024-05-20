@@ -3,11 +3,15 @@ import { Direction, GridEngine } from "grid-engine";
 import { Input, Physics } from "phaser";
 import CharacterController from "./CharacterController";
 import StateMachine from "./StateMachine";
+import { Task } from "./actions/types";
 class Character extends Physics.Arcade.Sprite {
     private gridEngine: GridEngine;
     private id: string;
     private characterController: CharacterController;
     private stateMachine: StateMachine;
+    private tasks: Array<Task>;
+    public currentTask: Task | undefined;
+
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -31,7 +35,7 @@ class Character extends Physics.Arcade.Sprite {
             this.stateMachine,
             this.id
         );
-        
+        this.tasks = [];
     }
 
     public init() {
@@ -39,19 +43,28 @@ class Character extends Physics.Arcade.Sprite {
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
         this.getBody().setCollideWorldBounds(true);
-       
-    }
-
-    public setCharState(state: string) {
-        this.stateMachine.setState(state);
     }
 
     public getId() {
         return this.id;
     }
 
+    public setCharState(state: string) {
+        this.stateMachine.setState(state);
+    }
+
+    public addTask(task: Task) {
+        this.tasks.push(task);
+    }
+
     update(dt: number): void {
         this.characterController.update(dt);
+        if (this.tasks.length > 0 && !this.currentTask) {
+            this.currentTask = this.tasks.shift();
+            if (this.currentTask) {
+                this.currentTask.start();
+            }
+        }
     }
 
     private createMovementAnimations() {

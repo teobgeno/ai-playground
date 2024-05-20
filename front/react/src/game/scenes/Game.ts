@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
+import WeedingTask from "../actions/WeedingTask";
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -9,6 +10,7 @@ export class Game extends Scene {
 
     gameText: Phaser.GameObjects.Text;
     gridEngine: GridEngine;
+    charactersMap :Map<string, Character>
     hero: Character;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
@@ -52,6 +54,11 @@ export class Game extends Scene {
     }
 
     create() {
+
+        this.charactersMap = new Map();
+        this.charToolsMap = new Map();
+        this.charToolsMap.set(1, { id: 1, title: "hoe" });
+
         this.initMap();
         this.initHero();
         this.initGridEngine();
@@ -68,8 +75,7 @@ export class Game extends Scene {
         this.marker.setDepth(1);
         this.marker.setAlpha(0);
 
-        this.charToolsMap = new Map();
-        this.charToolsMap.set(1, { id: 1, title: "hoe" });
+        
 
         EventBus.emit("current-scene-ready", this);
 
@@ -88,6 +94,10 @@ export class Game extends Scene {
         //     // this.arrow.body.reset(worldX, worldY);
         //     // this.arrow.setVisible(true);
         // });
+
+        this.input.on('pointerdown', () => {
+           this.checkActiveTool();
+        });
     }
 
     private initMap() {
@@ -146,8 +156,7 @@ export class Game extends Scene {
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
         this.hero.init();
-        
-       
+        this.charactersMap.set("hero", this.hero);
     }
 
     private initGridEngine() {
@@ -179,9 +188,16 @@ export class Game extends Scene {
 
         this.gridEngine
           .positionChangeFinished()
-          .subscribe(({ enterTile }) => {
-            // // check https://annoraaq.github.io/grid-engine/api/classes/GridEngineHeadless.html#move
-            // //this.gridEngineHeadless.stopMovement("player")
+          .subscribe(({ charId, enterTile }) => {
+            console.log(enterTile)
+            const char = this.charactersMap.get(charId);
+            if(char && char.currentTask) {
+                // console.log(char.currentTask.posX)
+                // console.log(char.currentTask.posY)
+                if (enterTile.x == char.currentTask.posX && enterTile.y == char.currentTask.posY) {
+                    char.currentTask.next();
+                }
+            }
             // this.posX = enterTile.x
             // this.posY = enterTile.y
             // if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
@@ -215,12 +231,8 @@ export class Game extends Scene {
             const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
             const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
 
-            // Snap to tile coordinates, but in world space
-            this.marker.x = this.map.tileToWorldX(pointerTileX) || 0;
-            this.marker.y = this.map.tileToWorldY(pointerTileY) || 0;
-
-            this.marker.setAlpha(1);
-            if (this.input.manager.activePointer.isDown) {
+   
+            //if (this.input.manager.activePointer.isDown && this.activeTool === 1) {
                 //get tile from all leyer if ground is clear continue
                 const tileGround = this.map.getTileAt(
                     pointerTileX,
@@ -248,22 +260,39 @@ export class Game extends Scene {
                         "wheat"
                     );
                     t.setDepth(1);
-                    console.log(tileGround.x + "---" + tileGround.y);
-                    this.gridEngine.moveTo("hero", {
-                        x: tileGround.x,
-                        y: tileGround.y,
-                    });
-
+                    //console.log(tileGround.x + "---" + tileGround.y);
+                    // this.gridEngine.moveTo("hero", {
+                    //     x: tileGround.x,
+                    //     y: tileGround.y,
+                    // });
+                    const w = new WeedingTask(this.hero, this.gridEngine, tileGround.x, tileGround.y);
+                    this.hero.addTask(w);
+                    //w.start();
                     //pixelX
                 }
-
                 //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
-            }
+            //}
         }
     }
 
     update(t: number, dt: number): void {
-        this.checkActiveTool();
+
+        if (this.activeTool === 1) {
+            const worldPoint = this.input.activePointer.positionToCamera(
+                this.cameras.main
+            );
+
+            // Rounds down to nearest tile
+            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
+            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
+
+            // Snap to tile coordinates, but in world space
+            this.marker.x = this.map.tileToWorldX(pointerTileX) || 0;
+            this.marker.y = this.map.tileToWorldY(pointerTileY) || 0;
+            this.marker.setAlpha(1);
+
+        }
+       
         this.hero.update(dt);
     }
 
