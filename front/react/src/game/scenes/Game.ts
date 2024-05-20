@@ -168,13 +168,13 @@ export class Game extends Scene {
 
         this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
             this.hero.anims.stop();
-            this.hero.setFrame(this.hero.getStopFrame(direction));
+            //this.hero.setFrame(this.hero.getStopFrame(direction));
         });
 
         this.gridEngine
             .directionChanged()
             .subscribe(({ charId, direction }) => {
-                this.hero.setFrame(this.hero.getStopFrame(direction));
+                //this.hero.setFrame(this.hero.getStopFrame(direction));
             });
     }
 
