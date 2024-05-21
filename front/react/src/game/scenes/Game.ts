@@ -189,7 +189,7 @@ export class Game extends Scene {
         this.gridEngine
           .positionChangeFinished()
           .subscribe(({ charId, enterTile }) => {
-            console.log(enterTile)
+            //console.log(enterTile)
             const char = this.charactersMap.get(charId);
             if(char && char.currentTask) {
                 // console.log(char.currentTask.posX)

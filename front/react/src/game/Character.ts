@@ -3,7 +3,7 @@ import { Direction, GridEngine } from "grid-engine";
 import { Input, Physics } from "phaser";
 import CharacterController from "./CharacterController";
 import StateMachine from "./StateMachine";
-import { Task } from "./actions/types";
+import { Task, TaskStatus } from "./actions/types";
 class Character extends Physics.Arcade.Sprite {
     private gridEngine: GridEngine;
     private id: string;
@@ -59,7 +59,7 @@ class Character extends Physics.Arcade.Sprite {
 
     update(dt: number): void {
         this.characterController.update(dt);
-        if (this.tasks.length > 0 && !this.currentTask) {
+        if ((this.tasks.length > 0 && !this.currentTask) || (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)) {
             this.currentTask = this.tasks.shift();
             if (this.currentTask) {
                 this.currentTask.start();

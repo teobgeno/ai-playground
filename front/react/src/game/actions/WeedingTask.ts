@@ -1,13 +1,14 @@
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import MoveCharAction from "./MoveCharAction";
-import {Task} from "./types";
+import {Task, TaskStatus} from "./types";
 
 export default class WeedingTask implements Task{
     private character: Character;
     private gridEngine: GridEngine;
     public posX: number;
     public posY: number;
+    public status: TaskStatus;
     private pointer: number = 0;
 
     constructor(
@@ -21,7 +22,11 @@ export default class WeedingTask implements Task{
         this.posX = posX;
         this.posY = posY;
     }
+    public getStatus() {
+       return this.status;
+    }
     public start() {
+        this.status = TaskStatus.Running;
         this.pointer = 1;
         this.next();
     }
@@ -32,6 +37,7 @@ export default class WeedingTask implements Task{
                 break;
             case 2:
                 console.log('next step')
+                this.status = TaskStatus.Completed;
                 break;
         }
     };
