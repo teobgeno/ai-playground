@@ -71,18 +71,18 @@ class Character extends Physics.Arcade.Sprite {
         this.createAnimation("right", this.id, 143, 147, 15, true, true);
         this.createAnimation("up", this.id, 104, 112, 15, true, true);
         this.createAnimation("down", this.id, 130, 138, 15, true, true);
-        this.createAnimation("left", this.id, 117, 121, 15, 10, true, true);
+        this.createAnimation("left", this.id, 117, 121, 15, true, true);
     }
 
     private createHumanoidAnimations(key: string) {
         const texture = key;
         this.createAnimation(
-            key + "_attack_right",
+            "attack_right",
             texture,
             195,
             200,
             15,
-            false,
+            true,
             true
         );
         this.createAnimation(

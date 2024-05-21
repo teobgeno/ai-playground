@@ -71,8 +71,11 @@ export default class CharacterController {
         else if (this.keyD?.isDown) {
             this.gridEngine.move(this.id, Direction.RIGHT);
         } else {
-            this.stateMachine.setState('idle')
+            if(!this.gridEngine.isMoving(this.id)) {
+                this.stateMachine.setState('idle')
+            }
         }
+        //console.log(this.gridEngine.isMoving(this.id))
     }
 
     private walkOnExit() {}

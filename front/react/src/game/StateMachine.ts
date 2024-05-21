@@ -63,7 +63,7 @@ export default class StateMachine
 	{
 		if (!this.states.has(name))
 		{
-			console.warn(`Tried to change to unknown state: ${name}`)
+			console.error(`Tried to change to unknown state: ${name}`)
 			return
 		}
 

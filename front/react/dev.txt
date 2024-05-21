@@ -1,2 +1,9 @@
 https://github.com/phaserjs/template-react
 https://github.com/slysnek/rs-clone/blob/develop/src/game/entity.ts
+
+
+https://github.com/amcolash/farming-game/tree/master
+https://www.binpress.com/create-mobile-html5-farming-game/
+
+--- for tiles ----
+https://github.com/Blockost/farming-rpg/tree/master
