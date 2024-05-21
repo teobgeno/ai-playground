@@ -36,8 +36,7 @@ export default class WeedingTask implements Task{
                 this.moveCharacter();
                 break;
             case 2:
-                console.log('next step')
-                this.status = TaskStatus.Completed;
+               this.weedGround();
                 break;
         }
     };
@@ -52,5 +51,12 @@ export default class WeedingTask implements Task{
         );
         m.execute();
         //this.next();
+    }
+
+    private weedGround() {
+        console.log('weeding');
+        setTimeout(() => {
+            this.status = TaskStatus.Completed;
+          }, 1000);
     }
 }
