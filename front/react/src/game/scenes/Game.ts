@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
+import {Land} from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
 
 export class Game extends Scene {
@@ -44,6 +45,11 @@ export class Game extends Scene {
         this.load.spritesheet("hero", "assets/sprites/hero.png", {
             frameWidth: 64,
             frameHeight: 64,
+        });
+
+        this.load.spritesheet('crops', '/assets/sprites/crops_1/crops.png', {
+            frameWidth: 32,
+            frameHeight: 64
         });
 
         this.load.atlas(
@@ -253,13 +259,16 @@ export class Game extends Scene {
                         `Properties: ${JSON.stringify(tileGround.properties)}`
                     );
                     //tile.properties.viewed = true;
-                    const t = this.add.sprite(
-                        tileGround.pixelX + 16,
-                        tileGround.pixelY + 16,
-                        "items",
-                        "wheat"
-                    );
-                    t.setDepth(1);
+                    // const t = this.add.sprite(
+                    //     tileGround.pixelX + 16,
+                    //     tileGround.pixelY + 16,
+                    //     "items",
+                    //     "wheat"
+                    // );
+                    // t.setDepth(1);
+
+                    const l = new Land(this,tileGround.pixelX + 16, tileGround.pixelY)
+
                     //console.log(tileGround.x + "---" + tileGround.y);
                     // this.gridEngine.moveTo("hero", {
                     //     x: tileGround.x,

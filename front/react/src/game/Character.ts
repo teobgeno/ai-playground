@@ -1,6 +1,5 @@
-import Phaser, { Tilemaps } from "phaser";
-import { Direction, GridEngine } from "grid-engine";
-import { Input, Physics } from "phaser";
+import Phaser, { Physics }  from "phaser";
+import { GridEngine } from "grid-engine";
 import CharacterController from "./CharacterController";
 import StateMachine from "./StateMachine";
 import { Task, TaskStatus } from "./actions/types";

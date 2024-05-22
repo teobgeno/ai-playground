@@ -13,3 +13,4 @@ https://github.com/jhvozdovich/stardew_harvest_crossing/tree/master/src
 
 
 https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
+https://github.com/amcolash/farming-game/blob/master/src/game/daynight.ts
