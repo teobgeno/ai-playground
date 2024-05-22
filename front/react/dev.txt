@@ -7,3 +7,8 @@ https://www.binpress.com/create-mobile-html5-farming-game/
 
 --- for tiles ----
 https://github.com/Blockost/farming-rpg/tree/master
+
+
+
+
+https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
