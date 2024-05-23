@@ -11,14 +11,17 @@ export class Game extends Scene {
 
     gameText: Phaser.GameObjects.Text;
     gridEngine: GridEngine;
-    charactersMap :Map<string, Character>
     hero: Character;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
     private marker: Phaser.GameObjects.Graphics;
-    private charToolsMap: Map<number, object>;
+   
     private activeTool: number;
     private propertiesText;
+
+    private charactersMap :Map<string, Character>
+    private charToolsMap: Map<number, object>;
+    private landsMap: Array<Land> = [];
     constructor() {
         super("Game");
     }
@@ -47,10 +50,11 @@ export class Game extends Scene {
             frameHeight: 64,
         });
 
-        this.load.spritesheet('crops', '/assets/sprites/crops/1/crops.png', {
-            frameWidth: 32,
-            frameHeight: 64
-        });
+        // this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', {
+        //     frameWidth: 32,
+        //     frameHeight: 64
+        // });
+        this.load.spritesheet('crops', 'assets/sprites/crops/2/crops.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.atlas(
             "items",
@@ -254,6 +258,7 @@ export class Game extends Scene {
                 );
 
                 if (tileGround && !tileTree) {
+                    console.log(tileGround)
                     // Note: JSON.stringify will convert the object tile properties to a string
                     this.propertiesText.setText(
                         `Properties: ${JSON.stringify(tileGround.properties)}`
@@ -266,8 +271,8 @@ export class Game extends Scene {
                     //     "wheat"
                     // );
                     // t.setDepth(1);
-
-                    const l = new Land(this,tileGround.pixelX + 16, tileGround.pixelY)
+                    this.landsMap.push(new Land(this,tileGround.pixelX, tileGround.pixelY));
+                    
 
                     //console.log(tileGround.x + "---" + tileGround.y);
                     // this.gridEngine.moveTo("hero", {
@@ -284,7 +289,7 @@ export class Game extends Scene {
         }
     }
 
-    update(t: number, dt: number): void {
+    update(time: number, delta: number): void {
 
         if (this.activeTool === 1) {
             const worldPoint = this.input.activePointer.positionToCamera(
@@ -302,7 +307,11 @@ export class Game extends Scene {
 
         }
        
-        this.hero.update(dt);
+        this.hero.update(delta);
+        for (const land of this.landsMap) {
+            land.update(time, delta)
+        }
+        
     }
 
     setActiveTool(tool: number) {
