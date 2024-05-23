@@ -1,10 +1,20 @@
 import { Physics } from "phaser";
 import { Crop } from "./Crop";
 //extends Physics.Arcade.Sprite
+
+export enum LandState {
+    EMPTY,
+    PLOWED,
+    PLANTED,
+    READY
+  }
+
 export class Land {
     private crop: Crop;
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
+
+    //status plowed, planted
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         //super(scene, 0, 0, 'land');

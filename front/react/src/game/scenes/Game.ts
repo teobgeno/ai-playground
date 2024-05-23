@@ -47,7 +47,7 @@ export class Game extends Scene {
             frameHeight: 64,
         });
 
-        this.load.spritesheet('crops', '/assets/sprites/crops_1/crops.png', {
+        this.load.spritesheet('crops', '/assets/sprites/crops/1/crops.png', {
             frameWidth: 32,
             frameHeight: 64
         });
