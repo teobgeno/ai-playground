@@ -2,6 +2,7 @@ import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import MoveCharAction from "./MoveCharAction";
 import {Task, TaskStatus} from "./types";
+import {Land} from "../farm/Land";
 
 export default class WeedingTask implements Task{
     private character: Character;
@@ -10,17 +11,20 @@ export default class WeedingTask implements Task{
     public posY: number;
     public status: TaskStatus;
     private pointer: number = 0;
+    private landTile:Land;
 
     constructor(
         character: Character,
         gridEngine: GridEngine,
         posX: number,
-        posY: number
+        posY: number,
+        landTile: Land
     ) {
         this.character = character;
         this.gridEngine = gridEngine;
         this.posX = posX;
         this.posY = posY;
+        this.landTile = landTile;
     }
     public getStatus() {
        return this.status;
@@ -61,6 +65,7 @@ export default class WeedingTask implements Task{
             this.status = TaskStatus.Completed;
             this.character.anims.restart();
             this.character.anims.stop();
+            this.landTile.init();
             //this.character.setCharState('idle')
           }, 1000);
     }

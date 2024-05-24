@@ -4,6 +4,7 @@ import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import {Land} from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
+import {DayNight} from "..//DayNight";
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -54,7 +55,7 @@ export class Game extends Scene {
         //     frameWidth: 32,
         //     frameHeight: 64
         // });
-        this.load.spritesheet('crops', 'assets/sprites/crops/2/crops.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', { frameWidth: 32, frameHeight: 64 });
 
         this.load.atlas(
             "items",
@@ -108,6 +109,10 @@ export class Game extends Scene {
         this.input.on('pointerdown', () => {
            this.checkActiveTool();
         });
+
+        // const d = new DayNight(this,0,0,1024,768)
+        // d.update(512,384);
+        // d.setDepth(4)
     }
 
     private initMap() {
@@ -271,7 +276,7 @@ export class Game extends Scene {
                     //     "wheat"
                     // );
                     // t.setDepth(1);
-                    this.landsMap.push(new Land(this,tileGround.pixelX, tileGround.pixelY));
+                    
                     
 
                     //console.log(tileGround.x + "---" + tileGround.y);
@@ -279,7 +284,9 @@ export class Game extends Scene {
                     //     x: tileGround.x,
                     //     y: tileGround.y,
                     // });
-                    const w = new WeedingTask(this.hero, this.gridEngine, tileGround.x, tileGround.y);
+                    const landTile = new Land(this,tileGround.pixelX, tileGround.pixelY)
+                    this.landsMap.push(landTile);
+                    const w = new WeedingTask(this.hero, this.gridEngine, tileGround.x, tileGround.y, landTile);
                     this.hero.addTask(w);
                     //w.start();
                     //pixelX
