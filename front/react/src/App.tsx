@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { MainMenu } from "./game/scenes/MainMenu";
 import { Game } from "./game/scenes/Game";
+import "./App.css";
 
 function App() {
     // The sprite can only be moved in the MainMenu Scene
@@ -64,34 +65,37 @@ function App() {
             }
         }
     };
-
+    //TODO::add toolbar
+    //https://codepen.io/cameronbaney/pen/nPpEqw
+    //http://cssstars.com/mac-os-dock-menu-css3/
+    //https://codepen.io/ZaynAlaoudi/pen/EorLMm
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            <div style={{marginLeft: '60px'}}>
-                <div>
-                    <button className="button" onClick={() => pickTool(1)}>
-                        Use Hoe
-                    </button>
-                </div>
-                <div>
-                    <button
-                        disabled={canMoveSprite}
-                        className="button"
-                        onClick={moveSprite}
-                    >
-                        Toggle Movement
-                    </button>
-                </div>
-                <div className="spritePosition">
-                    Sprite Position:
-                    <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                </div>
-                <div>
-                    <button className="button" onClick={addSprite}>
-                        Add New Sprite
-                    </button>
-                </div>
+            <div style={{position:'relative'}}>
+                <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+            
+                <ul className="toolbar cf">
+                    <li>
+                        <a href="#" onClick={() => pickTool(1)} style={{paddingLeft:'10px'}}>
+                            <i className="icon-home">⛏️</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" style={{paddingLeft:'10px'}}>
+                            <i className="icon-comments-alt">🌿</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" style={{paddingLeft:'10px'}}>
+                            <i className="icon-heart-empty">🌊</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" style={{paddingLeft:'10px'}}>
+                            <i className="icon-cloud"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     );

@@ -214,13 +214,13 @@ class Character extends Physics.Arcade.Sprite {
     public getStopFrame(direction: string) {
         switch (direction) {
             case "up":
-                return -1;
+                return 104;
             case "right":
-                return -1;
+                return 143;
             case "down":
-                return -1;
+                return 130;
             case "left":
-                return -1;
+                return 117;
         }
         return -1;
     }

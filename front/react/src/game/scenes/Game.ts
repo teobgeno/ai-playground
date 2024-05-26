@@ -15,7 +15,7 @@ export class Game extends Scene {
     hero: Character;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
-    private marker: Phaser.GameObjects.Graphics;
+    private marker: Phaser.GameObjects.Rectangle;
    
     private activeTool: number;
     private propertiesText;
@@ -23,6 +23,7 @@ export class Game extends Scene {
     private charactersMap :Map<string, Character>
     private charToolsMap: Map<number, object>;
     private landsMap: Array<Land> = [];
+    private farmLandMap :Map<string, string>
     constructor() {
         super("Game");
     }
@@ -56,6 +57,7 @@ export class Game extends Scene {
         //     frameHeight: 64
         // });
         this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('land', 'assets/sprites/crops/2/crops.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.atlas(
             "items",
@@ -80,9 +82,10 @@ export class Game extends Scene {
             color: "#000",
         });
 
-        this.marker = this.add.graphics();
-        this.marker.lineStyle(2, 0x000000, 1);
-        this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
+        //this.marker = this.add.graphics();
+        // this.marker.lineStyle(2, 0x000000, 1);
+        // this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
+        this.marker = this.add.rectangle(0, 0, this.map.tileWidth, this.map.tileHeight, 0x000000, 0)
         this.marker.setDepth(1);
         this.marker.setAlpha(0);
 
@@ -106,9 +109,52 @@ export class Game extends Scene {
         //     // this.arrow.setVisible(true);
         // });
 
-        this.input.on('pointerdown', () => {
+        this.input.on('pointerup', () => {
            this.checkActiveTool();
         });
+
+        this.input.on('pointermove', () => {
+            if (this.activeTool === 1) {
+            
+                const worldPoint = this.input.activePointer.positionToCamera(
+                    this.cameras.main
+                );
+
+                // Rounds down to nearest tile
+                const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
+                const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
+                if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
+                    this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
+                } else {
+                    this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
+                }
+            }
+        });
+
+        this.farmLandMap = new Map();
+        
+        for (let y =0; y < this.map.height; y++) {
+            for (let x =0; x < this.map.width; x++) {
+                const tileGround = this.map.getTileAt(
+                    x,
+                    y,
+                    false,
+                    "Ground"
+                );
+        
+                const tileTree = this.map.getTileAt(
+                    x,
+                    y,
+                    false,
+                    "Trees"
+                );
+
+                if(tileGround && !tileTree) {
+                    this.farmLandMap.set(x + '-' + y, 'soil');
+                }
+            }
+        }
+        
 
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
@@ -192,7 +238,7 @@ export class Game extends Scene {
 
         this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
             this.hero.anims.stop();
-            //this.hero.setFrame(this.hero.getStopFrame(direction));
+            this.hero.setFrame(this.hero.getStopFrame(direction));
         });
 
         this.gridEngine
@@ -246,53 +292,38 @@ export class Game extends Scene {
             const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
             const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
 
-   
-            //if (this.input.manager.activePointer.isDown && this.activeTool === 1) {
-                //get tile from all leyer if ground is clear continue
+            if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
+                console.log('ok')
+                //console.log(tileGround)
+                // Note: JSON.stringify will convert the object tile properties to a string
+                // this.propertiesText.setText(
+                //     `Properties: ${JSON.stringify(tileGround.properties)}`
+                // );
+                //tile.properties.viewed = true;
+                // const t = this.add.sprite(
+                //     tileGround.pixelX + 16,
+                //     tileGround.pixelY + 16,
+                //     "items",
+                //     "wheat"
+                // );
+ 
                 const tileGround = this.map.getTileAt(
                     pointerTileX,
                     pointerTileY,
                     false,
                     "Ground"
                 );
-                const tileTree = this.map.getTileAt(
-                    pointerTileX,
-                    pointerTileY,
-                    false,
-                    "Trees"
-                );
 
-                if (tileGround && !tileTree) {
-                    console.log(tileGround)
-                    // Note: JSON.stringify will convert the object tile properties to a string
-                    this.propertiesText.setText(
-                        `Properties: ${JSON.stringify(tileGround.properties)}`
-                    );
-                    //tile.properties.viewed = true;
-                    // const t = this.add.sprite(
-                    //     tileGround.pixelX + 16,
-                    //     tileGround.pixelY + 16,
-                    //     "items",
-                    //     "wheat"
-                    // );
-                    // t.setDepth(1);
-                    
-                    
-
-                    //console.log(tileGround.x + "---" + tileGround.y);
-                    // this.gridEngine.moveTo("hero", {
-                    //     x: tileGround.x,
-                    //     y: tileGround.y,
-                    // });
+                if(tileGround) {
+                    this.farmLandMap.set(pointerTileX + '-' + pointerTileY, 'land')
                     const landTile = new Land(this,tileGround.pixelX, tileGround.pixelY)
                     this.landsMap.push(landTile);
                     const w = new WeedingTask(this.hero, this.gridEngine, tileGround.x, tileGround.y, landTile);
                     this.hero.addTask(w);
-                    //w.start();
-                    //pixelX
                 }
-                //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
-            //}
+            }
+            //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
+          
         }
     }
 
@@ -308,10 +339,12 @@ export class Game extends Scene {
             const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
 
             // Snap to tile coordinates, but in world space
-            this.marker.x = this.map.tileToWorldX(pointerTileX) || 0;
-            this.marker.y = this.map.tileToWorldY(pointerTileY) || 0;
+            this.marker.x = (this.map.tileToWorldX(pointerTileX)|| 0) + 16;
+            this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
             this.marker.setAlpha(1);
 
+        } else {
+            this.marker.setAlpha(0);
         }
        
         this.hero.update(delta);

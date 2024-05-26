@@ -32,13 +32,30 @@ export class Land {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
-        this.crop = new Crop();
-        //this.sprite = scene.add.sprite(x, y, "crops", 34); 19 for crops_2
-        this.landState = LandState.PLANTED;
-        this.sprite = scene.add.sprite(x+16, y, "crops", 30);
-        this.sprite.setInteractive({ useHandCursor: true });
-        this.sprite.setDepth(1);
-        this.sprite.setAlpha(0.4);
+       
+    
+        // this.landState = LandState.PLANTED;
+        // this.crop = new Crop();
+
+        this.landState = LandState.PLOWED;
+
+        const t = scene.add.sprite(x+16, y+16, "land", 18)
+        t.setDepth(1);
+
+        const r = Math.floor(Math.random() * 10)
+        if(r > 5) {
+          t.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
+        }
+        
+        //this.sprite.setAlpha(0.4);
+
+        // this.sprite = scene.add.sprite(x+16, y, "crops", 30);
+        // this.sprite.setInteractive({ useHandCursor: true });
+        // this.sprite.setDepth(2);
+
+       
+
+        
         // this.life = 90;
         // this.health = 0.002;
         // this.health = ((( this.health + 1) / 2) * 0.4) + 0.6;
@@ -50,7 +67,7 @@ export class Land {
 
     public init() {
       this.isConstructed = true;
-      this.sprite.setAlpha(1);
+      //this.sprite.setAlpha(1);
     }
 
     public update(time: number, delta: number) {
