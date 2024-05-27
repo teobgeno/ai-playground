@@ -1,7 +1,7 @@
+import {Task, TaskStatus} from "./types";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import MoveCharAction from "./MoveCharAction";
-import {Task, TaskStatus} from "./types";
 import {Land} from "../farm/Land";
 
 export default class WeedingTask implements Task{

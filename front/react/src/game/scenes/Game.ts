@@ -4,7 +4,8 @@ import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import {Land} from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
-import {DayNight} from "..//DayNight";
+import {DayNight} from "../DayNight";
+import {ToolManager} from "../tools/ToolManager";
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -24,6 +25,7 @@ export class Game extends Scene {
     private charToolsMap: Map<number, object>;
     private landsMap: Array<Land> = [];
     private farmLandMap :Map<string, string>
+    private toolManager:ToolManager
     constructor() {
         super("Game");
     }
@@ -91,8 +93,6 @@ export class Game extends Scene {
 
         
 
-        EventBus.emit("current-scene-ready", this);
-
         // this.input.on('pointerup', (pointer:any) => {
         //     // Get the WORLD x and y position of the pointer
         //     const {worldX, worldY} = pointer;
@@ -110,25 +110,15 @@ export class Game extends Scene {
         // });
 
         this.input.on('pointerup', () => {
-           this.checkActiveTool();
+           this.toolManager.onPointerUp(this.input.activePointer.positionToCamera(
+            this.cameras.main
+            ))
         });
 
         this.input.on('pointermove', () => {
-            if (this.activeTool === 1) {
-            
-                const worldPoint = this.input.activePointer.positionToCamera(
-                    this.cameras.main
-                );
-
-                // Rounds down to nearest tile
-                const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
-                const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
-                if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
-                    this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
-                } else {
-                    this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
-                }
-            }
+            this.toolManager.onPointerMove(this.input.activePointer.positionToCamera(
+                this.cameras.main
+            ))
         });
 
         this.farmLandMap = new Map();
@@ -155,10 +145,11 @@ export class Game extends Scene {
             }
         }
         
-
+        this.toolManager = new ToolManager(this, this.map, this.gridEngine,this.hero, this.farmLandMap, this.landsMap, this.marker)
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
+        EventBus.emit("current-scene-ready", this);
     }
 
     private initMap() {
@@ -280,73 +271,8 @@ export class Game extends Scene {
         //     this.map.heightInPixels
         // );
     }
-
-    private checkActiveTool() {
-        if (this.activeTool === 1) {
-            //https://labs.phaser.io/edit.html?src=src/input\camera\world%20coordinates.js
-            const worldPoint = this.input.activePointer.positionToCamera(
-                this.cameras.main
-            );
-
-            // Rounds down to nearest tile
-            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
-            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
-
-            if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
-                console.log('ok')
-                //console.log(tileGround)
-                // Note: JSON.stringify will convert the object tile properties to a string
-                // this.propertiesText.setText(
-                //     `Properties: ${JSON.stringify(tileGround.properties)}`
-                // );
-                //tile.properties.viewed = true;
-                // const t = this.add.sprite(
-                //     tileGround.pixelX + 16,
-                //     tileGround.pixelY + 16,
-                //     "items",
-                //     "wheat"
-                // );
- 
-                const tileGround = this.map.getTileAt(
-                    pointerTileX,
-                    pointerTileY,
-                    false,
-                    "Ground"
-                );
-
-                if(tileGround) {
-                    this.farmLandMap.set(pointerTileX + '-' + pointerTileY, 'land')
-                    const landTile = new Land(this,tileGround.pixelX, tileGround.pixelY)
-                    this.landsMap.push(landTile);
-                    const w = new WeedingTask(this.hero, this.gridEngine, tileGround.x, tileGround.y, landTile);
-                    this.hero.addTask(w);
-                }
-            }
-            //  this.map.putTileAt(this.selectedTile, pointerTileX, pointerTileY);
-          
-        }
-    }
-
+    
     update(time: number, delta: number): void {
-
-        if (this.activeTool === 1) {
-            const worldPoint = this.input.activePointer.positionToCamera(
-                this.cameras.main
-            );
-
-            // Rounds down to nearest tile
-            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
-            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
-
-            // Snap to tile coordinates, but in world space
-            this.marker.x = (this.map.tileToWorldX(pointerTileX)|| 0) + 16;
-            this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
-            this.marker.setAlpha(1);
-
-        } else {
-            this.marker.setAlpha(0);
-        }
-       
         this.hero.update(delta);
         for (const land of this.landsMap) {
             land.update(time, delta)
@@ -355,13 +281,11 @@ export class Game extends Scene {
     }
 
     setActiveTool(tool: number) {
-        //this.scene.start("GameOver");
-        console.log("chang scene from react");
+        this.toolManager.setActiveTool(tool);
         if(this.activeTool && this.activeTool === tool) {
             this.activeTool = 0;
         } else {
             this.activeTool = tool;
         }
-        
     }
 }

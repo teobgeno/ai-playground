@@ -38,14 +38,13 @@ export class Land {
         // this.crop = new Crop();
 
         this.landState = LandState.PLOWED;
-
         const t = scene.add.sprite(x+16, y+16, "land", 18)
         t.setDepth(1);
 
-        const r = Math.floor(Math.random() * 10)
-        if(r > 5) {
-          t.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
-        }
+        // const r = Math.floor(Math.random() * 10)
+        // if(r > 5) {
+        //   t.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
+        // }
         
         //this.sprite.setAlpha(0.4);
 
