@@ -52,10 +52,12 @@ export class Game extends Scene {
             frameHeight: 64,
         });
 
-        // this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', {
-        //     frameWidth: 32,
-        //     frameHeight: 64
-        // });
+        this.load.spritesheet("npc", "assets/sprites/characters.png", {
+            frameWidth: 52,
+            frameHeight: 72,
+          });
+
+    
         this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet('land', 'assets/sprites/crops/2/crops.png', { frameWidth: 32, frameHeight: 32 });
 
@@ -156,8 +158,14 @@ export class Game extends Scene {
         });
         const tilesets = this.map.addTilesetImage("farm", "tiles");
         if (tilesets) {
-            this.map.createLayer("Ground", tilesets, 0, 0);
-            this.map.createLayer("Trees", tilesets, 0, 0);
+            // this.map.createLayer("Collision", tilesets, 0, 0);
+            // this.map.createLayer("Trees", tilesets, 0, 0);
+            // this.map.createLayer("Ground", tilesets, 0, 0);
+            for (let i = 0; i < this.map.layers.length; i++) {
+                const layer = this.map.createLayer(i, tilesets, 0, 0);
+                //layer.scale = 3;
+            }
+            
             // trees?.setCollisionByProperty({ collides: true });
             // if (trees) {
             //     this.physics.add.collider(this.hero, trees);
@@ -214,18 +222,36 @@ export class Game extends Scene {
                     id: "hero",
                     sprite: this.hero,
                     startPosition: { x: 15, y: 10 },
+                    // charLayer: "CharLayer"
                 },
             ],
         };
+
+        const npcSprite = this.add.sprite(0, 0, "npc");
+        gridEngineConfig.characters.push({
+            id: "npc0",
+            sprite: npcSprite,
+            walkingAnimationMapping: 1,
+            startPosition: { x: 12, y: 5 },
+            speed: 3,
+        });
+        //npcSprite.scale = 1.5;
+
         this.gridEngine.create(this.map, gridEngineConfig);
+        //this.gridEngine.moveRandomly("npc0", 1500);
 
         this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
-            this.hero.anims.play(direction);
+            if(charId === 'hero') {
+                this.hero.anims.play(direction);
+            }
+           
         });
 
         this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
-            this.hero.anims.stop();
-            this.hero.setFrame(this.hero.getStopFrame(direction));
+            if(charId === 'hero') {
+                this.hero.anims.stop();
+                this.hero.setFrame(this.hero.getStopFrame(direction));
+            }
         });
 
         this.gridEngine

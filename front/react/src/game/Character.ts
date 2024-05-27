@@ -41,7 +41,7 @@ class Character extends Physics.Arcade.Sprite {
         this.createMovementAnimations();
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
-        this.getBody().setCollideWorldBounds(true);
+        //this.getBody().setCollideWorldBounds(true);
     }
 
     public getId() {
