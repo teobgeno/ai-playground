@@ -3,9 +3,8 @@ import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import {Land} from "../farm/Land";
-import WeedingTask from "../actions/WeedingTask";
-import {DayNight} from "../DayNight";
-import {ToolManager} from "../tools/ToolManager";
+// import {DayNight} from "../DayNight";
+import {CursorManager} from "../cursors/CursorManager";
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -24,7 +23,7 @@ export class Game extends Scene {
     private charactersMap :Map<string, Character>
     private landsMap: Array<Land> = [];
     private farmLandMap :Map<string, string>
-    private toolManager:ToolManager
+    private cursorManager:CursorManager
     constructor() {
         super("Game");
     }
@@ -107,13 +106,13 @@ export class Game extends Scene {
         // });
 
         this.input.on('pointerup', () => {
-           this.toolManager.onPointerUp(this.input.activePointer.positionToCamera(
+           this.cursorManager.onPointerUp(this.input.activePointer.positionToCamera(
             this.cameras.main
             ))
         });
 
         this.input.on('pointermove', () => {
-            this.toolManager.onPointerMove(this.input.activePointer.positionToCamera(
+            this.cursorManager.onPointerMove(this.input.activePointer.positionToCamera(
                 this.cameras.main
             ))
         });
@@ -142,7 +141,7 @@ export class Game extends Scene {
             }
         }
         
-        this.toolManager = new ToolManager(this, this.map, this.gridEngine,this.hero, this.farmLandMap, this.landsMap, this.marker)
+        this.cursorManager = new CursorManager(this, this.map, this.gridEngine,this.hero, this.farmLandMap, this.landsMap, this.marker)
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
@@ -277,12 +276,12 @@ export class Game extends Scene {
         
     }
 
-    setActiveTool(tool: number) {
-        this.toolManager.setActiveTool(tool);
-        if(this.activeTool && this.activeTool === tool) {
-            this.activeTool = 0;
-        } else {
-            this.activeTool = tool;
-        }
+    setActiveTool(cursor: number) {
+        this.cursorManager.setActiveCursor(cursor);
+        // if(this.activeTool && this.activeTool === tool) {
+        //     this.activeTool = 0;
+        // } else {
+        //     this.activeTool = tool;
+        // }
     }
 }

@@ -7,7 +7,7 @@ import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
 import { CropCursor } from "./CropCursor";
 
-export class ToolManager {
+export class CursorManager {
     private map: Tilemaps.Tilemap;
     private hoeCursor: HoeCursor;
     private wateringCanCursor: WateringCanCursor;
@@ -74,11 +74,11 @@ export class ToolManager {
         }
     }
 
-    public hasActiveTool() {
+    public hasActiveCursor() {
         return this.currentCursor ? true : false;
     }
 
-    public setActiveTool(selectedToolType: CursorType) {
+    public cursorManager(selectedToolType: CursorType) {
 
         if(this.currentCursorType && this.currentCursorType === selectedToolType) {
             selectedToolType = CursorType.NONE;
