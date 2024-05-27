@@ -1,11 +1,11 @@
-import {Tool} from "./types";
+import {Cursor} from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
 
-export class HoeTool implements Tool{
+export class WateringCanCursor implements Cursor{
     private scene: Phaser.Scene;
     private map:Tilemaps.Tilemap;
     private gridEngine: GridEngine;
@@ -39,7 +39,7 @@ export class HoeTool implements Tool{
         this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
         this.marker.setAlpha(1);
 
-        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
+        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'land') {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
         } else {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
@@ -48,7 +48,7 @@ export class HoeTool implements Tool{
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "soil"
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "land"
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
@@ -58,21 +58,18 @@ export class HoeTool implements Tool{
             );
 
             if (tileGround) {
-                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, "land");
-                const landTile = new Land(
-                    this.scene,
-                    tileGround.pixelX,
-                    tileGround.pixelY
-                );
-                this.landsMap.push(landTile);
-                const w = new WeedingTask(
-                    this.character,
-                    this.gridEngine,
-                    tileGround.x,
-                    tileGround.y,
-                    landTile
-                );
-                this.character.addTask(w);
+               
+                const land = this.landsMap.find(x=> x.getPosX() === tileGround.pixelX && x.getPosY() === tileGround.pixelY);
+                land?.water();
+
+                // const w = new WeedingTask(
+                //     this.character,
+                //     this.gridEngine,
+                //     tileGround.x,
+                //     tileGround.y,
+                //     landTile
+                // );
+                // this.character.addTask(w);
             }
         }
     }

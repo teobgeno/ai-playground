@@ -1,18 +1,18 @@
-import { Tool, CursorType } from "./types";
+import { Cursor, CursorType } from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
-import { HoeTool } from "./HoeTool";
-import { WateringCanTool } from "./WateringCanTool";
+import { HoeCursor } from "./HoeCursor";
+import { WateringCanCursor } from "./WateringCanCursor";
 import { CropCursor } from "./CropCursor";
 
 export class ToolManager {
     private map: Tilemaps.Tilemap;
-    private hoeTool: Tool;
-    private wateringCanTool: WateringCanTool;
+    private hoeCursor: HoeCursor;
+    private wateringCanCursor: WateringCanCursor;
     private cropCursor: CropCursor;
-    private currentCursor: Tool | null;
+    private currentCursor: Cursor | null;
     private currentCursorType: CursorType;
     private marker:Phaser.GameObjects.Rectangle
 
@@ -28,7 +28,7 @@ export class ToolManager {
         
         this.map = map;
         this.marker = marker;
-        this.hoeTool = new HoeTool(
+        this.hoeCursor = new HoeCursor(
             scene,
             map,
             gridEngine,
@@ -38,7 +38,7 @@ export class ToolManager {
             marker
         );
 
-        this.wateringCanTool = new WateringCanTool(
+        this.wateringCanCursor = new WateringCanCursor(
             scene,
             map,
             gridEngine,
@@ -86,7 +86,7 @@ export class ToolManager {
         
         switch (selectedToolType) {
             case CursorType.HOE:
-                this.currentCursor = this.hoeTool;
+                this.currentCursor = this.hoeCursor;
                 this.currentCursorType = CursorType.HOE;
                 break;
             case CursorType.CROP:
@@ -94,7 +94,7 @@ export class ToolManager {
                     this.currentCursorType = CursorType.CROP;
                     break;
             case CursorType.WATERING_CAN:
-                        this.currentCursor = this.wateringCanTool;
+                        this.currentCursor = this.wateringCanCursor;
                         this.currentCursorType = CursorType.WATERING_CAN;
                         break;
             default:

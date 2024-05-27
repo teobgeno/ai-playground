@@ -1,10 +1,10 @@
-import {Tool} from "./types";
+import {Cursor} from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
 
-export class CropCursor implements Tool{
+export class CropCursor implements Cursor{
     private scene: Phaser.Scene;
     private map:Tilemaps.Tilemap;
     private gridEngine: GridEngine;

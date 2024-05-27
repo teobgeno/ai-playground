@@ -1,11 +1,11 @@
-import {Tool} from "./types";
+import {Cursor} from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
 
-export class WateringCanTool implements Tool{
+export class HoeCursor implements Cursor{
     private scene: Phaser.Scene;
     private map:Tilemaps.Tilemap;
     private gridEngine: GridEngine;
@@ -39,7 +39,7 @@ export class WateringCanTool implements Tool{
         this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
         this.marker.setAlpha(1);
 
-        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'land') {
+        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'soil') {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
         } else {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
@@ -48,7 +48,7 @@ export class WateringCanTool implements Tool{
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "land"
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "soil"
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
@@ -58,18 +58,21 @@ export class WateringCanTool implements Tool{
             );
 
             if (tileGround) {
-               
-                const land = this.landsMap.find(x=> x.getPosX() === tileGround.pixelX && x.getPosY() === tileGround.pixelY);
-                land?.water();
-
-                // const w = new WeedingTask(
-                //     this.character,
-                //     this.gridEngine,
-                //     tileGround.x,
-                //     tileGround.y,
-                //     landTile
-                // );
-                // this.character.addTask(w);
+                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, "land");
+                const landTile = new Land(
+                    this.scene,
+                    tileGround.pixelX,
+                    tileGround.pixelY
+                );
+                this.landsMap.push(landTile);
+                const w = new WeedingTask(
+                    this.character,
+                    this.gridEngine,
+                    tileGround.x,
+                    tileGround.y,
+                    landTile
+                );
+                this.character.addTask(w);
             }
         }
     }
