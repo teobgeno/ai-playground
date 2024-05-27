@@ -35,7 +35,7 @@ export class Land {
             this.posX + 16,
             this.posY + 16,
             "land",
-            18
+            19
         );
         this.sprite.setDepth(1);
         this.sprite.setAlpha(0.4);
@@ -80,6 +80,7 @@ export class Land {
     public plantCrop(cropType: CropType) {
         this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
         this.landState = LandState.PLANTED;
+        //this.updateTile();
     }
 
     public update(time: number, delta: number) {
@@ -150,9 +151,7 @@ export class Land {
                 frame = 18;
                 break;
             case LandState.PLANTED:
-                if (this.crop) {
-                    frame = this.crop.getCurrentGrowthStage();
-                }
+                frame = 19;
                 break;
             case LandState.READY:
                 //frame = this.crop.frame + 12;
