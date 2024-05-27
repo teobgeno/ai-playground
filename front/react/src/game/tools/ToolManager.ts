@@ -1,17 +1,19 @@
-import { Tool, ToolType } from "./types";
+import { Tool, CursorType } from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
 import { HoeTool } from "./HoeTool";
 import { WateringCanTool } from "./WateringCanTool";
+import { CropCursor } from "./CropCursor";
 
 export class ToolManager {
     private map: Tilemaps.Tilemap;
     private hoeTool: Tool;
     private wateringCanTool: WateringCanTool;
-    private currentTool: Tool | null;
-    private currentToolType: ToolType;
+    private cropCursor: CropCursor;
+    private currentCursor: Tool | null;
+    private currentCursorType: CursorType;
     private marker:Phaser.GameObjects.Rectangle
 
     constructor(
@@ -45,48 +47,62 @@ export class ToolManager {
             landsMap,
             marker
         );
+
+        this.cropCursor = new CropCursor(
+            scene,
+            map,
+            gridEngine,
+            character,
+            farmLandMap,
+            landsMap,
+            marker
+        );
     }
     public onPointerMove(worldPoint: object | Phaser.Math.Vector2) {
-        if(this.currentTool) {
+        if(this.currentCursor) {
             const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
             const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
-            this.currentTool.onPointerMove(pointerTileX, pointerTileY);
+            this.currentCursor.onPointerMove(pointerTileX, pointerTileY);
         }
     }
 
     public onPointerUp(worldPoint: object | Phaser.Math.Vector2) {
-        if(this.currentTool) {
+        if(this.currentCursor) {
             const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
             const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
-            this.currentTool.onPointerUp(pointerTileX, pointerTileY);
+            this.currentCursor.onPointerUp(pointerTileX, pointerTileY);
         }
     }
 
     public hasActiveTool() {
-        return this.currentTool ? true : false;
+        return this.currentCursor ? true : false;
     }
 
-    public setActiveTool(selectedToolType: ToolType) {
+    public setActiveTool(selectedToolType: CursorType) {
 
-        if(this.currentToolType && this.currentToolType === selectedToolType) {
-            selectedToolType = ToolType.NONE;
+        if(this.currentCursorType && this.currentCursorType === selectedToolType) {
+            selectedToolType = CursorType.NONE;
         }
         
         switch (selectedToolType) {
-            case ToolType.HOE:
-                this.currentTool = this.hoeTool;
-                this.currentToolType = ToolType.HOE;
+            case CursorType.HOE:
+                this.currentCursor = this.hoeTool;
+                this.currentCursorType = CursorType.HOE;
                 break;
-            case ToolType.WATERING_CAN:
-                    this.currentTool = this.wateringCanTool;
-                    this.currentToolType = ToolType.WATERING_CAN;
+            case CursorType.CROP:
+                    this.currentCursor = this.cropCursor;
+                    this.currentCursorType = CursorType.CROP;
                     break;
+            case CursorType.WATERING_CAN:
+                        this.currentCursor = this.wateringCanTool;
+                        this.currentCursorType = CursorType.WATERING_CAN;
+                        break;
             default:
-                this.currentTool = null;
-                this.currentToolType = ToolType.NONE;
+                this.currentCursor = null;
+                this.currentCursorType = CursorType.NONE;
                 this.marker.setAlpha(0);
         }
-        if(this.currentToolType) {
+        if(this.currentCursorType) {
             this.marker.setAlpha(1);
         }
     }
