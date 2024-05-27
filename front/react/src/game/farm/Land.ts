@@ -1,3 +1,4 @@
+import { CropType } from "./types";
 import { Physics } from "phaser";
 import { Crop } from "./Crop";
 //extends Physics.Arcade.Sprite
@@ -18,28 +19,21 @@ export class Land {
     private life: number;
     private health: number;
     private isConstructed: boolean = false;
+    private posX : number;
+    private posY : number;
 
     //status plowed, planted
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        //super(scene, 0, 0, 'land');
-        // if (this.scene.input.keyboard) {
-        //     this.keyW = this.scene.input.keyboard.addKey("W");
-        //     this.keyA = this.scene.input.keyboard.addKey("A");
-        //     this.keyS = this.scene.input.keyboard.addKey("S");
-        //     this.keyD = this.scene.input.keyboard.addKey("D");
-        // }
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
-       
-    
-        // this.landState = LandState.PLANTED;
-        // this.crop = new Crop();
-
+        this.posX = x;
+        this.posY = y;
         this.landState = LandState.PLOWED;
-        const t = scene.add.sprite(x+16, y+16, "land", 18)
-        t.setDepth(1);
+        this.sprite = scene.add.sprite(this.posX+16, this.posY+16, "land", 18)
+        this.sprite.setDepth(1);
+        this.sprite.setAlpha(0.4);
 
         // const r = Math.floor(Math.random() * 10)
         // if(r > 5) {
@@ -67,6 +61,14 @@ export class Land {
     public init() {
       this.isConstructed = true;
       //this.sprite.setAlpha(1);
+    }
+
+    public water() {
+      this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
+    }
+
+    public plantCrop() {
+      this.crop = new Crop(this.scene, CropType.CORN,this.posX, this.posY);
     }
 
     public update(time: number, delta: number) {
