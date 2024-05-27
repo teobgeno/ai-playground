@@ -86,7 +86,7 @@ function App() {
                         </a>
                     </li>
                     <li>
-                        <a href="#" style={{paddingLeft:'10px'}}>
+                        <a href="#" onClick={() => pickTool(3)} style={{paddingLeft:'10px'}}>
                             <i className="icon-heart-empty">🌊</i>
                         </a>
                     </li>

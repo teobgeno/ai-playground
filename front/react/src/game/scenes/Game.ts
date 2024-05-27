@@ -22,7 +22,6 @@ export class Game extends Scene {
     private propertiesText;
 
     private charactersMap :Map<string, Character>
-    private charToolsMap: Map<number, object>;
     private landsMap: Array<Land> = [];
     private farmLandMap :Map<string, string>
     private toolManager:ToolManager
@@ -71,8 +70,6 @@ export class Game extends Scene {
     create() {
 
         this.charactersMap = new Map();
-        this.charToolsMap = new Map();
-        this.charToolsMap.set(1, { id: 1, title: "hoe" });
 
         this.initMap();
         this.initHero();
@@ -88,7 +85,7 @@ export class Game extends Scene {
         // this.marker.lineStyle(2, 0x000000, 1);
         // this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
         this.marker = this.add.rectangle(0, 0, this.map.tileWidth, this.map.tileHeight, 0x000000, 0)
-        this.marker.setDepth(1);
+        this.marker.setDepth(10);
         this.marker.setAlpha(0);
 
         

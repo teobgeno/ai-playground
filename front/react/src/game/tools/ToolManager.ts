@@ -4,10 +4,12 @@ import { GridEngine } from "grid-engine";
 import Character from "../Character";
 import { Land } from "../farm/Land";
 import { HoeTool } from "./HoeTool";
+import { WateringCanTool } from "./WateringCanTool";
 
 export class ToolManager {
     private map: Tilemaps.Tilemap;
     private hoeTool: Tool;
+    private wateringCanTool: WateringCanTool;
     private currentTool: Tool | null;
     private currentToolType: ToolType;
     private marker:Phaser.GameObjects.Rectangle
@@ -25,6 +27,16 @@ export class ToolManager {
         this.map = map;
         this.marker = marker;
         this.hoeTool = new HoeTool(
+            scene,
+            map,
+            gridEngine,
+            character,
+            farmLandMap,
+            landsMap,
+            marker
+        );
+
+        this.wateringCanTool = new WateringCanTool(
             scene,
             map,
             gridEngine,
@@ -65,6 +77,10 @@ export class ToolManager {
                 this.currentTool = this.hoeTool;
                 this.currentToolType = ToolType.HOE;
                 break;
+            case ToolType.WATERING_CAN:
+                    this.currentTool = this.wateringCanTool;
+                    this.currentToolType = ToolType.WATERING_CAN;
+                    break;
             default:
                 this.currentTool = null;
                 this.currentToolType = ToolType.NONE;

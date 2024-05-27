@@ -1,6 +1,7 @@
 export enum ToolType {
     NONE = 0,
     HOE = 1,
+    WATERING_CAN = 3,
 }
 
 export interface Tool {
