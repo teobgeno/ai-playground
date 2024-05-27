@@ -1,14 +1,6 @@
+import {LandState, LandElements} from "./types";
 import { CropType } from "./types";
-import { Physics } from "phaser";
 import { Crop } from "./Crop";
-//extends Physics.Arcade.Sprite
-
-export enum LandState {
-    EMPTY,
-    PLOWED,
-    PLANTED,
-    READY,
-}
 
 export class Land {
     private crop: Crop | null;
@@ -21,6 +13,7 @@ export class Land {
     private isConstructed: boolean = false;
     private posX: number;
     private posY: number;
+    private elements: LandElements;
 
     //status plowed, planted
 
@@ -30,7 +23,6 @@ export class Land {
         this.scene = scene;
         this.posX = x;
         this.posY = y;
-        this.landState = LandState.PLOWED;
         this.sprite = scene.add.sprite(
             this.posX + 16,
             this.posY + 16,
@@ -62,19 +54,26 @@ export class Land {
 
     public init() {
         this.isConstructed = true;
+        this.landState = LandState.PLOWED;
+        this.elements = {
+            water: 0,
+            fertilizer: 0,
+        };
+
         this.sprite.setAlpha(1);
     }
 
     public getPosX() {
-      return this.posX;
+        return this.posX;
     }
 
     public getPosY() {
-      return this.posY;
+        return this.posY;
     }
 
     public water() {
         this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
+        this.elements.water = 100;
     }
 
     public plantCrop(cropType: CropType) {
@@ -87,7 +86,7 @@ export class Land {
         //console.log(this.crop.lastTimestamp)
 
         if (LandState.PLANTED) {
-            this.crop?.update(time);
+            this.crop?.update(time, this.elements);
         }
 
         // if (this.isConstructed && this.crop) {
@@ -116,7 +115,6 @@ export class Land {
 
         //     //console.log(time)
         // }
-
 
         //console.log(time)
         // if (this.crop != null) {

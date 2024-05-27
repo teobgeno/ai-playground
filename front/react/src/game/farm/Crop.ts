@@ -1,4 +1,4 @@
-import { CropType } from "./types";
+import { CropType, LandElements } from "./types";
 export class Crop {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
@@ -31,12 +31,8 @@ export class Crop {
         return this.currentGrowthStage === this.maxGrowthStage ? true : false;
     }
 
-    public update(time: number) {
+    public update(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
-            // if(this.currentGrowthStage === this.maxGrowthStage && this.landState != LandState.READY) {
-            //   this.landState = LandState.READY;
-            // }
-
             if (
                 time - this.lastTimestamp >= this.growthStageDuration &&
                 this.currentGrowthStage < this.maxGrowthStage
