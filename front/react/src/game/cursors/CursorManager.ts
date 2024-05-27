@@ -60,16 +60,16 @@ export class CursorManager {
     }
     public onPointerMove(worldPoint: object | Phaser.Math.Vector2) {
         if(this.currentCursor) {
-            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
-            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
+            const pointerTileX = this.map.worldToTileX((worldPoint as Phaser.Math.Vector2).x) || 0;
+            const pointerTileY = this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) || 0;
             this.currentCursor.onPointerMove(pointerTileX, pointerTileY);
         }
     }
 
     public onPointerUp(worldPoint: object | Phaser.Math.Vector2) {
         if(this.currentCursor) {
-            const pointerTileX = this.map.worldToTileX(worldPoint.x) || 0;
-            const pointerTileY = this.map.worldToTileY(worldPoint.y) || 0;
+            const pointerTileX = this.map.worldToTileX((worldPoint as Phaser.Math.Vector2).x) || 0;
+            const pointerTileY = this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) || 0;
             this.currentCursor.onPointerUp(pointerTileX, pointerTileY);
         }
     }
@@ -78,7 +78,7 @@ export class CursorManager {
         return this.currentCursor ? true : false;
     }
 
-    public cursorManager(selectedToolType: CursorType) {
+    public setActiveCursor(selectedToolType: CursorType) {
 
         if(this.currentCursorType && this.currentCursorType === selectedToolType) {
             selectedToolType = CursorType.NONE;
