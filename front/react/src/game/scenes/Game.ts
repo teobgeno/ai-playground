@@ -1,7 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import Character from "../Character";
+import {Hero} from "../characters/Hero";
+import {Humanoid} from "../characters/Humanoid";
 import {Land} from "../farm/Land";
 // import {DayNight} from "../DayNight";
 import {CursorManager} from "../cursors/CursorManager";
@@ -12,7 +13,7 @@ export class Game extends Scene {
 
     gameText: Phaser.GameObjects.Text;
     gridEngine: GridEngine;
-    hero: Character;
+    hero: Hero;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
     private marker: Phaser.GameObjects.Rectangle;
@@ -20,7 +21,7 @@ export class Game extends Scene {
     private activeTool: number;
     private propertiesText;
 
-    private charactersMap :Map<string, Character>
+    private charactersMap :Map<string, Humanoid>
     private landsMap: Array<Land> = [];
     private farmLandMap :Map<string, string>
     private cursorManager:CursorManager
@@ -208,7 +209,7 @@ export class Game extends Scene {
     }
 
     private initHero() {
-        this.hero = new Character(this, "hero", this.gridEngine, "hero");
+        this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
         this.hero.init();
@@ -263,7 +264,6 @@ export class Game extends Scene {
         this.gridEngine
           .positionChangeFinished()
           .subscribe(({ charId, enterTile }) => {
-            console.log(enterTile)
             const char = this.charactersMap.get(charId);
             if(char && char.currentTask) {
                 // console.log(char.currentTask.posX)

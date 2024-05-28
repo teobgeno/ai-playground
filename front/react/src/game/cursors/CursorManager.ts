@@ -1,7 +1,7 @@
 import { Cursor, CursorType } from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import Character from "../Character";
+import {Humanoid} from "../characters/Humanoid";
 import { Land } from "../farm/Land";
 import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
@@ -20,7 +20,7 @@ export class CursorManager {
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
-        character: Character,
+        character: Humanoid,
         farmLandMap: Map<string, string>,
         landsMap: Array<Land>,
         marker:Phaser.GameObjects.Rectangle

@@ -1,11 +1,11 @@
 import {Task, TaskStatus} from "./types";
 import { GridEngine } from "grid-engine";
-import Character from "../Character";
+import {Humanoid} from "../characters/Humanoid";
 import MoveCharAction from "./MoveCharAction";
 import {Land} from "../farm/Land";
 
 export default class WeedingTask implements Task{
-    private character: Character;
+    private character: Humanoid;
     private gridEngine: GridEngine;
     public posX: number;
     public posY: number;
@@ -14,7 +14,7 @@ export default class WeedingTask implements Task{
     private landTile:Land;
 
     constructor(
-        character: Character,
+        character: Humanoid,
         gridEngine: GridEngine,
         posX: number,
         posY: number,

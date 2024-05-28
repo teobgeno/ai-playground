@@ -1,14 +1,14 @@
 import { GridEngine } from "grid-engine";
-import Character from "../Character";
+import {Humanoid} from "../characters/Humanoid";
 
 export default class MoveCharAction {
-    private character: Character;
+    private character: Humanoid;
     private gridEngine: GridEngine;
     private posX: number;
     private posY: number;
 
     constructor(
-        character: Character,
+        character: Humanoid,
         gridEngine: GridEngine,
         posX: number,
         posY: number
@@ -23,7 +23,7 @@ export default class MoveCharAction {
             x: this.posX,
             y: this.posY,
         },'CharLayer'))
-        this.character.setCharState('walk')
+        //this.character.setCharState('walk')
         this.gridEngine.moveTo(this.character.getId(), {
             x: this.posX,
             y: this.posY,

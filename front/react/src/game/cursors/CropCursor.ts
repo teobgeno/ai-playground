@@ -1,14 +1,15 @@
 import { Cursor } from "./types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import Character from "../Character";
+import {Humanoid} from "../characters/Humanoid";
+
 import { Land } from "../farm/Land";
 
 export class CropCursor implements Cursor {
     private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private gridEngine: GridEngine;
-    private character: Character;
+    private character: Humanoid;
     private farmLandMap: Map<string, string>;
     private landsMap: Array<Land> = [];
     private marker: Phaser.GameObjects.Rectangle;
@@ -17,7 +18,7 @@ export class CropCursor implements Cursor {
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
-        character: Character,
+        character: Humanoid,
         farmLandMap: Map<string, string>,
         landsMap: Array<Land>,
         marker: Phaser.GameObjects.Rectangle

@@ -2,14 +2,13 @@ import Phaser, { Physics }  from "phaser";
 import { GridEngine } from "grid-engine";
 import CharacterController from "./CharacterController";
 import StateMachine from "./StateMachine";
-import { Task, TaskStatus } from "./actions/types";
-class Character extends Physics.Arcade.Sprite {
+import { Task, TaskStatus } from "../actions/types";
+import { Humanoid } from "./Humanoid";
+
+export class Hero extends Humanoid {
     private gridEngine: GridEngine;
-    private id: string;
     private characterController: CharacterController;
     private stateMachine: StateMachine;
-    private tasks: Array<Task>;
-    public currentTask: Task | undefined;
 
     constructor(
         scene: Phaser.Scene,
@@ -18,7 +17,7 @@ class Character extends Physics.Arcade.Sprite {
         //map: Tilemaps.Tilemap
         id: string
     ) {
-        super(scene, 0, 0, texture);
+        super(scene,texture, id);
         this.gridEngine = gridEngine;
         this.id = id;
         this.stateMachine = new StateMachine(this, this.id);
@@ -38,16 +37,8 @@ class Character extends Physics.Arcade.Sprite {
         //this.getBody().setCollideWorldBounds(true);
     }
 
-    public getId() {
-        return this.id;
-    }
-
     public setCharState(state: string) {
         this.stateMachine.setState(state);
-    }
-
-    public addTask(task: Task) {
-        this.tasks.push(task);
     }
 
     update(dt: number): void {
@@ -181,29 +172,29 @@ class Character extends Physics.Arcade.Sprite {
         );
     }
 
-    private createAnimation(
-        key: string,
-        texture: string,
-        start: number,
-        end: number,
-        rate: number | null,
-        repeat: boolean | null,
-        revert: any
-    ) {
-        rate = rate || 10;
-        const config = {
-            key: key,
-            frames: this.scene.anims.generateFrameNumbers(texture, {
-                start: start,
-                end: end,
-            }),
-            frameRate: rate,
-            repeat: 0,
-        };
-        if (repeat) config.repeat = -1;
-        //if (revert) config.frames.push({ key: texture, frame: start });
-        this.scene.anims.create(config);
-    }
+    // private createAnimation(
+    //     key: string,
+    //     texture: string,
+    //     start: number,
+    //     end: number,
+    //     rate: number | null,
+    //     repeat: boolean | null,
+    //     revert: any
+    // ) {
+    //     rate = rate || 10;
+    //     const config = {
+    //         key: key,
+    //         frames: this.scene.anims.generateFrameNumbers(texture, {
+    //             start: start,
+    //             end: end,
+    //         }),
+    //         frameRate: rate,
+    //         repeat: 0,
+    //     };
+    //     if (repeat) config.repeat = -1;
+    //     //if (revert) config.frames.push({ key: texture, frame: start });
+    //     this.scene.anims.create(config);
+    // }
 
     public getStopFrame(direction: string) {
         switch (direction) {
@@ -219,8 +210,7 @@ class Character extends Physics.Arcade.Sprite {
         return -1;
     }
 
-    public getBody(): Physics.Arcade.Body {
-        return this.body as Physics.Arcade.Body;
-    }
+    // public getBody(): Physics.Arcade.Body {
+    //     return this.body as Physics.Arcade.Body;
+    // }
 }
-export default Character;

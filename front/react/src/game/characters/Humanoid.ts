@@ -1,8 +1,12 @@
 import Phaser, { Physics }  from "phaser";
+import { Task } from "../actions/types";
 
-export default class Humanoid extends Physics.Arcade.Sprite {
-    private id: string;
+export class Humanoid extends Physics.Arcade.Sprite {
+    public id: string;
     private stamina: number;
+    protected tasks: Array<Task>;
+    public currentTask: Task | undefined;
+
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -36,11 +40,23 @@ export default class Humanoid extends Physics.Arcade.Sprite {
         this.scene.anims.create(config);
     }
 
+    public getId() {
+        return this.id;
+    }
+
     public getStamina(){
 
     }
 
     public setStamina(){
         
+    }
+
+    public addTask(task: Task) {
+        this.tasks.push(task);
+    }
+
+    public getBody(): Physics.Arcade.Body {
+        return this.body as Physics.Arcade.Body;
     }
 }
