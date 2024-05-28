@@ -19,12 +19,6 @@ class Character extends Physics.Arcade.Sprite {
         id: string
     ) {
         super(scene, 0, 0, texture);
-        // if (this.scene.input.keyboard) {
-        //     this.keyW = this.scene.input.keyboard.addKey("W");
-        //     this.keyA = this.scene.input.keyboard.addKey("A");
-        //     this.keyS = this.scene.input.keyboard.addKey("S");
-        //     this.keyD = this.scene.input.keyboard.addKey("D");
-        // }
         this.gridEngine = gridEngine;
         this.id = id;
         this.stateMachine = new StateMachine(this, this.id);

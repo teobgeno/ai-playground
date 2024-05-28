@@ -2,6 +2,7 @@ import Phaser, { Physics }  from "phaser";
 
 export default class Humanoid extends Physics.Arcade.Sprite {
     private id: string;
+    private stamina: number;
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -33,5 +34,13 @@ export default class Humanoid extends Physics.Arcade.Sprite {
         if (repeat) config.repeat = -1;
         //if (revert) config.frames.push({ key: texture, frame: start });
         this.scene.anims.create(config);
+    }
+
+    public getStamina(){
+
+    }
+
+    public setStamina(){
+        
     }
 }
