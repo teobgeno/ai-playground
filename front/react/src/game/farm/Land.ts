@@ -82,6 +82,10 @@ export class Land {
         //this.updateTile();
     }
 
+     //TODO:: change cursor when crop ready
+     //https://github.com/phaserjs/examples/blob/master/public/src/input/cursors/custom%20cursor.js
+     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
+     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number, delta: number) {
         //console.log(this.crop.lastTimestamp)
 
@@ -139,6 +143,8 @@ export class Land {
         //       }
         //     }
         //   }
+
+       
     }
     updateTile() {
         //this.scene.events.emit('tileUpdate', this);
