@@ -19,6 +19,10 @@ export default class MoveCharAction {
         this.posY = posY;
     }
     public execute() {
+        console.log(this.gridEngine.isBlocked({
+            x: this.posX,
+            y: this.posY,
+        },'CharLayer'))
         this.character.setCharState('walk')
         this.gridEngine.moveTo(this.character.getId(), {
             x: this.posX,
