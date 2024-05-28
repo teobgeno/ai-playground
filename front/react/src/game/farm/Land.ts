@@ -7,9 +7,6 @@ export class Land {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
     private landState: LandState;
-    private bar: Phaser.GameObjects.Rectangle;
-    private life: number;
-    private health: number;
     private isConstructed: boolean = false;
     private posX: number;
     private posY: number;
@@ -71,6 +68,10 @@ export class Land {
         return this.posY;
     }
 
+    public getState() {
+        return this.landState;
+    }
+
     public water() {
         this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
         this.elements.water = 100;
@@ -79,7 +80,10 @@ export class Land {
     public plantCrop(cropType: CropType) {
         this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
         this.landState = LandState.PLANTED;
-        //this.updateTile();
+    }
+
+    public harvestCrop() {
+        this.landState = LandState.PLANTED;
     }
 
      //TODO:: change cursor when crop ready
@@ -87,64 +91,12 @@ export class Land {
      //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
      //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number, delta: number) {
-        //console.log(this.crop.lastTimestamp)
-
         if (LandState.PLANTED) {
             this.crop?.update(time, this.elements);
+            if(this.crop?.isFullGrown()) {
+                this.landState = LandState.READY;
+            }
         }
-
-        // if (this.isConstructed && this.crop) {
-        //     if (this.crop.lastTimestamp) {
-        //         if (
-        //             this.crop.currentGrowthStage === this.crop.maxGrowthStage &&
-        //             this.landState != LandState.READY
-        //         ) {
-        //             this.landState = LandState.READY;
-        //         }
-
-        //         if (
-        //             time - this.crop.lastTimestamp >=
-        //                 this.crop.growthStageDuration &&
-        //             this.crop.currentGrowthStage < this.crop.maxGrowthStage
-        //         ) {
-        //             // console.log((time*1000) + ' - '+ this.crop.lastTimestamp)
-        //             //console.log(Math.floor(time/this.crop.lastTimestamp)) update currentGrowthStage based on this
-        //             this.crop.lastTimestamp = time;
-        //             this.crop.currentGrowthStage++;
-        //             this.updateTile();
-        //         }
-        //     } else {
-        //         this.crop.lastTimestamp = time;
-        //     }
-
-        //     //console.log(time)
-        // }
-
-        //console.log(time)
-        // if (this.crop != null) {
-        //     this.life -= (delta / 1000) * (1 / (1 / 5));
-        //     if (this.life < -this.crop.timeToDeath) {
-        //       this.crop = null;
-        //       this.landState = LandState.EMPTY;
-        //       this.bar.alpha = 0;
-        //       this.updateTile();
-        //     } else {
-        //       if (this.life > 0) {
-        //         this.bar.fillColor = 0x00ee00;
-        //         this.bar.width = (1 - (this.life / this.crop.timeToRipe)) * 32;
-        //       } else {
-        //         if (this.landState == LandState.PLANTED) {
-        //           this.landState = LandState.READY;
-        //           this.updateTile();
-        //         }
-
-        //         this.bar.fillColor = 0xee0000;
-        //         this.bar.width = (1 - (-this.life / this.crop.timeToDeath)) * 32;
-        //       }
-        //     }
-        //   }
-
-       
     }
     updateTile() {
         //this.scene.events.emit('tileUpdate', this);
