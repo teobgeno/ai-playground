@@ -1,7 +1,6 @@
-import Phaser, { Physics }  from "phaser";
 import { GridEngine } from "grid-engine";
 import CharacterController from "./CharacterController";
-import { Task, TaskStatus } from "../actions/types";
+import { TaskStatus } from "../actions/types";
 import { Humanoid } from "./Humanoid";
 
 export class Hero extends Humanoid {
@@ -24,7 +23,6 @@ export class Hero extends Humanoid {
             this.stateMachine,
             this.id
         );
-        this.tasks = [];
     }
 
     public init() {

@@ -90,7 +90,7 @@ export class Land {
      //https://github.com/phaserjs/examples/blob/master/public/src/input/cursors/custom%20cursor.js
      //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
      //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
-    public update(time: number, delta: number) {
+    public update(time: number) {
         if (LandState.PLANTED) {
             this.crop?.update(time, this.elements);
             if(this.crop?.isFullGrown()) {
