@@ -60,13 +60,13 @@ export default class WeedingTask implements Task{
     private weedGround() {
         console.log('weeding');
         this.character.anims.play('attack_right', true);
-        //this.character.setCharState('weed')
+        this.character.setCharState('weed')
         setTimeout(() => {
             this.status = TaskStatus.Completed;
             this.character.anims.restart();
             this.character.anims.stop();
             this.landTile.init();
-            //this.character.setCharState('idle')
+            this.character.setCharState('idle')
           }, 1000);
     }
 }

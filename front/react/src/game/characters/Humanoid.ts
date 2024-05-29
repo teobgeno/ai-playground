@@ -1,11 +1,13 @@
 import Phaser, { Physics }  from "phaser";
 import { Task } from "../actions/types";
+import StateMachine from "./StateMachine";
 
 export class Humanoid extends Physics.Arcade.Sprite {
     public id: string;
     private stamina: number;
     protected tasks: Array<Task>;
     public currentTask: Task | undefined;
+    protected stateMachine: StateMachine;
 
     constructor(
         scene: Phaser.Scene,
@@ -15,6 +17,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
         super(scene, 0, 0, texture);
         this.scene = scene;
         this.id = id;
+        this.stateMachine = new StateMachine(this, this.id);
     }
     protected createAnimation(
         key: string,
@@ -52,6 +55,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
         
     }
 
+    public setCharState(state: string) {
+        this.stateMachine.setState(state);
+    }
+    
     public addTask(task: Task) {
         this.tasks.push(task);
     }

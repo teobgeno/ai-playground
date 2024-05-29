@@ -1,14 +1,12 @@
 import Phaser, { Physics }  from "phaser";
 import { GridEngine } from "grid-engine";
 import CharacterController from "./CharacterController";
-import StateMachine from "./StateMachine";
 import { Task, TaskStatus } from "../actions/types";
 import { Humanoid } from "./Humanoid";
 
 export class Hero extends Humanoid {
     private gridEngine: GridEngine;
     private characterController: CharacterController;
-    private stateMachine: StateMachine;
 
     constructor(
         scene: Phaser.Scene,
@@ -20,7 +18,6 @@ export class Hero extends Humanoid {
         super(scene,texture, id);
         this.gridEngine = gridEngine;
         this.id = id;
-        this.stateMachine = new StateMachine(this, this.id);
         this.characterController = new CharacterController(
             this.scene,
             this.gridEngine,
@@ -35,10 +32,6 @@ export class Hero extends Humanoid {
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
         //this.getBody().setCollideWorldBounds(true);
-    }
-
-    public setCharState(state: string) {
-        this.stateMachine.setState(state);
     }
 
     update(dt: number): void {
