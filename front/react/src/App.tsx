@@ -149,7 +149,7 @@ function App() {
                     <div className="half">
                         <img
                             className="agent circle"
-                            src="http://askavenue.com/img/17.jpg"
+                            src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png"
                             alt="Jesse Tino"
                         />
                     </div>
