@@ -7,6 +7,8 @@ import "./App.css";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
+    const [isChatModalVisible, setIsChatModalVisible] = useState(false);
+
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -71,32 +73,63 @@ function App() {
     //https://codepen.io/ZaynAlaoudi/pen/EorLMm
     return (
         <div id="app">
-            <div style={{position:'relative'}}>
+            <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            
+
                 <ul className="toolbar cf">
                     <li>
-                        <a href="#" onClick={() => pickTool(1)} style={{paddingLeft:'10px'}}>
+                        <a
+                            href="#"
+                            onClick={() => pickTool(1)}
+                            style={{ paddingLeft: "10px" }}
+                        >
                             <i className="icon-home">⛏️</i>
                         </a>
                     </li>
                     <li>
-                        <a href="#" onClick={() => pickTool(2)} style={{paddingLeft:'10px'}}>
+                        <a
+                            href="#"
+                            onClick={() => pickTool(2)}
+                            style={{ paddingLeft: "10px" }}
+                        >
                             <i className="icon-comments-alt">🌿</i>
                         </a>
                     </li>
                     <li>
-                        <a href="#" onClick={() => pickTool(3)} style={{paddingLeft:'10px'}}>
+                        <a
+                            href="#"
+                            onClick={() => pickTool(3)}
+                            style={{ paddingLeft: "10px" }}
+                        >
                             <i className="icon-heart-empty">🌊</i>
                         </a>
                     </li>
                     <li>
-                        <a href="#" style={{paddingLeft:'10px'}}>
+                        <a href="#" style={{ paddingLeft: "10px" }}>
                             <i className="icon-cloud"></i>
                         </a>
                     </li>
                 </ul>
             </div>
+            {isChatModalVisible &&
+            <div id="container">
+                <div className="container-inner">
+                    <div className="content">
+                        <p>Do you want to Continue?</p>
+                    </div>
+                    <div className="buttons">
+                        <button type="button" className="confirm">
+                            Confirm
+                        </button>
+                        <button type="button" className="cancel">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+
+
         </div>
     );
 }
