@@ -9,7 +9,6 @@ function App() {
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     const [isChatModalVisible, setIsChatModalVisible] = useState(false);
 
-
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
     const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
@@ -111,25 +110,71 @@ function App() {
                     </li>
                 </ul>
             </div>
-            {isChatModalVisible &&
-            <div id="container">
-                <div className="container-inner">
-                    <div className="content">
-                        <p>Do you want to Continue?</p>
+            {isChatModalVisible && (
+                <div id="container">
+                    <div className="container-inner">
+                        <div className="content">
+                            <p>Do you want to Continue?</p>
+                            <textarea></textarea>
+                        </div>
+                        <div className="buttons">
+                            <button type="button" className="confirm">
+                                Confirm
+                            </button>
+                            <button type="button" className="cancel">
+                                Cancel
+                            </button>
+                        </div>
                     </div>
-                    <div className="buttons">
-                        <button type="button" className="confirm">
-                            Confirm
-                        </button>
-                        <button type="button" className="cancel">
-                            Cancel
+                </div>
+            )}
+             {/*chat*/}
+            <section className="avenue-messenger">
+                <div className="menu">
+                    <div className="items">
+                        <span>
+                            <a href="#" title="Minimize">
+                                —
+                            </a>
+                            <br />
+
+                            <a href="#" title="End Chat">
+                                ✕
+                            </a>
+                        </span>
+                    </div>
+                    <div className="button">...</div>
+                </div>
+                <div className="agent-face">
+                    <div className="half">
+                        <img
+                            className="agent circle"
+                            src="http://askavenue.com/img/17.jpg"
+                            alt="Jesse Tino"
+                        />
+                    </div>
+                </div>
+                <div className="chat">
+                    <div className="chat-title">
+                        <h1>Jesse Tino</h1>
+                        <h2>RE/MAX</h2>
+
+                    </div>
+                    <div className="messages">
+                        <div className="messages-content" />
+                    </div>
+                    <div className="message-box">
+                        <textarea
+                            className="message-input"
+                            placeholder="Type message..."
+                            defaultValue={""}
+                        />
+                        <button type="submit" className="message-submit">
+                            Send
                         </button>
                     </div>
                 </div>
-            </div>
-            }
-
-
+            </section>
         </div>
     );
 }

@@ -14,3 +14,8 @@ https://github.com/mluogh/grontown/blob/main/public/assets/tilesets/CREDITS-tree
 
 https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
 https://github.com/amcolash/farming-game/blob/master/src/game/daynight.ts
+
+
+
+--- chat ----
+https://codepen.io/ramilulu/pen/mrNoXw
