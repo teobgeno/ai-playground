@@ -14,11 +14,15 @@ export class Npc extends Humanoid {
     }
 
     public init() {
-         this.setInteractive({ cursor: 'url(assets/cursors/axe.cur), pointer' });
+        this.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
+        //this.disableInteractive();
         //.setInteractive( { useHandCursor: true  } );
-        this.on('pointerup',  (event) =>
-        {
-            console.log('talk')
+        this.on("pointerup", () => {
+            console.log("talk");
+            // setTimeout(() => {
+            //     console.log("sadsad");
+            //     this.disableInteractive();
+            // }, 2000);
         });
     }
 }
