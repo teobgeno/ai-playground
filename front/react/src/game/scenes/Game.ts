@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import {Hero} from "../characters/Hero";
+import {Npc} from "../characters/Npc";
 import {Humanoid} from "../characters/Humanoid";
 import {Land} from "../farm/Land";
 // import {DayNight} from "../DayNight";
@@ -75,6 +76,7 @@ export class Game extends Scene {
 
         this.initMap();
         this.initHero();
+        this.initNpcs();
         this.initGridEngine();
         this.initCamera(this.map);
 
@@ -216,6 +218,13 @@ export class Game extends Scene {
         this.charactersMap.set("hero", this.hero);
     }
 
+    private initNpcs() {
+        const npc = new Npc(this, "npc", this.gridEngine, "npc0");
+        this.physics.add.existing(npc);
+        this.add.existing(npc);
+        this.charactersMap.set("npc0", npc);
+    }
+
     private initGridEngine() {
         const gridEngineConfig = {
             characters: [
@@ -228,14 +237,18 @@ export class Game extends Scene {
             ],
         };
 
-        const npcSprite = this.add.sprite(0, 0, "npc");
-        gridEngineConfig.characters.push({
-            id: "npc0",
-            sprite: npcSprite,
-            walkingAnimationMapping: 1,
-            startPosition: { x: 12, y: 5 },
-            speed: 3,
-        });
+        //const npcSprite = this.add.sprite(0, 0, "npc");
+        const npc0 = this.charactersMap.get('npc0')
+        if(npc0) {
+            gridEngineConfig.characters.push({
+                id: npc0.getId(),
+                sprite: npc0,
+                walkingAnimationMapping: 1,
+                startPosition: { x: 12, y: 5 },
+                speed: 3,
+            });
+        }
+        
         //npcSprite.scale = 1.5;
 
         this.gridEngine.create(this.map, gridEngineConfig);
