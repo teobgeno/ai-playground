@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { MainMenu } from "./game/scenes/MainMenu";
 import { Game } from "./game/scenes/Game";
+import { EventBus } from "./game/EventBus";
 import "./App.css";
 
 export type Message = {
@@ -14,11 +15,27 @@ function App() {
     // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     const [isChatModalVisible, setIsChatModalVisible] = useState(false);
-    const [messageHistory, setMessageHistory] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
     const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        EventBus.on("on-talk-message-send", (message: Message) => {
+            setMessages((messages) => [
+                ...messages,
+                {
+                    isPlayer: message.isPlayer,
+                    characterName: message.characterName,
+                    content: message.content,
+                },
+            ]);
+        });
+        return () => {
+            EventBus.removeListener("on-talk-message-send");
+        };
+    }, []);
 
     const moveSprite = () => {
         if (phaserRef.current) {
@@ -73,6 +90,7 @@ function App() {
             }
         }
     };
+
     //TODO::add toolbar
     //https://codepen.io/cameronbaney/pen/nPpEqw
     //http://cssstars.com/mac-os-dock-menu-css3/
@@ -169,28 +187,30 @@ function App() {
                     <div className="messages">
                         <div className="messages-content" />
 
-                        {messageHistory.map((message, index) => (
-                            <span>
-                                <div className="message new">
-                                    <figure className="avatar">
-                                        <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
-                                    </figure>
-                                    Hi there, I'm Jesse and you?
-                                    <div className="timestamp">13:20</div>
-                                    <div className="checkmark-sent-delivered">
-                                        ✓
+                        {messages.map((message, index) => (
+                            <span key={index}>
+                                {message.isPlayer ? (
+                                    <div className="message message-personal new">
+                                        {message.content}
+                                        <div className="timestamp">13:4</div>
+                                        <div className="checkmark-sent-delivered">
+                                            ✓
+                                        </div>
+                                        <div className="checkmark-read">✓</div>
                                     </div>
-                                    <div className="checkmark-read">✓</div>
-                                </div>
-
-                                <div className="message message-personal new">
-                                    dsadsad
-                                    <div className="timestamp">13:4</div>
-                                    <div className="checkmark-sent-delivered">
-                                        ✓
+                                ) : (
+                                    <div className="message new">
+                                        <figure className="avatar">
+                                            <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
+                                        </figure>
+                                        {message.content}
+                                        <div className="timestamp">13:20</div>
+                                        <div className="checkmark-sent-delivered">
+                                            ✓
+                                        </div>
+                                        <div className="checkmark-read">✓</div>
                                     </div>
-                                    <div className="checkmark-read">✓</div>
-                                </div>
+                                )}
                             </span>
                         ))}
                     </div>
@@ -201,7 +221,7 @@ function App() {
                             defaultValue={""}
                         />
                         <button type="submit" className="message-submit">
-                            Send
+                            Add
                         </button>
                     </div>
                 </div>

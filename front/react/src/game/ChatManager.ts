@@ -5,6 +5,13 @@ export class ChatManager {
 
     constructor() {}
 
+    public startConversation() {
+        //this.participants.set(character.getId(), character);
+    }
+
+    public addMessage() {
+        //this.participants.set(character.getId(), character);
+    }
     public addParticipants(character: Humanoid) {
         this.participants.set(character.getId(), character);
     }
