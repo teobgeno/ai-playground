@@ -11,6 +11,14 @@ export class Npc extends Humanoid {
     ) {
         super(scene, texture, id);
         this.gridEngine = gridEngine;
-        this.id = id;
+    }
+
+    public init() {
+         this.setInteractive({ cursor: 'url(assets/cursors/axe.cur), pointer' });
+        //.setInteractive( { useHandCursor: true  } );
+        this.on('pointerup',  (event) =>
+        {
+            console.log('talk')
+        });
     }
 }

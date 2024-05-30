@@ -1,12 +1,23 @@
 import { EventBus } from "../EventBus";
-import { Scene, Tilemaps } from "phaser";
-import { GridEngine } from "grid-engine";
+import { Scene, Tilemaps, Physics } from "phaser";
+import { GridEngine, GridEngineConfig } from "grid-engine";
 import {Hero} from "../characters/Hero";
 import {Npc} from "../characters/Npc";
 import {Humanoid} from "../characters/Humanoid";
 import {Land} from "../farm/Land";
 // import {DayNight} from "../DayNight";
 import {CursorManager} from "../cursors/CursorManager";
+
+// type gridEngineConfigChar = {
+//     id?:string,
+//     sprite?:Physics.Arcade.Sprite
+//     walkingAnimationMapping?: number
+//     startPosition?: { x: number, y: number },
+//     speed?: number
+// }
+// type gridEngineConfig = {
+//     characters : Array<gridEngineConfigChar>
+// }
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -222,15 +233,18 @@ export class Game extends Scene {
         const npc = new Npc(this, "npc", this.gridEngine, "npc0");
         this.physics.add.existing(npc);
         this.add.existing(npc);
+        npc.init();
         this.charactersMap.set("npc0", npc);
     }
 
     private initGridEngine() {
-        const gridEngineConfig = {
+
+        const hero = this.charactersMap.get('hero');
+        const gridEngineConfig:GridEngineConfig = {
             characters: [
                 {
-                    id: "hero",
-                    sprite: this.hero,
+                    id:  hero?.getId() || '',
+                    sprite: hero,
                     startPosition: { x: 15, y: 10 },
                     // charLayer: "CharLayer"
                 },
@@ -247,12 +261,13 @@ export class Game extends Scene {
                 startPosition: { x: 12, y: 5 },
                 speed: 3,
             });
+            npc0.scale = 0.9;
         }
         
-        //npcSprite.scale = 1.5;
+        
 
         this.gridEngine.create(this.map, gridEngineConfig);
-        //this.gridEngine.moveRandomly("npc0", 1500);
+        //this.gridEngine.moveRandomly("npc0", 500);
 
         this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
             if(charId === 'hero') {
@@ -310,7 +325,7 @@ export class Game extends Scene {
     update(time: number, delta: number): void {
         this.hero.update(delta);
         for (const land of this.landsMap) {
-            land.update(time, delta)
+            land.update(time)
         }
         
     }
