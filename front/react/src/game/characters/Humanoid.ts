@@ -8,7 +8,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected tasks: Array<Task> = [];
     public currentTask: Task | undefined;
     protected stateMachine: StateMachine;
-    protected isNpc: boolean;
+    public isNpc: boolean;
 
     constructor(
         scene: Phaser.Scene,

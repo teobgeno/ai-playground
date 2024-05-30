@@ -4,10 +4,17 @@ import { MainMenu } from "./game/scenes/MainMenu";
 import { Game } from "./game/scenes/Game";
 import "./App.css";
 
+export type Message = {
+    isPlayer: boolean;
+    characterName: string;
+    content: string;
+};
+
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     const [isChatModalVisible, setIsChatModalVisible] = useState(false);
+    const [messageHistory, setMessageHistory] = useState<Message[]>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -128,7 +135,7 @@ function App() {
                     </div>
                 </div>
             )}
-             {/*chat*/}
+            {/*chat*/}
             <section className="avenue-messenger">
                 <div className="menu">
                     <div className="items">
@@ -158,10 +165,34 @@ function App() {
                     <div className="chat-title">
                         <h1>Jesse Tino</h1>
                         <h2>RE/MAX</h2>
-
                     </div>
                     <div className="messages">
                         <div className="messages-content" />
+
+                        {messageHistory.map((message, index) => (
+                            <span>
+                                <div className="message new">
+                                    <figure className="avatar">
+                                        <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
+                                    </figure>
+                                    Hi there, I'm Jesse and you?
+                                    <div className="timestamp">13:20</div>
+                                    <div className="checkmark-sent-delivered">
+                                        ✓
+                                    </div>
+                                    <div className="checkmark-read">✓</div>
+                                </div>
+
+                                <div className="message message-personal new">
+                                    dsadsad
+                                    <div className="timestamp">13:4</div>
+                                    <div className="checkmark-sent-delivered">
+                                        ✓
+                                    </div>
+                                    <div className="checkmark-read">✓</div>
+                                </div>
+                            </span>
+                        ))}
                     </div>
                     <div className="message-box">
                         <textarea
