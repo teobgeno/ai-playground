@@ -8,6 +8,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected tasks: Array<Task> = [];
     public currentTask: Task | undefined;
     protected stateMachine: StateMachine;
+    protected isNpc: boolean;
 
     constructor(
         scene: Phaser.Scene,
@@ -17,6 +18,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
         super(scene, 0, 0, texture);
         this.scene = scene;
         this.id = id;
+        this.isNpc = this.id === 'hero' ? false : true;
         this.stateMachine = new StateMachine(this, this.id);
     }
     protected createAnimation(
