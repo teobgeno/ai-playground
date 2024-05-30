@@ -17,10 +17,19 @@ export class Npc extends Humanoid {
         //this.disableInteractive();
         //.setInteractive( { useHandCursor: true  } );
         this.on("pointerup", () => {
+            this.initConversationWithPlayer();
             // setTimeout(() => {
             //     console.log("sadsad");
             //     this.disableInteractive();
             // }, 2000);
         });
+    }
+
+    public initConversationWithPlayer(){
+
+    }
+
+    public initConversationWithNpc(){
+
     }
 }
