@@ -23,10 +23,10 @@ export default class CharacterController {
         this.stateMachine = stateMachine;
         this.id = id;
         if (this.scene.input.keyboard) {
-            this.keyW = this.scene.input.keyboard.addKey("W");
-            this.keyA = this.scene.input.keyboard.addKey("A");
-            this.keyS = this.scene.input.keyboard.addKey("S");
-            this.keyD = this.scene.input.keyboard.addKey("D");
+            this.keyW = this.scene.input.keyboard.addKey("W", false);
+            this.keyA = this.scene.input.keyboard.addKey("A", false);
+            this.keyS = this.scene.input.keyboard.addKey("S", false);
+            this.keyD = this.scene.input.keyboard.addKey("D", false);
         }
 
         this.stateMachine

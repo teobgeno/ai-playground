@@ -55,6 +55,8 @@ export class Game extends Scene {
         //https://newdocs.phaser.io/docs/3.54.0/focus/Phaser.Physics.Matter.PointerConstraint-pointer
         //https://labs.phaser.io/view.html?src=src/input\pointer\drag%20rectangle.js
         //https://labs.phaser.io/edit.html?src=src/tilemap\mouse%20wheel%20zoom.js
+
+        //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Tilemaps.Tilemap-tilesets (multiple tilesets)
         // MAP LOADING
         this.load.image({
             key: "tiles",
