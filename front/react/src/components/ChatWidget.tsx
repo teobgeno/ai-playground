@@ -13,6 +13,11 @@ export const ChatWidget = () => {
     const [messages, setMessages] = useState<Message[]>([]);
 
     useEffect(() => {
+
+        EventBus.on("on-player-talk-start", () => {
+            setIsVisible(true)
+        });
+
         EventBus.on("on-talk-message-send", (message: Message) => {
             setMessages((messages) => [
                 ...messages,
@@ -30,7 +35,7 @@ export const ChatWidget = () => {
 
     return (
         <>
-            <section className={islVisible? 'hidden' : 'avenue-messenger'}>
+            <section className={islVisible? 'avenue-messenger' : 'hidden'}>
                 <div className="menu">
                     <div className="items">
                         <span>

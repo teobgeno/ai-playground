@@ -21,6 +21,7 @@ export class Npc extends Humanoid {
         //this.disableInteractive();
         //.setInteractive( { useHandCursor: true  } );
         this.on("pointerup", () => {
+            //TODO::set idle state and create options menu for interaction wuih npc
             this.initConversationWithPlayer();
             // setTimeout(() => {
             //     console.log("sadsad");
@@ -32,9 +33,14 @@ export class Npc extends Humanoid {
     public initConversationWithPlayer() {
         //TODO::check if npc can/want to talk to player
         const convGuid = this.chatManager.initConversation();
-        this.chatManager.addParticipant(this, convGuid);
         this.chatManager.addPlayerParticipant(convGuid);
+        this.chatManager.addParticipant(this, convGuid);
+        this.chatManager.startConversation(convGuid);
     }
 
     public initConversationWithNpc() {}
+
+    public startTalk() {
+        console.log('ok talk npc')
+    }
 }

@@ -1,5 +1,7 @@
 import { EventBus } from "./EventBus";
 import { Humanoid } from "./characters/Humanoid";
+import {Hero} from "./characters/Hero";
+import {Npc} from "./characters/Npc";
 
 type message = {
     characterId: string;
@@ -8,13 +10,14 @@ type message = {
 
 type conversation = {
     id: string;
-    participants: Map<string, Humanoid>;
+    participants: Array<Humanoid>;
+    currentParticipantTalkIndex:number
     messages: Array<message>;
 };
 export class ChatManager {
     private player: Humanoid;
     private conversations: Map<string, conversation> = new Map();
-    private participants: Map<string, string> = new Map();
+    private participantsToConv: Map<string, string> = new Map();
 
     constructor(player: Humanoid) {
         this.player = player;
@@ -24,34 +27,43 @@ export class ChatManager {
         const convGuid = self.crypto.randomUUID();
         this.conversations.set(convGuid, {
             id: convGuid,
-            participants: new Map(),
+            participants: [],
+            currentParticipantTalkIndex: 0,
             messages: [],
         });
         return convGuid;
     }
 
     public addMessage(characterId: string, message: string, guid: string) {
-        const conversation = this.conversations.get(guid);
-        const character = conversation?.participants.get(characterId);
-        EventBus.emit("on-talk-message-send", {
-            isPlayer: character?.isNpc,
-            characterName: "skordopoutsoglou",
-            content: message,
-        });
+        // const conversation = this.conversations.get(guid);
+        // const character = conversation?.participants.get(characterId);
+        // EventBus.emit("on-talk-message-send", {
+        //     isPlayer: character?.isNpc,
+        //     characterName: "skordopoutsoglou",
+        //     content: message,
+        // });
 
-        conversation?.messages.push({
-            characterId: characterId,
-            message: message,
-        });
+        // conversation?.messages.push({
+        //     characterId: characterId,
+        //     message: message,
+        // });
     }
 
     public addParticipant(character: Humanoid, guid: string) {
         const conversation = this.conversations.get(guid);
-        conversation?.participants.set(character.getId(), character);
-        this.participants.set(character.getId(), guid);
+        conversation?.participants.push(character);
+        this.participantsToConv.set(character.getId(), guid);
         character.setConvGuid(guid);
     }
+
     public addPlayerParticipant(guid: string) {
         this.addParticipant(this.player, guid);
+    }
+
+    public startConversation(guid: string) {
+        const conversation = this.conversations.get(guid);
+        const character = conversation?.participants[conversation?.currentParticipantTalkIndex];
+        !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
+        //this.addParticipant(this.player, guid);
     }
 }

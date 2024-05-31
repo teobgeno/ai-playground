@@ -1,3 +1,4 @@
+import { EventBus } from "../EventBus";
 import { GridEngine } from "grid-engine";
 import CharacterController from "./CharacterController";
 import { TaskStatus } from "../actions/types";
@@ -198,6 +199,17 @@ export class Hero extends Humanoid {
                 return 117;
         }
         return -1;
+    }
+
+    public startTalk() {
+        console.log('ok talk hero')
+        EventBus.emit("on-player-talk-start", {
+          
+        });
+    }
+
+    public sendMessage() {
+       
     }
 
     // public getBody(): Physics.Arcade.Body {
