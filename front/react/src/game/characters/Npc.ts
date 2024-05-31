@@ -30,8 +30,9 @@ export class Npc extends Humanoid {
     }
 
     public initConversationWithPlayer() {
+        //TODO::check if npc can/want to talk to player
         const convGuid = this.chatManager.initConversation();
-        this.chatManager.addParticipants(this, convGuid);
+        this.chatManager.addParticipant(this, convGuid);
         this.chatManager.addPlayerParticipant(convGuid);
     }
 

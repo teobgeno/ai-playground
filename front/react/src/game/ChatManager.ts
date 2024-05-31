@@ -14,6 +14,7 @@ type conversation = {
 export class ChatManager {
     private player: Humanoid;
     private conversations: Map<string, conversation> = new Map();
+    private participants: Map<string, string> = new Map();
 
     constructor(player: Humanoid) {
         this.player = player;
@@ -44,13 +45,12 @@ export class ChatManager {
         });
     }
 
-    public addParticipants(character: Humanoid, guid: string) {
+    public addParticipant(character: Humanoid, guid: string) {
         const conversation = this.conversations.get(guid);
         conversation?.participants.set(character.getId(), character);
+        this.participants.set(character.getId(), guid);
     }
     public addPlayerParticipant(guid: string) {
-        const conversation = this.conversations.get(guid);
-        conversation?.participants.set(this.player.getId(), this.player);
-        console.log(this.conversations)
+        this.addParticipant(this.player, guid);
     }
 }
