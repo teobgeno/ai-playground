@@ -49,6 +49,7 @@ export class ChatManager {
         const conversation = this.conversations.get(guid);
         conversation?.participants.set(character.getId(), character);
         this.participants.set(character.getId(), guid);
+        character.setConvGuid(guid);
     }
     public addPlayerParticipant(guid: string) {
         this.addParticipant(this.player, guid);

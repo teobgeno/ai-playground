@@ -1,4 +1,4 @@
-import Phaser, { Physics }  from "phaser";
+import Phaser, { Physics } from "phaser";
 import { Task } from "../actions/types";
 import StateMachine from "./StateMachine";
 
@@ -6,19 +6,16 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public id: string;
     //private stamina: number;
     protected tasks: Array<Task> = [];
-    public currentTask: Task | undefined;
     protected stateMachine: StateMachine;
+    protected convGuid: string | null;
+    public currentTask: Task | undefined;
     public isNpc: boolean;
 
-    constructor(
-        scene: Phaser.Scene,
-        texture: string,
-        id: string,
-    ) {
+    constructor(scene: Phaser.Scene, texture: string, id: string) {
         super(scene, 0, 0, texture);
         this.scene = scene;
         this.id = id;
-        this.isNpc = this.id === 'hero' ? false : true;
+        this.isNpc = this.id === "hero" ? false : true;
         this.stateMachine = new StateMachine(this, this.id);
     }
     protected createAnimation(
@@ -49,13 +46,17 @@ export class Humanoid extends Physics.Arcade.Sprite {
         return this.id;
     }
 
-    public getStamina(){
-
+    public getConvGuid() {
+        return this.convGuid;
     }
 
-    public setStamina(){
-        
+    public setConvGuid(convGuid: string) {
+        this.convGuid = convGuid;
     }
+
+    public getStamina() {}
+
+    public setStamina() {}
 
     public setCharState(state: string) {
         this.stateMachine.setState(state);
