@@ -1,15 +1,19 @@
 import { GridEngine } from "grid-engine";
 import { Humanoid } from "./Humanoid";
+import { ChatManager } from "../ChatManager";
 export class Npc extends Humanoid {
     private gridEngine: GridEngine;
+    private chatManager: ChatManager;
     constructor(
         scene: Phaser.Scene,
         texture: string,
         gridEngine: GridEngine,
-        id: string
+        id: string,
+        chatManager: ChatManager
     ) {
         super(scene, texture, id);
         this.gridEngine = gridEngine;
+        this.chatManager = chatManager;
     }
 
     public init() {
@@ -25,11 +29,11 @@ export class Npc extends Humanoid {
         });
     }
 
-    public initConversationWithPlayer(){
-
+    public initConversationWithPlayer() {
+        const convGuid = this.chatManager.initConversation();
+        this.chatManager.addParticipants(this, convGuid);
+        this.chatManager.addPlayerParticipant(convGuid);
     }
 
-    public initConversationWithNpc(){
-
-    }
+    public initConversationWithNpc() {}
 }

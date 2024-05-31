@@ -7,6 +7,8 @@ import {Humanoid} from "../characters/Humanoid";
 import {Land} from "../farm/Land";
 // import {DayNight} from "../DayNight";
 import {CursorManager} from "../cursors/CursorManager";
+import {ChatManager} from "../ChatManager";
+
 
 // type gridEngineConfigChar = {
 //     id?:string,
@@ -37,6 +39,7 @@ export class Game extends Scene {
     private landsMap: Array<Land> = [];
     private farmLandMap :Map<string, string>
     private cursorManager:CursorManager
+    private chatManager:ChatManager
     constructor() {
         super("Game");
     }
@@ -84,9 +87,9 @@ export class Game extends Scene {
     create() {
 
         this.charactersMap = new Map();
-
         this.initMap();
         this.initHero();
+        this.chatManager = new ChatManager(this.hero);
         this.initNpcs();
         this.initGridEngine();
         this.initCamera(this.map);
@@ -158,6 +161,7 @@ export class Game extends Scene {
         }
         
         this.cursorManager = new CursorManager(this, this.map, this.gridEngine,this.hero, this.farmLandMap, this.landsMap, this.marker)
+        
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
@@ -230,7 +234,7 @@ export class Game extends Scene {
     }
 
     private initNpcs() {
-        const npc = new Npc(this, "npc", this.gridEngine, "npc0");
+        const npc = new Npc(this, "npc", this.gridEngine, "npc0", this.chatManager);
         this.physics.add.existing(npc);
         this.add.existing(npc);
         npc.init();
@@ -338,4 +342,5 @@ export class Game extends Scene {
         //     this.activeTool = tool;
         // }
     }
+    
 }
