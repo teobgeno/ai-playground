@@ -7,7 +7,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     //private stamina: number;
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
-    protected convGuid: string | null;
+    protected convGuid: string;
     public currentTask: Task | undefined;
     public isNpc: boolean;
 

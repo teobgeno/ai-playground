@@ -4,6 +4,7 @@ import { ChatManager } from "../ChatManager";
 export class Npc extends Humanoid {
     private gridEngine: GridEngine;
     private chatManager: ChatManager;
+   
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -42,5 +43,6 @@ export class Npc extends Humanoid {
 
     public startTalk() {
         console.log('ok talk npc')
+        this.chatManager.generateNpcResponse(this.getId());
     }
 }

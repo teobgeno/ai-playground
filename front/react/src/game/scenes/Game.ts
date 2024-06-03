@@ -91,7 +91,7 @@ export class Game extends Scene {
         this.charactersMap = new Map();
         this.initMap();
         this.initHero();
-        this.chatManager = new ChatManager(this.hero);
+        this.chatManager = new ChatManager(this.charactersMap);
         this.initNpcs();
         this.initGridEngine();
         this.initCamera(this.map);

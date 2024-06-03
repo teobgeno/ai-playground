@@ -11,14 +11,17 @@ export type Message = {
 export const ChatWidget = () => {
     const [islVisible, setIsVisible] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
+    const [convGuid, setconvGuid] = useState(false);
+    const [playerMessage, setPlayerMessage] = useState("");
 
     useEffect(() => {
-
-        EventBus.on("on-player-talk-start", () => {
-            setIsVisible(true)
+        EventBus.on("on-chat-start-conversation", (data) => {
+            console.log(data);
+            setconvGuid(data.guid);
+            setIsVisible(true);
         });
 
-        EventBus.on("on-talk-message-send", (message: Message) => {
+        EventBus.on("on-chat-add-message", (message: Message) => {
             setMessages((messages) => [
                 ...messages,
                 {
@@ -29,13 +32,23 @@ export const ChatWidget = () => {
             ]);
         });
         return () => {
-            EventBus.removeListener("on-talk-message-send");
+            EventBus.removeListener("on-chat-add-message");
         };
     }, []);
 
+    const handleSendMessage = () => {
+        console.log({ message: playerMessage, guid: convGuid });
+        EventBus.emit("on-chat-character-message", {
+            characterId: "hero",
+            message: playerMessage,
+            guid: convGuid,
+        });
+        setPlayerMessage('');
+    };
+
     return (
         <>
-            <section className={islVisible? 'avenue-messenger' : 'hidden'}>
+            <section className={islVisible ? "avenue-messenger" : "hidden"}>
                 <div className="menu">
                     <div className="items">
                         <span>
@@ -71,21 +84,21 @@ export const ChatWidget = () => {
                         {messages.map((message, index) => (
                             <span key={index}>
                                 {message.isPlayer ? (
-                                    <div className="message message-personal new">
-                                        {message.content}
-                                        <div className="timestamp">13:4</div>
-                                        <div className="checkmark-sent-delivered">
-                                            ✓
-                                        </div>
-                                        <div className="checkmark-read">✓</div>
-                                    </div>
-                                ) : (
                                     <div className="message new">
                                         <figure className="avatar">
                                             <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
                                         </figure>
                                         {message.content}
                                         <div className="timestamp">13:20</div>
+                                        <div className="checkmark-sent-delivered">
+                                            ✓
+                                        </div>
+                                        <div className="checkmark-read">✓</div>
+                                    </div>
+                                ) : (
+                                    <div className="message message-personal new">
+                                        {message.content}
+                                        <div className="timestamp">13:4</div>
                                         <div className="checkmark-sent-delivered">
                                             ✓
                                         </div>
@@ -99,9 +112,14 @@ export const ChatWidget = () => {
                         <textarea
                             className="message-input"
                             placeholder="Type message..."
-                            defaultValue={""}
+                            onChange={(e) => setPlayerMessage(e.target.value)}
+                            value={playerMessage}
                         />
-                        <button type="submit" className="message-submit">
+                        <button
+                            type="submit"
+                            className="message-submit"
+                            onClick={handleSendMessage}
+                        >
                             Add
                         </button>
                     </div>

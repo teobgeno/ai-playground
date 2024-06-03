@@ -15,12 +15,16 @@ type conversation = {
     messages: Array<message>;
 };
 export class ChatManager {
-    private player: Humanoid;
+    private charactersMap:  Map<string, Humanoid>;
     private conversations: Map<string, conversation> = new Map();
     private participantsToConv: Map<string, string> = new Map();
 
-    constructor(player: Humanoid) {
-        this.player = player;
+    constructor(charactersMap:  Map<string, Humanoid>) {
+        this.charactersMap = charactersMap;
+
+        EventBus.on("on-chat-character-message", ({characterId, message, guid}) => {
+           this.addMessage(characterId, message, guid)
+        });
     }
 
     public initConversation() {
@@ -28,25 +32,26 @@ export class ChatManager {
         this.conversations.set(convGuid, {
             id: convGuid,
             participants: [],
-            currentParticipantTalkIndex: 0,
+            currentParticipantTalkIndex: -1,
             messages: [],
         });
         return convGuid;
     }
 
     public addMessage(characterId: string, message: string, guid: string) {
-        // const conversation = this.conversations.get(guid);
-        // const character = conversation?.participants.get(characterId);
-        // EventBus.emit("on-talk-message-send", {
-        //     isPlayer: character?.isNpc,
-        //     characterName: "skordopoutsoglou",
-        //     content: message,
-        // });
+        const conversation = this.conversations.get(guid);
+        const character = this.charactersMap.get(characterId);
+        EventBus.emit("on-chat-add-message", {
+            isPlayer: character?.isNpc,
+            characterName: "skordopoutsoglou",
+            content: message,
+        });
 
-        // conversation?.messages.push({
-        //     characterId: characterId,
-        //     message: message,
-        // });
+        conversation?.messages.push({
+            characterId: characterId,
+            message: message,
+        });
+        this.setConversationSide(guid)
     }
 
     public addParticipant(character: Humanoid, guid: string) {
@@ -57,13 +62,57 @@ export class ChatManager {
     }
 
     public addPlayerParticipant(guid: string) {
-        this.addParticipant(this.player, guid);
+        const player = this.charactersMap.get('hero');
+        if(player) {
+            this.addParticipant(player, guid);
+        }
     }
 
     public startConversation(guid: string) {
-        const conversation = this.conversations.get(guid);
-        const character = conversation?.participants[conversation?.currentParticipantTalkIndex];
-        !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
+        // const conversation = this.conversations.get(guid);
+        // const character = conversation?.participants[conversation?.currentParticipantTalkIndex];
+        // !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
         //this.addParticipant(this.player, guid);
+        //TODO::if in participants is hero emit event to open chatbox
+        const player = this.charactersMap.get('hero');
+        if(player) {
+            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), guid: guid});
+        }
+        this.setConversationSide(guid);
+    }
+
+    public setConversationSide(guid: string) {
+        const conversation = this.conversations.get(guid);
+        if(conversation) {
+            conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
+            const character = conversation.participants[conversation.currentParticipantTalkIndex];
+            !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
+        }
+    }
+
+    public generateNpcResponse(characterId: string) {
+        const fake = [
+            'Hi there, I\'m Jesse and you?',
+            'Nice to meet you',
+            'How are you?',
+            'Not too bad, thanks',
+            'What do you do?',
+            'That\'s awesome',
+            'Codepen is a nice place to stay',
+            'I think you\'re a nice person',
+            'Why do you think that?',
+            'Can you explain?',
+            'Anyway I\'ve gotta go now',
+            'It was a pleasure chat with you',
+            'Time to make a new codepen',
+            'Bye',
+            ':)'
+        ]
+        setTimeout(() => {
+            const guid = this.participantsToConv.get(characterId)
+            if(guid) {
+                this.addMessage(characterId,fake[Math.floor(Math.random()*fake.length)], guid);
+            }
+        }, 1000);
     }
 }
