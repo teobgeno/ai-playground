@@ -77,7 +77,7 @@ Chat
 	flex: 1 1 auto;
 	/*  color: rgba(255, 255, 255, .5);
 	color: #fff;*/
-	overflow: hidden;
+	overflow-y: scroll;
 	position: relative;
 	width: 100%;
   }
@@ -277,7 +277,7 @@ Chat
 	height: 24px;
 	margin: 0;
 	padding-right: 20px;
-	width: 265px;
+	width: 470px;
 	color: #444;
   }
   .message-box textarea:focus:-webkit-placeholder {
@@ -431,7 +431,7 @@ Chat
 	height: calc(100% - 60px) !important;
 	max-height: 460px !important;
 	min-height: 220px !important;
-	width: 320px;
+	width: 600px;
 	/*  transform: translateY(0);
 	  -webkit-transform: translateY(0);
 	  -moz-transform: translateY(0);

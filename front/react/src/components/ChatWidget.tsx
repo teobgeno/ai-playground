@@ -14,8 +14,7 @@ export const ChatWidget = () => {
     const [playerMessage, setPlayerMessage] = useState("");
 
     useEffect(() => {
-        EventBus.on("on-chat-start-conversation-player", (data) => {
-            console.log(data);
+        EventBus.on("on-chat-start-conversation", () => {
             setIsVisible(true);
         });
 
@@ -28,11 +27,26 @@ export const ChatWidget = () => {
                     content: message.content,
                 },
             ]);
+
+            setTimeout(() => {
+                const messagesCont = document.getElementById('messages')!;
+                messagesCont.scrollTop = messagesCont.scrollHeight;
+              }, 100)
+           
         });
+
+        EventBus.on("on-chat-end-conversation", () => {
+            setIsVisible(false);
+        });
+
         return () => {
+            EventBus.removeListener("on-chat-start-conversation");
             EventBus.removeListener("on-chat-add-message");
+            EventBus.removeListener("on-chat-end-conversation");
         };
     }, []);
+
+   
 
     const handleSendMessage = () => {
         console.log({ message: playerMessage});
@@ -41,6 +55,13 @@ export const ChatWidget = () => {
             message: playerMessage,
         });
         setPlayerMessage('');
+    };
+
+    const handleEndConversation = () => {
+        EventBus.emit("on-chat-character-player-close-conversation", {
+            characterId: "hero",
+        });
+        setMessages([]);
     };
 
     return (
@@ -59,7 +80,7 @@ export const ChatWidget = () => {
                             </a>
                         </span>
                     </div>
-                    <div className="button">...</div>
+                    <div className="button" onClick={() => handleEndConversation()}>✕</div>
                 </div>
                 <div className="agent-face">
                     <div className="half">
@@ -75,7 +96,7 @@ export const ChatWidget = () => {
                         <h1>Jesse Tino</h1>
                         <h2>RE/MAX</h2>
                     </div>
-                    <div className="messages">
+                    <div id="messages" className="messages">
                         <div className="messages-content" />
 
                         {messages.map((message, index) => (
@@ -107,6 +128,7 @@ export const ChatWidget = () => {
                     </div>
                     <div className="message-box">
                         <textarea
+                           
                             className="message-input"
                             placeholder="Type message..."
                             onChange={(e) => setPlayerMessage(e.target.value)}

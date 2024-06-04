@@ -25,6 +25,9 @@ export class ChatManager {
         EventBus.on("on-chat-character-player-message", (data: Message) => {
            this.addMessage(data.characterId, data.message)
         });
+        EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
+            this.closeConversation(data.characterId)
+         });
     }
 
     public initConversation() {
@@ -39,7 +42,7 @@ export class ChatManager {
     }
 
     public addMessage(characterId: string, message: string) {
-        const guid = this.participantsToConv.get(characterId)
+        const guid = this.participantsToConv.get(characterId);
         if(guid) {
             const conversation = this.conversations.get(guid);
             const character = this.charactersMap.get(characterId);
@@ -76,7 +79,7 @@ export class ChatManager {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
-            EventBus.emit("on-chat-start-conversation-player", {characterId: player.getId(), guid: guid});
+            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), guid: guid});
         }
         this.setConversationSide(guid);
     }
@@ -87,6 +90,23 @@ export class ChatManager {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
             const character = conversation.participants[conversation.currentParticipantTalkIndex];
             !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
+        }
+    }
+
+    public closeConversation(characterId: string) {
+        const guid = this.participantsToConv.get(characterId);
+        let hasPlayerInConv = false;
+        if(guid) {
+            const conversation = this.conversations.get(guid);
+            //TODO::log dialogue to db, character that closed the conversation
+            for(const participant of ( conversation?.participants || [])){
+                this.participantsToConv.delete(participant.getId())
+                if(!participant.isNpc) {hasPlayerInConv = true;}
+            }
+            this.conversations.delete(guid);
+            if(hasPlayerInConv) {
+                EventBus.emit("on-chat-end-conversation", {});
+            }
         }
     }
 
