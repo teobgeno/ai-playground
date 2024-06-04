@@ -22,7 +22,7 @@ export class ChatManager {
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
 
-        EventBus.on("on-chat-character-message", (data: Message) => {
+        EventBus.on("on-chat-character-player-message", (data: Message) => {
            this.addMessage(data.characterId, data.message)
         });
     }
@@ -73,14 +73,10 @@ export class ChatManager {
     }
 
     public startConversation(guid: string) {
-        // const conversation = this.conversations.get(guid);
-        // const character = conversation?.participants[conversation?.currentParticipantTalkIndex];
-        // !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
-        //this.addParticipant(this.player, guid);
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
-            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), guid: guid});
+            EventBus.emit("on-chat-start-conversation-player", {characterId: player.getId(), guid: guid});
         }
         this.setConversationSide(guid);
     }

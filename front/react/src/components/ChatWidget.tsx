@@ -14,7 +14,7 @@ export const ChatWidget = () => {
     const [playerMessage, setPlayerMessage] = useState("");
 
     useEffect(() => {
-        EventBus.on("on-chat-start-conversation", (data) => {
+        EventBus.on("on-chat-start-conversation-player", (data) => {
             console.log(data);
             setIsVisible(true);
         });
@@ -36,7 +36,7 @@ export const ChatWidget = () => {
 
     const handleSendMessage = () => {
         console.log({ message: playerMessage});
-        EventBus.emit("on-chat-character-message", {
+        EventBus.emit("on-chat-character-player-message", {
             characterId: "hero",
             message: playerMessage,
         });
