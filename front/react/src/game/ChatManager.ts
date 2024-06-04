@@ -3,7 +3,7 @@ import { Humanoid } from "./characters/Humanoid";
 import {Hero} from "./characters/Hero";
 import {Npc} from "./characters/Npc";
 
-type message = {
+type Message = {
     characterId: string;
     message: string;
 };
@@ -12,7 +12,7 @@ type conversation = {
     id: string;
     participants: Array<Humanoid>;
     currentParticipantTalkIndex:number
-    messages: Array<message>;
+    messages: Array<Message>;
 };
 export class ChatManager {
     private charactersMap:  Map<string, Humanoid>;
@@ -22,8 +22,8 @@ export class ChatManager {
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
 
-        EventBus.on("on-chat-character-message", ({characterId, message, guid}) => {
-           this.addMessage(characterId, message, guid)
+        EventBus.on("on-chat-character-message", (data: Message) => {
+           this.addMessage(data.characterId, data.message)
         });
     }
 
@@ -38,7 +38,9 @@ export class ChatManager {
         return convGuid;
     }
 
-    public addMessage(characterId: string, message: string, guid: string) {
+    public addMessage(characterId: string, message: string) {
+
+        const guid = this.participantsToConv.get(characterId)
         const conversation = this.conversations.get(guid);
         const character = this.charactersMap.get(characterId);
         EventBus.emit("on-chat-add-message", {
@@ -109,10 +111,7 @@ export class ChatManager {
             ':)'
         ]
         setTimeout(() => {
-            const guid = this.participantsToConv.get(characterId)
-            if(guid) {
-                this.addMessage(characterId,fake[Math.floor(Math.random()*fake.length)], guid);
-            }
+            this.addMessage(characterId,fake[Math.floor(Math.random()*fake.length)]);
         }, 1000);
     }
 }

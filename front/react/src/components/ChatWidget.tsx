@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
 import "./Chat.css";
 
-export type Message = {
+export type ChatBoxMessage = {
     isPlayer: boolean;
     characterName: string;
     content: string;
@@ -10,14 +10,12 @@ export type Message = {
 
 export const ChatWidget = () => {
     const [islVisible, setIsVisible] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [convGuid, setconvGuid] = useState(false);
+    const [messages, setMessages] = useState<ChatBoxMessage[]>([]);
     const [playerMessage, setPlayerMessage] = useState("");
 
     useEffect(() => {
         EventBus.on("on-chat-start-conversation", (data) => {
             console.log(data);
-            setconvGuid(data.guid);
             setIsVisible(true);
         });
 
@@ -37,11 +35,10 @@ export const ChatWidget = () => {
     }, []);
 
     const handleSendMessage = () => {
-        console.log({ message: playerMessage, guid: convGuid });
+        console.log({ message: playerMessage});
         EventBus.emit("on-chat-character-message", {
             characterId: "hero",
             message: playerMessage,
-            guid: convGuid,
         });
         setPlayerMessage('');
     };
