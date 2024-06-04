@@ -19,7 +19,7 @@ export const ChatWidget = () => {
             setIsVisible(true);
         });
 
-        EventBus.on("on-chat-add-message", (message: Message) => {
+        EventBus.on("on-chat-add-message", (message: ChatBoxMessage) => {
             setMessages((messages) => [
                 ...messages,
                 {

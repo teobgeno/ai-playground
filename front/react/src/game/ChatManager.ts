@@ -39,21 +39,23 @@ export class ChatManager {
     }
 
     public addMessage(characterId: string, message: string) {
-
         const guid = this.participantsToConv.get(characterId)
-        const conversation = this.conversations.get(guid);
-        const character = this.charactersMap.get(characterId);
-        EventBus.emit("on-chat-add-message", {
-            isPlayer: character?.isNpc,
-            characterName: "skordopoutsoglou",
-            content: message,
-        });
-
-        conversation?.messages.push({
-            characterId: characterId,
-            message: message,
-        });
-        this.setConversationSide(guid)
+        if(guid) {
+            const conversation = this.conversations.get(guid);
+            const character = this.charactersMap.get(characterId);
+            EventBus.emit("on-chat-add-message", {
+                isPlayer: character?.isNpc,
+                characterName: "skordopoutsoglou",
+                content: message,
+            });
+    
+            conversation?.messages.push({
+                characterId: characterId,
+                message: message,
+            });
+            this.setConversationSide(guid)
+        }
+        
     }
 
     public addParticipant(character: Humanoid, guid: string) {
