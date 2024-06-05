@@ -101,6 +101,7 @@ export class ChatManager {
             //TODO::log dialogue to db, character that closed the conversation
             for(const participant of ( conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getId())
+                participant.setCharState('idle');
                 if(!participant.isNpc) {hasPlayerInConv = true;}
             }
             this.conversations.delete(guid);

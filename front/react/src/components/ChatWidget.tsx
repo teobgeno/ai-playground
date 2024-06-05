@@ -107,20 +107,20 @@ export const ChatWidget = () => {
                                             <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
                                         </figure>
                                         {message.content}
-                                        <div className="timestamp">13:20</div>
+                                        {/* <div className="timestamp">13:20</div>
                                         <div className="checkmark-sent-delivered">
                                             ✓
                                         </div>
-                                        <div className="checkmark-read">✓</div>
+                                        <div className="checkmark-read">✓</div> */}
                                     </div>
                                 ) : (
                                     <div className="message message-personal new">
                                         {message.content}
-                                        <div className="timestamp">13:4</div>
+                                        {/* <div className="timestamp">13:4</div>
                                         <div className="checkmark-sent-delivered">
                                             ✓
                                         </div>
-                                        <div className="checkmark-read">✓</div>
+                                        <div className="checkmark-read">✓</div> */}
                                     </div>
                                 )}
                             </span>

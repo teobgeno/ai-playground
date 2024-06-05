@@ -39,6 +39,7 @@ export default class CharacterController {
                 onUpdate: this.walkOnUpdate,
                 onExit: this.walkOnExit,
             })
+            .addState("talk", {})
             .setState("idle");
     }
 
