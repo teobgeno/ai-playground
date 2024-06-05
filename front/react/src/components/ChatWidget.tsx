@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, KeyboardEvent  } from "react";
 import { EventBus } from "../game/EventBus";
 import "./Chat.css";
 
@@ -57,12 +57,21 @@ export const ChatWidget = () => {
         setPlayerMessage('');
     };
 
+    const handleTextareaKeyPress= (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if(e.key === 'Enter' && e.shiftKey == false) {
+            e.preventDefault();
+            handleSendMessage();
+          }
+    }
+
     const handleEndConversation = () => {
         EventBus.emit("on-chat-character-player-close-conversation", {
             characterId: "hero",
         });
         setMessages([]);
     };
+
+   
 
     return (
         <>
@@ -133,6 +142,7 @@ export const ChatWidget = () => {
                             placeholder="Type message..."
                             onChange={(e) => setPlayerMessage(e.target.value)}
                             value={playerMessage}
+                            onKeyDown={(e) => handleTextareaKeyPress(e)}
                         />
                         <button
                             type="submit"

@@ -21,6 +21,7 @@ export class Npc extends Humanoid {
         this.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
         //this.disableInteractive();
         //.setInteractive( { useHandCursor: true  } );
+        //https://codepen.io/NickHatBoecker/pen/zYdBoNb
         this.on("pointerup", () => {
             //TODO::set idle state and create options menu for interaction wuih npc
             this.initConversationWithPlayer();

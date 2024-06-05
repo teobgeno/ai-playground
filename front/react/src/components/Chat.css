@@ -78,6 +78,7 @@ Chat
 	/*  color: rgba(255, 255, 255, .5);
 	color: #fff;*/
 	overflow-y: scroll;
+	overflow-x: hidden;
 	position: relative;
 	width: 100%;
   }
@@ -174,7 +175,7 @@ Chat
 	 bottom: -8px;*/
   }
   .messages .message:last-child {
-	margin-bottom: 30px;
+	margin-bottom: 5px;
   }
   .messages .message.new {
 	transform: scale(0);
