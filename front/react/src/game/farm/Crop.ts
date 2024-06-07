@@ -19,8 +19,12 @@ export class Crop {
         this.lastTimestamp = 0;
 
         this.sprite = this.scene.add.sprite(x + 16, y, "crops", 30);
-        this.sprite.setInteractive({ useHandCursor: true });
+        //this.sprite.setInteractive({ useHandCursor: true });
         this.sprite.setDepth(2);
+       
+    }
+    public getSprite() {
+        return this.sprite;
     }
 
     public getCurrentGrowthStage() {

@@ -58,12 +58,7 @@ export class Land {
         };
 
         this.sprite.setAlpha(1);
-        this.sprite.on("pointerup", () => {
-            console.log('fsdfsd')
-        //    if(this.landState === LandState.READY) {
-        //         this.harvestCrop();
-        //    }
-        });
+      
     }
 
     public getPosX() {
@@ -86,19 +81,27 @@ export class Land {
     public plantCrop(cropType: CropType) {
         if(this.landState === LandState.PLOWED) {
             this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
+            this.crop.getSprite().on("pointerup",this.onHarvestCrop);
             this.landState = LandState.PLANTED;
         }
         
     }
 
-    private setHarvestInteractive(){
-        this.sprite.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
+    private onHarvestCrop = () =>{
+        console.log('crop harvest')
+        if(this.landState === LandState.READY) {
+            this.landState = LandState.PLOWED;
+            this.harvestCrop();
+            this.crop?.getSprite().off("pointerup",this.onHarvestCrop);
+            this.crop?.remove();
+            this.crop = null;
+            this.updateTile();
+            
+        }
     }
+
     public harvestCrop() {
-        this.landState = LandState.PLOWED;
-        this.sprite.disableInteractive();
-        this.crop?.remove();
-        this.updateTile();
+        //TODO::add to player inventory
     }
 
      //TODO:: change cursor when crop ready
