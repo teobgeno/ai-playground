@@ -13,7 +13,7 @@ export class Crop {
         this.scene = scene;
         this.timeToRipe = 10;
         this.timeToDeath = 30;
-        this.growthStageDuration = 5000;
+        this.growthStageDuration = 1000;
         this.maxGrowthStage = 34;
         this.currentGrowthStage = 30;
         this.lastTimestamp = 0;
@@ -50,5 +50,13 @@ export class Crop {
     updateTile() {
         const frame = this.getCurrentGrowthStage();
         this.sprite.setFrame(frame);
+    }
+
+    public setHarvestInteractive(){
+        this.sprite.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
+    }
+
+    public remove(){
+        this.sprite.destroy();
     }
 }

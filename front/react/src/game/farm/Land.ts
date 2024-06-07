@@ -58,6 +58,12 @@ export class Land {
         };
 
         this.sprite.setAlpha(1);
+        this.sprite.on("pointerup", () => {
+            console.log('fsdfsd')
+        //    if(this.landState === LandState.READY) {
+        //         this.harvestCrop();
+        //    }
+        });
     }
 
     public getPosX() {
@@ -78,12 +84,21 @@ export class Land {
     }
 
     public plantCrop(cropType: CropType) {
-        this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
-        this.landState = LandState.PLANTED;
+        if(this.landState === LandState.PLOWED) {
+            this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
+            this.landState = LandState.PLANTED;
+        }
+        
     }
 
+    private setHarvestInteractive(){
+        this.sprite.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
+    }
     public harvestCrop() {
-        this.landState = LandState.PLANTED;
+        this.landState = LandState.PLOWED;
+        this.sprite.disableInteractive();
+        this.crop?.remove();
+        this.updateTile();
     }
 
      //TODO:: change cursor when crop ready
@@ -93,8 +108,9 @@ export class Land {
     public update(time: number) {
         if (LandState.PLANTED) {
             this.crop?.update(time, this.elements);
-            if(this.crop?.isFullGrown()) {
+            if(this.crop?.isFullGrown() && this.landState === LandState.PLANTED) {
                 this.landState = LandState.READY;
+                this.crop?.setHarvestInteractive();
             }
         }
     }
