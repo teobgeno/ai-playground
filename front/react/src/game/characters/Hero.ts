@@ -1,12 +1,13 @@
-import { EventBus } from "../EventBus";
 import { GridEngine } from "grid-engine";
-import CharacterController from "./CharacterController";
+import { CharacterController } from "./CharacterController";
+import { CharacterInventory } from "./CharacterInventory";
 import { TaskStatus } from "../actions/types";
 import { Humanoid } from "./Humanoid";
 
 export class Hero extends Humanoid {
     private gridEngine: GridEngine;
     private characterController: CharacterController;
+    private characterInventory: CharacterInventory;
 
     constructor(
         scene: Phaser.Scene,
@@ -15,7 +16,7 @@ export class Hero extends Humanoid {
         //map: Tilemaps.Tilemap
         id: string
     ) {
-        super(scene,texture, id);
+        super(scene, texture, id);
         this.gridEngine = gridEngine;
         this.characterController = new CharacterController(
             this.scene,
@@ -23,6 +24,7 @@ export class Hero extends Humanoid {
             this.stateMachine,
             this.id
         );
+        this.characterInventory = new CharacterInventory();
     }
 
     public init() {
@@ -32,9 +34,17 @@ export class Hero extends Humanoid {
         //this.getBody().setCollideWorldBounds(true);
     }
 
+    public getInventory() {
+        return this.characterInventory;
+    }
+
     update(dt: number): void {
         this.characterController.update(dt);
-        if ((this.tasks.length > 0 && !this.currentTask) || (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)) {
+        if (
+            (this.tasks.length > 0 && !this.currentTask) ||
+            (this.currentTask &&
+                this.currentTask.getStatus() === TaskStatus.Completed)
+        ) {
             this.currentTask = this.tasks.shift();
             if (this.currentTask) {
                 this.currentTask.start();
@@ -51,15 +61,7 @@ export class Hero extends Humanoid {
 
     private createHumanoidAnimations(key: string) {
         const texture = key;
-        this.createAnimation(
-            "attack_right",
-            texture,
-            195,
-            200,
-            15,
-            true,
-            true
-        );
+        this.createAnimation("attack_right", texture, 195, 200, 15, true, true);
         this.createAnimation(
             key + "_attack_down",
             texture,
@@ -202,13 +204,11 @@ export class Hero extends Humanoid {
     }
 
     public startTalk() {
-        console.log('ok talk hero')
+        console.log("ok talk hero");
         //EventBus.emit("on-player-talk-start", {});
     }
 
-    public sendMessage() {
-       
-    }
+    public sendMessage() {}
 
     // public getBody(): Physics.Arcade.Body {
     //     return this.body as Physics.Arcade.Body;

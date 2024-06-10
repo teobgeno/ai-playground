@@ -6,6 +6,7 @@ import {Npc} from "../characters/Npc";
 import {Humanoid} from "../characters/Humanoid";
 import {Land} from "../farm/Land";
 // import {DayNight} from "../DayNight";
+import {Hoe} from "../tools/Hoe";
 import {CursorManager} from "../cursors/CursorManager";
 import {ChatManager} from "../ChatManager";
 
@@ -229,6 +230,7 @@ export class Game extends Scene {
 
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
+        this.hero.getInventory().addItem(new Hoe());
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
         this.hero.init();

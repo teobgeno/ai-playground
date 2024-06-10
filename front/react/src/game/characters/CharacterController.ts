@@ -2,7 +2,7 @@ import { Input } from "phaser";
 import { Direction, GridEngine } from "grid-engine";
 import StateMachine from "./StateMachine";
 
-export default class CharacterController {
+export class CharacterController {
     private scene: Phaser.Scene;
     private gridEngine: GridEngine;
     private keyW: Input.Keyboard.Key;
