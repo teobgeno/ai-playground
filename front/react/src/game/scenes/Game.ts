@@ -346,5 +346,14 @@ export class Game extends Scene {
         //     this.activeTool = tool;
         // }
     }
+
+    getHotbarItems() {
+        return this.hero.getInventory().getHotbarItems();
+        // if(this.activeTool && this.activeTool === tool) {
+        //     this.activeTool = 0;
+        // } else {
+        //     this.activeTool = tool;
+        // }
+    }
     
 }

@@ -9,7 +9,7 @@ export class CharacterInventory {
     public addItem(item: InventoryItem) {
         if(!this.getItem(item.id) || (item && !item.isStackable)) {
             //find next available slot
-            for (let i = 0; i < this.inventorySize; i += 1) {
+            for (let i = 0; i < this.inventorySize; i++) {
                 if (typeof this.items[i] === 'undefined' || ( this.items[i] &&  this.items[i] === null)) {
                     this.items[i] = item;
                     break;
@@ -32,7 +32,13 @@ export class CharacterInventory {
     private getItem(itemId: number) {
         return this.items.find(x=>x.id === itemId);
     }
-    private getHotbarItems() {}
+    public getHotbarItems() {
+        const ret: Array<InventoryItem> = [];
+        for (let i = 0; i < this.hotbarSize; i++) {
+            ret.push(this.items[i])
+        }
+        return ret;
+    }
 
     //id
     //isStackable
