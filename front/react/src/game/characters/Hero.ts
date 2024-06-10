@@ -202,7 +202,6 @@ export class Hero extends Humanoid {
     }
 
     public startTalk() {
-        this.setCharState('talk')
         console.log('ok talk hero')
         //EventBus.emit("on-player-talk-start", {});
     }

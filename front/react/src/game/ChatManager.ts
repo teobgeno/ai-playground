@@ -79,6 +79,7 @@ export class ChatManager {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
+            player.setCharState('talk')
             EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), guid: guid});
         }
         this.setConversationSide(guid);
