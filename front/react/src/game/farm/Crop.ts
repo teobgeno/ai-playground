@@ -33,6 +33,7 @@ export class Crop {
 
     public update(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
+            //TODO:: use clock to calculate growth. Time is not always available. Scene chage, tab browser not active....
             if (
                 time - this.lastTimestamp >= this.growthStageDuration &&
                 this.currentGrowthStage < this.maxGrowthStage
