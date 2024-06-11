@@ -1,7 +1,8 @@
 import { Cursor, CursorType } from "./types";
+import { InventoryItem } from "../characters/types";
+import {Humanoid} from "../characters/Humanoid";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import {Humanoid} from "../characters/Humanoid";
 import { Land } from "../farm/Land";
 import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
@@ -78,7 +79,7 @@ export class CursorManager {
         return this.currentCursor ? true : false;
     }
 
-    public setActiveCursor(selectedToolType: CursorType) {
+    public setActiveCursor(selectedToolType: CursorType, item: InventoryItem) {
 
         if(this.currentCursorType && this.currentCursorType === selectedToolType) {
             selectedToolType = CursorType.NONE;

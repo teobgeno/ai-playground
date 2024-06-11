@@ -8,6 +8,8 @@ export class Hoe implements Tool, InventoryItem {
     public amount: number
     public icon:string;
     public cursorType:CursorType
+
+    public weedSpeed:number
  
 
     constructor() {
@@ -16,6 +18,7 @@ export class Hoe implements Tool, InventoryItem {
         this.amount = 1;
         this.icon = '⛏️';
         this.cursorType = CursorType.HOE;
+        this.weedSpeed = 5000;
     }
 
     public execute() {}

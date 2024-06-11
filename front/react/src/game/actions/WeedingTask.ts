@@ -1,4 +1,5 @@
 import {Task, TaskStatus} from "./types";
+import { Hoe } from "../tools/Hoe";
 import { GridEngine } from "grid-engine";
 import {Humanoid} from "../characters/Humanoid";
 import MoveCharAction from "./MoveCharAction";
@@ -12,19 +13,22 @@ export default class WeedingTask implements Task{
     public status: TaskStatus;
     private pointer: number = 0;
     private landTile:Land;
+    private hoe:Hoe;
 
     constructor(
         character: Humanoid,
         gridEngine: GridEngine,
         posX: number,
         posY: number,
-        landTile: Land
+        landTile: Land,
+        hoe: Hoe
     ) {
         this.character = character;
         this.gridEngine = gridEngine;
         this.posX = posX;
         this.posY = posY;
         this.landTile = landTile;
+        this.hoe = hoe;
     }
     public getStatus() {
        return this.status;
@@ -67,6 +71,6 @@ export default class WeedingTask implements Task{
             this.character.anims.stop();
             this.landTile.init();
             this.character.setCharState('idle')
-          }, 1000);
+          }, this.hoe.weedSpeed);
     }
 }

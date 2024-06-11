@@ -1,7 +1,8 @@
 import { Cursor } from "./types";
+import { Hoe } from "../tools/Hoe";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import {Humanoid} from "../characters/Humanoid";
+import { Humanoid } from "../characters/Humanoid";
 import { Land } from "../farm/Land";
 import WeedingTask from "../actions/WeedingTask";
 
@@ -13,6 +14,7 @@ export class HoeCursor implements Cursor {
     private farmLandMap: Map<string, string>;
     private landsMap: Array<Land> = [];
     private marker: Phaser.GameObjects.Rectangle;
+    private hoe: Hoe;
 
     constructor(
         scene: Phaser.Scene,
@@ -30,6 +32,10 @@ export class HoeCursor implements Cursor {
         this.farmLandMap = farmLandMap;
         this.landsMap = landsMap;
         this.marker = marker;
+    }
+
+    public setItem(hoe: Hoe) {
+        this.hoe = hoe;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
