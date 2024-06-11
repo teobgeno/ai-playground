@@ -5,6 +5,7 @@ export interface InventoryItem
 {
     id:number;
     isStackable:boolean;
-    amount: number
-    cursorType:CursorType
+    amount: number;
+    icon:string;
+    cursorType:CursorType;
 }

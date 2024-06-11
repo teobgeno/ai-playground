@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
+import { InventoryItem } from "./game/characters/types";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
@@ -13,6 +14,8 @@ export type Message = {
 
 function App() {
 
+    const [hotbarItems, setHotbarItems] = useState<InventoryItem[]>([]);
+
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
 
@@ -20,7 +23,8 @@ function App() {
     const currentScene = (scene: Phaser.Scene) => {
         // console.log(scene.scene.key)
         // setCanMoveSprite(scene.scene.key !== "MainMenu");
-        console.log((scene as Game).getHotbarItems());
+        //console.log((scene as Game).getHotbarItems());
+        setHotbarItems((scene as Game).getHotbarItems());
         
     };
 
@@ -42,7 +46,7 @@ function App() {
         <div id="app">
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-                <Hotbar />
+                <Hotbar items={hotbarItems}/>
             </div>
             <ChatWidget />
            
