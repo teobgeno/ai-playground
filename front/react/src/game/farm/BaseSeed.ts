@@ -1,5 +1,5 @@
-import { InventoryItem } from "../../characters/types";
-import { CursorType } from "../../cursors/types";
+import { InventoryItem } from "../characters/types";
+import { CursorType } from "../cursors/types";
 
 export class CornSeed implements InventoryItem {
     public id:number;
