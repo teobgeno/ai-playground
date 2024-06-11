@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, KeyboardEvent  } from "react";
+import { useState, useEffect, KeyboardEvent  } from "react";
 import { EventBus } from "../game/EventBus";
 import "./Chat.css";
 
