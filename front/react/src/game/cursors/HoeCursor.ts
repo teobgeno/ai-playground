@@ -1,5 +1,6 @@
 import { Cursor } from "./types";
 import { Hoe } from "../tools/Hoe";
+import { InventoryItem } from "../characters/types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import { Humanoid } from "../characters/Humanoid";
@@ -34,8 +35,8 @@ export class HoeCursor implements Cursor {
         this.marker = marker;
     }
 
-    public setItem(hoe: Hoe) {
-        this.hoe = hoe;
+    public setItem(hoe: InventoryItem) {
+        this.hoe = hoe as Hoe;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
@@ -94,7 +95,8 @@ export class HoeCursor implements Cursor {
                     this.gridEngine,
                     tileGround.x,
                     tileGround.y,
-                    landTile
+                    landTile,
+                    this.hoe
                 );
                 this.character.addTask(w);
             }

@@ -79,14 +79,15 @@ export class CursorManager {
         return this.currentCursor ? true : false;
     }
 
-    public setActiveCursor(selectedToolType: CursorType, item: InventoryItem) {
-
+    public setActiveItemCursor(item: InventoryItem) {
+        let selectedToolType = item.cursorType
         if(this.currentCursorType && this.currentCursorType === selectedToolType) {
             selectedToolType = CursorType.NONE;
         }
         
         switch (selectedToolType) {
             case CursorType.HOE:
+                this.hoeCursor.setItem(item)
                 this.currentCursor = this.hoeCursor;
                 this.currentCursorType = CursorType.HOE;
                 break;

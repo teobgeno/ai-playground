@@ -1,4 +1,5 @@
 import { Input } from "phaser";
+import { EventBus } from "../EventBus";
 import { Direction, GridEngine } from "grid-engine";
 import StateMachine from "./StateMachine";
 
@@ -9,6 +10,7 @@ export class CharacterController {
     private keyA: Input.Keyboard.Key;
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
+    private keyESC: Input.Keyboard.Key;
     private stateMachine: StateMachine;
     private id: string;
 
@@ -16,7 +18,7 @@ export class CharacterController {
         scene: Phaser.Scene,
         gridEngine: GridEngine,
         stateMachine: StateMachine,
-        id:string
+        id: string
     ) {
         this.scene = scene;
         this.gridEngine = gridEngine;
@@ -27,6 +29,7 @@ export class CharacterController {
             this.keyA = this.scene.input.keyboard.addKey("A", false);
             this.keyS = this.scene.input.keyboard.addKey("S", false);
             this.keyD = this.scene.input.keyboard.addKey("D", false);
+            this.keyESC = this.scene.input.keyboard.addKey("ESC", false);
         }
 
         this.stateMachine
@@ -44,7 +47,15 @@ export class CharacterController {
     }
 
     update(dt: number) {
+        this.gameControllsUpdate();
         this.stateMachine.update(dt);
+    }
+
+    private gameControllsUpdate() {
+        if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
+            EventBus.emit("on-character-controller-esc-key", {});
+            console.log("escape");
+        }
     }
 
     private idleOnEnter() {
@@ -52,32 +63,32 @@ export class CharacterController {
     }
 
     private idleOnUpdate = () => {
-        if (this.keyW?.isDown || this.keyA?.isDown || this.keyS?.isDown || this.keyD?.isDown) {
-            this.stateMachine.setState('walk')
+        if (
+            this.keyW?.isDown ||
+            this.keyA?.isDown ||
+            this.keyS?.isDown ||
+            this.keyD?.isDown
+        ) {
+            this.stateMachine.setState("walk");
         }
-    }
-    private walkOnEnter() {
-        
-    }
+    };
+    private walkOnEnter() {}
     private walkOnUpdate = () => {
         if (this.keyW?.isDown) {
             this.gridEngine.move(this.id, Direction.UP);
-        }
-        else if (this.keyA?.isDown) {
+        } else if (this.keyA?.isDown) {
             this.gridEngine.move(this.id, Direction.LEFT);
-        }
-        else if (this.keyS?.isDown) {
+        } else if (this.keyS?.isDown) {
             this.gridEngine.move(this.id, Direction.DOWN);
-        }
-        else if (this.keyD?.isDown) {
+        } else if (this.keyD?.isDown) {
             this.gridEngine.move(this.id, Direction.RIGHT);
         } else {
-            if(!this.gridEngine.isMoving(this.id)) {
-                this.stateMachine.setState('idle')
+            if (!this.gridEngine.isMoving(this.id)) {
+                this.stateMachine.setState("idle");
             }
         }
         //console.log(this.gridEngine.isMoving(this.id))
-    }
+    };
 
     private walkOnExit() {}
 }

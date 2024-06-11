@@ -1,6 +1,6 @@
+import { InventoryItem } from "./game/characters/types";
 import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
-import { InventoryItem } from "./game/characters/types";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
@@ -28,12 +28,11 @@ function App() {
         
     };
 
-    const pickTool = (tool: number) => {
+    const setActiveItem = (item: InventoryItem) => {
         if (phaserRef.current) {
             const scene = phaserRef.current.scene as Game;
-
             if (scene) {
-                scene.setActiveTool(tool);
+                scene.setActiveItem(item);
             }
         }
     };
@@ -46,7 +45,7 @@ function App() {
         <div id="app">
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-                <Hotbar items={hotbarItems}/>
+                <Hotbar items={hotbarItems} setActiveItem={setActiveItem}/>
             </div>
             <ChatWidget />
            

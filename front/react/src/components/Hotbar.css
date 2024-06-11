@@ -18,9 +18,9 @@
 	border-radius: 4px;
 	box-shadow: 0 0 3px rgba(64,100,138,.3), 0 2px 4px #3b5c7f, 0 12px 18px rgba(64,100,138,.4);
     padding: 0;
+	display: flex;
 }
 .toolbar li {
-	float:left;
 	list-style: none;
 	width: 25%;
 }
@@ -43,7 +43,14 @@
 	text-decoration: none;
 	text-shadow: 0 1px 0 #fff;
 }
-	.toolbar li:first-child a {
+.toolbar li a{
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+
+.toolbar li:first-child a {
 		border-left: none;
 		border-radius:4px 0 0 4px
 	}
@@ -74,4 +81,9 @@
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8aafd5', endColorstr='#5c8abb',GradientType=0 );
 		box-shadow: 0 2px 3px rgba(0,0,0,.3) inset;
 		text-shadow: 0 -1px 0 #40648a;
+	}
+
+
+	.toolbar .active_item a {
+		background: linear-gradient(to bottom, #aac5e0 0%, #adc8e4 4%, #a2c0de 30%, #9ab9da 68%, #92b2d5 89%, #8baed2 92%, #7da1c7 96%, #7ca0c6 100%);
 	}

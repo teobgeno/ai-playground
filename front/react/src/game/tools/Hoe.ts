@@ -18,7 +18,7 @@ export class Hoe implements Tool, InventoryItem {
         this.amount = 1;
         this.icon = '⛏️';
         this.cursorType = CursorType.HOE;
-        this.weedSpeed = 5000;
+        this.weedSpeed = 1000;
     }
 
     public execute() {}

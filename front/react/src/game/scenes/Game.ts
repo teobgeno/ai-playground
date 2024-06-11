@@ -9,6 +9,7 @@ import {Land} from "../farm/Land";
 import {Hoe} from "../tools/Hoe";
 import {CursorManager} from "../cursors/CursorManager";
 import {ChatManager} from "../ChatManager";
+import { InventoryItem } from "../characters/types";
 
 
 // type gridEngineConfigChar = {
@@ -338,13 +339,8 @@ export class Game extends Scene {
         
     }
 
-    setActiveTool(cursor: number) {
-        this.cursorManager.setActiveCursor(cursor);
-        // if(this.activeTool && this.activeTool === tool) {
-        //     this.activeTool = 0;
-        // } else {
-        //     this.activeTool = tool;
-        // }
+    setActiveItem(item:InventoryItem) {
+        this.cursorManager.setActiveItemCursor(item);
     }
 
     getHotbarItems() {

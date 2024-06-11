@@ -49,6 +49,10 @@ export default class WeedingTask implements Task{
         }
     };
 
+    public cancel = () => {
+        
+    }
+
     private moveCharacter() {
         this.pointer = 2;
         const m = new MoveCharAction(
