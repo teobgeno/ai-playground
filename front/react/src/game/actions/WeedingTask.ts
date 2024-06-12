@@ -1,7 +1,7 @@
 import {Task, TaskStatus} from "./types";
+import {Humanoid} from "../characters/Humanoid";
 import { Hoe } from "../tools/Hoe";
 import { GridEngine } from "grid-engine";
-import {Humanoid} from "../characters/Humanoid";
 import MoveCharAction from "./MoveCharAction";
 import {Land} from "../farm/Land";
 
@@ -29,29 +29,43 @@ export default class WeedingTask implements Task{
         this.posY = posY;
         this.landTile = landTile;
         this.hoe = hoe;
+        this.status = TaskStatus.Initialized;
     }
+
     public getStatus() {
        return this.status;
     }
+
+    public setStatus(status: TaskStatus) {
+        this.status = status;
+     }
+
     public start() {
-        this.status = TaskStatus.Running;
+        this.status = this.status === TaskStatus.Initialized ? TaskStatus.Running : this.status;
         this.pointer = 1;
         this.next();
     }
-    public next = () => {
-        switch (this.pointer) {
-            case 1:
-                this.moveCharacter();
-                break;
-            case 2:
-               this.weedGround();
-                break;
-        }
-    };
 
     public cancel = () => {
-        
+        console.log('cancel task');
+        this.status = TaskStatus.Rollback;
+        this.gridEngine.stopMovement(this.character.getId());
+        this.landTile.rollbackLand();
+        this.status = TaskStatus.Completed;
     }
+
+    public next = () => {
+        if(this.status === TaskStatus.Running) {
+            switch (this.pointer) {
+                case 1:
+                    //this.moveCharacter();
+                    break;
+                case 2:
+                   this.weedGround();
+                    break;
+            }
+        }
+    };
 
     private moveCharacter() {
         this.pointer = 2;
@@ -68,13 +82,14 @@ export default class WeedingTask implements Task{
     private weedGround() {
         console.log('weeding');
         this.character.anims.play('attack_right', true);
-        this.character.setCharState('weed')
+        //this.character.setCharState('weed')
         setTimeout(() => {
-            this.status = TaskStatus.Completed;
             this.character.anims.restart();
             this.character.anims.stop();
-            this.landTile.init();
-            this.character.setCharState('idle')
+            if(this.status === TaskStatus.Running) {
+                this.status = TaskStatus.Completed;
+                this.landTile.init();
+            }
           }, this.hoe.weedSpeed);
     }
 }

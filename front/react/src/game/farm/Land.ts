@@ -61,6 +61,10 @@ export class Land {
       
     }
 
+    public rollbackLand() {
+        this.sprite.destroy();
+    }
+
     public getPosX() {
         return this.posX;
     }

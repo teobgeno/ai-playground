@@ -3,6 +3,7 @@ import { CharacterController } from "./CharacterController";
 import { CharacterInventory } from "./CharacterInventory";
 import { TaskStatus } from "../actions/types";
 import { Humanoid } from "./Humanoid";
+import { EventBus } from "../EventBus";
 
 export class Hero extends Humanoid {
     private gridEngine: GridEngine;
@@ -13,7 +14,6 @@ export class Hero extends Humanoid {
         scene: Phaser.Scene,
         texture: string,
         gridEngine: GridEngine,
-        //map: Tilemaps.Tilemap
         id: string
     ) {
         super(scene, texture, id);
@@ -25,13 +25,19 @@ export class Hero extends Humanoid {
             this.id
         );
         this.characterInventory = new CharacterInventory();
+
+        EventBus.on("on-character-controller-esc-key", () => {
+            this.tasks.forEach((task) => task.setStatus(TaskStatus.Canceled));
+            if( this.currentTask) {
+                this.currentTask.setStatus(TaskStatus.Canceled);
+            }
+        });
     }
 
     public init() {
         this.createMovementAnimations();
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
-        //this.getBody().setCollideWorldBounds(true);
     }
 
     public getInventory() {
@@ -40,15 +46,23 @@ export class Hero extends Humanoid {
 
     update(dt: number): void {
         this.characterController.update(dt);
+        this.updateTasksQueue();
+    }
+
+    private updateTasksQueue() {
         if (
             (this.tasks.length > 0 && !this.currentTask) ||
             (this.currentTask &&
                 this.currentTask.getStatus() === TaskStatus.Completed)
         ) {
             this.currentTask = this.tasks.shift();
-            if (this.currentTask) {
+            if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
                 this.currentTask.start();
             }
+        }
+       
+        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
+            this.currentTask.cancel();
         }
     }
 

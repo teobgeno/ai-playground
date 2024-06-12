@@ -89,7 +89,7 @@ export class HoeCursor implements Cursor {
                     tileGround.pixelX,
                     tileGround.pixelY
                 );
-                this.landsMap.push(landTile);
+                //this.landsMap.push(landTile);
                 const w = new WeedingTask(
                     this.character,
                     this.gridEngine,
