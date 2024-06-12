@@ -10,7 +10,7 @@ export default class WeedingTask implements Task{
     private gridEngine: GridEngine;
     public posX: number;
     public posY: number;
-    public status: TaskStatus;
+    private status: TaskStatus;
     private pointer: number = 0;
     private landTile:Land;
     private hoe:Hoe;
@@ -58,7 +58,7 @@ export default class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    //this.moveCharacter();
+                    this.moveCharacter();
                     break;
                 case 2:
                    this.weedGround();
