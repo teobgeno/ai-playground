@@ -2,7 +2,7 @@ import { GridEngine } from "grid-engine";
 import { Hoe } from "../tools/Hoe";
 import {Land} from "../farm/Land";
 //import MoveCharAction from "./MoveCharAction";
-
+import { Tilemaps } from "phaser";
 import {Task, TaskStatus} from "./types";
 import {Humanoid} from "../characters/Humanoid";
 import {LandEntity} from "../farm/types";
@@ -12,8 +12,7 @@ export default class WeedingTask implements Task{
     private character: Humanoid;
     public pointerX: number;
     public pointerY: number;
-    public tileX: number;
-    public tileY: number;
+    public tile:Tilemaps.Tile;
     private status: TaskStatus;
     private pointer: number = 0;
     private landsMap: Array<Land> = [];
@@ -26,8 +25,7 @@ export default class WeedingTask implements Task{
         character: Humanoid,
         pointerX: number,
         pointerY: number,
-        tileX: number,
-        tileY: number,
+        tile:Tilemaps.Tile,
         landsMap: Array<Land>,
         farmLandMap: Map<string, LandEntity>,
         landTile: Land,
@@ -37,8 +35,7 @@ export default class WeedingTask implements Task{
         this.gridEngine = gridEngine;
         this.pointerX = pointerX;
         this.pointerY = pointerY;
-        this.tileX = tileX;
-        this.tileY = tileY;
+        this.tile = tile;
         this.landsMap = landsMap;
         this.farmLandMap = farmLandMap;
         this.landTile = landTile;
@@ -69,10 +66,14 @@ export default class WeedingTask implements Task{
         this.landTile.rollbackLand();
 
         this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: false, hasCrop: false });
-        this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tileX && x.getPosY() !== this.tileY);
-        // const landIndex = this.landsMap.findIndex(x=> x.getPosX() === this.tileX && x.getPosY() === this.tileY);
-        // delete this.landsMap[landIndex];
-
+        //this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tile.pixelX && x.getPosY() !== this.tile.pixelY);
+       
+        const landIndex = this.landsMap.findIndex(x=> x.getPosX() === this.tile.pixelX && x.getPosY() === this.tile.pixelY);
+        this.landsMap.splice(landIndex, 1)
+        console.log(landIndex + '---' + this.tile.pixelX + '---' + this.tile.pixelY)
+      
+        //delete this.landsMap[landIndex];
+        console.log(this.landsMap)
         this.status = TaskStatus.Completed;
     }
 
@@ -80,7 +81,7 @@ export default class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter();
+                    //this.moveCharacter();
                     break;
                 case 2:
                    this.weedGround();
@@ -93,14 +94,14 @@ export default class WeedingTask implements Task{
         this.pointer = 2;
         this.character.setCharState('walk')
         this.gridEngine.moveTo(this.character.getId(), {
-            x: this.tileX,
-            y: this.tileY,
+            x: this.tile.x,
+            y: this.tile.y,
         });
         // const m = new MoveCharAction(
         //     this.character,
         //     this.gridEngine,
-        //     this.tileX,
-        //     this.tileY
+        //     this.tile.x,
+        //     this.tile.y
         // );
         // m.execute();
     }
