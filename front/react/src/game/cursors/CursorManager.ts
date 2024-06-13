@@ -1,12 +1,15 @@
-import { Cursor, CursorType } from "./types";
-import { InventoryItem } from "../characters/types";
-import {Humanoid} from "../characters/Humanoid";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import { Land } from "../farm/Land";
+
 import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
 import { CropCursor } from "./CropCursor";
+
+import { Cursor, CursorType } from "./types";
+import { InventoryItem } from "../characters/types";
+import {Humanoid} from "../characters/Humanoid";
+import {LandEntity} from "../farm/types";
 
 export class CursorManager {
     private map: Tilemaps.Tilemap;
@@ -22,7 +25,7 @@ export class CursorManager {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, string>,
+        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
         marker:Phaser.GameObjects.Rectangle
     ) {

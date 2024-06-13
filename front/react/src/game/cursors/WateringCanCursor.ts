@@ -1,16 +1,19 @@
-import {Cursor} from "./types";
+
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import {Humanoid} from "../characters/Humanoid";
 import { Land } from "../farm/Land";
-import WeedingTask from "../actions/WeedingTask";
+
+import {Humanoid} from "../characters/Humanoid";
+import {Cursor} from "./types";
+import {LandEntity} from "../farm/types";
+
 
 export class WateringCanCursor implements Cursor{
     private scene: Phaser.Scene;
     private map:Tilemaps.Tilemap;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private farmLandMap: Map<string, string>;
+    private farmLandMap: Map<string, LandEntity>;
     private landsMap: Array<Land> = [];
     private marker:Phaser.GameObjects.Rectangle;
 
@@ -19,7 +22,7 @@ export class WateringCanCursor implements Cursor{
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, string>,
+        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
         marker:Phaser.GameObjects.Rectangle
 
@@ -39,7 +42,7 @@ export class WateringCanCursor implements Cursor{
         this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
         this.marker.setAlpha(1);
 
-        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY) === 'land') {
+        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY)?.isWeeded) {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
         } else {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
@@ -48,7 +51,7 @@ export class WateringCanCursor implements Cursor{
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "land"
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,

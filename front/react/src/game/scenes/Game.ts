@@ -10,6 +10,7 @@ import {Hoe} from "../tools/Hoe";
 import {CursorManager} from "../cursors/CursorManager";
 import {ChatManager} from "../ChatManager";
 import { InventoryItem } from "../characters/types";
+import {LandEntity} from "../farm/types";
 
 
 // type gridEngineConfigChar = {
@@ -39,7 +40,7 @@ export class Game extends Scene {
 
     private charactersMap :Map<string, Humanoid>
     private landsMap: Array<Land> = [];
-    private farmLandMap :Map<string, string>
+    private farmLandMap :Map<string, LandEntity>
     private cursorManager:CursorManager
     private chatManager:ChatManager
     constructor() {
@@ -159,7 +160,7 @@ export class Game extends Scene {
                 );
 
                 if(tileGround && !tileTree) {
-                    this.farmLandMap.set(x + '-' + y, 'soil');
+                    this.farmLandMap.set(x + '-' + y, {isWeeded:false, hasCrop:false});
                 }
             }
         }

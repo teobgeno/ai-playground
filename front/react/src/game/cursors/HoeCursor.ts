@@ -1,18 +1,21 @@
-import { Cursor } from "./types";
-import { Hoe } from "../tools/Hoe";
-import { InventoryItem } from "../characters/types";
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import { Humanoid } from "../characters/Humanoid";
-import { Land } from "../farm/Land";
+
+import { Hoe } from "../tools/Hoe";
 import WeedingTask from "../actions/WeedingTask";
+import { Land } from "../farm/Land";
+
+import { InventoryItem } from "../characters/types";
+import { Humanoid } from "../characters/Humanoid";
+import { Cursor } from "./types";
+import {LandEntity} from "../farm/types";
 
 export class HoeCursor implements Cursor {
     private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private farmLandMap: Map<string, string>;
+    private farmLandMap: Map<string, LandEntity>;
     private landsMap: Array<Land> = [];
     private marker: Phaser.GameObjects.Rectangle;
     private hoe: Hoe;
@@ -22,7 +25,7 @@ export class HoeCursor implements Cursor {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, string>,
+        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
         marker: Phaser.GameObjects.Rectangle
     ) {
@@ -45,8 +48,7 @@ export class HoeCursor implements Cursor {
         this.marker.setAlpha(1);
 
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) ===
-                "soil" &&
+            !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -68,8 +70,7 @@ export class HoeCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) ===
-                "soil" &&
+            !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -83,13 +84,13 @@ export class HoeCursor implements Cursor {
             );
 
             if (tileGround) {
-                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, "land");
+                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {isWeeded:true, hasCrop:false});
                 const landTile = new Land(
                     this.scene,
                     tileGround.pixelX,
                     tileGround.pixelY
                 );
-                this.landsMap.push(landTile);
+                //this.landsMap.push(landTile);
                 const w = new WeedingTask(
                     this.character,
                     this.gridEngine,

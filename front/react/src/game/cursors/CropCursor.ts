@@ -1,16 +1,18 @@
-import { Cursor } from "./types";
+
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import {Humanoid} from "../characters/Humanoid";
-
 import { Land } from "../farm/Land";
+
+import {Humanoid} from "../characters/Humanoid";
+import { Cursor } from "./types";
+import {LandEntity} from "../farm/types";
 
 export class CropCursor implements Cursor {
     private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private farmLandMap: Map<string, string>;
+    private farmLandMap: Map<string, LandEntity>;
     private landsMap: Array<Land> = [];
     private marker: Phaser.GameObjects.Rectangle;
 
@@ -19,7 +21,7 @@ export class CropCursor implements Cursor {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, string>,
+        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
         marker: Phaser.GameObjects.Rectangle
     ) {
@@ -38,7 +40,7 @@ export class CropCursor implements Cursor {
         this.marker.setAlpha(1);
 
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "land"
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop
         ) {
             this.marker.setStrokeStyle(
                 2,
@@ -56,7 +58,7 @@ export class CropCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY) === "land"
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
