@@ -84,7 +84,7 @@ export class HoeCursor implements Cursor {
             );
 
             if (tileGround) {
-                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {isWeeded:true, hasCrop:false});
+                
                 const landTile = new Land(
                     this.scene,
                     tileGround.pixelX,
@@ -93,6 +93,8 @@ export class HoeCursor implements Cursor {
                 const w = new WeedingTask(
                     this.gridEngine,
                     this.character,
+                    pointerTileX,
+                    pointerTileY,
                     tileGround.x,
                     tileGround.y,
                     this.landsMap,

@@ -10,8 +10,10 @@ import {LandEntity} from "../farm/types";
 export default class WeedingTask implements Task{
     private gridEngine: GridEngine;
     private character: Humanoid;
-    public posX: number;
-    public posY: number;
+    public pointerX: number;
+    public pointerY: number;
+    public tileX: number;
+    public tileY: number;
     private status: TaskStatus;
     private pointer: number = 0;
     private landsMap: Array<Land> = [];
@@ -22,8 +24,10 @@ export default class WeedingTask implements Task{
     constructor(
         gridEngine: GridEngine,
         character: Humanoid,
-        posX: number,
-        posY: number,
+        pointerX: number,
+        pointerY: number,
+        tileX: number,
+        tileY: number,
         landsMap: Array<Land>,
         farmLandMap: Map<string, LandEntity>,
         landTile: Land,
@@ -31,8 +35,10 @@ export default class WeedingTask implements Task{
     ) {
         this.character = character;
         this.gridEngine = gridEngine;
-        this.posX = posX;
-        this.posY = posY;
+        this.pointerX = pointerX;
+        this.pointerY = pointerY;
+        this.tileX = tileX;
+        this.tileY = tileY;
         this.landsMap = landsMap;
         this.farmLandMap = farmLandMap;
         this.landTile = landTile;
@@ -58,8 +64,15 @@ export default class WeedingTask implements Task{
     public cancel = () => {
         console.log('cancel task');
         this.status = TaskStatus.Rollback;
+
         this.gridEngine.stopMovement(this.character.getId());
         this.landTile.rollbackLand();
+
+        this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: false, hasCrop: false });
+        this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tileX && x.getPosY() !== this.tileY);
+        // const landIndex = this.landsMap.findIndex(x=> x.getPosX() === this.tileX && x.getPosY() === this.tileY);
+        // delete this.landsMap[landIndex];
+
         this.status = TaskStatus.Completed;
     }
 
@@ -80,14 +93,14 @@ export default class WeedingTask implements Task{
         this.pointer = 2;
         this.character.setCharState('walk')
         this.gridEngine.moveTo(this.character.getId(), {
-            x: this.posX,
-            y: this.posY,
+            x: this.tileX,
+            y: this.tileY,
         });
         // const m = new MoveCharAction(
         //     this.character,
         //     this.gridEngine,
-        //     this.posX,
-        //     this.posY
+        //     this.tileX,
+        //     this.tileY
         // );
         // m.execute();
     }
@@ -100,6 +113,7 @@ export default class WeedingTask implements Task{
             this.character.anims.restart();
             this.character.anims.stop();
             if(this.status === TaskStatus.Running) {
+                this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: true, hasCrop: false });
                 this.status = TaskStatus.Completed;
                 this.landTile.init();
             }
