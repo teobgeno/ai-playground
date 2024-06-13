@@ -7,7 +7,7 @@ import {Task, TaskStatus} from "./types";
 import {Humanoid} from "../characters/Humanoid";
 import {LandEntity} from "../farm/types";
 
-export default class WeedingTask implements Task{
+export class WeedingTask implements Task{
     private gridEngine: GridEngine;
     private character: Humanoid;
     public pointerX: number;
@@ -66,14 +66,10 @@ export default class WeedingTask implements Task{
         this.landTile.rollbackLand();
 
         this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: false, hasCrop: false });
-        //this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tile.pixelX && x.getPosY() !== this.tile.pixelY);
-       
         const landIndex = this.landsMap.findIndex(x=> x.getPosX() === this.tile.pixelX && x.getPosY() === this.tile.pixelY);
         this.landsMap.splice(landIndex, 1)
-        console.log(landIndex + '---' + this.tile.pixelX + '---' + this.tile.pixelY)
-      
-        //delete this.landsMap[landIndex];
-        console.log(this.landsMap)
+        // console.log(landIndex + '---' + this.tile.pixelX + '---' + this.tile.pixelY)
+        // console.log(this.landsMap)
         this.status = TaskStatus.Completed;
     }
 

@@ -2,7 +2,7 @@ import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 
 import { Hoe } from "../tools/Hoe";
-import WeedingTask from "../actions/WeedingTask";
+import { WeedingTask } from "../actions/WeedingTask";
 import { Land } from "../farm/Land";
 
 import { InventoryItem } from "../characters/types";
