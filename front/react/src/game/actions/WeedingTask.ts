@@ -58,7 +58,7 @@ export default class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter();
+                    //this.moveCharacter();
                     break;
                 case 2:
                    this.weedGround();
