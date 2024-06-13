@@ -25,16 +25,16 @@ export class HoeCursor implements Cursor {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
+        farmLandMap: Map<string, LandEntity>,
         marker: Phaser.GameObjects.Rectangle
     ) {
         this.scene = scene;
         this.map = map;
         this.gridEngine = gridEngine;
         this.character = character;
-        this.farmLandMap = farmLandMap;
         this.landsMap = landsMap;
+        this.farmLandMap = farmLandMap;
         this.marker = marker;
     }
 
@@ -90,12 +90,13 @@ export class HoeCursor implements Cursor {
                     tileGround.pixelX,
                     tileGround.pixelY
                 );
-                //this.landsMap.push(landTile);
                 const w = new WeedingTask(
-                    this.character,
                     this.gridEngine,
+                    this.character,
                     tileGround.x,
                     tileGround.y,
+                    this.landsMap,
+                    this.farmLandMap,
                     landTile,
                     this.hoe
                 );

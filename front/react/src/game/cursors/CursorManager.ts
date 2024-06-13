@@ -25,8 +25,8 @@ export class CursorManager {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
+        farmLandMap: Map<string, LandEntity>,
         marker:Phaser.GameObjects.Rectangle
     ) {
         
@@ -37,8 +37,8 @@ export class CursorManager {
             map,
             gridEngine,
             character,
-            farmLandMap,
             landsMap,
+            farmLandMap,
             marker
         );
 
@@ -47,8 +47,8 @@ export class CursorManager {
             map,
             gridEngine,
             character,
-            farmLandMap,
             landsMap,
+            farmLandMap,
             marker
         );
 
@@ -57,8 +57,8 @@ export class CursorManager {
             map,
             gridEngine,
             character,
-            farmLandMap,
             landsMap,
+            farmLandMap,
             marker
         );
     }

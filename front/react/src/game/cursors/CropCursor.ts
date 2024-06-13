@@ -12,8 +12,8 @@ export class CropCursor implements Cursor {
     private map: Tilemaps.Tilemap;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private farmLandMap: Map<string, LandEntity>;
     private landsMap: Array<Land> = [];
+    private farmLandMap: Map<string, LandEntity>;
     private marker: Phaser.GameObjects.Rectangle;
 
     constructor(
@@ -21,8 +21,8 @@ export class CropCursor implements Cursor {
         map: Tilemaps.Tilemap,
         gridEngine: GridEngine,
         character: Humanoid,
-        farmLandMap: Map<string, LandEntity>,
         landsMap: Array<Land>,
+        farmLandMap: Map<string, LandEntity>,
         marker: Phaser.GameObjects.Rectangle
     ) {
         this.scene = scene;

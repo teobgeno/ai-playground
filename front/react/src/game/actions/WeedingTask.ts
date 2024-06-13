@@ -1,25 +1,31 @@
+import { GridEngine } from "grid-engine";
+import { Hoe } from "../tools/Hoe";
+import {Land} from "../farm/Land";
+//import MoveCharAction from "./MoveCharAction";
+
 import {Task, TaskStatus} from "./types";
 import {Humanoid} from "../characters/Humanoid";
-import { Hoe } from "../tools/Hoe";
-import { GridEngine } from "grid-engine";
-import MoveCharAction from "./MoveCharAction";
-import {Land} from "../farm/Land";
+import {LandEntity} from "../farm/types";
 
 export default class WeedingTask implements Task{
-    private character: Humanoid;
     private gridEngine: GridEngine;
+    private character: Humanoid;
     public posX: number;
     public posY: number;
     private status: TaskStatus;
     private pointer: number = 0;
+    private landsMap: Array<Land> = [];
+    private farmLandMap: Map<string, LandEntity>;
     private landTile:Land;
     private hoe:Hoe;
 
     constructor(
-        character: Humanoid,
         gridEngine: GridEngine,
+        character: Humanoid,
         posX: number,
         posY: number,
+        landsMap: Array<Land>,
+        farmLandMap: Map<string, LandEntity>,
         landTile: Land,
         hoe: Hoe
     ) {
@@ -27,9 +33,12 @@ export default class WeedingTask implements Task{
         this.gridEngine = gridEngine;
         this.posX = posX;
         this.posY = posY;
+        this.landsMap = landsMap;
+        this.farmLandMap = farmLandMap;
         this.landTile = landTile;
         this.hoe = hoe;
         this.status = TaskStatus.Initialized;
+        this.landsMap.push(this.landTile);
     }
 
     public getStatus() {
@@ -58,7 +67,7 @@ export default class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    //this.moveCharacter();
+                    this.moveCharacter();
                     break;
                 case 2:
                    this.weedGround();
@@ -69,14 +78,18 @@ export default class WeedingTask implements Task{
 
     private moveCharacter() {
         this.pointer = 2;
-        const m = new MoveCharAction(
-            this.character,
-            this.gridEngine,
-            this.posX,
-            this.posY
-        );
-        m.execute();
-        //this.next();
+        this.character.setCharState('walk')
+        this.gridEngine.moveTo(this.character.getId(), {
+            x: this.posX,
+            y: this.posY,
+        });
+        // const m = new MoveCharAction(
+        //     this.character,
+        //     this.gridEngine,
+        //     this.posX,
+        //     this.posY
+        // );
+        // m.execute();
     }
 
     private weedGround() {

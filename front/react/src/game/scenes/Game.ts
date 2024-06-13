@@ -165,7 +165,7 @@ export class Game extends Scene {
             }
         }
         
-        this.cursorManager = new CursorManager(this, this.map, this.gridEngine,this.hero, this.farmLandMap, this.landsMap, this.marker)
+        this.cursorManager = new CursorManager(this, this.map, this.gridEngine,this.hero, this.landsMap, this.farmLandMap, this.marker)
         
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
