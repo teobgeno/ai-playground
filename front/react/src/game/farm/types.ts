@@ -1,8 +1,8 @@
 export enum LandState {
-    EMPTY,
-    PLOWED,
-    PLANTED,
-    READY,
+    EMPTY = 0,
+    PLOWED = 1,
+    PLANTED = 2,
+    READY = 3,
 }
 
 export interface LandElements {
@@ -14,9 +14,3 @@ export interface LandEntity {
     isWeeded: boolean;
     hasCrop: boolean;
 }
-
-export enum CropType {
-    TOMATO = 1,
-    CORN = 2,
-}
-

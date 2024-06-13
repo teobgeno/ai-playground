@@ -1,3 +1,4 @@
+import { Tilemaps } from "phaser";
 export interface Action
 {
 	execute: () => void
@@ -12,8 +13,7 @@ export enum TaskStatus {
 }
 export interface Task
 {
-	posX?:number;
-    posY?:number;
+    getTile: () => Tilemaps.Tile;
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
     start: () => void;

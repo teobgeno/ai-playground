@@ -95,6 +95,7 @@ export class CursorManager {
                 this.currentCursorType = CursorType.HOE;
                 break;
             case CursorType.CROP:
+                    this.cropCursor.setItem(item)
                     this.currentCursor = this.cropCursor;
                     this.currentCursorType = CursorType.CROP;
                     break;

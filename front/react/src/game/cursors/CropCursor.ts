@@ -3,8 +3,10 @@ import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import { Land } from "../farm/Land";
 
+import { Seed } from "../farm/Seed";
 import { SeedTask } from "../actions/SeedTask";
 
+import { InventoryItem } from "../characters/types";
 import {Humanoid} from "../characters/Humanoid";
 import { Cursor } from "./types";
 import {LandEntity} from "../farm/types";
@@ -17,6 +19,7 @@ export class CropCursor implements Cursor {
     private landsMap: Array<Land> = [];
     private farmLandMap: Map<string, LandEntity>;
     private marker: Phaser.GameObjects.Rectangle;
+    private seed: Seed;
 
     constructor(
         scene: Phaser.Scene,
@@ -42,7 +45,12 @@ export class CropCursor implements Cursor {
         this.marker.setAlpha(1);
 
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
+            !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            !this.gridEngine.isBlocked(
+                { x: pointerTileX, y: pointerTileY },
+                "CharLayer"
+            )
         ) {
             this.marker.setStrokeStyle(
                 2,
@@ -58,9 +66,19 @@ export class CropCursor implements Cursor {
         }
     }
 
+    public setItem(seed: InventoryItem) {
+        this.seed = seed as Seed;
+    }
+
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop
+            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
+            !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            !this.gridEngine.isBlocked(
+                { x: pointerTileX, y: pointerTileY },
+                "CharLayer"
+            )
+            
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
@@ -70,21 +88,24 @@ export class CropCursor implements Cursor {
             );
 
             if (tileGround) {
-                const land = this.landsMap.find(
+                const landTile = this.landsMap.find(
                     (x) =>
                         x.getPosX() === tileGround.pixelX &&
                         x.getPosY() === tileGround.pixelY
                 );
-                land?.plantCrop(2);
-
-                // const w = new SeedTask(
-                //     this.character,
-                //     this.gridEngine,
-                //     tileGround.x,
-                //     tileGround.y,
-                //     landTile
-                // );
-                // this.character.addTask(w);
+      
+                const s = new SeedTask(
+                    this.gridEngine,
+                    this.character,
+                    pointerTileX,
+                    pointerTileY,
+                    tileGround,
+                    this.landsMap,
+                    this.farmLandMap,
+                    landTile as Land,
+                    this.seed,
+                );
+                this.character.addTask(s);
             }
         }
     }

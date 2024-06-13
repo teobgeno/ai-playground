@@ -1,25 +1,16 @@
-import { CropType, LandElements } from "./types";
+import { LandElements } from "./types";
+import { Seed } from "./Seed";
 export class Crop {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
-    public timeToRipe: number;
-    public timeToDeath: number;
-    public growthStageDuration: number;
+    private seed: Seed;
     public lastTimestamp: number = 0;
-    public maxGrowthStage: number;
-    public currentGrowthStage: number;
 
-    constructor(scene: Phaser.Scene, cropType: CropType, x: number, y: number) {
+    constructor(scene: Phaser.Scene, seed: Seed, x: number, y: number) {
         this.scene = scene;
-        this.timeToRipe = 10;
-        this.timeToDeath = 30;
-        this.growthStageDuration = 1000;
-        this.maxGrowthStage = 34;
-        this.currentGrowthStage = 30;
+        this.seed = seed;
         this.lastTimestamp = 0;
-
-        this.sprite = this.scene.add.sprite(x + 16, y, "crops", 30);
-        //this.sprite.setInteractive({ useHandCursor: true });
+        this.sprite = this.scene.add.sprite(x + 16, y, "crops", this.seed.currentGrowthStage);
         this.sprite.setDepth(2);
        
     }
@@ -28,24 +19,25 @@ export class Crop {
     }
 
     public getCurrentGrowthStage() {
-        return this.currentGrowthStage;
+        return this.seed.currentGrowthStage;
     }
 
     public isFullGrown() {
-        return this.currentGrowthStage === this.maxGrowthStage ? true : false;
+        return this.seed.currentGrowthStage === this.seed.maxGrowthStage ? true : false;
     }
 
     public update(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
             //TODO:: use clock to calculate growth. Time is not always available. Scene chage, tab browser not active....
             if (
-                time - this.lastTimestamp >= this.growthStageDuration &&
-                this.currentGrowthStage < this.maxGrowthStage
+                time - this.lastTimestamp >= this.seed.growthStageDuration &&
+                this.seed.currentGrowthStage < this.seed.maxGrowthStage
             ) {
                 // console.log((time*1000) + ' - '+ this.lastTimestamp)
                 //console.log(Math.floor(time/this.lastTimestamp)) update currentGrowthStage based on this
                 this.lastTimestamp = time;
-                this.currentGrowthStage++;
+                this.seed.currentGrowthStage++;
+                console.log(this.seed.currentGrowthStage)
                 this.updateTile();
             }
         } else {

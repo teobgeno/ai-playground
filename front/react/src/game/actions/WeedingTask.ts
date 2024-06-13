@@ -12,7 +12,7 @@ export class WeedingTask implements Task{
     private character: Humanoid;
     public pointerX: number;
     public pointerY: number;
-    public tile:Tilemaps.Tile;
+    private tile:Tilemaps.Tile;
     private status: TaskStatus;
     private pointer: number = 0;
     private landsMap: Array<Land> = [];
@@ -48,6 +48,10 @@ export class WeedingTask implements Task{
        return this.status;
     }
 
+    public getTile() {
+        return this.tile;
+     }
+
     public setStatus(status: TaskStatus) {
         this.status = status;
      }
@@ -77,7 +81,7 @@ export class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    //this.moveCharacter();
+                    this.moveCharacter();
                     break;
                 case 2:
                    this.weedGround();

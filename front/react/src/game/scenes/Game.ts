@@ -1,17 +1,17 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps, Physics } from "phaser";
 import { GridEngine, GridEngineConfig } from "grid-engine";
-import {Hero} from "../characters/Hero";
-import {Npc} from "../characters/Npc";
-import {Humanoid} from "../characters/Humanoid";
-import {Land} from "../farm/Land";
+import { Hero } from "../characters/Hero";
+import { Npc } from "../characters/Npc";
+import { Humanoid } from "../characters/Humanoid";
+import { Land } from "../farm/Land";
 // import {DayNight} from "../DayNight";
-import {Hoe} from "../tools/Hoe";
-import {CursorManager} from "../cursors/CursorManager";
-import {ChatManager} from "../ChatManager";
+import { Hoe } from "../tools/Hoe";
+import { Seed } from "../farm/Seed";
+import { CursorManager } from "../cursors/CursorManager";
+import { ChatManager } from "../ChatManager";
 import { InventoryItem } from "../characters/types";
-import {LandEntity} from "../farm/types";
-
+import { LandEntity } from "../farm/types";
 
 // type gridEngineConfigChar = {
 //     id?:string,
@@ -34,15 +34,15 @@ export class Game extends Scene {
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private map!: Tilemaps.Tilemap;
     private marker: Phaser.GameObjects.Rectangle;
-   
+
     private activeTool: number;
     private propertiesText;
 
-    private charactersMap :Map<string, Humanoid>
+    private charactersMap: Map<string, Humanoid>;
     private landsMap: Array<Land> = [];
-    private farmLandMap :Map<string, LandEntity>
-    private cursorManager:CursorManager
-    private chatManager:ChatManager
+    private farmLandMap: Map<string, LandEntity>;
+    private cursorManager: CursorManager;
+    private chatManager: ChatManager;
     constructor() {
         super("Game");
     }
@@ -76,11 +76,16 @@ export class Game extends Scene {
         this.load.spritesheet("npc", "assets/sprites/characters.png", {
             frameWidth: 52,
             frameHeight: 72,
-          });
+        });
 
-    
-        this.load.spritesheet('crops', 'assets/sprites/crops/1/crops.png', { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet('land', 'assets/sprites/crops/2/crops.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("crops", "assets/sprites/crops/1/crops.png", {
+            frameWidth: 32,
+            frameHeight: 64,
+        });
+        this.load.spritesheet("land", "assets/sprites/crops/2/crops.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
 
         this.load.atlas(
             "items",
@@ -90,7 +95,6 @@ export class Game extends Scene {
     }
 
     create() {
-
         this.charactersMap = new Map();
         this.initMap();
         this.initHero();
@@ -99,19 +103,29 @@ export class Game extends Scene {
         this.initGridEngine();
         this.initCamera(this.map);
 
-        this.propertiesText = this.add.text(16, 16, "Click on a tile to view its properties.", {
-            font: "20px Arial",
-            color: "#000",
-        });
+        this.propertiesText = this.add.text(
+            16,
+            16,
+            "Click on a tile to view its properties.",
+            {
+                font: "20px Arial",
+                color: "#000",
+            }
+        );
 
         //this.marker = this.add.graphics();
         // this.marker.lineStyle(2, 0x000000, 1);
         // this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
-        this.marker = this.add.rectangle(0, 0, this.map.tileWidth, this.map.tileHeight, 0x000000, 0)
+        this.marker = this.add.rectangle(
+            0,
+            0,
+            this.map.tileWidth,
+            this.map.tileHeight,
+            0x000000,
+            0
+        );
         this.marker.setDepth(10);
         this.marker.setAlpha(0);
-
-        
 
         // this.input.on('pointerup', (pointer:any) => {
         //     // Get the WORLD x and y position of the pointer
@@ -129,44 +143,45 @@ export class Game extends Scene {
         //     // this.arrow.setVisible(true);
         // });
 
-        this.input.on('pointerup', () => {
-           this.cursorManager.onPointerUp(this.input.activePointer.positionToCamera(
-            this.cameras.main
-            ))
+        this.input.on("pointerup", () => {
+            this.cursorManager.onPointerUp(
+                this.input.activePointer.positionToCamera(this.cameras.main)
+            );
         });
 
-        this.input.on('pointermove', () => {
-            this.cursorManager.onPointerMove(this.input.activePointer.positionToCamera(
-                this.cameras.main
-            ))
+        this.input.on("pointermove", () => {
+            this.cursorManager.onPointerMove(
+                this.input.activePointer.positionToCamera(this.cameras.main)
+            );
         });
 
         this.farmLandMap = new Map();
-        
-        for (let y =0; y < this.map.height; y++) {
-            for (let x =0; x < this.map.width; x++) {
-                const tileGround = this.map.getTileAt(
-                    x,
-                    y,
-                    false,
-                    "Ground"
-                );
-        
-                const tileTree = this.map.getTileAt(
-                    x,
-                    y,
-                    false,
-                    "Trees"
-                );
 
-                if(tileGround && !tileTree) {
-                    this.farmLandMap.set(x + '-' + y, {isWeeded:false, hasCrop:false});
+        for (let y = 0; y < this.map.height; y++) {
+            for (let x = 0; x < this.map.width; x++) {
+                const tileGround = this.map.getTileAt(x, y, false, "Ground");
+
+                const tileTree = this.map.getTileAt(x, y, false, "Trees");
+
+                if (tileGround && !tileTree) {
+                    this.farmLandMap.set(x + "-" + y, {
+                        isWeeded: false,
+                        hasCrop: false,
+                    });
                 }
             }
         }
-        
-        this.cursorManager = new CursorManager(this, this.map, this.gridEngine,this.hero, this.landsMap, this.farmLandMap, this.marker)
-        
+
+        this.cursorManager = new CursorManager(
+            this,
+            this.map,
+            this.gridEngine,
+            this.hero,
+            this.landsMap,
+            this.farmLandMap,
+            this.marker
+        );
+
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
@@ -188,7 +203,7 @@ export class Game extends Scene {
                 const layer = this.map.createLayer(i, tilesets, 0, 0);
                 //layer.scale = 3;
             }
-            
+
             // trees?.setCollisionByProperty({ collides: true });
             // if (trees) {
             //     this.physics.add.collider(this.hero, trees);
@@ -233,6 +248,13 @@ export class Game extends Scene {
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.hero.getInventory().addItem(new Hoe());
+        this.hero.getInventory().addItem(
+            new Seed(2, true, 4, "🌽", 1000, 30, 34)
+        );
+        this.hero.getInventory().addItem(
+            new Seed(3, true, 4, "🍅", 8000, 0, 4)
+        );
+
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
         this.hero.init();
@@ -240,7 +262,13 @@ export class Game extends Scene {
     }
 
     private initNpcs() {
-        const npc = new Npc(this, "npc", this.gridEngine, "npc0", this.chatManager);
+        const npc = new Npc(
+            this,
+            "npc",
+            this.gridEngine,
+            "npc0",
+            this.chatManager
+        );
         this.physics.add.existing(npc);
         this.add.existing(npc);
         npc.init();
@@ -248,12 +276,11 @@ export class Game extends Scene {
     }
 
     private initGridEngine() {
-
-        const hero = this.charactersMap.get('hero');
-        const gridEngineConfig:GridEngineConfig = {
+        const hero = this.charactersMap.get("hero");
+        const gridEngineConfig: GridEngineConfig = {
             characters: [
                 {
-                    id:  hero?.getId() || '',
+                    id: hero?.getId() || "",
                     sprite: hero,
                     startPosition: { x: 15, y: 10 },
                     // charLayer: "CharLayer"
@@ -262,8 +289,8 @@ export class Game extends Scene {
         };
 
         //const npcSprite = this.add.sprite(0, 0, "npc");
-        const npc0 = this.charactersMap.get('npc0')
-        if(npc0) {
+        const npc0 = this.charactersMap.get("npc0");
+        if (npc0) {
             gridEngineConfig.characters.push({
                 id: npc0.getId(),
                 sprite: npc0,
@@ -273,21 +300,18 @@ export class Game extends Scene {
             });
             npc0.scale = 0.9;
         }
-        
-        
 
         this.gridEngine.create(this.map, gridEngineConfig);
         //this.gridEngine.moveRandomly("npc0", 500);
 
         this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
-            if(charId === 'hero') {
+            if (charId === "hero") {
                 this.hero.anims.play(direction);
             }
-           
         });
 
         this.gridEngine.movementStopped().subscribe(({ charId, direction }) => {
-            if(charId === 'hero') {
+            if (charId === "hero") {
                 this.hero.anims.stop();
                 this.hero.setFrame(this.hero.getStopFrame(direction));
             }
@@ -297,25 +321,28 @@ export class Game extends Scene {
             .directionChanged()
             .subscribe(({ charId, direction }) => {
                 //this.hero.setFrame(this.hero.getStopFrame(direction));
-        });
+            });
 
         this.gridEngine
-          .positionChangeFinished()
-          .subscribe(({ charId, enterTile }) => {
-            const char = this.charactersMap.get(charId);
-            if(char && char.currentTask) {
-                // console.log(char.currentTask.posX)
-                // console.log(char.currentTask.posY)
-                if (enterTile.x == char.currentTask.posX && enterTile.y == char.currentTask.posY) {
-                    char.currentTask.next();
+            .positionChangeFinished()
+            .subscribe(({ charId, enterTile }) => {
+                const char = this.charactersMap.get(charId);
+                if (char && char.currentTask) {
+                    // console.log(char.currentTask.posX)
+                    // console.log(char.currentTask.posY)
+                    if (
+                        enterTile.x == char.currentTask.getTile().x &&
+                        enterTile.y == char.currentTask.getTile().y
+                    ) {
+                        char.currentTask.next();
+                    }
                 }
-            }
-            // this.posX = enterTile.x
-            // this.posY = enterTile.y
-            // if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
-            //   cb()
-            // }
-        })
+                // this.posX = enterTile.x
+                // this.posY = enterTile.y
+                // if (enterTile.x == targetPos.x && enterTile.y == targetPos.y) {
+                //   cb()
+                // }
+            });
     }
 
     private initCamera(map: Tilemaps.Tilemap): void {
@@ -331,16 +358,15 @@ export class Game extends Scene {
         //     this.map.heightInPixels
         // );
     }
-    
+
     update(time: number, delta: number): void {
         this.hero.update(delta);
         for (const land of this.landsMap) {
-            land.update(time)
+            land.update(time);
         }
-        
     }
 
-    setActiveItem(item:InventoryItem) {
+    setActiveItem(item: InventoryItem) {
         this.cursorManager.setActiveItemCursor(item);
     }
 
@@ -352,5 +378,4 @@ export class Game extends Scene {
         //     this.activeTool = tool;
         // }
     }
-    
 }

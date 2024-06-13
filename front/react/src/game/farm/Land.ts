@@ -1,12 +1,12 @@
 import {LandState, LandElements} from "./types";
-import { CropType } from "./types";
+import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 
 export class Land {
     private crop: Crop | null;
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
-    private landState: LandState;
+    private landState: number;
     private isConstructed: boolean = false;
     private posX: number;
     private posY: number;
@@ -82,9 +82,9 @@ export class Land {
         this.elements.water = 100;
     }
 
-    public plantCrop(cropType: CropType) {
+    public plantCrop(seed: Seed) {
         if(this.landState === LandState.PLOWED) {
-            this.crop = new Crop(this.scene, cropType, this.posX, this.posY);
+            this.crop = new Crop(this.scene, seed, this.posX, this.posY);
             this.crop.getSprite().on("pointerup",this.onHarvestCrop);
             this.landState = LandState.PLANTED;
         }
@@ -113,9 +113,9 @@ export class Land {
      //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
      //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
-        if (LandState.PLANTED) {
+        if (this.landState === LandState.PLANTED) {
             this.crop?.update(time, this.elements);
-            if(this.crop?.isFullGrown() && this.landState === LandState.PLANTED) {
+            if(this.crop?.isFullGrown()) {
                 this.landState = LandState.READY;
                 this.crop?.setHarvestInteractive();
             }
