@@ -3,6 +3,8 @@ import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import { Land } from "../farm/Land";
 
+import { SeedTask } from "../actions/SeedTask";
+
 import {Humanoid} from "../characters/Humanoid";
 import { Cursor } from "./types";
 import {LandEntity} from "../farm/types";
@@ -75,7 +77,7 @@ export class CropCursor implements Cursor {
                 );
                 land?.plantCrop(2);
 
-                // const w = new WeedingTask(
+                // const w = new SeedTask(
                 //     this.character,
                 //     this.gridEngine,
                 //     tileGround.x,
