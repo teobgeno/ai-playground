@@ -57,6 +57,7 @@ export function Hotbar(props: HotbarProps) {
                             >
                                 <a href="#" onClick={() => handleSelectItem(item)}>
                                     <i className="icon-home">{item.icon}</i>
+                                    {item.amount}
                                 </a>
                             </li>
                         );

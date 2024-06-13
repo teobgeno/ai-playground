@@ -118,7 +118,7 @@ export class SeedTask implements Task {
             this.character.anims.restart();
             this.character.anims.stop();
             if (this.status === TaskStatus.Running) {
-                this.landTile.plantCrop(this.seed);
+                this.landTile.plantCrop({...this.seed} as Seed);
                 this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
                     isWeeded: true,
                     hasCrop: true,

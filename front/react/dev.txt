@@ -19,3 +19,14 @@ https://github.com/amcolash/farming-game/blob/master/src/game/daynight.ts
 
 --- chat ----
 https://codepen.io/ramilulu/pen/mrNoXw
+
+
+
+1) nearby tile map utils
+2) when pick crop farmLandMap set hasCrop false
+3) seed cursor corn - tomato cursor must be on
+4) seed task remove item from inventory
+5) when seed plant add first frame with opacity like land
+6) water can task
+7) chat task
+8) task abstract class

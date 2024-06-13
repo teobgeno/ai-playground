@@ -127,7 +127,7 @@ export class Land {
         let frame = 0;
         switch (this.landState) {
             case LandState.PLOWED:
-                frame = 18;
+                frame = 19;
                 break;
             case LandState.PLANTED:
                 frame = 19;
@@ -137,7 +137,7 @@ export class Land {
                 //frame = 12;
                 break;
             default:
-                frame = 19;
+                frame = 18;
                 break;
         }
 

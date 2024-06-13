@@ -37,7 +37,6 @@ export class Crop {
                 //console.log(Math.floor(time/this.lastTimestamp)) update currentGrowthStage based on this
                 this.lastTimestamp = time;
                 this.seed.currentGrowthStage++;
-                console.log(this.seed.currentGrowthStage)
                 this.updateTile();
             }
         } else {
