@@ -254,6 +254,11 @@ export class Game extends Scene {
         this.hero.getInventory().addItem(
             new Seed(3, true, 4, "🍅", 8000, 0, 4)
         );
+        this.hero.getInventory().addItem(
+            new Seed(4, true, 2, "🌶", 3000, 20, 24)
+        );
+
+        
 
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
