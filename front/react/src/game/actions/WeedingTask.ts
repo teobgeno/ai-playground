@@ -81,17 +81,26 @@ export class WeedingTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter();
+                    this.initTask();
                     break;
                 case 2:
+                    this.moveCharacter();
+                    break;
+                case 3:
                    this.weedGround();
                     break;
             }
         }
     };
 
-    private moveCharacter() {
+    private initTask(){
+        this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: true, hasCrop: false });
         this.pointer = 2;
+        this.next();
+    }
+
+    private moveCharacter() {
+        this.pointer = 3;
         this.character.setCharState('walk')
         this.gridEngine.moveTo(this.character.getId(), {
             x: this.tile.x,

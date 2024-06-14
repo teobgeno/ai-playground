@@ -27,6 +27,13 @@ export class CharacterInventory {
         this.updateItem(item, InventoryAction.Remove);
     }
 
+    public removeItemById(itemId: number, amount:number) {
+        const remItem = this.getItem(itemId);
+        if(remItem) {
+            remItem.amount = remItem.amount - amount;
+        }
+    }
+
     private updateItem(item: InventoryItem, action: InventoryAction) {
         const updItem = this.getItem(item.id);
         if (updItem && action === InventoryAction.Add) {

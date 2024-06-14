@@ -1,12 +1,14 @@
 import Phaser, { Physics } from "phaser";
 import { Task } from "../actions/types";
 import StateMachine from "./StateMachine";
+import { CharacterInventory } from "./CharacterInventory";
 
 export class Humanoid extends Physics.Arcade.Sprite {
     public id: string;
     //private stamina: number;
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
+    protected characterInventory: CharacterInventory;
     protected convGuid: string;
     public currentTask: Task | undefined;
     public isNpc: boolean;
@@ -17,6 +19,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
         this.id = id;
         this.isNpc = this.id === "hero" ? false : true;
         this.stateMachine = new StateMachine(this, this.id);
+        this.characterInventory = new CharacterInventory();
     }
     protected createAnimation(
         key: string,
@@ -60,6 +63,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
     public setCharState(state: string) {
         this.stateMachine.setState(state);
+    }
+
+    public getInventory() {
+        return this.characterInventory;
     }
 
     public addTask(task: Task) {

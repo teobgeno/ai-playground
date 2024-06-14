@@ -1,6 +1,5 @@
 import { GridEngine } from "grid-engine";
 import { CharacterController } from "./CharacterController";
-import { CharacterInventory } from "./CharacterInventory";
 import { TaskStatus } from "../actions/types";
 import { Humanoid } from "./Humanoid";
 import { EventBus } from "../EventBus";
@@ -8,8 +7,7 @@ import { EventBus } from "../EventBus";
 export class Hero extends Humanoid {
     private gridEngine: GridEngine;
     private characterController: CharacterController;
-    private characterInventory: CharacterInventory;
-
+    
     constructor(
         scene: Phaser.Scene,
         texture: string,
@@ -24,8 +22,7 @@ export class Hero extends Humanoid {
             this.stateMachine,
             this.id
         );
-        this.characterInventory = new CharacterInventory();
-
+       
         EventBus.on("on-character-controller-esc-key", () => {
             this.tasks.forEach((task) => task.setStatus(TaskStatus.Canceled));
             if( this.currentTask) {
@@ -38,10 +35,6 @@ export class Hero extends Humanoid {
         this.createMovementAnimations();
         this.createHumanoidAnimations(this.id);
         this.getBody().setSize(32, 64);
-    }
-
-    public getInventory() {
-        return this.characterInventory;
     }
 
     update(dt: number): void {
