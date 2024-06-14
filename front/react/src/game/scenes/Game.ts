@@ -255,7 +255,7 @@ export class Game extends Scene {
             new Seed(3, true, 4, "🍅", 8000, 0, 4)
         );
         this.hero.getInventory().addItem(
-            new Seed(4, true, 2, "🌶", 3000, 20, 24)
+            new Seed(4, true, 2, "🌶️", 3000, 20, 24)
         );
 
         

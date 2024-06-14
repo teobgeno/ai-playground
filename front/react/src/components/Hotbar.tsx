@@ -23,9 +23,9 @@ export function Hotbar(props: HotbarProps) {
     }, []);
 
     const handleSelectItem = (item: InventoryItem) => {
-        if(activeItemId === item.id) {
+        if (activeItemId === item.id) {
             deSelectItem();
-        } else{
+        } else {
             setActiveItemId(item.id);
             props.setActiveItem(item);
         }
@@ -40,7 +40,7 @@ export function Hotbar(props: HotbarProps) {
             icon: "",
             cursorType: CursorType.NONE,
         });
-    }
+    };
 
     return (
         <>
@@ -52,12 +52,24 @@ export function Hotbar(props: HotbarProps) {
                             <li
                                 key={i}
                                 className={
-                                    activeItemId === item.id ? "active_item" : ""
+                                    activeItemId === item.id
+                                        ? "active_item"
+                                        : ""
                                 }
                             >
-                                <a href="#" onClick={() => handleSelectItem(item)}>
+                                <a
+                                    href="#"
+                                    onClick={() => handleSelectItem(item)}
+                                >
                                     <i className="icon-home">{item.icon}</i>
-                                    {item.amount}
+
+                                    {item.isStackable && (
+                                        <>
+                                            <div style={{ fontSize: "16px" }}>
+                                                {item.amount}
+                                            </div>
+                                        </>
+                                    )}
                                 </a>
                             </li>
                         );
@@ -71,39 +83,6 @@ export function Hotbar(props: HotbarProps) {
                         );
                     }
                 })}
-
-                {/* <li>
-                    <a
-                        href="#"
-                        onClick={() => pickTool(1)}
-                        style={{ paddingLeft: "10px" }}
-                    >
-                        <i className="icon-home">⛏️</i>
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href="#"
-                        onClick={() => pickTool(2)}
-                        style={{ paddingLeft: "10px" }}
-                    >
-                        <i className="icon-comments-alt">🌿</i>
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href="#"
-                        onClick={() => pickTool(3)}
-                        style={{ paddingLeft: "10px" }}
-                    >
-                        <i className="icon-heart-empty">🌊</i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" style={{ paddingLeft: "10px" }}>
-                        <i className="icon-cloud"></i>
-                    </a>
-                </li> */}
             </ul>
         </>
     );

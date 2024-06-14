@@ -33,6 +33,9 @@ export class CharacterInventory {
         const remItem = this.getItem(itemId);
         if(remItem) {
             remItem.amount = remItem.amount - amount;
+            if(remItem.amount === 0){
+                //this.items.find((x) => x.id === itemId);
+            }
         }
         EventBus.emit("on-character-inventory-update", {});
     }
