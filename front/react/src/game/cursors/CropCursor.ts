@@ -47,6 +47,7 @@ export class CropCursor implements Cursor {
         if (
             this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
             !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            this.seed.amount > 0 &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -74,6 +75,7 @@ export class CropCursor implements Cursor {
         if (
             this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
             !this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            this.seed.amount > 0 &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -86,7 +88,7 @@ export class CropCursor implements Cursor {
                 false,
                 "Ground"
             );
-
+            console.log(this.seed.amount + ' seed amount')
             if (tileGround) {
 
                 this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {
