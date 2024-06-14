@@ -22,6 +22,14 @@ export function Hotbar(props: HotbarProps) {
         };
     }, []);
 
+    useEffect(() => {
+      console.log('change props')
+        const activeItem = props.items.find(x=> x?.id === activeItemId);
+        if(!activeItem) {
+            deSelectItem();
+        }
+    }, [props.items]);
+
     const handleSelectItem = (item: InventoryItem) => {
         if (activeItemId === item.id) {
             deSelectItem();
