@@ -12,8 +12,14 @@ export class Crop {
         this.lastTimestamp = 0;
         this.sprite = this.scene.add.sprite(x + 16, y, "crops", this.seed.currentGrowthStage);
         this.sprite.setDepth(2);
+        this.sprite.setAlpha(0.8);
        
     }
+    public init() {
+        this.sprite.setAlpha(1);
+    }
+
+
     public getSprite() {
         return this.sprite;
     }

@@ -42,6 +42,7 @@ export class SeedTask implements Task {
         this.landTile = landTile;
         this.seed = seed;
         this.status = TaskStatus.Initialized;
+        this.landTile.createCrop({...this.seed} as Seed);
     }
 
     public getStatus() {
@@ -73,7 +74,7 @@ export class SeedTask implements Task {
         //this.landTile.rollbackLand();
 
         this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
-            isWeeded: false,
+            isWeeded: true,
             hasCrop: false,
         });
         //this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tile.pixelX && x.getPosY() !== this.tile.pixelY);
@@ -118,7 +119,7 @@ export class SeedTask implements Task {
             this.character.anims.restart();
             this.character.anims.stop();
             if (this.status === TaskStatus.Running) {
-                this.landTile.plantCrop({...this.seed} as Seed);
+                this.landTile.plantCrop();
                 this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
                     isWeeded: true,
                     hasCrop: true,

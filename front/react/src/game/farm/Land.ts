@@ -82,13 +82,18 @@ export class Land {
         this.elements.water = 100;
     }
 
-    public plantCrop(seed: Seed) {
+    public createCrop(seed: Seed) {
         if(this.landState === LandState.PLOWED) {
             this.crop = new Crop(this.scene, seed, this.posX, this.posY);
+        }
+    }
+
+    public plantCrop() {
+        if(this.crop && this.landState === LandState.PLOWED) {
+            this.crop.init();
             this.crop.getSprite().on("pointerup",this.onHarvestCrop);
             this.landState = LandState.PLANTED;
         }
-        
     }
 
     private onHarvestCrop = () =>{
