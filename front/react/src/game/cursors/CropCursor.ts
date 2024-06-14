@@ -88,7 +88,7 @@ export class CropCursor implements Cursor {
                 false,
                 "Ground"
             );
-            console.log(this.seed.amount + ' seed amount')
+
             if (tileGround) {
 
                 this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {
