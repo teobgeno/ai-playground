@@ -77,6 +77,8 @@ export class SeedTask implements Task {
             hasCrop: false,
         });
 
+        this.character.getInventory().addItem(this.seed);
+
         this.status = TaskStatus.Completed;
     };
 
@@ -97,11 +99,6 @@ export class SeedTask implements Task {
     };
 
     private initTask(){
-        this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
-            isWeeded: true,
-            hasCrop: true,
-        });
-
         this.landTile.createCrop({...this.seed} as Seed);
         this.character.getInventory().removeItemById(this.seed.id, 1);
         this.pointer = 2;

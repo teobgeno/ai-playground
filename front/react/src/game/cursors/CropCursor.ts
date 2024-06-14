@@ -88,6 +88,12 @@ export class CropCursor implements Cursor {
             );
 
             if (tileGround) {
+
+                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {
+                    isWeeded: true,
+                    hasCrop: true,
+                });
+
                 const landTile = this.landsMap.find(
                     (x) =>
                         x.getPosX() === tileGround.pixelX &&
