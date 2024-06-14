@@ -30,7 +30,7 @@ https://codepen.io/ramilulu/pen/mrNoXw
 - task abstract class
 - set growth for crop based on time from clock and not from phaser
 - tasks remove timeout and set interval. On each interval check for cancel status
-
+- replace weeding with Tillage
 
 -------- done -----
 - when seed plant add first frame with opacity like land
