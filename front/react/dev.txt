@@ -22,13 +22,16 @@ https://codepen.io/ramilulu/pen/mrNoXw
 
 
 
-1) nearby tile map utils
-2) when pick crop farmLandMap set hasCrop false
-3) seed cursor corn - tomato cursor must be on
-4) seed task remove item from inventory
-5) when seed plant add first frame with opacity like land
-6) water can task
-7) chat task
-8) task abstract class
-9) set growth for crop based on time from clock and not from phaser
-10) tasks remove timeout and set interval. On each interval check for cancel status
+- nearby tile map utils
+- when pick crop farmLandMap set hasCrop false
+- seed cursor corn - tomato cursor must be on
+- water can task
+- chat task
+- task abstract class
+- set growth for crop based on time from clock and not from phaser
+- tasks remove timeout and set interval. On each interval check for cancel status
+
+
+-------- done -----
+- when seed plant add first frame with opacity like land
+- seed task remove item from inventory
