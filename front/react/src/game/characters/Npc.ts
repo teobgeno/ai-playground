@@ -46,4 +46,22 @@ export class Npc extends Humanoid {
         console.log('ok talk npc')
         this.chatManager.generateNpcResponse(this.getId());
     }
+
+    public toggleInteraction(doInteract: boolean) {
+        doInteract
+            ? this.resumeInteraction()
+            : this.pauseInteraction();
+    }
+
+    public pauseInteraction() {
+        if (this.input && this.input.enabled) {
+            this.disableInteractive();
+        }
+    }
+
+    public resumeInteraction() {
+        if (this.input && !this.input.enabled) {
+            this.setInteractive();
+        }
+    }
 }

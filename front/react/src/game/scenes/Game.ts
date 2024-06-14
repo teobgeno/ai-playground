@@ -374,11 +374,17 @@ export class Game extends Scene {
     setActiveItem(item: InventoryItem) {
         this.cursorManager.setActiveItemCursor(item);
         const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
-
+        
+        //disable interactions to game objects when cursor exists 
         for (const land of this.landsMap) {
             land.toggleInteraction(enableObjInteractions);
         }
-        
+
+        for (const [key, character] of this.charactersMap) {
+            if(character.getId() !== 'hero') {
+                (character as Npc).toggleInteraction(enableObjInteractions);
+            }
+        }
     }
 
     getHotbarItems() {
