@@ -64,7 +64,11 @@ export class Land {
     public rollbackLand() {
         this.sprite.destroy();
     }
-
+    
+    public rollbackCrop() {
+        this.destroyCrop();
+    }
+    
     public getPosX() {
         return this.posX;
     }
@@ -101,16 +105,19 @@ export class Land {
         if(this.landState === LandState.READY) {
             this.landState = LandState.PLOWED;
             this.harvestCrop();
-            this.crop?.getSprite().off("pointerup",this.onHarvestCrop);
-            this.crop?.remove();
-            this.crop = null;
-            this.updateTile();
-            
+            this.destroyCrop();
         }
     }
 
     public harvestCrop() {
         //TODO::add to player inventory
+    }
+
+    public destroyCrop() {
+        this.crop?.getSprite().off("pointerup",this.onHarvestCrop);
+        this.crop?.remove();
+        this.crop = null;
+        this.updateTile();
     }
 
      //TODO:: change cursor when crop ready

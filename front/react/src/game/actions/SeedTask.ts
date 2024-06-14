@@ -71,13 +71,12 @@ export class SeedTask implements Task {
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getId());
-        //this.landTile.rollbackLand();
+        this.landTile.rollbackCrop();
 
         this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
             isWeeded: true,
             hasCrop: false,
         });
-        //this.landsMap = this.landsMap.filter(x=> x.getPosX() !== this.tile.pixelX && x.getPosY() !== this.tile.pixelY);
 
         this.status = TaskStatus.Completed;
     };

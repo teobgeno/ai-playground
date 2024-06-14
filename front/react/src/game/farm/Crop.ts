@@ -19,7 +19,6 @@ export class Crop {
         this.sprite.setAlpha(1);
     }
 
-
     public getSprite() {
         return this.sprite;
     }
