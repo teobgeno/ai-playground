@@ -10,10 +10,14 @@ export class Crop {
         this.scene = scene;
         this.seed = seed;
         this.lastTimestamp = 0;
-        this.sprite = this.scene.add.sprite(x + 16, y, "crops", this.seed.currentGrowthStage);
+        this.sprite = this.scene.add.sprite(
+            x + 16,
+            y,
+            "crops",
+            this.seed.currentGrowthStage
+        );
         this.sprite.setDepth(2);
         this.sprite.setAlpha(0.8);
-       
     }
     public init() {
         this.sprite.setAlpha(1);
@@ -28,7 +32,9 @@ export class Crop {
     }
 
     public isFullGrown() {
-        return this.seed.currentGrowthStage === this.seed.maxGrowthStage ? true : false;
+        return this.seed.currentGrowthStage === this.seed.maxGrowthStage
+            ? true
+            : false;
     }
 
     public update(time: number, elements: LandElements) {
@@ -53,11 +59,29 @@ export class Crop {
         this.sprite.setFrame(frame);
     }
 
-    public setHarvestInteractive(){
-        this.sprite.setInteractive({ cursor: "url(assets/cursors/axe.cur), pointer" });
+    public initHarvestInteractive() {
+        this.sprite.setInteractive({
+            cursor: "url(assets/cursors/axe.cur), pointer",
+        });
     }
 
-    public remove(){
+    public removeHarvestInteractive() {
+        this.sprite.removeInteractive();
+    }
+
+    public pauseHarvestInteractive() {
+        if (this.sprite.input && this.sprite.input.enabled) {
+            this.sprite.disableInteractive();
+        }
+    }
+
+    public resumeHarvestInteractive() {
+        if (this.sprite.input && !this.sprite.input.enabled) {
+            this.sprite.setInteractive();
+        }
+    }
+
+    public remove() {
         this.sprite.destroy();
     }
 }

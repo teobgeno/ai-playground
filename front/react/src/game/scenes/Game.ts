@@ -373,6 +373,12 @@ export class Game extends Scene {
 
     setActiveItem(item: InventoryItem) {
         this.cursorManager.setActiveItemCursor(item);
+        const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
+
+        for (const land of this.landsMap) {
+            land.toggleInteraction(enableObjInteractions);
+        }
+        
     }
 
     getHotbarItems() {

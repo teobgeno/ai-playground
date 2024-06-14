@@ -1,4 +1,4 @@
-import {LandState, LandElements} from "./types";
+import { LandState, LandElements } from "./types";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 
@@ -58,17 +58,16 @@ export class Land {
         };
 
         this.sprite.setAlpha(1);
-      
     }
 
     public rollbackLand() {
         this.sprite.destroy();
     }
-    
+
     public rollbackCrop() {
         this.destroyCrop();
     }
-    
+
     public getPosX() {
         return this.posX;
     }
@@ -87,49 +86,62 @@ export class Land {
     }
 
     public createCrop(seed: Seed) {
-        if(this.landState === LandState.PLOWED) {
+        if (this.landState === LandState.PLOWED) {
             this.crop = new Crop(this.scene, seed, this.posX, this.posY);
         }
     }
 
     public plantCrop() {
-        if(this.crop && this.landState === LandState.PLOWED) {
+        if (this.crop && this.landState === LandState.PLOWED) {
             this.crop.init();
-            this.crop.getSprite().on("pointerup",this.onHarvestCrop);
             this.landState = LandState.PLANTED;
         }
     }
 
-    private onHarvestCrop = () =>{
-        console.log('crop harvest')
-        if(this.landState === LandState.READY) {
-            this.landState = LandState.PLOWED;
-            this.harvestCrop();
-            this.destroyCrop();
-        }
+    private initInteractive = () => {
+        this.crop?.initHarvestInteractive();
+        this.crop?.getSprite().on("pointerup", this.onHarvestCrop);
+    };
+
+    private removeInteractive = () => {
+        this.crop?.removeHarvestInteractive();
+        this.crop?.getSprite().off("pointerup", this.onHarvestCrop);
+    };
+
+    public toggleInteraction(doInteract: boolean) {
+        doInteract
+            ? this.crop?.resumeHarvestInteractive()
+            : this.crop?.pauseHarvestInteractive();
     }
 
-    public harvestCrop() {
+    private onHarvestCrop = () => {
+        this.landState = LandState.PLOWED;
+        this.harvestCrop();
+        this.destroyCrop();
+    };
+
+    private harvestCrop() {
         //TODO::add to player inventory
     }
 
     public destroyCrop() {
-        this.crop?.getSprite().off("pointerup",this.onHarvestCrop);
+        this.removeInteractive();
         this.crop?.remove();
         this.crop = null;
         this.updateTile();
     }
 
-     //TODO:: change cursor when crop ready
-     //https://github.com/phaserjs/examples/blob/master/public/src/input/cursors/custom%20cursor.js
-     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
-     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
+    //TODO:: change cursor when crop ready
+    //https://github.com/phaserjs/examples/blob/master/public/src/input/cursors/custom%20cursor.js
+    //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
+    //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
         if (this.landState === LandState.PLANTED) {
             this.crop?.update(time, this.elements);
-            if(this.crop?.isFullGrown()) {
+            if (this.crop?.isFullGrown()) {
                 this.landState = LandState.READY;
-                this.crop?.setHarvestInteractive();
+                this.initInteractive();
+                console.log(this.crop);
             }
         }
     }
