@@ -2,7 +2,7 @@ import { EventBus } from "../EventBus";
 import { InventoryItem, InventoryAction } from "./types";
 
 export class CharacterInventory {
-    private items: Array<InventoryItem> = [];
+    private items: Array<InventoryItem | null> = [];
     private inventorySize = 24;
     private hotbarSize = 4;
     constructor() {}
@@ -29,12 +29,15 @@ export class CharacterInventory {
         this.updateItem(item, InventoryAction.Remove);
     }
 
-    public removeItemById(itemId: number, amount:number) {
+    public removeItemById(itemId: number, amount: number) {
         const remItem = this.getItem(itemId);
-        if(remItem) {
+        if (remItem) {
             remItem.amount = remItem.amount - amount;
-            if(remItem.amount === 0){
-                //this.items.find((x) => x.id === itemId);
+            if (remItem.amount === 0) {
+                const itemIndex = this.items.findIndex((x) => x?.id === itemId);
+                if (itemIndex > -1) {
+                    this.items[itemIndex] = null;
+                }
             }
         }
         EventBus.emit("on-character-inventory-update", {});
@@ -51,10 +54,10 @@ export class CharacterInventory {
     }
 
     private getItem(itemId: number) {
-        return this.items.find((x) => x.id === itemId);
+        return this.items.find((x) => x?.id === itemId);
     }
     public getHotbarItems() {
-        const ret: Array<InventoryItem> = [];
+        const ret: Array<InventoryItem | null> = [];
         for (let i = 0; i < this.hotbarSize; i++) {
             ret.push(this.items[i]);
         }
