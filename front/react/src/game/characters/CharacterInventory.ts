@@ -1,3 +1,4 @@
+import { EventBus } from "../EventBus";
 import { InventoryItem, InventoryAction } from "./types";
 
 export class CharacterInventory {
@@ -21,6 +22,7 @@ export class CharacterInventory {
         } else {
             this.updateItem(item, InventoryAction.Add);
         }
+        EventBus.emit("on-character-inventory-update", {});
     }
 
     public removeItem(item: InventoryItem) {
@@ -32,6 +34,7 @@ export class CharacterInventory {
         if(remItem) {
             remItem.amount = remItem.amount - amount;
         }
+        EventBus.emit("on-character-inventory-update", {});
     }
 
     private updateItem(item: InventoryItem, action: InventoryAction) {

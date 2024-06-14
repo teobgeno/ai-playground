@@ -1,4 +1,5 @@
 import { InventoryItem } from "./game/characters/types";
+import { EventBus } from "./game/EventBus";
 import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { Game } from "./game/scenes/Game";
@@ -13,7 +14,6 @@ export type Message = {
 };
 
 function App() {
-
     const [hotbarItems, setHotbarItems] = useState<InventoryItem[]>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
@@ -21,11 +21,7 @@ function App() {
 
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Phaser.Scene) => {
-        // console.log(scene.scene.key)
-        // setCanMoveSprite(scene.scene.key !== "MainMenu");
-        //console.log((scene as Game).getHotbarItems());
         setHotbarItems((scene as Game).getHotbarItems());
-        
     };
 
     const setActiveItem = (item: InventoryItem) => {
@@ -37,6 +33,19 @@ function App() {
         }
     };
 
+    useEffect(() => {
+        EventBus.on("on-character-inventory-update", () => {
+            const scene = phaserRef?.current?.scene as Game;
+            if(scene) {
+                setHotbarItems((scene as Game).getHotbarItems());
+            }
+        });
+
+        return () => {
+            EventBus.removeListener("on-character-inventory-update");
+        };
+    }, []);
+
     //TODO::add toolbar
     //https://codepen.io/cameronbaney/pen/nPpEqw
     //http://cssstars.com/mac-os-dock-menu-css3/
@@ -45,10 +54,9 @@ function App() {
         <div id="app">
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-                <Hotbar items={hotbarItems} setActiveItem={setActiveItem}/>
+                <Hotbar items={hotbarItems} setActiveItem={setActiveItem} />
             </div>
             <ChatWidget />
-           
         </div>
     );
 }
