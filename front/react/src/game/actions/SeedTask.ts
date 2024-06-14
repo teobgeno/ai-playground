@@ -76,8 +76,8 @@ export class SeedTask implements Task {
             isWeeded: true,
             hasCrop: false,
         });
-
-        this.character.getInventory().addItem(this.seed);
+     
+        this.character.getInventory().addItem({...this.seed, amount:1});
 
         this.status = TaskStatus.Completed;
     };
@@ -86,27 +86,18 @@ export class SeedTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.initTask();
-                    break;
-                case 2:
                     this.moveCharacter();
                     break;
-                case 3:
+                case 2:
                     this.plantSeed();
                     break;
             }
         }
     };
 
-    private initTask(){
-        this.landTile.createCrop({...this.seed} as Seed);
-        this.character.getInventory().removeItemById(this.seed.id, 1);
-        this.pointer = 2;
-        this.next();
-    }
 
     private moveCharacter() {
-        this.pointer = 3;
+        this.pointer = 2;
         this.character.setCharState("walk");
         this.gridEngine.moveTo(this.character.getId(), {
             x: this.tile.x,

@@ -99,6 +99,9 @@ export class CropCursor implements Cursor {
                         x.getPosX() === tileGround.pixelX &&
                         x.getPosY() === tileGround.pixelY
                 );
+
+                landTile?.createCrop({...this.seed} as Seed);
+                this.character.getInventory().removeItemById(this.seed.id, 1);
       
                 const s = new SeedTask(
                     this.gridEngine,
