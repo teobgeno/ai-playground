@@ -60,12 +60,36 @@ export class Game extends Scene {
         //https://labs.phaser.io/edit.html?src=src/tilemap\mouse%20wheel%20zoom.js
 
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Tilemaps.Tilemap-tilesets (multiple tilesets)
+        
+        // this.load.image('fences', 'assets/graphics/environment/Fences.png');
+        // this.load.image('grass', 'assets/graphics/environment/Grass.png');
+        // this.load.image('hills', 'assets/graphics/environment/Hills.png');
+        // this.load.image('house', 'assets/graphics/environment/House.png');
+        // this.load.image('houseDecoration', 'assets/graphics/environment/House Decoration.png');
+        // this.load.image('interaction', 'assets/graphics/environment/interaction.png');
+        // this.load.image('paths', 'assets/graphics/environment/Paths.png');
+        // this.load.image('plantDecoration', 'assets/graphics/environment/Plant Decoration.png');
+        // this.load.image('water', 'assets/graphics/environment/Water.png');
+        // this.load.image('objects','assets/graphics/objects/bush.png');
+        // this.load.image('objects','assets/graphics/objects/flower.png');
+        // this.load.image('objects','assets/graphics/objects/merchant.png');
+        // this.load.image('objects','assets/graphics/objects/mushroom.png');
+        // this.load.image('objects','assets/graphics/objects/mushrooms.png');
+        // this.load.image('objects','assets/graphics/objects/stump_medium.png');
+        // this.load.image('objects','assets/graphics/objects/stump_small.png');
+        // this.load.image('objects','assets/graphics/objects/sunflower.png');
+        // this.load.image('objects','assets/graphics/objects/tree_medium.png');
+        // this.load.image('objects','assets/graphics/objects/tree_small.png');
+        
+     
+
         // MAP LOADING
         this.load.image({
             key: "tiles",
             url: "assets/tiles/farm.png",
         });
         this.load.tilemapTiledJSON("farm", "assets/tilemaps/farm.json");
+        //this.load.tilemapTiledJSON("farm", "assets/tilemaps/map.json");
 
         //this.load.image('hero', 'assets/sprites/hero.png');
         this.load.spritesheet("hero", "assets/sprites/hero.png", {
@@ -194,13 +218,31 @@ export class Game extends Scene {
             tileWidth: 32,
             tileHeight: 32,
         });
+
         const tilesets = this.map.addTilesetImage("farm", "tiles");
+
+        // const fencesTiles = this.map.addTilesetImage('Fences', 'fences');
+        // const grassTiles = this.map.addTilesetImage('Grass', 'grass');
+        // const hillsTiles = this.map.addTilesetImage('Hills', 'hills');
+        // const houseTiles = this.map.addTilesetImage('House', 'house');
+        // const houseDecorationTiles = this.map.addTilesetImage('House Decoration', 'houseDecoration');
+        // const interactionTiles = this.map.addTilesetImage('interaction', 'interaction');
+        // const pathsTiles = this.map.addTilesetImage('Paths', 'paths');
+        // const plantDecorationTiles = this.map.addTilesetImage('Plant Decoration', 'plantDecoration');
+        // const waterTiles = this.map.addTilesetImage('Water', 'water');
+        // const objectTiles = this.map.addTilesetImage('Objects', 'objects');
+        // const allTiles = [fencesTiles,grassTiles,hillsTiles,houseTiles,houseDecorationTiles,interactionTiles,pathsTiles,plantDecorationTiles,waterTiles,objectTiles];
+        // console.log(allTiles)
+        // console.log(this.map.layers)
+  
         if (tilesets) {
             // this.map.createLayer("Collision", tilesets, 0, 0);
-            // this.map.createLayer("Trees", tilesets, 0, 0);
-            // this.map.createLayer("Ground", tilesets, 0, 0);
+           
+            
             for (let i = 0; i < this.map.layers.length; i++) {
-                const layer = this.map.createLayer(i, tilesets, 0, 0);
+                console.log(this.map.layers[i].name)
+                this.map.createLayer( this.map.layers[i].name.toString(), tilesets, 0, 0);
+                //const layer = this.map.createLayer(i, tilesets, 0, 0);
                 //layer.scale = 3;
             }
 
