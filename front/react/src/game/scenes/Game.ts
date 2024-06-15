@@ -437,4 +437,8 @@ export class Game extends Scene {
         //     this.activeTool = tool;
         // }
     }
+
+    addPlayerTask() {
+        console.log('add harvest task')
+    }
 }

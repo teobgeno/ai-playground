@@ -1,13 +1,13 @@
-import { LandState, LandElements } from "./types";
+import { Game } from "../scenes/Game";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
+import { LandState, LandElements } from "./types";
 
 export class Land {
     private crop: Crop | null;
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
     private landState: number;
-    private isConstructed: boolean = false;
     private posX: number;
     private posY: number;
     private elements: LandElements;
@@ -50,7 +50,6 @@ export class Land {
     }
 
     public init() {
-        this.isConstructed = true;
         this.landState = LandState.PLOWED;
         this.elements = {
             water: 0,
@@ -122,6 +121,7 @@ export class Land {
 
     private harvestCrop() {
         //TODO::add to player inventory
+        (this.scene as Game).addPlayerTask();
     }
 
     public destroyCrop() {
