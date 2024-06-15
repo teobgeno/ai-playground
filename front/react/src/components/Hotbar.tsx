@@ -23,9 +23,9 @@ export function Hotbar(props: HotbarProps) {
     }, []);
 
     useEffect(() => {
-      console.log('change props')
-        const activeItem = props.items.find(x=> x?.id === activeItemId);
-        if(!activeItem) {
+        console.log("change props");
+        const activeItem = props.items.find((x) => x?.id === activeItemId);
+        if (!activeItem) {
             deSelectItem();
         }
     }, [props.items]);
@@ -34,9 +34,19 @@ export function Hotbar(props: HotbarProps) {
         if (activeItemId === item.id) {
             deSelectItem();
         } else {
+            if (activeItemId) {
+                deSelectItem();
+            }
             setActiveItemId(item.id);
             props.setActiveItem(item);
         }
+
+        // if (activeItemId === item.id) {
+        //     deSelectItem();
+        // } else {
+        //     setActiveItemId(item.id);
+        //     props.setActiveItem(item);
+        // }
     };
 
     const deSelectItem = () => {

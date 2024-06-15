@@ -10,8 +10,6 @@ import {LandEntity} from "../farm/types";
 export class WeedingTask implements Task{
     private gridEngine: GridEngine;
     private character: Humanoid;
-    public pointerX: number;
-    public pointerY: number;
     private tile:Tilemaps.Tile;
     private status: TaskStatus;
     private pointer: number = 0;
@@ -23,8 +21,6 @@ export class WeedingTask implements Task{
     constructor(
         gridEngine: GridEngine,
         character: Humanoid,
-        pointerX: number,
-        pointerY: number,
         tile:Tilemaps.Tile,
         landsMap: Array<Land>,
         farmLandMap: Map<string, LandEntity>,
@@ -33,8 +29,6 @@ export class WeedingTask implements Task{
     ) {
         this.character = character;
         this.gridEngine = gridEngine;
-        this.pointerX = pointerX;
-        this.pointerY = pointerY;
         this.tile = tile;
         this.landsMap = landsMap;
         this.farmLandMap = farmLandMap;
@@ -70,7 +64,7 @@ export class WeedingTask implements Task{
         this.gridEngine.stopMovement(this.character.getId());
         this.landTile.rollbackLand();
 
-        this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: false, hasCrop: false });
+        this.farmLandMap.set(this.tile.x + "-" + this.tile.y, { isWeeded: false, hasCrop: false });
         const landIndex = this.landsMap.findIndex(x=> x.getPosX() === this.tile.pixelX && x.getPosY() === this.tile.pixelY);
         this.landsMap.splice(landIndex, 1);
         // console.log(landIndex + '---' + this.tile.pixelX + '---' + this.tile.pixelY)
@@ -115,7 +109,7 @@ export class WeedingTask implements Task{
             this.character.anims.restart();
             this.character.anims.stop();
             if(this.status === TaskStatus.Running) {
-                this.farmLandMap.set(this.pointerX + "-" + this.pointerY, { isWeeded: true, hasCrop: false });
+                this.farmLandMap.set(this.tile.x + "-" + this.tile.y, { isWeeded: true, hasCrop: false });
                 this.status = TaskStatus.Completed;
                 this.landTile.init();
             }

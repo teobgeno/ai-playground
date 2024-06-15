@@ -11,12 +11,9 @@ import { Seed } from "../farm/Seed";
 export class SeedTask implements Task {
     private gridEngine: GridEngine;
     private character: Humanoid;
-    public pointerX: number;
-    public pointerY: number;
     public tile: Tilemaps.Tile;
     private status: TaskStatus;
     private pointer: number = 0;
-    private landsMap: Array<Land> = [];
     private farmLandMap: Map<string, LandEntity>;
     private landTile: Land;
     private seed: Seed;
@@ -24,20 +21,14 @@ export class SeedTask implements Task {
     constructor(
         gridEngine: GridEngine,
         character: Humanoid,
-        pointerX: number,
-        pointerY: number,
         tile: Tilemaps.Tile,
-        landsMap: Array<Land>,
         farmLandMap: Map<string, LandEntity>,
         landTile: Land,
         seed: Seed
     ) {
         this.character = character;
         this.gridEngine = gridEngine;
-        this.pointerX = pointerX;
-        this.pointerY = pointerY;
         this.tile = tile;
-        this.landsMap = landsMap;
         this.farmLandMap = farmLandMap;
         this.landTile = landTile;
         this.seed = seed;
@@ -72,7 +63,7 @@ export class SeedTask implements Task {
         this.gridEngine.stopMovement(this.character.getId());
         this.landTile.rollbackCrop();
 
-        this.farmLandMap.set(this.pointerX + "-" + this.pointerY, {
+        this.farmLandMap.set(this.tile.x + "-" + this.tile.y, {
             isWeeded: true,
             hasCrop: false,
         });

@@ -91,7 +91,7 @@ export class CropCursor implements Cursor {
 
             if (tileGround) {
 
-                this.farmLandMap.set(pointerTileX + "-" + pointerTileY, {
+                this.farmLandMap.set(tileGround.x + "-" + tileGround.y, {
                     isWeeded: true,
                     hasCrop: true,
                 });
@@ -108,10 +108,7 @@ export class CropCursor implements Cursor {
                 const s = new SeedTask(
                     this.gridEngine,
                     this.character,
-                    pointerTileX,
-                    pointerTileY,
                     tileGround,
-                    this.landsMap,
                     this.farmLandMap,
                     landTile as Land,
                     this.seed,
