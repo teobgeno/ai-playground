@@ -9,7 +9,6 @@ import { Land } from "../farm/Land";
 import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
-import {LandEntity} from "../farm/types";
 
 export class HoeCursor implements Cursor {
     private scene: Phaser.Scene;

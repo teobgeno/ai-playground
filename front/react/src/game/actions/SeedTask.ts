@@ -1,51 +1,35 @@
+import { BaseTask } from "./BaseTask";
+import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
-import { Land } from "../farm/Land";
-//import MoveCharAction from "./MoveCharAction";
-import { Tilemaps } from "phaser";
-import { Task, TaskStatus } from "./types";
-import { Humanoid } from "../characters/Humanoid";
-import { LandEntity } from "../farm/types";
 
+import {Land} from "../farm/Land";
 import { Seed } from "../farm/Seed";
 
-export class SeedTask implements Task {
-    private gridEngine: GridEngine;
-    private character: Humanoid;
-    public tile: Tilemaps.Tile;
-    private status: TaskStatus;
-    private pointer: number = 0;
-    private farmLandMap: Map<string, LandEntity>;
-    private landTile: Land;
+import {TaskStatus, Task} from "./types";
+import {Humanoid} from "../characters/Humanoid";
+
+export class SeedTask extends BaseTask implements Task{
+
+    private mapManager: MapManager;
+    private landEntity:Land;
     private seed: Seed;
 
     constructor(
+        mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        tile: Tilemaps.Tile,
-        farmLandMap: Map<string, LandEntity>,
-        landTile: Land,
+        landEntity: Land,
         seed: Seed
     ) {
-        this.character = character;
-        this.gridEngine = gridEngine;
-        this.tile = tile;
-        this.farmLandMap = farmLandMap;
-        this.landTile = landTile;
+        super(gridEngine, character);
+
+        this.mapManager = mapManager;
         this.seed = seed;
+        this.landEntity = landEntity;
+
         this.status = TaskStatus.Initialized;
     }
 
-    public getStatus() {
-        return this.status;
-    }
-
-    public getTile() {
-        return this.tile;
-    }
-
-    public setStatus(status: TaskStatus) {
-        this.status = status;
-    }
 
     public start() {
         this.status =
@@ -61,12 +45,9 @@ export class SeedTask implements Task {
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getId());
-        this.landTile.rollbackCrop();
+        this.landEntity.rollbackCrop();
 
-        this.farmLandMap.set(this.tile.x + "-" + this.tile.y, {
-            isWeeded: true,
-            hasCrop: false,
-        });
+        this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
      
         this.character.getInventory().addItem({...this.seed, amount:1});
 
@@ -77,7 +58,7 @@ export class SeedTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter();
+                    this.moveCharacter(this.landEntity.getPixelX(), this.landEntity.getPixelY());
                     break;
                 case 2:
                     this.plantSeed();
@@ -87,22 +68,6 @@ export class SeedTask implements Task {
     };
 
 
-    private moveCharacter() {
-        this.pointer = 2;
-        this.character.setCharState("walk");
-        this.gridEngine.moveTo(this.character.getId(), {
-            x: this.tile.x,
-            y: this.tile.y,
-        });
-        // const m = new MoveCharAction(
-        //     this.character,
-        //     this.gridEngine,
-        //     this.tile.x,
-        //     this.tile.y
-        // );
-        // m.execute();
-    }
-
     private plantSeed() {
         console.log("seed");
         this.character.anims.play("attack_right", true);
@@ -111,7 +76,7 @@ export class SeedTask implements Task {
             this.character.anims.restart();
             this.character.anims.stop();
             if (this.status === TaskStatus.Running) {
-                this.landTile.plantCrop();
+                this.landEntity.plantCrop();
                 this.status = TaskStatus.Completed;
             }
         }, 1000);

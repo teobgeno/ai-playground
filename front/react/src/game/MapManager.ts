@@ -48,7 +48,8 @@ export class MapManager {
         this.plotLandEntities.push(entity);
     }
 
-    public deletePlotLandEntity(entity: Land) {
-        this.plotLandEntities.push(entity);
+    public deletePlotLandEntityByCoords(x:number, y:number) {
+        const landIndex = this.plotLandEntities.findIndex(e=> e.getPixelX() === x && e.getPixelY() === y);
+        this.plotLandEntities.splice(landIndex, 1);
     }
 }

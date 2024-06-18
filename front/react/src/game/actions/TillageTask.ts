@@ -4,17 +4,13 @@ import { GridEngine } from "grid-engine";
 
 import {Land} from "../farm/Land";
 import { Hoe } from "../items/Hoe";
-//import MoveCharAction from "./MoveCharAction";
-import { Tilemaps } from "phaser";
-import {Task, TaskStatus} from "./types";
-import {Humanoid} from "../characters/Humanoid";
-import {LandEntity} from "../farm/types";
 
-export class TillageTask  extends BaseTask{
+import {TaskStatus, Task} from "./types";
+import {Humanoid} from "../characters/Humanoid";
+
+export class TillageTask extends BaseTask implements Task{
 
     private mapManager: MapManager;
-    private gridEngine: GridEngine;
-    private character: Humanoid;
     private landEntity:Land;
     private hoe:Hoe;
 
@@ -47,8 +43,8 @@ export class TillageTask  extends BaseTask{
         this.landEntity.rollbackLand();
 
         this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: false, hasCrop: false });
-        const landIndex = this.mapManager.getPlotLandEntities().findIndex(x=> x.getPixelX() === this.tile.pixelX && x.getPixelY() === this.tile.pixelY);
-        this.landsMap.splice(landIndex, 1);
+        this.mapManager.deletePlotLandEntityByCoords(this.landEntity.getPixelX(), this.landEntity.getPixelY());
+
         this.status = TaskStatus.Completed;
     }
 
@@ -56,7 +52,7 @@ export class TillageTask  extends BaseTask{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter();
+                    this.moveCharacter(this.landEntity.getPixelX(), this.landEntity.getPixelY());
                     break;
                 case 2:
                    this.weedGround();
@@ -64,15 +60,6 @@ export class TillageTask  extends BaseTask{
             }
         }
     };
-
-    private moveCharacter() {
-        this.pointer = 2;
-        this.character.setCharState('walk')
-        this.gridEngine.moveTo(this.character.getId(), {
-            x: this.landEntity.getX(),
-            y: this.landEntity.getY(),
-        });
-    }
 
     private weedGround() {
         console.log('weeding');
@@ -82,9 +69,9 @@ export class TillageTask  extends BaseTask{
             this.character.anims.restart();
             this.character.anims.stop();
             if(this.status === TaskStatus.Running) {
-                this.farmLandMap.set(this.tile.x + "-" + this.tile.y, { isWeeded: true, hasCrop: false });
+                this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 this.status = TaskStatus.Completed;
-                this.landTile.init();
+                this.landEntity.init();
             }
           }, this.hoe.weedSpeed);
     }

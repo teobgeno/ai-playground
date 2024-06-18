@@ -8,10 +8,7 @@ export abstract class BaseTask {
     protected status: TaskStatus;
     protected pointer: number = 0;
 
-    constructor(
-        gridEngine: GridEngine,
-        character: Humanoid,
-    ) {
+    constructor(gridEngine: GridEngine, character: Humanoid) {
         this.character = character;
         this.gridEngine = gridEngine;
         this.status = TaskStatus.Initialized;
@@ -25,16 +22,12 @@ export abstract class BaseTask {
         this.status = status;
     }
 
-    public getTile() {
-        return this.tile;
-    }
-
     protected moveCharacter(x: number, y: number) {
         this.pointer = 2;
         this.character.setCharState("walk");
         this.gridEngine.moveTo(this.character.getId(), {
-            x: this.tile.x,
-            y: this.tile.y,
+            x: x,
+            y: y,
         });
         // const m = new MoveCharAction(
         //     this.character,

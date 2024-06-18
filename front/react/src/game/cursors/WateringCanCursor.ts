@@ -1,38 +1,35 @@
-
 import { Tilemaps } from "phaser";
+import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
-import { Land } from "../farm/Land";
 
-import {Humanoid} from "../characters/Humanoid";
-import {Cursor} from "./types";
-import {LandEntity} from "../farm/types";
+// import { Land } from "../farm/Land";
 
+
+import { Humanoid } from "../characters/Humanoid";
+import { Cursor } from "./types";
 
 export class WateringCanCursor implements Cursor{
     private scene: Phaser.Scene;
-    private map:Tilemaps.Tilemap;
+    private map: Tilemaps.Tilemap;
+    private mapManager: MapManager;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private landsMap: Array<Land> = [];
-    private farmLandMap: Map<string, LandEntity>;
-    private marker:Phaser.GameObjects.Rectangle;
+    private marker: Phaser.GameObjects.Rectangle;
 
     constructor(
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
+        mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        landsMap: Array<Land>,
-        farmLandMap: Map<string, LandEntity>,
-        marker:Phaser.GameObjects.Rectangle
+        marker: Phaser.GameObjects.Rectangle
 
     ) {
         this.scene = scene;
         this.map = map;
+        this.mapManager = mapManager;
         this.gridEngine = gridEngine;
         this.character = character;
-        this.landsMap = landsMap;
-        this.farmLandMap = farmLandMap;
         this.marker = marker;
     }
 
@@ -42,7 +39,7 @@ export class WateringCanCursor implements Cursor{
         this.marker.y = (this.map.tileToWorldY(pointerTileY)|| 0) + 16;
         this.marker.setAlpha(1);
 
-        if (this.farmLandMap.get(pointerTileX + '-' + pointerTileY)?.isWeeded) {
+        if (this.mapManager.getPlotLandCoords().get(pointerTileX + '-' + pointerTileY)?.isWeeded) {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(0, 153, 0), 1);
         } else {
             this.marker.setStrokeStyle(2,Phaser.Display.Color.GetColor(204, 0, 0), 1);
@@ -51,7 +48,7 @@ export class WateringCanCursor implements Cursor{
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (
-            this.farmLandMap.get(pointerTileX + "-" + pointerTileY)?.isWeeded
+            this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded
         ) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
@@ -62,8 +59,13 @@ export class WateringCanCursor implements Cursor{
 
             if (tileGround) {
                
-                const land = this.landsMap.find(x=> x.getPosX() === tileGround.pixelX && x.getPosY() === tileGround.pixelY);
-                land?.water();
+                const landEntity = this.mapManager.getPlotLandEntities().find(
+                    (x) =>
+                        x.getX() === tileGround.pixelX &&
+                        x.getY() === tileGround.pixelY
+                );
+
+                landEntity?.water();
 
                 // const w = new WeedingTask(
                 //     this.character,

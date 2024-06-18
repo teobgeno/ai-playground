@@ -1,6 +1,5 @@
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
-import { Land } from "../farm/Land";
 import { MapManager } from "../MapManager";
 
 import { HoeCursor } from "./HoeCursor";
@@ -10,7 +9,6 @@ import { CropCursor } from "./CropCursor";
 import { Cursor, CursorType } from "./types";
 import { InventoryItem } from "../characters/types";
 import {Humanoid} from "../characters/Humanoid";
-import {LandEntity} from "../farm/types";
 
 export class CursorManager {
     private map: Tilemaps.Tilemap;
