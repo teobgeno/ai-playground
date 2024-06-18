@@ -1,5 +1,5 @@
 import { GridEngine } from "grid-engine";
-import { Hoe } from "../tools/Hoe";
+import { Hoe } from "../items/Hoe";
 import {Land} from "../farm/Land";
 //import MoveCharAction from "./MoveCharAction";
 import { Tilemaps } from "phaser";
