@@ -3,7 +3,7 @@ import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
 import { Hoe } from "../items/Hoe";
-import { WeedingTask } from "../actions/WeedingTask";
+import { TillageTask } from "../actions/TillageTask";
 import { Land } from "../farm/Land";
 
 import { InventoryItem } from "../characters/types";
@@ -96,7 +96,7 @@ export class HoeCursor implements Cursor {
                     this.mapManager,
                     this.gridEngine,
                     this.character,
-                    this.landEntity,
+                    landEntity,
                     this.hoe
                 );
                 this.character.addTask(t);

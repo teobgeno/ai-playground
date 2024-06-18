@@ -29,7 +29,7 @@ export class TillageTask  extends BaseTask{
         this.mapManager = mapManager;
         this.hoe = hoe;
         this.landEntity = landEntity;
-        this.mapManager.setPlotLandEntities(this.landEntity);
+        this.mapManager.addPlotLandEntity(this.landEntity);
         console.log('task weed')
     }
 
@@ -46,7 +46,7 @@ export class TillageTask  extends BaseTask{
         this.gridEngine.stopMovement(this.character.getId());
         this.landEntity.rollbackLand();
 
-        this.mapManager.setPlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: false, hasCrop: false });
+        this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: false, hasCrop: false });
         const landIndex = this.mapManager.getPlotLandEntities().findIndex(x=> x.getPixelX() === this.tile.pixelX && x.getPixelY() === this.tile.pixelY);
         this.landsMap.splice(landIndex, 1);
         this.status = TaskStatus.Completed;

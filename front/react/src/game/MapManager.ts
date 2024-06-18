@@ -36,7 +36,8 @@ export class MapManager {
     }
 
     public updatePlotLandCoords(key:string, entity: LandEntity) {
-        this.plotLandCoords.set(key, entity);
+        const current = this.plotLandCoords.get(key);
+        this.plotLandCoords.set(key, {...current, ...entity});
     }
 
     public getPlotLandEntities() {
