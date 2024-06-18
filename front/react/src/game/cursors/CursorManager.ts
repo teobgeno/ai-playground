@@ -1,6 +1,7 @@
 import { Tilemaps } from "phaser";
 import { GridEngine } from "grid-engine";
 import { Land } from "../farm/Land";
+import { MapManager } from "../MapManager";
 
 import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
@@ -13,6 +14,7 @@ import {LandEntity} from "../farm/types";
 
 export class CursorManager {
     private map: Tilemaps.Tilemap;
+    private mapManager: MapManager;
     private hoeCursor: HoeCursor;
     private wateringCanCursor: WateringCanCursor;
     private cropCursor: CropCursor;
@@ -23,42 +25,39 @@ export class CursorManager {
     constructor(
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
+        mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        landsMap: Array<Land>,
-        farmLandMap: Map<string, LandEntity>,
         marker:Phaser.GameObjects.Rectangle
     ) {
         
         this.map = map;
+        this.mapManager = mapManager;
         this.marker = marker;
         this.hoeCursor = new HoeCursor(
             scene,
             map,
+            this.mapManager,
             gridEngine,
             character,
-            landsMap,
-            farmLandMap,
             marker
         );
 
         this.wateringCanCursor = new WateringCanCursor(
             scene,
             map,
+            this.mapManager,
             gridEngine,
             character,
-            landsMap,
-            farmLandMap,
             marker
         );
 
         this.cropCursor = new CropCursor(
             scene,
             map,
+            this.mapManager,
             gridEngine,
             character,
-            landsMap,
-            farmLandMap,
             marker
         );
     }

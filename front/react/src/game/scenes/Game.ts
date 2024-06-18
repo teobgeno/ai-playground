@@ -13,6 +13,7 @@ import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
 import { InventoryItem } from "../characters/types";
 import { LandEntity } from "../farm/types";
+import { MapManager } from "../MapManager";
 
 // type gridEngineConfigChar = {
 //     id?:string,
@@ -44,6 +45,7 @@ export class Game extends Scene {
     private farmLandMap: Map<string, LandEntity>;
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
+    private mapManager: MapManager;
     constructor() {
         super("Game");
     }
@@ -180,6 +182,7 @@ export class Game extends Scene {
             );
         });
 
+        
         this.farmLandMap = new Map();
 
         for (let y = 0; y < this.map.height; y++) {
@@ -200,6 +203,7 @@ export class Game extends Scene {
         this.cursorManager = new CursorManager(
             this,
             this.map,
+            this.mapManager,
             this.gridEngine,
             this.hero,
             this.landsMap,
@@ -219,9 +223,7 @@ export class Game extends Scene {
             tileWidth: 32,
             tileHeight: 32,
         });
-
-        const tilesets = this.map.addTilesetImage("farm", "tiles");
-
+        
         // const fencesTiles = this.map.addTilesetImage('Fences', 'fences');
         // const grassTiles = this.map.addTilesetImage('Grass', 'grass');
         // const hillsTiles = this.map.addTilesetImage('Hills', 'hills');
@@ -235,11 +237,9 @@ export class Game extends Scene {
         // const allTiles = [fencesTiles,grassTiles,hillsTiles,houseTiles,houseDecorationTiles,interactionTiles,pathsTiles,plantDecorationTiles,waterTiles,objectTiles];
         // console.log(allTiles)
         // console.log(this.map.layers)
-  
+        const tilesets = this.map.addTilesetImage("farm", "tiles");
         if (tilesets) {
             // this.map.createLayer("Collision", tilesets, 0, 0);
-           
-            
             for (let i = 0; i < this.map.layers.length; i++) {
                 console.log(this.map.layers[i].name)
                 this.map.createLayer( this.map.layers[i].name.toString(), tilesets, 0, 0);
@@ -285,6 +285,7 @@ export class Game extends Scene {
             this.map.widthInPixels,
             this.map.heightInPixels
         );
+        this.mapManager.createPlotLandCoords();
         //this.showDebugWalls();
     }
 

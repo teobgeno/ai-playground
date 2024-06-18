@@ -1,15 +1,15 @@
 import { Tilemaps } from "phaser";
 import { LandEntity } from "./farm/types";
+import { Land } from "./farm/Land";
 export class MapManager {
-    private map: Tilemaps.Tilemap
-    private farmLandMap: Map<string, LandEntity>;
-    constructor(
-        map: Tilemaps.Tilemap,
-    ) {
+    private map: Tilemaps.Tilemap;
+    private plotLandCoords: Map<string, LandEntity>;
+    private plotLandEntities: Array<Land> = [];
+    constructor(map: Tilemaps.Tilemap) {
         this.map = map;
     }
 
-    public setOutDoorFarmLand() {
+    public createPlotLandCoords() {
         for (let y = 0; y < this.map.height; y++) {
             for (let x = 0; x < this.map.width; x++) {
                 const tileGround = this.map.getTileAt(x, y, false, "Ground");
@@ -17,16 +17,29 @@ export class MapManager {
                 const tileTree = this.map.getTileAt(x, y, false, "Trees");
 
                 if (tileGround && !tileTree) {
-                    this.farmLandMap.set(x + "-" + y, {
+                    this.plotLandCoords.set(x + "-" + y, {
                         isWeeded: false,
                         hasCrop: false,
+                        hasConstruction: false,
                     });
                 }
             }
         }
     }
 
-    public getOutDoorFarmLand() {
-        return this.farmLandMap;
+    public getPlotLandCoords() {
+        return this.plotLandCoords;
+    }
+
+    public setPlotLandCoords(key:string, entity: LandEntity) {
+        this.plotLandCoords.set(key, entity);
+    }
+
+    public getPlotLandEntities() {
+        return this.plotLandEntities;
+    }
+
+    public setPlotLandEntities(entity: Land) {
+        this.plotLandEntities.push(entity);
     }
 }
