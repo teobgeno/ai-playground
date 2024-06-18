@@ -35,11 +35,19 @@ export class MapManager {
         this.plotLandCoords.set(key, entity);
     }
 
+    public updatePlotLandCoords(key:string, entity: LandEntity) {
+        this.plotLandCoords.set(key, entity);
+    }
+
     public getPlotLandEntities() {
         return this.plotLandEntities;
     }
 
-    public setPlotLandEntities(entity: Land) {
+    public addPlotLandEntity(entity: Land) {
+        this.plotLandEntities.push(entity);
+    }
+
+    public deletePlotLandEntity(entity: Land) {
         this.plotLandEntities.push(entity);
     }
 }
