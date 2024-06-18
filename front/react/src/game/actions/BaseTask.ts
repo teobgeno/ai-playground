@@ -1,14 +1,21 @@
 import { GridEngine } from "grid-engine";
 import { Humanoid } from "../characters/Humanoid";
-import { Tilemaps } from "phaser";
-import { Task, TaskStatus } from "./types";
+import { TaskStatus } from "./types";
 
-abstract class BaseTask {
+export abstract class BaseTask {
     protected gridEngine: GridEngine;
     protected character: Humanoid;
-    public tile: Tilemaps.Tile;
     protected status: TaskStatus;
     protected pointer: number = 0;
+
+    constructor(
+        gridEngine: GridEngine,
+        character: Humanoid,
+    ) {
+        this.character = character;
+        this.gridEngine = gridEngine;
+        this.status = TaskStatus.Initialized;
+    }
 
     public getStatus() {
         return this.status;
@@ -18,7 +25,11 @@ abstract class BaseTask {
         this.status = status;
     }
 
-    protected moveCharacter() {
+    public getTile() {
+        return this.tile;
+    }
+
+    protected moveCharacter(x: number, y: number) {
         this.pointer = 2;
         this.character.setCharState("walk");
         this.gridEngine.moveTo(this.character.getId(), {
