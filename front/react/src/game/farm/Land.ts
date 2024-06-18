@@ -8,21 +8,31 @@ export class Land {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
     private landState: number;
-    private posX: number;
-    private posY: number;
+    private x: number;
+    private y: number;
+    private pixelX: number;
+    private pixelY: number;
     private elements: LandElements;
 
     //status plowed, planted
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        pixelX: number,
+        pixelY: number
+    ) {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
-        this.posX = x;
-        this.posY = y;
+        this.x = x;
+        this.y = y;
+        this.pixelX = pixelX;
+        this.pixelY = pixelY;
         this.sprite = scene.add.sprite(
-            this.posX + 16,
-            this.posY + 16,
+            this.pixelX + 16,
+            this.pixelY + 16,
             "land",
             19
         );
@@ -67,12 +77,20 @@ export class Land {
         this.destroyCrop();
     }
 
-    public getPosX() {
-        return this.posX;
+    public getX() {
+        return this.x;
     }
 
-    public getPosY() {
-        return this.posY;
+    public getY() {
+        return this.y;
+    }
+
+    public getPixelX() {
+        return this.pixelX;
+    }
+
+    public getPixelY() {
+        return this.pixelY;
     }
 
     public getState() {
@@ -86,7 +104,7 @@ export class Land {
 
     public createCrop(seed: Seed) {
         if (this.landState === LandState.PLOWED) {
-            this.crop = new Crop(this.scene, seed, this.posX, this.posY);
+            this.crop = new Crop(this.scene, seed, this.pixelX, this.pixelY);
         }
     }
 

@@ -206,8 +206,6 @@ export class Game extends Scene {
             this.mapManager,
             this.gridEngine,
             this.hero,
-            this.landsMap,
-            this.farmLandMap,
             this.marker
         );
 

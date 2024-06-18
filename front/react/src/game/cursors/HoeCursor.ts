@@ -1,6 +1,6 @@
 import { Tilemaps } from "phaser";
-import { GridEngine } from "grid-engine";
 import { MapManager } from "../MapManager";
+import { GridEngine } from "grid-engine";
 
 import { Hoe } from "../items/Hoe";
 import { WeedingTask } from "../actions/WeedingTask";
@@ -86,20 +86,20 @@ export class HoeCursor implements Cursor {
 
                 const landEntity = new Land(
                     this.scene,
+                    tileGround.x,
+                    tileGround.y,
                     tileGround.pixelX,
-                    tileGround.pixelY
+                    tileGround.pixelY,
                 );
                 
-                const w = new WeedingTask(
+                const t = new TillageTask(
+                    this.mapManager,
                     this.gridEngine,
                     this.character,
-                    tileGround,
-                    this.landsMap,
-                    this.farmLandMap,
-                    landTile,
+                    this.landEntity,
                     this.hoe
                 );
-                this.character.addTask(w);
+                this.character.addTask(t);
             }
         }
     }
