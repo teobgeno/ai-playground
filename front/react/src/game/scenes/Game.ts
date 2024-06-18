@@ -1,18 +1,18 @@
 import { EventBus } from "../EventBus";
-import { Scene, Tilemaps, Physics } from "phaser";
+import { Scene, Tilemaps } from "phaser";
 import { GridEngine, GridEngineConfig } from "grid-engine";
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
-import { Land } from "../farm/Land";
+//import { Land } from "../farm/Land";
 // import {DayNight} from "../DayNight";
-import { Item } from "../items/item";
+//import { Item } from "../items/item";
 import { Hoe } from "../items/Hoe";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
 import { InventoryItem } from "../characters/types";
-import { LandEntity } from "../farm/types";
+//import { LandEntity } from "../farm/types";
 import { MapManager } from "../MapManager";
 
 // type gridEngineConfigChar = {
@@ -37,8 +37,8 @@ export class Game extends Scene {
     private map!: Tilemaps.Tilemap;
     private marker: Phaser.GameObjects.Rectangle;
 
-    private activeTool: number;
-    private propertiesText;
+    // private activeTool: number;
+    // private propertiesText;
     private charactersMap: Map<string, Humanoid>;
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
@@ -127,15 +127,15 @@ export class Game extends Scene {
         this.initGridEngine();
         this.initCamera(this.map);
 
-        this.propertiesText = this.add.text(
-            16,
-            16,
-            "Click on a tile to view its properties.",
-            {
-                font: "20px Arial",
-                color: "#000",
-            }
-        );
+        // this.propertiesText = this.add.text(
+        //     16,
+        //     16,
+        //     "Click on a tile to view its properties.",
+        //     {
+        //         font: "20px Arial",
+        //         color: "#000",
+        //     }
+        // );
 
         //this.marker = this.add.graphics();
         // this.marker.lineStyle(2, 0x000000, 1);
@@ -346,11 +346,11 @@ export class Game extends Scene {
             }
         });
 
-        this.gridEngine
-            .directionChanged()
-            .subscribe(({ charId, direction }) => {
-                //this.hero.setFrame(this.hero.getStopFrame(direction));
-            });
+        // this.gridEngine
+        //     .directionChanged()
+        //     .subscribe(({ charId, direction }) => {
+              
+        //     });
 
         this.gridEngine
             .positionChangeFinished()
@@ -404,7 +404,7 @@ export class Game extends Scene {
             land.toggleInteraction(enableObjInteractions);
         }
 
-        for (const [key, character] of this.charactersMap) {
+        for (const [, character] of this.charactersMap) {
             if(character.getId() !== 'hero') {
                 (character as Npc).toggleInteraction(enableObjInteractions);
             }
