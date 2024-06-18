@@ -6,6 +6,7 @@ import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 import { Land } from "../farm/Land";
 // import {DayNight} from "../DayNight";
+import { Item } from "../items/item";
 import { Hoe } from "../items/Hoe";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
