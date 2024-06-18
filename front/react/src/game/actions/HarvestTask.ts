@@ -51,7 +51,7 @@ export class HarvestTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.getPixelX(), this.landEntity.getPixelY());
+                    this.moveCharacter(this.landEntity.getX(), this.landEntity.getY());
                     break;
                 case 2:
                     this.harvestCrop();

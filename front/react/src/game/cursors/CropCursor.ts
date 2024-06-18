@@ -94,8 +94,8 @@ export class CropCursor implements Cursor {
 
                 const landEntity = this.mapManager.getPlotLandEntities().find(
                     (x) =>
-                        x.getX() === tileGround.pixelX &&
-                        x.getY() === tileGround.pixelY
+                        x.getX() === tileGround.x &&
+                        x.getY() === tileGround.y
                 );
 
                 if(landEntity) {

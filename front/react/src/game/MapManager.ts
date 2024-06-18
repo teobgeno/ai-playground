@@ -3,7 +3,7 @@ import { LandEntity } from "./farm/types";
 import { Land } from "./farm/Land";
 export class MapManager {
     private map: Tilemaps.Tilemap;
-    private plotLandCoords: Map<string, LandEntity>;
+    private plotLandCoords: Map<string, LandEntity> = new Map();
     private plotLandEntities: Array<Land> = [];
     constructor(map: Tilemaps.Tilemap) {
         this.map = map;

@@ -17,5 +17,6 @@ export interface Task
     next: () => void;
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
+    getMoveDestinationPoint: () => {x: number, y: number}
 }
 

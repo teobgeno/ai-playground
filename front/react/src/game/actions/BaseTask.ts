@@ -7,6 +7,8 @@ export abstract class BaseTask {
     protected character: Humanoid;
     protected status: TaskStatus;
     protected pointer: number = 0;
+    protected destinationMoveX : number = 0;
+    protected destinationMoveY : number = 0;
 
     constructor(gridEngine: GridEngine, character: Humanoid) {
         this.character = character;
@@ -22,13 +24,19 @@ export abstract class BaseTask {
         this.status = status;
     }
 
+    public getMoveDestinationPoint() {
+        return {x: this.destinationMoveX, y: this.destinationMoveY};
+    }
     protected moveCharacter(x: number, y: number) {
         this.pointer = 2;
         this.character.setCharState("walk");
+        this.destinationMoveX = x;
+        this.destinationMoveY = y;
         this.gridEngine.moveTo(this.character.getId(), {
             x: x,
             y: y,
         });
+        
         // const m = new MoveCharAction(
         //     this.character,
         //     this.gridEngine,

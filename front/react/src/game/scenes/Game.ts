@@ -39,10 +39,7 @@ export class Game extends Scene {
 
     private activeTool: number;
     private propertiesText;
-
     private charactersMap: Map<string, Humanoid>;
-    private landsMap: Array<Land> = [];
-    private farmLandMap: Map<string, LandEntity>;
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
     private mapManager: MapManager;
@@ -183,23 +180,7 @@ export class Game extends Scene {
         });
 
         
-        this.farmLandMap = new Map();
-
-        for (let y = 0; y < this.map.height; y++) {
-            for (let x = 0; x < this.map.width; x++) {
-                const tileGround = this.map.getTileAt(x, y, false, "Ground");
-
-                const tileTree = this.map.getTileAt(x, y, false, "Trees");
-
-                if (tileGround && !tileTree) {
-                    this.farmLandMap.set(x + "-" + y, {
-                        isWeeded: false,
-                        hasCrop: false,
-                    });
-                }
-            }
-        }
-
+   
         this.cursorManager = new CursorManager(
             this,
             this.map,
@@ -283,6 +264,7 @@ export class Game extends Scene {
             this.map.widthInPixels,
             this.map.heightInPixels
         );
+        this.mapManager = new MapManager(this.map);
         this.mapManager.createPlotLandCoords();
         //this.showDebugWalls();
     }
@@ -378,8 +360,8 @@ export class Game extends Scene {
                     // console.log(char.currentTask.posX)
                     // console.log(char.currentTask.posY)
                     if (
-                        enterTile.x == char.currentTask.getTile().x &&
-                        enterTile.y == char.currentTask.getTile().y
+                        enterTile.x == char.currentTask.getMoveDestinationPoint().x &&
+                        enterTile.y == char.currentTask.getMoveDestinationPoint().y
                     ) {
                         char.currentTask.next();
                     }
@@ -408,7 +390,7 @@ export class Game extends Scene {
 
     update(time: number, delta: number): void {
         this.hero.update(delta);
-        for (const land of this.landsMap) {
+        for (const land of this.mapManager.getPlotLandEntities()) {
             land.update(time);
         }
     }
@@ -418,7 +400,7 @@ export class Game extends Scene {
         const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
         
         //disable interactions to game objects when cursor exists 
-        for (const land of this.landsMap) {
+        for (const land of this.mapManager.getPlotLandEntities()) {
             land.toggleInteraction(enableObjInteractions);
         }
 
