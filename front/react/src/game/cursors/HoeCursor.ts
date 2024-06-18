@@ -84,7 +84,7 @@ export class HoeCursor implements Cursor {
             if (tileGround) {
                 this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
 
-                const landTile = new Land(
+                const landEntity = new Land(
                     this.scene,
                     tileGround.pixelX,
                     tileGround.pixelY
