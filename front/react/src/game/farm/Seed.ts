@@ -10,13 +10,28 @@ export class Seed implements InventoryItem {
     public icon: string;
 
     public growthStageDuration: number;
-    public currentGrowthStage: number;
-    public maxGrowthStage: number;
+    public currentGrowthStageFrame: number;
+    public maxGrowthStageFrame: number;
     public cursorType: CursorType = CursorType.CROP;
 
     constructor(id: number, title: string) {
         this.id = id;
         this.title = title;
+    }
+
+    public setGrowthStageDuration(growthStageDuration: number) {
+        this.growthStageDuration = growthStageDuration;
+        return this;
+    }
+
+    public setCurrentGrowthStageFrame(currentGrowthStageFrame: number) {
+        this.currentGrowthStageFrame = currentGrowthStageFrame;
+        return this;
+    }
+
+    public setMaxGrowthStageFrame(maxGrowthStageFrame: number) {
+        this.maxGrowthStageFrame = maxGrowthStageFrame;
+        return this;
     }
 
     public setIsStackable(isStackable: boolean) {

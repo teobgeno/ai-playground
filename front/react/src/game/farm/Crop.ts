@@ -14,7 +14,7 @@ export class Crop {
             x + 16,
             y,
             "crops",
-            this.seed.currentGrowthStage
+            this.seed.currentGrowthStageFrame
         );
         this.sprite.setDepth(2);
         this.sprite.setAlpha(0.8);
@@ -28,11 +28,11 @@ export class Crop {
     }
 
     public getCurrentGrowthStage() {
-        return this.seed.currentGrowthStage;
+        return this.seed.currentGrowthStageFrame;
     }
 
     public isFullGrown() {
-        return this.seed.currentGrowthStage === this.seed.maxGrowthStage
+        return this.seed.currentGrowthStageFrame === this.seed.maxGrowthStageFrame
             ? true
             : false;
     }
@@ -42,12 +42,12 @@ export class Crop {
             //TODO:: use clock to calculate growth. Time is not always available. Scene chage, tab browser not active....
             if (
                 time - this.lastTimestamp >= this.seed.growthStageDuration &&
-                this.seed.currentGrowthStage < this.seed.maxGrowthStage
+                this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
             ) {
                 // console.log((time*1000) + ' - '+ this.lastTimestamp)
                 //console.log(Math.floor(time/this.lastTimestamp)) update currentGrowthStage based on this
                 this.lastTimestamp = time;
-                this.seed.currentGrowthStage++;
+                this.seed.currentGrowthStageFrame++;
                 this.updateTile();
             }
         } else {

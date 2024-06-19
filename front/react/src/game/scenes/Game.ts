@@ -273,16 +273,24 @@ export class Game extends Scene {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.hero.getInventory().addItem(new Hoe());
         
+        const cornSeed = new Seed(2, 'Corn Seeds');
+       
+        this.hero.getInventory().addItem(
+            cornSeed
+            .setIsStackable(true)
+            .setAmount(4)
+            .setIcon('🌱')
+            .setGrowthStageDuration(1000)
+            .setCurrentGrowthStageFrame(30)
+            .setMaxGrowthStageFrame(34)
+        );
 
-        this.hero.getInventory().addItem(
-            new Seed(2, true, 4, "🌱c", 1000, 30, 34)
-        );
-        this.hero.getInventory().addItem(
-            new Seed(3, true, 4, "🍅", 8000, 0, 4)
-        );
-        this.hero.getInventory().addItem(
-            new Seed(4, true, 2, "🌶️", 3000, 20, 24)
-        );
+        // this.hero.getInventory().addItem(
+        //     new Seed(3, true, 4, "🍅", 8000, 0, 4)
+        // );
+        // this.hero.getInventory().addItem(
+        //     new Seed(4, true, 2, "🌶️", 3000, 20, 24)
+        // );
 
         
 
