@@ -272,8 +272,10 @@ export class Game extends Scene {
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.hero.getInventory().addItem(new Hoe());
+        
+
         this.hero.getInventory().addItem(
-            new Seed(2, true, 4, "🌽", 1000, 30, 34)
+            new Seed(2, true, 4, "🌱c", 1000, 30, 34)
         );
         this.hero.getInventory().addItem(
             new Seed(3, true, 4, "🍅", 8000, 0, 4)
