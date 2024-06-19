@@ -14,7 +14,10 @@ import { ChatManager } from "../ChatManager";
 import { InventoryItem } from "../characters/types";
 //import { LandEntity } from "../farm/types";
 import { MapManager } from "../MapManager";
+import { Item } from "../items/item";
 
+import { HarvestTask } from "../actions/HarvestTask";
+import { Land } from "../farm/Land";
 // type gridEngineConfigChar = {
 //     id?:string,
 //     sprite?:Physics.Arcade.Sprite
@@ -274,7 +277,10 @@ export class Game extends Scene {
         this.hero.getInventory().addItem(new Hoe());
         
         const cornSeed = new Seed(2, 'Corn Seeds');
-       
+
+        const seedCrop = new Item(3,'Corn');
+        seedCrop.setIcon('🌽')
+
         this.hero.getInventory().addItem(
             cornSeed
             .setIsStackable(true)
@@ -283,6 +289,7 @@ export class Game extends Scene {
             .setGrowthStageDuration(1000)
             .setCurrentGrowthStageFrame(30)
             .setMaxGrowthStageFrame(34)
+            .setCrop(seedCrop)
         );
 
         // this.hero.getInventory().addItem(
@@ -430,7 +437,14 @@ export class Game extends Scene {
         // }
     }
 
-    addPlayerTask() {
+    addPlayerTask(task: string, params : Land) {
         console.log('add harvest task')
+        const h = new HarvestTask(
+            this.mapManager,
+            this.gridEngine,
+            this.hero,
+            params,
+        );
+        this.hero.addTask(h);
     }
 }

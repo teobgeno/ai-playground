@@ -69,8 +69,10 @@ export class HarvestTask extends BaseTask implements Task{
             this.character.anims.restart();
             this.character.anims.stop();
             if (this.status === TaskStatus.Running) {
-                this.landEntity.harvestCrop();
-                //this.character.getInventory().addItem({...this.seed, amount:1});
+                const crop = this.landEntity.executeHarvestCrop()
+                if(crop) {
+                    this.character.getInventory().addItem({...crop});
+                }
                 this.status = TaskStatus.Completed;
             }
         }, 1000);

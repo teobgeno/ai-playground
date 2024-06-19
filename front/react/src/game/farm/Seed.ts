@@ -1,3 +1,4 @@
+import { Item } from "../items/item";
 import { InventoryItem } from "../characters/types";
 import { CursorType } from "../cursors/types";
 
@@ -7,12 +8,13 @@ export class Seed implements InventoryItem {
 
     public isStackable: boolean = true;
     public amount: number = 0;
-    public icon: string = '';
+    public icon: string = "";
+    public cursorType: CursorType = CursorType.CROP;
 
     public growthStageDuration: number;
     public currentGrowthStageFrame: number;
     public maxGrowthStageFrame: number;
-    public cursorType: CursorType = CursorType.CROP;
+    public crop: Item;
 
     constructor(id: number, title: string) {
         this.id = id;
@@ -48,9 +50,19 @@ export class Seed implements InventoryItem {
         return this;
     }
 
-    public execute() {}
-
-    public setCrop() {
-        //🌽
+    public setCrop(crop: Item) {
+        this.crop = crop;
+        return this;
     }
+
+    public getCropFromHarvest() {
+        this.crop.amount = Math.floor(this.getRandomArbitrary(1, 4));
+        return this.crop;
+    }
+
+    private getRandomArbitrary(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+    }
+
+    public execute() {}
 }

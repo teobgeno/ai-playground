@@ -132,13 +132,16 @@ export class Land {
     }
 
     private onHarvestCrop = () => {
-        (this.scene as Game).addPlayerTask();
+        (this.scene as Game).addPlayerTask('harvest', this);
     };
 
-    public harvestCrop() {
+    public executeHarvestCrop() {
+        return this.crop?.executeHarvest();
+    }
+
+    public resetCrop() {
         //TODO::add to player inventory
         this.landState = LandState.PLOWED;
-        this.harvestCrop();
         this.destroyCrop();
     }
 
