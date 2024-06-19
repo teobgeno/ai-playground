@@ -5,7 +5,7 @@ export class Crop {
     private sprite: Phaser.GameObjects.Sprite;
     private seed: Seed;
     public lastTimestamp: number = 0;
-
+    //https://docs.google.com/spreadsheets/d/1DPAq3AyaXIlqML1KummuMHDS_MV3uH0Z7kXAZXKFsSQ/edit?pli=1&gid=0#gid=0  List crops
     constructor(scene: Phaser.Scene, seed: Seed, x: number, y: number) {
         this.scene = scene;
         this.seed = seed;
