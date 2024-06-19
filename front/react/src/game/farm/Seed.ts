@@ -5,9 +5,9 @@ export class Seed implements InventoryItem {
     public id: number;
     public title: string;
 
-    public isStackable: boolean;
-    public amount: number;
-    public icon: string;
+    public isStackable: boolean = true;
+    public amount: number = 0;
+    public icon: string = '';
 
     public growthStageDuration: number;
     public currentGrowthStageFrame: number;
@@ -50,7 +50,7 @@ export class Seed implements InventoryItem {
 
     public execute() {}
 
-    public getCrop() {
+    public setCrop() {
         //🌽
     }
 }

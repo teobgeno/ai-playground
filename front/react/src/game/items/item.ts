@@ -3,10 +3,29 @@ import { CursorType } from "../cursors/types";
 
 export class Item implements InventoryItem {
     public id: number;
-    public isStackable: boolean;
-    public amount: number;
-    public icon: string;
-    public cursorType: CursorType;
+    public title: string;
 
-    constructor() {}
+    public isStackable: boolean = true;
+    public amount: number = 0;
+    public icon: string = '';
+    public cursorType: CursorType = CursorType.NONE;
+
+    constructor(id: number, title: string) {
+        this.id = id;
+        this.title = title;
+    }
+
+    public setIsStackable(isStackable: boolean) {
+        this.isStackable = isStackable;
+        return this;
+    }
+
+    public setAmount(amount: number) {
+        this.amount = amount;
+        return this;
+    }
+    public setIcon(icon: string) {
+        this.icon = icon;
+        return this;
+    }
 }
