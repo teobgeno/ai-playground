@@ -223,7 +223,6 @@ export class Game extends Scene {
         if (tilesets) {
             // this.map.createLayer("Collision", tilesets, 0, 0);
             for (let i = 0; i < this.map.layers.length; i++) {
-                console.log(this.map.layers[i].name)
                 this.map.createLayer( this.map.layers[i].name.toString(), tilesets, 0, 0);
                 //const layer = this.map.createLayer(i, tilesets, 0, 0);
                 //layer.scale = 3;

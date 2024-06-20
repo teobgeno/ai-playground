@@ -67,11 +67,7 @@ export class CropCursor implements Cursor {
     }
 
     public setItem(seed: InventoryItem) {
-        const cloneSeed = Seed.clone(seed as Seed);
-        this.seed = cloneSeed;
-        this.seed.amount = 1;
-        console.log('mutation result')
-        console.log(this.seed === seed)
+        this.seed = seed as Seed;
     }
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
@@ -103,15 +99,19 @@ export class CropCursor implements Cursor {
                 );
 
                 if(landEntity) {
-                    landEntity.createCrop(this.seed);
-                    this.character.getInventory().removeItemById(this.seed.id, 1);
+
+                    const cloneSeed = Seed.clone(this.seed);
+                    cloneSeed.amount = 1;
+
+                    landEntity.createCrop(cloneSeed);
+                    this.character.getInventory().removeItemById(cloneSeed.id, 1);
           
                     const s = new SeedTask(
                         this.mapManager,
                         this.gridEngine,
                         this.character,
                         landEntity,
-                        this.seed
+                        cloneSeed
     
                     );
                     this.character.addTask(s);
