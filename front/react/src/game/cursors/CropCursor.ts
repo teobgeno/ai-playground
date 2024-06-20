@@ -45,7 +45,7 @@ export class CropCursor implements Cursor {
        
         if (
             this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            ! this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
             this.seed.amount > 0 &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
