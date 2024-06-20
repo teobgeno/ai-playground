@@ -19,6 +19,18 @@ export class Seed implements InventoryItem {
     constructor(id: number, title: string) {
         this.id = id;
         this.title = title;
+        return this;
+    }
+
+    public static clone(orig: Seed) {
+        return new Seed(orig.id, orig.title)
+            .setGrowthStageDuration(orig.growthStageDuration)
+            .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
+            .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
+            .setIsStackable(orig.isStackable)
+            .setAmount(orig.amount)
+            .setIcon(orig.icon)
+            .setCrop(Item.clone(orig.crop))
     }
 
     public setGrowthStageDuration(growthStageDuration: number) {

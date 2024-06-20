@@ -13,6 +13,14 @@ export class Item implements InventoryItem {
     constructor(id: number, title: string) {
         this.id = id;
         this.title = title;
+        return this;
+    }
+
+    public static clone(orig: Item) {
+        return new Item(orig.id, orig.title)
+            .setIsStackable(orig.isStackable)
+            .setAmount(orig.amount)
+            .setIcon(orig.icon)
     }
 
     public setIsStackable(isStackable: boolean) {
