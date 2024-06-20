@@ -48,8 +48,8 @@ export class SeedTask extends BaseTask implements Task{
         this.landEntity.rollbackCrop();
 
         this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
-     
-        this.character.getInventory().addItem({...this.seed, amount:1});
+        
+        this.character.getInventory().addItem(this.seed);
 
         this.status = TaskStatus.Completed;
     };
