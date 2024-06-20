@@ -72,6 +72,8 @@ export class HarvestTask extends BaseTask implements Task{
                 const crop = this.landEntity.executeHarvestCrop()
                 if(crop) {
                     this.character.getInventory().addItem({...crop});
+                    this.landEntity.endCrop();
+                    this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 }
                 this.status = TaskStatus.Completed;
             }

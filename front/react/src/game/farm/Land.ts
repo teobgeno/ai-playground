@@ -139,7 +139,7 @@ export class Land {
         return this.crop?.executeHarvest();
     }
 
-    public resetCrop() {
+    public endCrop() {
         //TODO::add to player inventory
         this.landState = LandState.PLOWED;
         this.destroyCrop();
