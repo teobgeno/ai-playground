@@ -202,15 +202,26 @@ export class Game extends Scene {
 
     private test() {
         
-        const s = this.add.sprite(420, 350, 'items', 'wood');
+        const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
         this.physics.add.existing(s);
-        s.body.setSize(s.width, s.height / 2, false);
-        s.body.setOffset(0, s.height / 2);
+       // s.body.setSize(s.width, s.height / 2, false);
+        //s.body.setOffset(0, s.height / 2);
         this.hero.setCollideWorldBounds(true)
 
         s.setDepth(10)
 
+        const tileGround = this.map.getTileAt(
+            13,
+            11,
+            false,
+            "Ground"
+        );
+        console.log(tileGround)
+        if(tileGround) {
+            tileGround.properties={ge_collide:true}
+        }
+      
         // this.gridEngine.addCharacter({
         //     id: `fence`,
         //     sprite: s,
@@ -355,6 +366,7 @@ export class Game extends Scene {
     private initGridEngine() {
         const hero = this.charactersMap.get("hero");
         const gridEngineConfig: GridEngineConfig = {
+            cacheTileCollisions: false,
             characters: [
                 {
                     id: hero?.getId() || "",
@@ -410,6 +422,13 @@ export class Game extends Scene {
             .positionChangeFinished()
             .subscribe(({ charId, enterTile }) => {
                 const char = this.charactersMap.get(charId);
+
+                // if(enterTile.x === 10 && enterTile.y === 10) {
+                //     console.log('Collision detected!');
+                //     char?.stop();
+                //     this.gridEngine.stopMovement(charId)
+                // }
+
                 if (char && char.currentTask) {
                     // console.log(char.currentTask.posX)
                     // console.log(char.currentTask.posY)
