@@ -196,7 +196,21 @@ export class Game extends Scene {
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
+        this.test();
         EventBus.emit("current-scene-ready", this);
+    }
+
+    private test() {
+        
+        const s = this.add.sprite(420, 350, 'items', 'wood');
+        s.setDepth(1)
+       
+
+        this.physics.add.overlap(this.hero, s, ()=>{console.log('sdsad')}, null, this);
+        
+        // const t = this.map.getLayer('Trees');
+        // console.log(t);
+        // t.add(s)
     }
 
     private initMap() {
@@ -302,6 +316,7 @@ export class Game extends Scene {
 
         this.physics.add.existing(this.hero);
         this.add.existing(this.hero);
+        this.hero.setCollideWorldBounds(true)
         this.hero.init();
         this.charactersMap.set("hero", this.hero);
     }
@@ -328,6 +343,9 @@ export class Game extends Scene {
                     id: hero?.getId() || "",
                     sprite: hero,
                     startPosition: { x: 15, y: 10 },
+                    // collides: {
+                    //     collisionGroups: ['cg1']
+                    // }
                     // charLayer: "CharLayer"
                 },
             ],
@@ -342,6 +360,9 @@ export class Game extends Scene {
                 walkingAnimationMapping: 1,
                 startPosition: { x: 12, y: 5 },
                 speed: 3,
+                // collides: {
+                //     collisionGroups: ['cg1']
+                // }
             });
             npc0.scale = 0.9;
         }
