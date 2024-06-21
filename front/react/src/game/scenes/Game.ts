@@ -203,11 +203,23 @@ export class Game extends Scene {
     private test() {
         
         const s = this.add.sprite(420, 350, 'items', 'wood');
-        s.setDepth(1)
-       
+        this.physics.add.existing(s);
+        this.hero.setCollideWorldBounds(true)
 
-        this.physics.add.overlap(this.hero, s, ()=>{console.log('sdsad')}, null, this);
-        
+        s.setDepth(10)
+
+        this.gridEngine.addCharacter({
+            id: `fence`,
+            sprite: s,
+            startPosition: { x: 10, y: 10 },
+            collides: true
+        });
+       
+        //this.physics.add.collider(this.hero, s, ()=>{console.log('sdsad')}, null, this);
+        //this.physics.world.collide(this.hero, [s]);
+
+
+
         // const t = this.map.getLayer('Trees');
         // console.log(t);
         // t.add(s)
