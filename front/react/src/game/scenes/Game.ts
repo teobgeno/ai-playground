@@ -203,17 +203,22 @@ export class Game extends Scene {
     private test() {
         
         const s = this.add.sprite(420, 350, 'items', 'wood');
+       
         this.physics.add.existing(s);
+        s.body.setSize(s.width, s.height / 2, false);
+        s.body.setOffset(0, s.height / 2);
         this.hero.setCollideWorldBounds(true)
 
         s.setDepth(10)
 
-        this.gridEngine.addCharacter({
-            id: `fence`,
-            sprite: s,
-            startPosition: { x: 10, y: 10 },
-            collides: true
-        });
+        // this.gridEngine.addCharacter({
+        //     id: `fence`,
+        //     sprite: s,
+        //     startPosition: { x: 10, y: 10 },
+        //     tileHeight:1,
+        //     tileWidth: 1,
+        //     collides: true
+        // });
        
         //this.physics.add.collider(this.hero, s, ()=>{console.log('sdsad')}, null, this);
         //this.physics.world.collide(this.hero, [s]);
