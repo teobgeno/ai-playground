@@ -205,40 +205,43 @@ export class Game extends Scene {
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
         this.physics.add.existing(s);
-       // s.body.setSize(s.width, s.height / 2, false);
-        //s.body.setOffset(0, s.height / 2);
-        this.hero.setCollideWorldBounds(true)
+       (s.body as Phaser.Physics.Arcade.Body ).setSize(s.width/2, s.height / 2, true);
+       (s.body as Phaser.Physics.Arcade.Body ).immovable = true;
+       (s.body as Phaser.Physics.Arcade.Body ).onCollide = true;
+        //this.hero.setCollideWorldBounds(true)
 
-        s.setDepth(10)
+        s.setDepth(2)
 
+    
         const tileGround = this.map.getTileAt(
             13,
             11,
             false,
             "Ground"
         );
-        console.log(tileGround)
-        if(tileGround) {
-            tileGround.properties={ge_collide:true}
-        }
+
+        // if(tileGround) {
+        //     tileGround.properties={ge_collide:true}
+        // }
+
+        //https://labs.phaser.io/view.html?src=src\depth%20sorting\sprite%20depth%20index.js
+
+       
+
+      
       
         // this.gridEngine.addCharacter({
         //     id: `fence`,
         //     sprite: s,
-        //     startPosition: { x: 10, y: 10 },
+        //     startPosition: { x: 13, y: 11 },
         //     tileHeight:1,
         //     tileWidth: 1,
-        //     collides: true
+        //     collides: false
         // });
        
+        //works
         //this.physics.add.collider(this.hero, s, ()=>{console.log('sdsad')}, null, this);
-        //this.physics.world.collide(this.hero, [s]);
-
-
-
-        // const t = this.map.getLayer('Trees');
-        // console.log(t);
-        // t.add(s)
+     
     }
 
     private initMap() {
