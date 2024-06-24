@@ -38,6 +38,7 @@ export class Hero extends Humanoid {
     }
 
     update(dt: number): void {
+        //console.log(this.displayHeight);
         this.characterController.update(dt);
         this.updateTasksQueue();
     }

@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
-import { GridEngine, GridEngineConfig } from "grid-engine";
+import { Direction, GridEngine, GridEngineConfig } from "grid-engine";
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
@@ -104,6 +104,10 @@ export class Game extends Scene {
             frameWidth: 52,
             frameHeight: 72,
         });
+        this.load.spritesheet("cow", "assets/sprites/cow_walk.png", {
+            frameWidth: 128,
+            frameHeight: 128,
+        });
 
         this.load.spritesheet("crops", "assets/sprites/crops/1/crops.png", {
             frameWidth: 32,
@@ -118,6 +122,14 @@ export class Game extends Scene {
             "items",
             "assets/sprites/items.png",
             "assets/sprites/items.json"
+        );
+
+        // /https://phaser.discourse.group/t/image-atlas-how-to-create/1699
+        //https://www.leshylabs.com/apps/sstool/
+        this.load.atlas(
+            "fence",
+            "assets/sprites/fence_remix.png",
+            "assets/sprites/fence_remix.json"
         );
     }
 
@@ -196,7 +208,7 @@ export class Game extends Scene {
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
-        this.test();
+        //this.test();
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -399,8 +411,44 @@ export class Game extends Scene {
             npc0.scale = 0.9;
         }
 
+        const spr = this.add.sprite(0, 0, "cow");
+        this.physics.add.existing(spr);
+        spr.scale = 1.2;
+        (spr.body as Phaser.Physics.Arcade.Body ).setSize(32, 64);
+        gridEngineConfig.characters.push({
+            id: `cow`,
+            sprite: spr,
+            walkingAnimationMapping: {
+                up: {
+                  leftFoot: 0,
+                  standing: 1,
+                  rightFoot: 2
+                },
+                down: {
+                  leftFoot: 8,
+                  standing: 9,
+                  rightFoot: 10
+                },
+                left: {
+                  leftFoot: 4,
+                  standing: 5,
+                  rightFoot: 6
+                },
+                right: {
+                  leftFoot: 12,
+                  standing: 13,
+                  rightFoot: 14
+                },
+              },
+            startPosition: { x:12, y:15 },
+            speed: 2
+        })
+        
+
         this.gridEngine.create(this.map, gridEngineConfig);
         //this.gridEngine.moveRandomly("npc0", 500);
+        this.gridEngine.moveRandomly("cow", 1000);
+        this.gridEngine.turnTowards("cow", Direction.LEFT);
 
         this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
             if (charId === "hero") {

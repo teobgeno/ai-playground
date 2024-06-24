@@ -21,6 +21,15 @@ export class Crop {
     }
     public init() {
         this.sprite.setAlpha(1);
+        const dp = 2 + this.shiftPad(this.sprite.y + this.sprite.displayHeight/2, 7);
+        console.log(dp)
+        this.sprite.setDepth(dp)
+    }
+
+    private shiftPad(t:number, e:number) {
+        const i = Math.floor(t),
+            o = `${i}`.padStart(e, "0").length;
+        return i / Math.pow(10, o)
     }
 
     public getSprite() {
