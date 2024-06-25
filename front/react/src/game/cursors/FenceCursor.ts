@@ -16,7 +16,7 @@ export class FenceCursor implements Cursor {
     private mapManager: MapManager;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private marker: Phaser.GameObjects.Rectangle;
+    private marker: Phaser.GameObjects.Sprite;
    
     constructor(
         scene: Phaser.Scene,
@@ -31,7 +31,13 @@ export class FenceCursor implements Cursor {
         this.mapManager = mapManager;
         this.gridEngine = gridEngine;
         this.character = character;
-        this.marker = marker;
+        //this.marker = marker;
+        this.marker = this.scene.add.sprite(
+            -1000,
+            -1000,
+            "fence",
+            'sprite8'
+        );
     }
 
     // public setItem(hoe: InventoryItem) {
@@ -50,17 +56,17 @@ export class FenceCursor implements Cursor {
                 "CharLayer"
             )
         ) {
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(0, 153, 0),
-                1
-            );
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(0, 153, 0),
+            //     1
+            // );
         } else {
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(204, 0, 0),
-                1
-            );
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(204, 0, 0),
+            //     1
+            // );
         }
     }
 
