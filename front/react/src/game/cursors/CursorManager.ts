@@ -5,6 +5,7 @@ import { MapManager } from "../MapManager";
 import { HoeCursor } from "./HoeCursor";
 import { WateringCanCursor } from "./WateringCanCursor";
 import { CropCursor } from "./CropCursor";
+import { FenceCursor } from "./FenceCursor";
 
 import { Cursor, CursorType } from "./types";
 import { InventoryItem } from "../characters/types";
@@ -16,6 +17,7 @@ export class CursorManager {
     private hoeCursor: HoeCursor;
     private wateringCanCursor: WateringCanCursor;
     private cropCursor: CropCursor;
+    private fenceCursor: FenceCursor;
     private currentCursor: Cursor | null;
     private currentCursorType: CursorType;
     private marker:Phaser.GameObjects.Rectangle
@@ -51,6 +53,15 @@ export class CursorManager {
         );
 
         this.cropCursor = new CropCursor(
+            scene,
+            map,
+            this.mapManager,
+            gridEngine,
+            character,
+            marker
+        );
+
+        this.fenceCursor = new FenceCursor(
             scene,
             map,
             this.mapManager,
@@ -99,6 +110,10 @@ export class CursorManager {
             case CursorType.WATERING_CAN:
                         this.currentCursor = this.wateringCanCursor;
                         this.currentCursorType = CursorType.WATERING_CAN;
+                        break;
+            case CursorType.FENCE:
+                        this.currentCursor = this.fenceCursor;
+                        this.currentCursorType = CursorType.FENCE;
                         break;
             default:
                 this.currentCursor = null;

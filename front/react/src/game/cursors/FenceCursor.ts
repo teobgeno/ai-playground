@@ -2,11 +2,11 @@ import { Tilemaps } from "phaser";
 import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
-import { Hoe } from "../items/Hoe";
-import { TillageTask } from "../actions/TillageTask";
-import { Land } from "../farm/Land";
+// import { Hoe } from "../items/Hoe";
+// import { TillageTask } from "../actions/TillageTask";
+// import { Land } from "../farm/Land";
 
-import { InventoryItem } from "../characters/types";
+// import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
 
@@ -17,8 +17,7 @@ export class FenceCursor implements Cursor {
     private gridEngine: GridEngine;
     private character: Humanoid;
     private marker: Phaser.GameObjects.Rectangle;
-    private hoe: Hoe;
-
+   
     constructor(
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
@@ -35,9 +34,9 @@ export class FenceCursor implements Cursor {
         this.marker = marker;
     }
 
-    public setItem(hoe: InventoryItem) {
-        this.hoe = hoe as Hoe;
-    }
+    // public setItem(hoe: InventoryItem) {
+    //     this.hoe = hoe as Hoe;
+    // }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
         this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
@@ -83,22 +82,22 @@ export class FenceCursor implements Cursor {
             if (tileGround) {
                 this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
 
-                const landEntity = new Land(
-                    this.scene,
-                    tileGround.x,
-                    tileGround.y,
-                    tileGround.pixelX,
-                    tileGround.pixelY,
-                );
+                // const landEntity = new Land(
+                //     this.scene,
+                //     tileGround.x,
+                //     tileGround.y,
+                //     tileGround.pixelX,
+                //     tileGround.pixelY,
+                // );
                 
-                const t = new TillageTask(
-                    this.mapManager,
-                    this.gridEngine,
-                    this.character,
-                    landEntity,
-                    this.hoe
-                );
-                this.character.addTask(t);
+                // const t = new TillageTask(
+                //     this.mapManager,
+                //     this.gridEngine,
+                //     this.character,
+                //     landEntity,
+                //     this.hoe
+                // );
+                // this.character.addTask(t);
             }
         }
     }
