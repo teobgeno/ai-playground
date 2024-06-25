@@ -161,7 +161,7 @@ export class FenceCursor implements Cursor {
                 }
 
                 if(this.activeMarkerKey === 'twoColumnsVertical') {
-                    padY = -5;
+                    padY = 48;
 
                 }
 
