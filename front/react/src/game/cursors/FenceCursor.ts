@@ -32,21 +32,21 @@ export class FenceCursor implements Cursor {
         this.gridEngine = gridEngine;
         this.character = character;
 
-        
+
         this.markers['singleColumn'] = this.scene.add.sprite(
             -1000,
             -1000,
             "fence",
             'sprite2'
-        );
-        this.markers['singleColumn'] = this.scene.add.sprite(
+        ).setDepth(2);
+        this.markers['oneRowRight'] = this.scene.add.sprite(
             -1000,
             -1000,
             "fence",
-            'sprite*_1'
-        );
+            'sprite8_1'
+        ).setDepth(2);
         //'sprite8_1'
-        this.marker.setDepth(2);
+       
    
     }
 

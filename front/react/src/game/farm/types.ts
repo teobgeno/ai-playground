@@ -14,4 +14,5 @@ export interface LandEntity {
     isWeeded?: boolean;
     hasCrop?: boolean;
     hasConstruction?: boolean;
+    hasFence?: boolean;
 }
