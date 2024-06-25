@@ -40,7 +40,7 @@ export class Land {
             this.pixelX,
             this.pixelY,
             "fence",
-            'sprite5'
+            'sprite8'
         );
         this.sprite.setDepth(1);
         this.sprite.setAlpha(0.4);
