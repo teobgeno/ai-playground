@@ -17,6 +17,7 @@ export class FenceCursor implements Cursor {
     private gridEngine: GridEngine;
     private character: Humanoid;
     private markers: {[key: string]: Phaser.GameObjects.Sprite};
+    private activeMarker:  Phaser.GameObjects.Sprite;
    
     constructor(
         scene: Phaser.Scene,
@@ -45,6 +46,8 @@ export class FenceCursor implements Cursor {
             "fence",
             'sprite8_1'
         ).setDepth(2);
+
+        this.activeMarker = this.markers['singleColumn'];
         //'sprite8_1'
        
    
@@ -55,9 +58,21 @@ export class FenceCursor implements Cursor {
     // }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0)+16;
-        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0)+16;
-        this.marker.setAlpha(0.4);
+        this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0)+16;
+        this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0)+16;
+        this.activeMarker.setAlpha(0.4);
+
+        let hasRight = false;
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
+            hasRight = true;
+           
+        }
+
+        if(hasRight) {
+            this.activeMarker = this.markers['oneRowRight'];
+        } else {
+            this.activeMarker = this.markers['singleColumn'];
+        }
         
         if (
             !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
