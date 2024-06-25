@@ -169,6 +169,29 @@
         }
       },
       {
+        "filename": "sprite8_0",
+        "frame": {
+          "x": 10,
+          "y": 98,
+          "w": 14,
+          "h": 30
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 0,
+          "w": 14,
+          "h": 30
+        },
+        "sourceSize": {
+          "w": 14,
+          "h": 30
+        }
+      },
+
+
+      {
         "filename": "sprite8_1",
         "frame": {
           "x": 24,
@@ -193,7 +216,7 @@
       {
         "filename": "sprite8_2",
         "frame": {
-          "x": 20,
+          "x": 24,
           "y": 98,
           "w": 78,
           "h": 30
@@ -201,7 +224,7 @@
         "rotated": false,
         "trimmed": false,
         "spriteSourceSize": {
-          "x": 20,
+          "x": 24,
           "y": 0,
           "w": 78,
           "h": 30

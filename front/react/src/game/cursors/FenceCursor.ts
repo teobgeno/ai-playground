@@ -18,6 +18,8 @@ export class FenceCursor implements Cursor {
     private character: Humanoid;
     private markers: {[key: string]: Phaser.GameObjects.Sprite} = {};
     private activeMarker:  Phaser.GameObjects.Sprite;
+    private activeMarkerKey: string;
+    private activeSprite: string;
    
     constructor(
         scene: Phaser.Scene,
@@ -36,20 +38,20 @@ export class FenceCursor implements Cursor {
         this.markers['singleColumn'] = this.scene.add.sprite(
             -1000,
             -1000,
-            "fence",
-            'sprite2'
+            'fence',
+            'sprite8_0'
         ).setDepth(2);
         this.markers['oneRowRight'] = this.scene.add.sprite(
             -1000,
             -1000,
-            "fence",
+            'fence',
             'sprite8_1'
         ).setDepth(2);
 
         this.markers['twoRowsRight'] = this.scene.add.sprite(
             -1000,
             -1000,
-            "fence",
+            'fence',
             'sprite8_2'
         ).setDepth(2);
 
@@ -71,15 +73,17 @@ export class FenceCursor implements Cursor {
             hasFence = true;
         }
 
-        let key = 'singleColumn';
-        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
-            key = 'oneRowRight';
-        }
+        this.activeMarkerKey = 'singleColumn';
         if(this.mapManager.getPlotLandCoords().get(pointerTileX - 2 + "-" + pointerTileY)?.hasFence) {
-            key = 'twoRowsRight';
+            this.activeMarkerKey = 'twoRowsRight';
         }
 
-        this.activeMarker = this.markers[key];
+        
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
+            this.activeMarkerKey = 'oneRowRight';
+        }
+
+        this.activeMarker = this.markers[this.activeMarkerKey];
     
         if(!hasFence) {
             this.activeMarker.setAlpha(0.4);
@@ -125,6 +129,7 @@ export class FenceCursor implements Cursor {
             if (tileGround) {
                 this.mapManager.updatePlotLandCoords(tileGround.x + "-" + tileGround.y, { hasFence: true });
 
+                console.log(this.activeMarker )
                 const landEntity = new Land(
                     this.scene,
                     tileGround.x,
@@ -132,6 +137,26 @@ export class FenceCursor implements Cursor {
                     tileGround.pixelX,
                     tileGround.pixelY,
                 );
+               
+                let padX = 16;
+                let padY = 16;
+
+                if(this.activeMarkerKey === 'oneRowRight') {
+                    padX = 7;
+                }
+
+                if(this.activeMarkerKey === 'twoRowsRight') {
+                    padX = -2;
+                }
+
+                this.scene.add.sprite(
+                    tileGround.pixelX+padX,
+                    tileGround.pixelY+padY,
+                    "fence",
+                    this.activeMarker.frame.customData.filename
+                ).setDepth(2)
+
+                tileGround.properties={ge_collide:true}
                 
                 // const t = new TillageTask(
                 //     this.mapManager,
