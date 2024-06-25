@@ -139,7 +139,7 @@ export class FenceCursor implements Cursor {
                 );
                
                 let padX = 16;
-                let padY = 16;
+                const padY = 16;
 
                 if(this.activeMarkerKey === 'oneRowRight') {
                     padX = 7;
