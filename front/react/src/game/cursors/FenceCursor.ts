@@ -55,6 +55,13 @@ export class FenceCursor implements Cursor {
             'sprite8_2'
         ).setDepth(2);
 
+        this.markers['twoColumnsVertical'] = this.scene.add.sprite(
+            -1000,
+            -1000,
+            'fence',
+            'sprite4'
+        ).setDepth(2);
+        
         this.activeMarker = this.markers['singleColumn'];
 
     }
@@ -74,13 +81,17 @@ export class FenceCursor implements Cursor {
         }
 
         this.activeMarkerKey = 'singleColumn';
-        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 2 + "-" + pointerTileY)?.hasFence) {
+        if(this.mapManager.getPlotLandCoords().get((pointerTileX - 2) + "-" + pointerTileY)?.hasFence) {
             this.activeMarkerKey = 'twoRowsRight';
         }
 
         
-        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
+        if(this.mapManager.getPlotLandCoords().get((pointerTileX - 1) + "-" + pointerTileY)?.hasFence) {
             this.activeMarkerKey = 'oneRowRight';
+        }
+
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY + 2))?.hasFence) {
+            this.activeMarkerKey = 'twoColumnsVertical';
         }
 
         this.activeMarker = this.markers[this.activeMarkerKey];
@@ -139,7 +150,7 @@ export class FenceCursor implements Cursor {
                 );
                
                 let padX = 16;
-                const padY = 16;
+                let padY = 16;
 
                 if(this.activeMarkerKey === 'oneRowRight') {
                     padX = 7;
@@ -147,6 +158,11 @@ export class FenceCursor implements Cursor {
 
                 if(this.activeMarkerKey === 'twoRowsRight') {
                     padX = -2;
+                }
+
+                if(this.activeMarkerKey === 'twoColumnsVertical') {
+                    padY = -5;
+
                 }
 
                 this.scene.add.sprite(
