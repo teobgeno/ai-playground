@@ -66,8 +66,7 @@ export class CursorManager {
             map,
             this.mapManager,
             gridEngine,
-            character,
-            marker
+            character
         );
     }
     public onPointerMove(worldPoint: object | Phaser.Math.Vector2) {

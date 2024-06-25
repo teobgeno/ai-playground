@@ -25,7 +25,6 @@ export class FenceCursor implements Cursor {
         mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        marker: Phaser.GameObjects.Rectangle
     ) {
         this.scene = scene;
         this.map = map;
@@ -55,9 +54,7 @@ export class FenceCursor implements Cursor {
         ).setDepth(2);
 
         this.activeMarker = this.markers['singleColumn'];
-        //'sprite8_1'
-       
-   
+
     }
 
     // public setItem(hoe: InventoryItem) {
