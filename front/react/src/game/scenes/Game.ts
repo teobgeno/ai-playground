@@ -18,6 +18,7 @@ import { Item } from "../items/item";
 
 import { HarvestTask } from "../actions/HarvestTask";
 import { Land } from "../farm/Land";
+import { CursorType } from "../cursors/types";
 // type gridEngineConfigChar = {
 //     id?:string,
 //     sprite?:Physics.Arcade.Sprite
@@ -348,6 +349,16 @@ export class Game extends Scene {
             .setCrop(seedCrop)
         );
 
+        const fencePart = new Item(8, 'Fence');
+
+        this.hero.getInventory().addItem(
+            fencePart
+            .setIsStackable(true)
+            .setAmount(4)
+            .setIcon('𓊐')
+            .setCursorType(CursorType.FENCE)
+        );
+        
         // this.hero.getInventory().addItem(
         //     new Seed(3, true, 4, "🍅", 8000, 0, 4)
         // );

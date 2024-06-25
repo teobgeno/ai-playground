@@ -3,6 +3,7 @@ export enum CursorType {
     HOE = 1,
     CROP = 2,
     WATERING_CAN = 3,
+    FENCE = 4,
    
 }
 

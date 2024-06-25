@@ -32,8 +32,14 @@ export class Item implements InventoryItem {
         this.amount = amount;
         return this;
     }
+
     public setIcon(icon: string) {
         this.icon = icon;
+        return this;
+    }
+
+    public setCursorType(cursorType: CursorType) {
+        this.cursorType = cursorType;
         return this;
     }
 }
