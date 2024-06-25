@@ -16,7 +16,7 @@ export class FenceCursor implements Cursor {
     private mapManager: MapManager;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private markers: {[key: string]: Phaser.GameObjects.Sprite};
+    private markers: {[key: string]: Phaser.GameObjects.Sprite} = {};
     private activeMarker:  Phaser.GameObjects.Sprite;
    
     constructor(
@@ -60,12 +60,11 @@ export class FenceCursor implements Cursor {
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
         this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0)+16;
         this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0)+16;
-        this.activeMarker.setAlpha(0.4);
+        this.activeMarker.setAlpha(0);
 
         let hasRight = false;
         if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
             hasRight = true;
-           
         }
 
         if(hasRight) {
@@ -73,6 +72,8 @@ export class FenceCursor implements Cursor {
         } else {
             this.activeMarker = this.markers['singleColumn'];
         }
+
+        this.activeMarker.setAlpha(0.4);
         
         if (
             !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
@@ -111,7 +112,7 @@ export class FenceCursor implements Cursor {
             );
             
             if (tileGround) {
-                this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
+                this.mapManager.updatePlotLandCoords(tileGround.x + "-" + tileGround.y, { hasFence: true });
 
                 const landEntity = new Land(
                     this.scene,
