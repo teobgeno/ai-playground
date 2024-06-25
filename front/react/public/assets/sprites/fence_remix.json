@@ -191,6 +191,28 @@
       },
 
       {
+        "filename": "sprite8_2",
+        "frame": {
+          "x": 20,
+          "y": 98,
+          "w": 78,
+          "h": 30
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 0,
+          "w": 78,
+          "h": 30
+        },
+        "sourceSize": {
+          "w": 78,
+          "h": 30
+        }
+      },
+
+      {
         "filename": "sprite9",
         "frame": {
           "x": 10,

@@ -47,6 +47,13 @@ export class FenceCursor implements Cursor {
             'sprite8_1'
         ).setDepth(2);
 
+        this.markers['twoRowsRight'] = this.scene.add.sprite(
+            -1000,
+            -1000,
+            "fence",
+            'sprite8_2'
+        ).setDepth(2);
+
         this.activeMarker = this.markers['singleColumn'];
         //'sprite8_1'
        
@@ -62,18 +69,25 @@ export class FenceCursor implements Cursor {
         this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0)+16;
         this.activeMarker.setAlpha(0);
 
-        let hasRight = false;
+        let hasFence = false;
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasFence) {
+            hasFence = true;
+        }
+
+        let key = 'singleColumn';
         if(this.mapManager.getPlotLandCoords().get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence) {
-            hasRight = true;
+            key = 'oneRowRight';
+        }
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX - 2 + "-" + pointerTileY)?.hasFence) {
+            key = 'twoRowsRight';
         }
 
-        if(hasRight) {
-            this.activeMarker = this.markers['oneRowRight'];
-        } else {
-            this.activeMarker = this.markers['singleColumn'];
+        this.activeMarker = this.markers[key];
+    
+        if(!hasFence) {
+            this.activeMarker.setAlpha(0.4);
         }
-
-        this.activeMarker.setAlpha(0.4);
+       
         
         if (
             !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
