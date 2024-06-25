@@ -4,7 +4,7 @@ import { GridEngine } from "grid-engine";
 
 // import { Hoe } from "../items/Hoe";
 // import { TillageTask } from "../actions/TillageTask";
-// import { Land } from "../farm/Land";
+import { Land } from "../farm/Land";
 
 // import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
@@ -36,8 +36,11 @@ export class FenceCursor implements Cursor {
             -1000,
             -1000,
             "fence",
-            'sprite8'
+            'sprite2'
         );
+        //'sprite8_1'
+        this.marker.setDepth(2);
+   
     }
 
     // public setItem(hoe: InventoryItem) {
@@ -45,9 +48,9 @@ export class FenceCursor implements Cursor {
     // }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
-        this.marker.setAlpha(1);
+        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0)+16;
+        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0)+16;
+        this.marker.setAlpha(0.4);
         
         if (
             !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
@@ -88,13 +91,13 @@ export class FenceCursor implements Cursor {
             if (tileGround) {
                 this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
 
-                // const landEntity = new Land(
-                //     this.scene,
-                //     tileGround.x,
-                //     tileGround.y,
-                //     tileGround.pixelX,
-                //     tileGround.pixelY,
-                // );
+                const landEntity = new Land(
+                    this.scene,
+                    tileGround.x,
+                    tileGround.y,
+                    tileGround.pixelX,
+                    tileGround.pixelY,
+                );
                 
                 // const t = new TillageTask(
                 //     this.mapManager,
