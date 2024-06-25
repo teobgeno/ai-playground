@@ -79,8 +79,12 @@ export class FenceCursor implements Cursor {
         if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasFence) {
             hasFence = true;
         }
-
         this.activeMarkerKey = 'singleColumn';
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY + 2))?.hasFence) {
+            this.activeMarkerKey = 'twoColumnsVertical';
+        }
+
+       
         if(this.mapManager.getPlotLandCoords().get((pointerTileX - 2) + "-" + pointerTileY)?.hasFence) {
             this.activeMarkerKey = 'twoRowsRight';
         }
@@ -90,9 +94,7 @@ export class FenceCursor implements Cursor {
             this.activeMarkerKey = 'oneRowRight';
         }
 
-        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY + 2))?.hasFence) {
-            this.activeMarkerKey = 'twoColumnsVertical';
-        }
+      
 
         this.activeMarker = this.markers[this.activeMarkerKey];
     
