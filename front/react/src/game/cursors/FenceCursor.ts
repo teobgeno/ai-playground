@@ -16,7 +16,7 @@ export class FenceCursor implements Cursor {
     private mapManager: MapManager;
     private gridEngine: GridEngine;
     private character: Humanoid;
-    private marker: Phaser.GameObjects.Sprite;
+    private markers: {[key: string]: Phaser.GameObjects.Sprite};
    
     constructor(
         scene: Phaser.Scene,
@@ -31,12 +31,19 @@ export class FenceCursor implements Cursor {
         this.mapManager = mapManager;
         this.gridEngine = gridEngine;
         this.character = character;
-        //this.marker = marker;
-        this.marker = this.scene.add.sprite(
+
+        
+        this.markers['singleColumn'] = this.scene.add.sprite(
             -1000,
             -1000,
             "fence",
             'sprite2'
+        );
+        this.markers['singleColumn'] = this.scene.add.sprite(
+            -1000,
+            -1000,
+            "fence",
+            'sprite*_1'
         );
         //'sprite8_1'
         this.marker.setDepth(2);
