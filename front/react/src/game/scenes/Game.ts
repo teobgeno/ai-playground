@@ -333,7 +333,14 @@ export class Game extends Scene {
 
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
-        this.hero.getInventory().addItem(new Hoe());
+      
+        const hoe = new Hoe(1, 'Hoe', 
+            new InventoryItem()
+            .setIcon('⛏️')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.HOE)
+        )
 
         const seedCrop = new GenericItem(3,'Corn', new InventoryItem().setIcon('🌽'));
         const cornSeed = new Seed(2, 'Corn Seeds', 
@@ -355,15 +362,9 @@ export class Game extends Scene {
             .setCursorType(CursorType.FENCE)
         );
 
-
-
-        this.hero.getInventory().addItem(
-            cornSeed
-         );
-
-        this.hero.getInventory().addItem(
-            fencePart
-        );
+        this.hero.getInventory().addItem(hoe);
+        this.hero.getInventory().addItem(cornSeed);
+        this.hero.getInventory().addItem(fencePart);
         
         // this.hero.getInventory().addItem(
         //     new Seed(3, true, 4, "🍅", 8000, 0, 4)

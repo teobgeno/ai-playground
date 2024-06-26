@@ -1,25 +1,20 @@
-import { Tool } from "./types";
-import { InventoryItem } from "../characters/types";
-import { CursorType } from "../cursors/types";
 
-export class Hoe implements Tool, InventoryItem {
-    public id:number;
-    public isStackable:boolean;
-    public amount: number
-    public icon:string;
-    public cursorType:CursorType
+import { BaseItem } from "../items/BaseItem";
+import { InventoryItem } from "../items/InventoryItem";
+import { Storable } from "../items/types";
 
+export class Hoe extends BaseItem implements Storable {
+    public inventory: InventoryItem;
     public weedSpeed:number
- 
 
-    constructor() {
-        this.id = 1;
-        this.isStackable = false;
-        this.amount = 1;
-        this.icon = '⛏️';
-        this.cursorType = CursorType.HOE;
+    constructor(id: number, title: string, inventory: InventoryItem) {
+        super(id, title);
+        this.inventory = inventory;
         this.weedSpeed = 1000;
     }
 
-    public execute() {}
+    public getInventory() {
+        return this.inventory;
+    }
+
 }
