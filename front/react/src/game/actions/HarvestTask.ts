@@ -6,6 +6,7 @@ import {Land} from "../farm/Land";
 
 import {TaskStatus, Task} from "./types";
 import {Humanoid} from "../characters/Humanoid";
+import { GenericItem } from "../items/GenericItem";
 
 export class HarvestTask extends BaseTask implements Task{
 
@@ -71,7 +72,7 @@ export class HarvestTask extends BaseTask implements Task{
             if (this.status === TaskStatus.Running) {
                 const crop = this.landEntity.executeHarvestCrop()
                 if(crop) {
-                    this.character.getInventory().addItem({...crop});
+                    this.character.getInventory().addItem(GenericItem.clone(crop));
                     this.landEntity.endCrop();
                     this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 }
