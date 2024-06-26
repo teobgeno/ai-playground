@@ -1,8 +1,9 @@
 import { Storable } from "../game/items/types";
+import { InventoryItem } from "../game/items/InventoryItem";
 import { useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
 import "./Hotbar.css";
-import { CursorType } from "../game/cursors/types";
+
 
 export type HotbarProps = {
     items: Array<Storable | null>;
@@ -53,10 +54,9 @@ export function Hotbar(props: HotbarProps) {
         setActiveItemId(0);
         props.setActiveItem({
             id: 0,
-            isStackable: false,
-            amount: 0,
-            icon: "",
-            cursorType: CursorType.NONE,
+            getInventory() {
+                return new InventoryItem()
+            },
         });
     };
 
