@@ -84,6 +84,54 @@
           "h": 94
         }
       },
+
+      {
+        "filename": "column_up",
+        "frame": {
+          "x": 74,
+          "y": 2,
+          "w": 14,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+          "x": 0,
+          "y": 0,
+          "w": 14,
+          "h": 33
+        },
+        "sourceSize": {
+          "w": 14,
+          "h": 33
+        }
+      },
+
+
+      {
+        "filename": "column_down",
+        "frame": {
+          "x": 74,
+          "y": 35,
+          "w": 14,
+          "h": 60
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+          "x": 0,
+          "y": 0,
+          "w": 14,
+          "h": 60
+        },
+        "sourceSize": {
+          "w": 14,
+          "h": 60
+        }
+      },
+
+
+
       {
         "filename": "sprite5",
         "frame": {
@@ -169,7 +217,7 @@
         }
       },
       {
-        "filename": "sprite8_0",
+        "filename": "pole",
         "frame": {
           "x": 10,
           "y": 98,
@@ -179,7 +227,7 @@
         "rotated": false,
         "trimmed": false,
         "spriteSourceSize": {
-          "x": 10,
+          "x": 0,
           "y": 0,
           "w": 14,
           "h": 30
@@ -192,7 +240,7 @@
 
 
       {
-        "filename": "sprite8_1",
+        "filename": "side_right",
         "frame": {
           "x": 24,
           "y": 98,
@@ -202,7 +250,7 @@
         "rotated": false,
         "trimmed": false,
         "spriteSourceSize": {
-          "x": 24,
+          "x": 0,
           "y": 0,
           "w": 32,
           "h": 30
@@ -214,27 +262,51 @@
       },
 
       {
-        "filename": "sprite8_2",
+        "filename": "side_left",
         "frame": {
-          "x": 24,
+          "x": 10,
           "y": 98,
-          "w": 78,
+          "w": 32,
           "h": 30
         },
         "rotated": false,
         "trimmed": false,
         "spriteSourceSize": {
-          "x": 24,
+          "x": 0,
           "y": 0,
-          "w": 78,
+          "w": 32,
           "h": 30
         },
         "sourceSize": {
-          "w": 78,
+          "w": 32,
           "h": 30
         }
       },
 
+
+      {
+        "filename": "side_both",
+        "frame": {
+          "x": 24,
+          "y": 98,
+          "w": 50,
+          "h": 30
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+          "x": 0,
+          "y": 0,
+          "w": 32,
+          "h": 30
+        },
+        "sourceSize": {
+          "w": 32,
+          "h": 30
+        }
+      },
+
+   
       {
         "filename": "sprite9",
         "frame": {
