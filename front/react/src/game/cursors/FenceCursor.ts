@@ -88,8 +88,8 @@ export class FenceCursor implements Cursor {
         ) {
             hasFence = true;
         }
-        this.activeMarkerKey = "singlePole";
 
+        this.activeMarkerKey = "singlePole";
         if (
             this.mapManager
                 .getPlotLandCoords()
