@@ -1,12 +1,12 @@
-import { InventoryItem } from "../game/characters/types";
+import { Storable } from "../game/items/types";
 import { useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
 import "./Hotbar.css";
 import { CursorType } from "../game/cursors/types";
 
 export type HotbarProps = {
-    items: Array<InventoryItem>;
-    setActiveItem: (item: InventoryItem) => void;
+    items: Array<Storable | null>;
+    setActiveItem: (item: Storable) => void;
 };
 
 export function Hotbar(props: HotbarProps) {
@@ -30,7 +30,7 @@ export function Hotbar(props: HotbarProps) {
         }
     }, [props.items]);
 
-    const handleSelectItem = (item: InventoryItem) => {
+    const handleSelectItem = (item: Storable) => {
         if (activeItemId === item.id) {
             deSelectItem();
         } else {
@@ -79,12 +79,12 @@ export function Hotbar(props: HotbarProps) {
                                     href="#"
                                     onClick={() => handleSelectItem(item)}
                                 >
-                                    <i className="icon-home">{item.icon}</i>
+                                    <i className="icon-home">{item.getInventory().icon}</i>
 
-                                    {item.isStackable && (
+                                    {item.getInventory().isStackable && (
                                         <>
                                             <div style={{ fontSize: "16px" }}>
-                                                {item.amount}
+                                                {item.getInventory().amount}
                                             </div>
                                         </>
                                     )}

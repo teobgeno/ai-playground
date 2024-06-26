@@ -6,7 +6,7 @@ import { GridEngine } from "grid-engine";
 import { Seed } from "../farm/Seed";
 import { SeedTask } from "../actions/SeedTask";
 
-import { InventoryItem } from "../characters/types";
+import { Storable } from "../items/types";
 import {Humanoid} from "../characters/Humanoid";
 import { Cursor } from "./types";
 
@@ -54,7 +54,7 @@ export class CropCursor implements Cursor {
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
             this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
             !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
-            this.seed.amount > 0 &&
+            this.seed.getInventory().amount > 0 &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -76,7 +76,7 @@ export class CropCursor implements Cursor {
         }
     }
 
-    public setItem(seed: InventoryItem) {
+    public setItem(seed: Storable) {
         this.seed = seed as Seed;
     }
 
@@ -102,7 +102,7 @@ export class CropCursor implements Cursor {
                 if(landEntity) {
 
                     const cloneSeed = Seed.clone(this.seed);
-                    cloneSeed.amount = 1;
+                    cloneSeed.getInventory().amount = 1;
 
                     landEntity.createCrop(cloneSeed);
                     this.character.getInventory().removeItemById(cloneSeed.id, 1);

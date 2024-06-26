@@ -8,7 +8,7 @@ import { CropCursor } from "./CropCursor";
 import { FenceCursor } from "./FenceCursor";
 
 import { Cursor, CursorType } from "./types";
-import { InventoryItem } from "../characters/types";
+import { Storable } from "../items/types";
 import {Humanoid} from "../characters/Humanoid";
 
 export class CursorManager {
@@ -89,8 +89,8 @@ export class CursorManager {
         return this.currentCursor ? true : false;
     }
 
-    public setActiveItemCursor(item: InventoryItem) {
-        let selectedToolType = item.cursorType
+    public setActiveItemCursor(item: Storable) {
+        let selectedToolType = item.getInventory().cursorType
         if(this.currentCursorType && this.currentCursorType === selectedToolType) {
             selectedToolType = CursorType.NONE;
         }

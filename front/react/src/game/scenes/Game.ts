@@ -11,7 +11,7 @@ import { Hoe } from "../items/Hoe";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
-//import { InventoryItem } from "../characters/types";
+import { Storable } from "../items/types";
 //import { LandEntity } from "../farm/types";
 import { MapManager } from "../MapManager";
 
@@ -536,7 +536,7 @@ export class Game extends Scene {
         }
     }
 
-    setActiveItem(item: InventoryItem) {
+    setActiveItem(item: Storable) {
         this.cursorManager.setActiveItemCursor(item);
         const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
         

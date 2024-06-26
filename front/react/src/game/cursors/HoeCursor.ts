@@ -6,7 +6,7 @@ import { Hoe } from "../items/Hoe";
 import { TillageTask } from "../actions/TillageTask";
 import { Land } from "../farm/Land";
 
-import { InventoryItem } from "../characters/types";
+import { Storable } from "../items/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
 
@@ -36,7 +36,7 @@ export class HoeCursor implements Cursor {
         this.marker = marker;
     }
 
-    public setItem(hoe: InventoryItem) {
+    public setItem(hoe: Storable) {
         this.hoe = hoe as Hoe;
     }
 

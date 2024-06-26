@@ -1,4 +1,4 @@
-import { InventoryItem } from "./game/characters/types";
+import { Storable } from "./game/items/types";
 import { EventBus } from "./game/EventBus";
 import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
@@ -14,7 +14,7 @@ export type Message = {
 };
 
 function App() {
-    const [hotbarItems, setHotbarItems] = useState<InventoryItem[]>([]);
+    const [hotbarItems, setHotbarItems] = useState<Array<Storable | null>>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -24,7 +24,7 @@ function App() {
         setHotbarItems((scene as Game).getHotbarItems());
     };
 
-    const setActiveItem = (item: InventoryItem) => {
+    const setActiveItem = (item: Storable) => {
         if (phaserRef.current) {
             const scene = phaserRef.current.scene as Game;
             if (scene) {
