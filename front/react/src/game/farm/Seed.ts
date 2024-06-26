@@ -1,36 +1,34 @@
-import { Item } from "../items/item";
-import { InventoryItem } from "../characters/types";
-import { CursorType } from "../cursors/types";
-
-export class Seed implements InventoryItem {
-    public id: number;
-    public title: string;
-
-    public isStackable: boolean = true;
-    public amount: number = 0;
-    public icon: string = "";
-    public cursorType: CursorType = CursorType.CROP;
-
+import { BaseItem } from "../items/BaseItem";
+import { GenericItem } from "../items/GenericItem";
+import { InventoryItem } from "../items/InventoryItem";
+import { Storable } from "../items/types";
+export class Seed extends BaseItem implements Storable{
+    public inventory: InventoryItem;
+    public crop: GenericItem;
     public growthStageDuration: number;
     public currentGrowthStageFrame: number;
     public maxGrowthStageFrame: number;
-    public crop: Item;
 
-    constructor(id: number, title: string) {
-        this.id = id;
-        this.title = title;
+    constructor(id: number, title: string, inventory: InventoryItem) {
+        super(id, title);
+        this.inventory = inventory;
         return this;
     }
 
     public static clone(orig: Seed) {
-        return new Seed(orig.id, orig.title)
-            .setGrowthStageDuration(orig.growthStageDuration)
-            .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
-            .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
-            .setIsStackable(orig.isStackable)
-            .setAmount(orig.amount)
-            .setIcon(orig.icon)
-            .setCrop(Item.clone(orig.crop))
+        return new Seed(
+            orig.id,
+            orig.title,
+            InventoryItem.clone(orig.getInventory())
+        )
+        .setGrowthStageDuration(orig.growthStageDuration)
+        .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
+        .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
+        .setCrop(GenericItem.clone(orig.crop));
+    }
+
+    public getInventory() {
+        return this.inventory;
     }
 
     public setGrowthStageDuration(growthStageDuration: number) {
@@ -48,27 +46,13 @@ export class Seed implements InventoryItem {
         return this;
     }
 
-    public setIsStackable(isStackable: boolean) {
-        this.isStackable = isStackable;
-        return this;
-    }
-
-    public setAmount(amount: number) {
-        this.amount = amount;
-        return this;
-    }
-    public setIcon(icon: string) {
-        this.icon = icon;
-        return this;
-    }
-
-    public setCrop(crop: Item) {
+    public setCrop(crop: GenericItem) {
         this.crop = crop;
         return this;
     }
 
     public getCropFromHarvest() {
-        this.crop.amount = Math.floor(this.getRandomArbitrary(1, 4));
+        this.crop.getInventory().amount = Math.floor(this.getRandomArbitrary(1, 4));
         return this.crop;
     }
 

@@ -11,10 +11,12 @@ import { Hoe } from "../items/Hoe";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
-import { InventoryItem } from "../characters/types";
+//import { InventoryItem } from "../characters/types";
 //import { LandEntity } from "../farm/types";
 import { MapManager } from "../MapManager";
-import { Item } from "../items/item";
+
+import { InventoryItem } from "../items/InventoryItem"
+import { GenericItem } from "../items/GenericItem";
 
 import { HarvestTask } from "../actions/HarvestTask";
 import { Land } from "../farm/Land";
@@ -333,23 +335,29 @@ export class Game extends Scene {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.hero.getInventory().addItem(new Hoe());
         
-        const cornSeed = new Seed(2, 'Corn Seeds');
+        const cornSeed = new Seed(2, 'Corn Seeds', 
+            new InventoryItem()
+            .setIsStackable(true)
+            .setAmount(4).setIcon('🌱')
+            .setCursorType(CursorType.CROP)
+        );
+        const seedCrop = new GenericItem(3,'Corn', new InventoryItem().setIcon('🌽'));
 
-        const seedCrop = new Item(3,'Corn');
-        seedCrop.setIcon('🌽')
-
+        
         this.hero.getInventory().addItem(
             cornSeed
-            .setIsStackable(true)
-            .setAmount(4)
-            .setIcon('🌱')
             .setGrowthStageDuration(1000)
             .setCurrentGrowthStageFrame(30)
             .setMaxGrowthStageFrame(34)
             .setCrop(seedCrop)
         );
 
-        const fencePart = new Item(8, 'Fence');
+        const fencePart = new GenericItem(8, 'Fence', 
+            new InventoryItem().setIsStackable(true)
+            .setAmount(4)
+            .setIcon('𓊐')
+            .setCursorType(CursorType.FENCE)
+        );
 
         this.hero.getInventory().addItem(
             fencePart

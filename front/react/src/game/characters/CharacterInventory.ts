@@ -1,14 +1,15 @@
 import { EventBus } from "../EventBus";
-import { InventoryItem, InventoryAction } from "./types";
+import { InventoryAction } from "./types";
+import { Storable } from "../items/types";
 
 export class CharacterInventory {
-    private items: Array<InventoryItem | null> = [];
+    private items: Array<Storable | null> = [];
     private inventorySize = 24;
     private hotbarSize = 4;
     constructor() {}
 
-    public addItem(item: InventoryItem) {
-        if (!this.getItem(item.id) || (item && !item.isStackable)) {
+    public addItem(item: Storable) {
+        if (!this.getItem(item.id) || (item && !item.getInventory().isStackable)) {
             //find next available slot
             for (let i = 0; i < this.inventorySize; i++) {
                 if (
@@ -25,15 +26,15 @@ export class CharacterInventory {
         EventBus.emit("on-character-inventory-update", {});
     }
 
-    public removeItem(item: InventoryItem) {
+    public removeItem(item: Storable) {
         this.updateItem(item, InventoryAction.Remove);
     }
 
     public removeItemById(itemId: number, amount: number) {
         const remItem = this.getItem(itemId);
         if (remItem) {
-            remItem.amount = remItem.amount - amount;
-            if (remItem.amount === 0) {
+            remItem.getInventory().amount = remItem.getInventory().amount - amount;
+            if (remItem.getInventory().amount === 0) {
                 const itemIndex = this.items.findIndex((x) => x?.id === itemId);
                 if (itemIndex > -1) {
                     this.items[itemIndex] = null;
@@ -43,13 +44,13 @@ export class CharacterInventory {
         EventBus.emit("on-character-inventory-update", {});
     }
 
-    private updateItem(item: InventoryItem, action: InventoryAction) {
+    private updateItem(item: Storable, action: InventoryAction) {
         const updItem = this.getItem(item.id);
         if (updItem && action === InventoryAction.Add) {
-            updItem.amount += item.amount;
+            updItem.getInventory().amount += item.getInventory().amount;
         }
         if (updItem && action === InventoryAction.Remove) {
-            updItem.amount -= item.amount;
+            updItem.getInventory().amount -= item.getInventory().amount;
         }
     }
 
@@ -57,7 +58,7 @@ export class CharacterInventory {
         return this.items.find((x) => x?.id === itemId);
     }
     public getHotbarItems() {
-        const ret: Array<InventoryItem | null> = [];
+        const ret: Array<Storable | null> = [];
         for (let i = 0; i < this.hotbarSize; i++) {
             ret.push(this.items[i]);
         }
