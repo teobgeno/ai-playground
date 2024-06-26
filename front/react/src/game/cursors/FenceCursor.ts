@@ -20,6 +20,7 @@ export class FenceCursor implements Cursor {
     private activeMarker:  Phaser.GameObjects.Sprite;
     private activeMarkerKey: string;
     private activeSprite: string;
+    private canExecute: boolean = false;
    
     constructor(
         scene: Phaser.Scene,
@@ -132,44 +133,24 @@ export class FenceCursor implements Cursor {
             this.activeMarkerKey = 'oneRowBoth';
         }
 
-      
-
         this.activeMarker = this.markers[this.activeMarkerKey];
     
         if(!hasFence) {
             this.activeMarker.setAlpha(0.4);
         }
-       
         
+        this.canExecute = false;
         if (
-            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            !this.gridEngine.isBlocked(
-                { x: pointerTileX, y: pointerTileY },
-                "CharLayer"
-            )
+            this.mapManager.isTilePlotExist(pointerTileX, pointerTileY)
+            && !this.mapManager.isTilePlotOccupied(pointerTileX, pointerTileY)
+            && !this.gridEngine.isBlocked({ x: pointerTileX, y: pointerTileY },"CharLayer")
         ) {
-            // this.marker.setStrokeStyle(
-            //     2,
-            //     Phaser.Display.Color.GetColor(0, 153, 0),
-            //     1
-            // );
-        } else {
-            // this.marker.setStrokeStyle(
-            //     2,
-            //     Phaser.Display.Color.GetColor(204, 0, 0),
-            //     1
-            // );
-        }
+            this.canExecute = true;
+        } 
     }
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
-        if (
-            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            !this.gridEngine.isBlocked(
-                { x: pointerTileX, y: pointerTileY },
-                "CharLayer"
-            )
-        ) {
+        if (this.canExecute) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
                 pointerTileY,

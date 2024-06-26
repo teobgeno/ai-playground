@@ -52,4 +52,19 @@ export class MapManager {
         const landIndex = this.plotLandEntities.findIndex(e=> e.getPixelX() === x && e.getPixelY() === y);
         this.plotLandEntities.splice(landIndex, 1);
     }
+
+    public isTilePlotExist(x: number, y: number) {
+        const land = this.plotLandCoords.get(x + "-" + y);
+        return land ? true: false;
+    }
+
+    public hasTilePlotConstruction(x: number, y: number) {
+        const land = this.plotLandCoords.get(x + "-" + y);
+        return land?.hasFence
+    }
+
+    public isTilePlotOccupied(x: number, y: number) {
+        const land = this.plotLandCoords.get(x + "-" + y);
+        return land?.hasFence || land?.isWeeded;
+    }
 }
