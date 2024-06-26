@@ -89,7 +89,7 @@
         "filename": "column_up",
         "frame": {
           "x": 74,
-          "y": 2,
+          "y": 0,
           "w": 14,
           "h": 33
         },
@@ -106,8 +106,6 @@
           "h": 33
         }
       },
-
-
       {
         "filename": "column_down",
         "frame": {

@@ -40,41 +40,48 @@ export class FenceCursor implements Cursor {
             -1000,
             'fence',
             'pole'
-        ).setDepth(1);
+        ).setDepth(1.1);
         this.markers['oneRowRight'] = this.scene.add.sprite(
             -1000,
             -1000,
             'fence',
             'side_right'
-        ).setDepth(1);
+        ).setDepth(1.1);
 
         this.markers['oneRowLeft'] = this.scene.add.sprite(
             -1000,
             -1000,
             'fence',
             'side_left'
-        ).setDepth(1);
+        ).setDepth(1.1);
 
         this.markers['oneRowBoth'] = this.scene.add.sprite(
             -1000,
             -1000,
             'fence',
             'side_both'
-        ).setDepth(1);
+        ).setDepth(1.1);
     
         this.markers['oneColumnUp'] = this.scene.add.sprite(
             -1000,
             -1000,
             'fence',
             'column_up'
-        ).setDepth(1);
+        ).setDepth(1.1);
 
         this.markers['oneColumnDown'] = this.scene.add.sprite(
             -1000,
             -1000,
             'fence',
             'column_down'
-        ).setDepth(1.1);
+        ).setDepth(1.2);
+
+        this.markers['oneColumnBoth'] = this.scene.add.sprite(
+            -1000,
+            -1000,
+            'fence',
+            'sprite4'
+        ).setDepth(1);
         
         this.activeMarker = this.markers['singlePole'];
 
@@ -95,12 +102,19 @@ export class FenceCursor implements Cursor {
         }
         this.activeMarkerKey = 'singlePole';
 
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY - 1))?.hasFence) {
+            this.activeMarkerKey = 'oneColumnDown';
+        }
+
         if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY + 1))?.hasFence) {
             this.activeMarkerKey = 'oneColumnUp';
         }
 
-        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY - 1))?.hasFence) {
-            this.activeMarkerKey = 'oneColumnDown';
+       
+        if(this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY - 1))?.hasFence
+        && this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + ( pointerTileY + 1))?.hasFence
+    ) {
+            this.activeMarkerKey = 'oneColumnBoth';
         }
 
        
