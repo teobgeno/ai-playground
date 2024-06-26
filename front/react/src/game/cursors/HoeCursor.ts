@@ -17,6 +17,7 @@ export class HoeCursor implements Cursor {
     private gridEngine: GridEngine;
     private character: Humanoid;
     private marker: Phaser.GameObjects.Rectangle;
+    private canExecute: boolean = false;
     private hoe: Hoe;
 
     constructor(
@@ -39,24 +40,30 @@ export class HoeCursor implements Cursor {
         this.hoe = hoe as Hoe;
     }
 
+    public hidePointer() {
+        this.marker.x = -1000;
+        this.marker.y = -1000;
+        this.marker.setAlpha(0);
+    }
+
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
         this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
         
         if (
-            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            !this.gridEngine.isBlocked(
-                { x: pointerTileX, y: pointerTileY },
-                "CharLayer"
-            )
+            this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
+            !this.mapManager.isTilePlotOccupied(pointerTileX, pointerTileY) &&
+            !this.gridEngine.isBlocked({ x: pointerTileX, y: pointerTileY },"CharLayer")
         ) {
+            this.canExecute = true;
             this.marker.setStrokeStyle(
                 2,
                 Phaser.Display.Color.GetColor(0, 153, 0),
                 1
             );
         } else {
+            this.canExecute = false;
             this.marker.setStrokeStyle(
                 2,
                 Phaser.Display.Color.GetColor(204, 0, 0),
@@ -66,13 +73,7 @@ export class HoeCursor implements Cursor {
     }
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
-        if (
-            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            !this.gridEngine.isBlocked(
-                { x: pointerTileX, y: pointerTileY },
-                "CharLayer"
-            )
-        ) {
+        if (this.canExecute) {
             const tileGround = this.map.getTileAt(
                 pointerTileX,
                 pointerTileY,

@@ -10,4 +10,5 @@ export enum CursorType {
 export interface Cursor {
     onPointerMove(pointerTileX: number, pointerTileY: number): void;
     onPointerUp(pointerTileX: number, pointerTileY: number): void;
+    hidePointer(): void;
 }

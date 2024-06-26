@@ -115,11 +115,9 @@ export class CursorManager {
                         this.currentCursorType = CursorType.FENCE;
                         break;
             default:
+                this.currentCursor?.hidePointer();
                 this.currentCursor = null;
                 this.currentCursorType = CursorType.NONE;
-                this.marker.x = -1000;
-                this.marker.y = -1000;
-                this.marker.setAlpha(0);
         }
         if(this.currentCursorType) {
             this.marker.setAlpha(1);

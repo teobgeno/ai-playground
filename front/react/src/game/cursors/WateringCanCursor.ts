@@ -33,6 +33,12 @@ export class WateringCanCursor implements Cursor{
         this.marker = marker;
     }
 
+    public hidePointer() {
+        this.marker.x = -1000;
+        this.marker.y = -1000;
+        this.marker.setAlpha(0);
+    }
+
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
 
         this.marker.x = (this.map.tileToWorldX(pointerTileX)|| 0) + 16;
