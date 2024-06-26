@@ -106,6 +106,7 @@ export class CropCursor implements Cursor {
 
                     landEntity.createCrop(cloneSeed);
                     this.character.getInventory().removeItemById(cloneSeed.id, 1);
+                    console.log(cloneSeed)
           
                     const s = new SeedTask(
                         this.mapManager,
