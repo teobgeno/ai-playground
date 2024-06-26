@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
-import { Direction, GridEngine, GridEngineConfig } from "grid-engine";
+import { GridEngine, GridEngineConfig } from "grid-engine";
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
@@ -211,12 +211,12 @@ export class Game extends Scene {
         // const d = new DayNight(this,0,0,1024,768)
         // d.update(512,384);
         // d.setDepth(4)
-        //this.test();
+        this.test();
         EventBus.emit("current-scene-ready", this);
     }
 
     private test() {
-        
+        return
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
         this.physics.add.existing(s);
@@ -228,12 +228,12 @@ export class Game extends Scene {
         s.setDepth(2)
 
     
-        const tileGround = this.map.getTileAt(
-            13,
-            11,
-            false,
-            "Ground"
-        );
+        // const tileGround = this.map.getTileAt(
+        //     13,
+        //     11,
+        //     false,
+        //     "Ground"
+        // );
 
         // if(tileGround) {
         //     tileGround.properties={ge_collide:true}
