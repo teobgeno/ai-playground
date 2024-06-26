@@ -334,23 +334,19 @@ export class Game extends Scene {
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
         this.hero.getInventory().addItem(new Hoe());
-        
+
+        const seedCrop = new GenericItem(3,'Corn', new InventoryItem().setIcon('🌽'));
         const cornSeed = new Seed(2, 'Corn Seeds', 
             new InventoryItem()
             .setIsStackable(true)
             .setAmount(4).setIcon('🌱')
             .setCursorType(CursorType.CROP)
-        );
-        const seedCrop = new GenericItem(3,'Corn', new InventoryItem().setIcon('🌽'));
-
-        
-        this.hero.getInventory().addItem(
-            cornSeed
-            .setGrowthStageDuration(1000)
-            .setCurrentGrowthStageFrame(30)
-            .setMaxGrowthStageFrame(34)
-            .setCrop(seedCrop)
-        );
+        )
+        .setGrowthStageDuration(1000)
+        .setCurrentGrowthStageFrame(30)
+        .setMaxGrowthStageFrame(34)
+        .setCrop(seedCrop);
+       
 
         const fencePart = new GenericItem(8, 'Fence', 
             new InventoryItem().setIsStackable(true)
@@ -359,12 +355,14 @@ export class Game extends Scene {
             .setCursorType(CursorType.FENCE)
         );
 
+
+
+        this.hero.getInventory().addItem(
+            cornSeed
+         );
+
         this.hero.getInventory().addItem(
             fencePart
-            .setIsStackable(true)
-            .setAmount(4)
-            .setIcon('𓊐')
-            .setCursorType(CursorType.FENCE)
         );
         
         // this.hero.getInventory().addItem(
