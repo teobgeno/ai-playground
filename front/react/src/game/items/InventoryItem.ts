@@ -1,4 +1,3 @@
-
 import { CursorType } from "../cursors/types";
 
 export class InventoryItem  {

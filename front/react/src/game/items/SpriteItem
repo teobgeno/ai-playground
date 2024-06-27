@@ -1,0 +1,38 @@
+
+export class SpriteItem  {
+
+    private scene: Phaser.Scene;
+    private sprite: Phaser.GameObjects.Sprite;
+    private x: number;
+    private y: number;
+    private pixelX: number;
+    private pixelY: number;
+
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        pixelX: number,
+        pixelY: number
+    ) {
+        //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
+        //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
+        this.pixelX = pixelX;
+        this.pixelY = pixelY;
+        this.sprite = scene.add.sprite(
+            this.pixelX + 16,
+            this.pixelY + 16,
+            "land",
+            19
+        );
+    }
+
+    // public static clone(orig: DestructItem) {
+    //     return new DestructItem()
+    // }
+
+
+}
