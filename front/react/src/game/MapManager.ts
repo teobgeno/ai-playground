@@ -1,10 +1,11 @@
 import { Tilemaps } from "phaser";
-import { LandEntity } from "./farm/types";
-import { Land } from "./farm/Land";
+import { LandProperties } from "./farm/types";
+import { FarmLand } from "./farm/FarmLand";
+
 export class MapManager {
     private map: Tilemaps.Tilemap;
-    private plotLandCoords: Map<string, LandEntity> = new Map();
-    private plotLandEntities: Array<Land> = [];
+    private plotLandCoords: Map<string, LandProperties> = new Map();
+    private plotLandEntities: Array<FarmLand> = [];
     constructor(map: Tilemaps.Tilemap) {
         this.map = map;
     }
@@ -31,11 +32,11 @@ export class MapManager {
         return this.plotLandCoords;
     }
 
-    public setPlotLandCoords(key:string, entity: LandEntity) {
+    public setPlotLandCoords(key:string, entity: LandProperties) {
         this.plotLandCoords.set(key, entity);
     }
 
-    public updatePlotLandCoords(key:string, entity: LandEntity) {
+    public updatePlotLandCoords(key:string, entity: LandProperties) {
         const current = this.plotLandCoords.get(key);
         this.plotLandCoords.set(key, {...current, ...entity});
     }
@@ -44,7 +45,7 @@ export class MapManager {
         return this.plotLandEntities;
     }
 
-    public addPlotLandEntity(entity: Land) {
+    public addPlotLandEntity(entity: FarmLand) {
         this.plotLandEntities.push(entity);
     }
 

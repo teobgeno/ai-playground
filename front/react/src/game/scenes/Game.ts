@@ -4,7 +4,7 @@ import { GridEngine, GridEngineConfig } from "grid-engine";
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
-//import { Land } from "../farm/Land";
+//import { FarmLand } from "../farm/FarmLand";
 // import {DayNight} from "../DayNight";
 //import { Item } from "../items/item";
 import { Hoe } from "../items/Hoe";
@@ -12,7 +12,7 @@ import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
 import { Storable } from "../items/types";
-//import { LandEntity } from "../farm/types";
+//import { LandProperties } from "../farm/types";
 import { MapManager } from "../MapManager";
 
 import { InventoryItem } from "../items/InventoryItem"
@@ -20,7 +20,7 @@ import { GenericItem } from "../items/GenericItem";
 import { Rock } from "../items/Rock";
 
 import { HarvestTask } from "../actions/HarvestTask";
-import { Land } from "../farm/Land";
+import { FarmLand } from "../farm/FarmLand";
 import { CursorType } from "../cursors/types";
 // type gridEngineConfigChar = {
 //     id?:string,

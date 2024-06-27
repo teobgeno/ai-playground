@@ -3,7 +3,7 @@ import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
 
-export class Land {
+export class FarmLand {
     private crop: Crop | null;
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;

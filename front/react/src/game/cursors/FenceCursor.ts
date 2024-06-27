@@ -4,7 +4,7 @@ import { GridEngine } from "grid-engine";
 
 // import { Hoe } from "../items/Hoe";
 // import { TillageTask } from "../actions/TillageTask";
-import { Land } from "../farm/Land";
+import { FarmLand } from "../farm/FarmLand";
 
 // import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
@@ -179,7 +179,7 @@ export class FenceCursor implements Cursor {
                 );
 
                 console.log(this.activeMarker);
-                const landEntity = new Land(
+                const landEntity = new FarmLand(
                     this.scene,
                     tileGround.x,
                     tileGround.y,

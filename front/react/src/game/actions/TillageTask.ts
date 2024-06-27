@@ -2,7 +2,7 @@ import { BaseTask } from "./BaseTask";
 import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
-import {Land} from "../farm/Land";
+import { FarmLand } from "../farm/FarmLand";
 import { Hoe } from "../items/Hoe";
 
 import {TaskStatus, Task} from "./types";
@@ -11,14 +11,14 @@ import {Humanoid} from "../characters/Humanoid";
 export class TillageTask extends BaseTask implements Task{
 
     private mapManager: MapManager;
-    private landEntity:Land;
+    private landEntity:FarmLand;
     private hoe:Hoe;
 
     constructor(
         mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        landEntity: Land,
+        landEntity: FarmLand,
         hoe: Hoe
     ) {
         super(gridEngine, character);

@@ -4,7 +4,7 @@ import { GridEngine } from "grid-engine";
 
 import { Hoe } from "../items/Hoe";
 import { TillageTask } from "../actions/TillageTask";
-import { Land } from "../farm/Land";
+import { FarmLand } from "../farm/FarmLand";
 
 import { Storable } from "../items/types";
 import { Humanoid } from "../characters/Humanoid";
@@ -84,7 +84,7 @@ export class HoeCursor implements Cursor {
             if (tileGround) {
                 this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
 
-                const landEntity = new Land(
+                const landEntity = new FarmLand(
                     this.scene,
                     tileGround.x,
                     tileGround.y,

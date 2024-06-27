@@ -10,7 +10,7 @@ export interface LandElements {
     fertilizer: number;
 }
 
-export interface LandEntity {
+export interface LandProperties {
     isWeeded?: boolean;
     hasCrop?: boolean;
     hasConstruction?: boolean;

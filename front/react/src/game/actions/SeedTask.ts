@@ -2,7 +2,7 @@ import { BaseTask } from "./BaseTask";
 import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
-import {Land} from "../farm/Land";
+import { FarmLand } from "../farm/FarmLand";
 import { Seed } from "../farm/Seed";
 
 import {TaskStatus, Task} from "./types";
@@ -11,14 +11,14 @@ import {Humanoid} from "../characters/Humanoid";
 export class SeedTask extends BaseTask implements Task{
 
     private mapManager: MapManager;
-    private landEntity:Land;
+    private landEntity:FarmLand;
     private seed: Seed;
 
     constructor(
         mapManager: MapManager,
         gridEngine: GridEngine,
         character: Humanoid,
-        landEntity: Land,
+        landEntity: FarmLand,
         seed: Seed
     ) {
         super(gridEngine, character);
