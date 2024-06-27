@@ -18,8 +18,8 @@ export class SpriteItem {
         this.depth = depth;
         
         this.sprite = this.scene.add.sprite(
-            this.coordsData.pixelX + 16,
-            this.coordsData.pixelY + 16,
+            this.coordsData.pixelX,
+            this.coordsData.pixelY,
             this.textureData.texture,
             this.textureData.frame
         );

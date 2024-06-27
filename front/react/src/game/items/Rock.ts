@@ -22,8 +22,8 @@ export class Rock extends BaseItem {
             {
                 x: coords.x,
                 y: coords.y,
-                pixelX: coords.pixelX,
-                pixelY: coords.pixelY,
+                pixelX: coords.pixelX + 16,
+                pixelY: coords.pixelY + 16,
             },
             1
         );
