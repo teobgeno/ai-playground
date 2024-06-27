@@ -17,6 +17,7 @@ import { MapManager } from "../MapManager";
 
 import { InventoryItem } from "../items/InventoryItem"
 import { GenericItem } from "../items/GenericItem";
+import { Rock } from "../items/Rock";
 
 import { HarvestTask } from "../actions/HarvestTask";
 import { Land } from "../farm/Land";
@@ -121,7 +122,7 @@ export class Game extends Scene {
             frameHeight: 32,
         });
 
-        this.load.spritesheet("landTiles", "assets/assets/tiles/farm.png", {
+        this.load.spritesheet("landTiles", "assets/tiles/farm.png", {
             frameWidth: 32,
             frameHeight: 32,
         });
@@ -222,6 +223,8 @@ export class Game extends Scene {
 
     private test() {
         //landTiles
+
+        const rockItem = new Rock(20, 'rock', this, {x:11, y:10, pixelX:352, pixelY:320});
         return
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        

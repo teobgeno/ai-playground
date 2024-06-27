@@ -1,33 +1,30 @@
-import { TextureData } from "../core/types";
+import { TextureData, CoordsData } from "../core/types";
 export class SpriteItem {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
-    private textureData: { texture: string; frame: number };
-    private x: number;
-    private y: number;
-    private pixelX: number;
-    private pixelY: number;
+    private textureData: TextureData;
+    private coordsData: CoordsData;
+    private depth: number;
 
     constructor(
         scene: Phaser.Scene,
         textureData: TextureData,
-        x: number,
-        y: number,
-        pixelX: number,
-        pixelY: number
+        coordsData: CoordsData,
+        depth: number
     ) {
         this.scene = scene;
         this.textureData = textureData;
-        this.x = x;
-        this.y = y;
-        this.pixelX = pixelX;
-        this.pixelY = pixelY;
+        this.coordsData = coordsData;
+        this.depth = depth;
+        
         this.sprite = this.scene.add.sprite(
-            this.pixelX + 16,
-            this.pixelY + 16,
+            this.coordsData.pixelX + 16,
+            this.coordsData.pixelY + 16,
             this.textureData.texture,
             this.textureData.frame
         );
+
+        this.sprite.setDepth(this.depth);
     }
 
     public getSprite() {

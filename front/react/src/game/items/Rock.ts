@@ -6,7 +6,6 @@ import { GenericItem } from "./GenericItem";
 import { CoordsData } from "../core/types";
 
 export class Rock extends BaseItem {
-    private scene: Phaser.Scene;
     public destruct: DestructItem;
     public sprite: SpriteItem;
 
@@ -19,11 +18,14 @@ export class Rock extends BaseItem {
         super(id, title);
         this.sprite = new SpriteItem(
             scene,
-            { texture: "Land", frame: 19 },
-            coords.x,
-            coords.y,
-            coords.pixelX,
-            coords.pixelY
+            { texture: "landTiles", frame: 4 },
+            {
+                x: coords.x,
+                y: coords.y,
+                pixelX: coords.pixelX,
+                pixelY: coords.pixelY,
+            },
+            1
         );
         this.destruct = new DestructItem();
         this.destruct.addResource(
