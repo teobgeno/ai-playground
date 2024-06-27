@@ -5,7 +5,9 @@ import { Storable } from "../items/types";
 export class ConstuctItem extends BaseItem implements Storable {
 
     public inventory: InventoryItem;
-    public materials: string; // Materials created this item.item ids and amount. Can or cannot  be extracted if this item destroyed by player.
+    public materials: string; 
+    // Materials created this item.item ids and amount. Can or cannot  be extracted if this item destroyed by player.
+    // destroyable get materials back
     // decay item or not.
     // collision on/off or toggle (e.x door)
     // sprite, animations
