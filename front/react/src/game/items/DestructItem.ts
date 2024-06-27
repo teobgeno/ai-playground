@@ -11,7 +11,7 @@ export class DestructItem {
         return func(this.resources);
     }
 
-    public addResources(resource: GenericItem) {
+    public addResource(resource: GenericItem) {
         this.resources.push(resource);
     }
 }

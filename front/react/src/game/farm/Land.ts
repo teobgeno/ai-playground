@@ -30,7 +30,7 @@ export class Land {
         this.y = y;
         this.pixelX = pixelX;
         this.pixelY = pixelY;
-        this.sprite = scene.add.sprite(
+        this.sprite = this.scene.add.sprite(
             this.pixelX + 16,
             this.pixelY + 16,
             "land",
