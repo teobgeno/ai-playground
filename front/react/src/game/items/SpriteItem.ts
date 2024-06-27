@@ -1,9 +1,8 @@
-
-export class SpriteItem  {
-
+import { TextureData } from "../core/types";
+export class SpriteItem {
     private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
-    private textureData: {texture:string, frame:number};
+    private textureData: { texture: string; frame: number };
     private x: number;
     private y: number;
     private pixelX: number;
@@ -11,13 +10,12 @@ export class SpriteItem  {
 
     constructor(
         scene: Phaser.Scene,
-        textureData:{texture:string, frame:number},
+        textureData: TextureData,
         x: number,
         y: number,
         pixelX: number,
         pixelY: number
     ) {
-
         this.scene = scene;
         this.textureData = textureData;
         this.x = x;
@@ -32,7 +30,7 @@ export class SpriteItem  {
         );
     }
 
-    public getSprite(){
+    public getSprite() {
         return this.sprite;
     }
 
@@ -43,6 +41,4 @@ export class SpriteItem  {
     // public static clone(orig: DestructItem) {
     //     return new DestructItem()
     // }
-
-
 }

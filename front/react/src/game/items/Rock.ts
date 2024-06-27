@@ -3,21 +3,27 @@ import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
 import { GenericItem } from "./GenericItem";
+import { CoordsData } from "../core/types";
 
 export class Rock extends BaseItem {
     private scene: Phaser.Scene;
     public destruct: DestructItem;
     public sprite: SpriteItem;
 
-    constructor(id: number, title: string, scene: Phaser.Scene) {
+    constructor(
+        id: number,
+        title: string,
+        scene: Phaser.Scene,
+        coords: CoordsData
+    ) {
         super(id, title);
         this.sprite = new SpriteItem(
             scene,
             { texture: "Land", frame: 19 },
-            10,
-            10,
-            10,
-            10
+            coords.x,
+            coords.y,
+            coords.pixelX,
+            coords.pixelY
         );
         this.destruct = new DestructItem();
         this.destruct.addResource(

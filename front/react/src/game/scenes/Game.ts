@@ -121,6 +121,11 @@ export class Game extends Scene {
             frameHeight: 32,
         });
 
+        this.load.spritesheet("landTiles", "assets/assets/tiles/farm.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
+
         this.load.atlas(
             "items",
             "assets/sprites/items.png",
@@ -216,6 +221,7 @@ export class Game extends Scene {
     }
 
     private test() {
+        //landTiles
         return
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
