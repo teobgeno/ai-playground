@@ -11,7 +11,7 @@ import {
 } from "../core/types";
 
 export class Rock extends BaseItem implements MapObject {
-    public objectType: MapObjectType.Rock;
+    public objectType: MapObjectType = MapObjectType.Rock;
     public destruct: DestructItem;
     public sprite: SpriteItem;
 

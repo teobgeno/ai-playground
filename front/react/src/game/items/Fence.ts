@@ -3,13 +3,19 @@ import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
 import { GenericItem } from "./GenericItem";
-import { CoordsData, MapObject, MapObjectType, TextureData, ObjectItems } from "../core/types";
+import {
+    CoordsData,
+    MapObject,
+    MapObjectType,
+    TextureData,
+    ObjectItems,
+} from "../core/types";
 
 export class Fence extends BaseItem implements MapObject {
-    public objectType: MapObjectType.Fence;
+    public objectType: MapObjectType = MapObjectType.Fence;
     public destruct: DestructItem;
     public sprite: SpriteItem;
-   
+
     constructor(
         scene: Phaser.Scene,
         coords: CoordsData,
@@ -18,7 +24,7 @@ export class Fence extends BaseItem implements MapObject {
         padY: number
     ) {
         //TODO:: generate id ????
-        super(1, 'Fence Part');
+        super(1, "Fence Part");
         this.sprite = new SpriteItem(
             scene,
             { texture: texture.texture, frame: texture.frame },

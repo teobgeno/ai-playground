@@ -5,8 +5,8 @@ import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
 import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
-export class FarmLand implements MapObject{
-    public objectType: MapObjectType.FarmLand;
+export class FarmLand implements MapObject {
+    public objectType: MapObjectType = MapObjectType.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprite: SpriteItem;
@@ -15,10 +15,7 @@ export class FarmLand implements MapObject{
 
     //status plowed, planted
 
-    constructor(
-        scene: Phaser.Scene,
-        coords: CoordsData,
-    ) {
+    constructor(scene: Phaser.Scene, coords: CoordsData) {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
@@ -31,11 +28,11 @@ export class FarmLand implements MapObject{
                 pixelX: coords.pixelX,
                 pixelY: coords.pixelY,
             },
-            16, 16
-
+            16,
+            16
         );
         this.sprite.setDepth(1);
-        this.sprite.setAlpha(0.4)
+        this.sprite.setAlpha(0.4);
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,
@@ -92,7 +89,12 @@ export class FarmLand implements MapObject{
 
     public createCrop(seed: Seed) {
         if (this.landState === LandState.PLOWED) {
-            this.crop = new Crop(this.scene, seed, this.sprite.getPixelX(), this.sprite.getPixelY());
+            this.crop = new Crop(
+                this.scene,
+                seed,
+                this.sprite.getPixelX(),
+                this.sprite.getPixelY()
+            );
         }
     }
 
@@ -120,7 +122,7 @@ export class FarmLand implements MapObject{
     }
 
     private onHarvestCrop = () => {
-        (this.scene as Game).addPlayerTask('harvest', this);
+        (this.scene as Game).addPlayerTask("harvest", this);
     };
 
     public executeHarvestCrop() {
