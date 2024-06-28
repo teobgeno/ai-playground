@@ -54,8 +54,6 @@ export class CropCursor implements Cursor {
         this.marker.setAlpha(1);
        
         const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
-        console.log( (mapObj as FarmLand)?.getState())
-        console.log( mapObj?.objectType)
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
             mapObj?.objectType === MapObjectType.FarmLand &&
