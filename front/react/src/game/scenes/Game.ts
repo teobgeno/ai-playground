@@ -225,7 +225,8 @@ export class Game extends Scene {
         //landTiles
 
         const rockItem = new Rock(this, {x:11, y:10, pixelX:352, pixelY:320});
-        return
+        this.mapManager.setPlotLandCoords(11, 10, rockItem);
+        return;
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
         this.physics.add.existing(s);
