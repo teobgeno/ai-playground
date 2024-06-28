@@ -192,10 +192,10 @@ export class FenceCursor implements Cursor {
                     padY = 0;
                 }
 
-                const landEntity = new FarmLand(
-                    this.scene,
-                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
-                );
+                // const landEntity = new FarmLand(
+                //     this.scene,
+                //     {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
+                // );
 
                 const fenceEntity = new Fence(
                     this.scene,
@@ -204,16 +204,8 @@ export class FenceCursor implements Cursor {
                     padX,
                     padY
                 )
-                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
-                // this.scene.add
-                //     .sprite(
-                //         tileGround.pixelX + padX,
-                //         tileGround.pixelY + padY,
-                //         "fence",
-                //         this.activeMarker.frame.customData.filename
-                //     )
-                //     .setDepth(2);
 
+                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
                 tileGround.properties = { ge_collide: true };
 
                 // const t = new TillageTask(
