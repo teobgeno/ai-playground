@@ -50,10 +50,12 @@ export class HoeCursor implements Cursor {
         this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
-        
+
+        const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
+
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            !this.mapManager.isTilePlotOccupied(pointerTileX, pointerTileY) &&
+            mapObj === null &&
             !this.gridEngine.isBlocked({ x: pointerTileX, y: pointerTileY },"CharLayer")
         ) {
             this.canExecute = true;
@@ -82,15 +84,15 @@ export class HoeCursor implements Cursor {
             );
             
             if (tileGround) {
-                this.mapManager.setPlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: false });
 
                 const landEntity = new FarmLand(
                     this.scene,
-                    tileGround.x,
-                    tileGround.y,
-                    tileGround.pixelX,
-                    tileGround.pixelY,
+                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
                 );
+                
+
+                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, landEntity);
+
                 
                 const t = new TillageTask(
                     this.mapManager,

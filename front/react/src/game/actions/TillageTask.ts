@@ -25,7 +25,6 @@ export class TillageTask extends BaseTask implements Task{
         this.mapManager = mapManager;
         this.hoe = hoe;
         this.landEntity = landEntity;
-        this.mapManager.addPlotLandEntity(this.landEntity);
         console.log('task weed')
     }
 
@@ -42,8 +41,10 @@ export class TillageTask extends BaseTask implements Task{
         this.gridEngine.stopMovement(this.character.getId());
         this.landEntity.rollbackLand();
 
-        this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: false, hasCrop: false });
-        this.mapManager.deletePlotLandEntityByCoords(this.landEntity.getPixelX(), this.landEntity.getPixelY());
+        this.mapManager.setPlotLandCoords(this.landEntity.sprite.getX(), this.landEntity.sprite.getY(), null);
+
+        // this.mapManager.updatePlotLandCoords(this.landEntity.sprite.getX() + "-" + this.landEntity.sprite.getY(), { isWeeded: false, hasCrop: false });
+        // this.mapManager.deletePlotLandEntityByCoords(this.landEntity.sprite.getPixelX(), this.landEntity.sprite.getPixelY());
 
         this.status = TaskStatus.Completed;
     }
@@ -52,7 +53,7 @@ export class TillageTask extends BaseTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.getX(), this.landEntity.getY());
+                    this.moveCharacter(this.landEntity.sprite.getX(), this.landEntity.sprite.getY());
                     break;
                 case 2:
                    this.weedGround();
@@ -69,7 +70,7 @@ export class TillageTask extends BaseTask implements Task{
             this.character.anims.restart();
             this.character.anims.stop();
             if(this.status === TaskStatus.Running) {
-                this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
+                //this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 this.status = TaskStatus.Completed;
                 this.landEntity.init();
             }

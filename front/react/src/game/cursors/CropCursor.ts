@@ -7,8 +7,11 @@ import { Seed } from "../farm/Seed";
 import { SeedTask } from "../actions/SeedTask";
 
 import { Storable } from "../items/types";
-import {Humanoid} from "../characters/Humanoid";
+import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
+import { MapObjectType } from "../core/types";
+import { FarmLand } from "../farm/FarmLand";
+import { LandState } from "../farm/types";
 
 
 export class CropCursor implements Cursor {
@@ -50,10 +53,12 @@ export class CropCursor implements Cursor {
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
        
+        const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
+
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.isWeeded &&
-            !this.mapManager.getPlotLandCoords().get(pointerTileX + "-" + pointerTileY)?.hasCrop &&
+            mapObj?.objectType === MapObjectType.FarmLand &&
+            (mapObj as FarmLand)?.getState() !== LandState.PLANTED &&
             this.seed.getInventory().amount > 0 &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
@@ -91,20 +96,14 @@ export class CropCursor implements Cursor {
 
             if (tileGround) {
 
-                this.mapManager.updatePlotLandCoords(tileGround.x + "-" + tileGround.y, { isWeeded: true, hasCrop: true });
-
-                const landEntity = this.mapManager.getPlotLandEntities().find(
-                    (x) =>
-                        x.getX() === tileGround.x &&
-                        x.getY() === tileGround.y
-                );
-
+                const landEntity = this.mapManager.getPlotLandCoord(tileGround.x, tileGround.y);
+                
                 if(landEntity) {
 
                     const cloneSeed = Seed.clone(this.seed);
                     cloneSeed.getInventory().amount = 1;
 
-                    landEntity.createCrop(cloneSeed);
+                    (landEntity as FarmLand).createCrop(cloneSeed);
                     this.character.getInventory().removeItemById(cloneSeed.id, 1);
                     console.log(cloneSeed)
           
@@ -112,7 +111,7 @@ export class CropCursor implements Cursor {
                         this.mapManager,
                         this.gridEngine,
                         this.character,
-                        landEntity,
+                        (landEntity as FarmLand),
                         cloneSeed
     
                     );

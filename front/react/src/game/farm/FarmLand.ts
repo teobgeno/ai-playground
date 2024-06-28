@@ -18,10 +18,6 @@ export class FarmLand implements MapObject{
     constructor(
         scene: Phaser.Scene,
         coords: CoordsData,
-        x: number,
-        y: number,
-        pixelX: number,
-        pixelY: number
     ) {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
@@ -30,10 +26,10 @@ export class FarmLand implements MapObject{
             scene,
             { texture: "land", frame: 19 },
             {
-                x: x,
-                y: y,
-                pixelX: pixelX,
-                pixelY: pixelY,
+                x: coords.x,
+                y: coords.y,
+                pixelX: coords.pixelX,
+                pixelY: coords.pixelY,
             },
             16, 16
 

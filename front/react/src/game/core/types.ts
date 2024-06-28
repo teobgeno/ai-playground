@@ -8,12 +8,20 @@ export interface CoordsData {
 
 export interface TextureData {
     texture: string;
-    frame: number;
+    frame: number | string;
 }
 
 export enum MapObjectType {
     FarmLand = 1,
     Rock = 2,
+    Fence = 3,
+}
+
+export enum ObjectItems {
+    Stone = 1,
+    Wood = 2,
+    FencePart = 3,
+    Rock = 4
 }
 
 export interface MapObject {

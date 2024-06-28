@@ -5,10 +5,12 @@ import { GridEngine } from "grid-engine";
 // import { Hoe } from "../items/Hoe";
 // import { TillageTask } from "../actions/TillageTask";
 import { FarmLand } from "../farm/FarmLand";
+import { Fence } from "../items/Fence";
 
 // import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
+import { MapObjectType } from "../core/types";
 
 export class FenceCursor implements Cursor {
     private scene: Phaser.Scene;
@@ -81,10 +83,11 @@ export class FenceCursor implements Cursor {
         this.activeMarker.setAlpha(0);
 
         let hasFence = false;
+
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + pointerTileY)?.hasFence
+                .get(pointerTileX + "-" + pointerTileY)?.objectType === MapObjectType.Fence
         ) {
             hasFence = true;
         }
@@ -93,7 +96,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.hasFence
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnDown";
         }
@@ -101,7 +104,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.hasFence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnUp";
         }
@@ -109,10 +112,10 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.hasFence &&
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === MapObjectType.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.hasFence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnBoth";
         }
@@ -120,7 +123,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowRight";
         }
@@ -128,7 +131,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.hasFence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowLeft";
         }
@@ -136,10 +139,10 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.hasFence &&
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.hasFence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowBoth";
         }
@@ -153,7 +156,7 @@ export class FenceCursor implements Cursor {
         this.canExecute = false;
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            !this.mapManager.isTilePlotOccupied(pointerTileX, pointerTileY) &&
+            this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY) === null &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -173,20 +176,7 @@ export class FenceCursor implements Cursor {
             );
 
             if (tileGround) {
-                this.mapManager.updatePlotLandCoords(
-                    tileGround.x + "-" + tileGround.y,
-                    { hasFence: true }
-                );
-
-                console.log(this.activeMarker);
-                const landEntity = new FarmLand(
-                    this.scene,
-                    tileGround.x,
-                    tileGround.y,
-                    tileGround.pixelX,
-                    tileGround.pixelY
-                );
-
+                
                 let padX = 16;
                 let padY = 16;
 
@@ -202,16 +192,27 @@ export class FenceCursor implements Cursor {
                     padY = 0;
                 }
 
-                console.log(padY);
+                const landEntity = new FarmLand(
+                    this.scene,
+                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
+                );
 
-                this.scene.add
-                    .sprite(
-                        tileGround.pixelX + padX,
-                        tileGround.pixelY + padY,
-                        "fence",
-                        this.activeMarker.frame.customData.filename
-                    )
-                    .setDepth(2);
+                const fenceEntity = new Fence(
+                    this.scene,
+                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY},
+                    { texture: 'fence', frame: this.activeMarker.frame.customData.filename },
+                    padX,
+                    padY
+                )
+                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
+                // this.scene.add
+                //     .sprite(
+                //         tileGround.pixelX + padX,
+                //         tileGround.pixelY + padY,
+                //         "fence",
+                //         this.activeMarker.frame.customData.filename
+                //     )
+                //     .setDepth(2);
 
                 tileGround.properties = { ge_collide: true };
 

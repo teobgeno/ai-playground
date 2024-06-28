@@ -3,40 +3,38 @@ import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
 import { GenericItem } from "./GenericItem";
-import {
-    CoordsData,
-    MapObject,
-    MapObjectType,
-    ObjectItems,
-} from "../core/types";
+import { CoordsData, MapObject, MapObjectType, TextureData, ObjectItems } from "../core/types";
 
-export class Rock extends BaseItem implements MapObject {
-    public objectType: MapObjectType.Rock;
+export class Fence extends BaseItem implements MapObject {
+    public objectType: MapObjectType.Fence;
     public destruct: DestructItem;
     public sprite: SpriteItem;
-
+   
     constructor(
         scene: Phaser.Scene,
-        coords: CoordsData
+        coords: CoordsData,
+        texture: TextureData,
+        padX: number,
+        padY: number
     ) {
-         //TODO:: generate id ????
-        super(1, 'Rock');
+        //TODO:: generate id ????
+        super(1, 'Fence Part');
         this.sprite = new SpriteItem(
             scene,
-            { texture: "landTiles", frame: 4 },
+            { texture: texture.texture, frame: texture.frame },
             {
                 x: coords.x,
                 y: coords.y,
                 pixelX: coords.pixelX,
                 pixelY: coords.pixelY,
             },
-            16,
-            16
+            padX,
+            padY
         );
-        this.sprite.setDepth(1);
+        this.sprite.setDepth(2);
         this.destruct = new DestructItem();
         this.destruct.addResource(
-            new GenericItem(ObjectItems.Stone, "stone", new InventoryItem())
+            new GenericItem(ObjectItems.Wood, "wood", new InventoryItem())
         );
     }
 
