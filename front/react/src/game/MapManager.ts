@@ -1,7 +1,5 @@
 import { Tilemaps } from "phaser";
-import { LandProperties } from "./farm/types";
-import { FarmLand } from "./farm/FarmLand";
-import { CoordsData, MapObject, MapObjectType } from "./core/types";
+import { MapObject } from "./core/types";
 
 export class MapManager {
     private map: Tilemaps.Tilemap;
