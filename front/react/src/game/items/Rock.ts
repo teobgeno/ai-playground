@@ -15,12 +15,9 @@ export class Rock extends BaseItem implements MapObject {
     public destruct: DestructItem;
     public sprite: SpriteItem;
 
-    constructor(
-        scene: Phaser.Scene,
-        coords: CoordsData
-    ) {
-         //TODO:: generate id ????
-        super(1, 'Rock');
+    constructor(scene: Phaser.Scene, coords: CoordsData) {
+        //TODO:: generate id ????
+        super(1, "Rock");
         this.sprite = new SpriteItem(
             scene,
             { texture: "landTiles", frame: 4 },
