@@ -24,7 +24,7 @@ export class Fence extends BaseItem implements MapObject {
         padY: number
     ) {
         //TODO:: generate id ????
-        super(1, "Fence Part");
+        super(ObjectItems.FencePart, "Fence Part");
         this.sprite = new SpriteItem(
             scene,
             { texture: texture.texture, frame: texture.frame },

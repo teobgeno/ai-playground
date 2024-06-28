@@ -8,6 +8,7 @@ import { Humanoid } from "../characters/Humanoid";
 // import {DayNight} from "../DayNight";
 //import { Item } from "../items/item";
 import { Hoe } from "../items/Hoe";
+import { PickAxe } from "../items/PickAxe";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
@@ -22,6 +23,7 @@ import { Rock } from "../items/Rock";
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
 import { CursorType } from "../cursors/types";
+import { ObjectItems } from "../core/types";
 // type gridEngineConfigChar = {
 //     id?:string,
 //     sprite?:Physics.Arcade.Sprite
@@ -344,7 +346,15 @@ export class Game extends Scene {
     private initHero() {
         this.hero = new Hero(this, "hero", this.gridEngine, "hero");
       
-        const hoe = new Hoe(1, 'Hoe', 
+        const hoe = new Hoe(
+            new InventoryItem()
+            .setIcon('🧹')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.HOE)
+        )
+
+        const pickAxe = new PickAxe(
             new InventoryItem()
             .setIcon('⛏️')
             .setIsStackable(false)
@@ -352,8 +362,8 @@ export class Game extends Scene {
             .setCursorType(CursorType.HOE)
         )
 
-        const seedCrop = new GenericItem(3,'Corn', new InventoryItem().setIcon('🌽'));
-        const cornSeed = new Seed(2, 'Corn Seeds', 
+        const seedCrop = new GenericItem(ObjectItems.Corn,'Corn', new InventoryItem().setIcon('🌽'));
+        const cornSeed = new Seed(ObjectItems.CornSeeds, 'Corn Seeds', 
             new InventoryItem()
             .setIsStackable(true)
             .setAmount(4).setIcon('🌱')
@@ -373,6 +383,7 @@ export class Game extends Scene {
         );
 
         this.hero.getInventory().addItem(hoe);
+        this.hero.getInventory().addItem(pickAxe);
         this.hero.getInventory().addItem(cornSeed);
         this.hero.getInventory().addItem(fencePart);
         

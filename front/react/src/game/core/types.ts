@@ -21,7 +21,11 @@ export enum ObjectItems {
     Stone = 1,
     Wood = 2,
     FencePart = 3,
-    Rock = 4
+    Rock = 4,
+    PickAxe = 5,
+    Hoe = 6,
+    Corn = 7,
+    CornSeeds = 8
 }
 
 export interface MapObject {
