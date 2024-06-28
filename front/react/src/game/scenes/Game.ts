@@ -224,7 +224,7 @@ export class Game extends Scene {
     private test() {
         //landTiles
 
-        const rockItem = new Rock(20, 'rock', this, {x:11, y:10, pixelX:352, pixelY:320});
+        const rockItem = new Rock(this, {x:11, y:10, pixelX:352, pixelY:320});
         return
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
