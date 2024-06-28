@@ -3,11 +3,12 @@ import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
 import { GenericItem } from "./GenericItem";
-import { CoordsData } from "../core/types";
+import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
-export class Rock extends BaseItem {
+export class Rock extends BaseItem implements MapObject {
     public destruct: DestructItem;
     public sprite: SpriteItem;
+    public objectType:MapObjectType.Rock;
 
     constructor(
         id: number,

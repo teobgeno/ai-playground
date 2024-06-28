@@ -31,6 +31,22 @@ export class SpriteItem {
         return this.sprite;
     }
 
+    public getX() {
+        return this.coordsData.x;
+    }
+
+    public getY() {
+        return this.coordsData.y;
+    }
+
+    public getPixelX() {
+        return this.coordsData.pixelX;
+    }
+
+    public getPixelY() {
+        return this.coordsData.pixelY;
+    }
+
     public remove() {
         this.sprite.destroy();
     }

@@ -1,11 +1,14 @@
 import { Game } from "../scenes/Game";
+import { SpriteItem } from "../items/SpriteItem";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
+import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
-export class FarmLand {
+export class FarmLand implements MapObject{
     private crop: Crop | null;
     private scene: Phaser.Scene;
+    public sprite: SpriteItem;
     private sprite: Phaser.GameObjects.Sprite;
     private landState: number;
     private x: number;
@@ -36,6 +39,19 @@ export class FarmLand {
             "land",
             19
         );
+
+        this.sprite = new SpriteItem(
+            scene,
+            { texture: "landTiles", frame: 4 },
+            {
+                x: x,
+                y: y,
+                pixelX: pixelX + 16,
+                pixelY: pixelY + 16,
+            },
+            1
+        );
+
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,

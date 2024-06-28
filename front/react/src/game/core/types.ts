@@ -1,3 +1,4 @@
+import { SpriteItem } from "../items/SpriteItem";
 export interface CoordsData {
     x: number;
     y: number;
@@ -6,6 +7,16 @@ export interface CoordsData {
 }
 
 export interface TextureData {
-    texture: string, 
-    frame: number
+    texture: string;
+    frame: number;
+}
+
+export enum MapObjectType {
+    FarmLand = 1,
+    Rock = 2,
+}
+
+export interface MapObject {
+    objectType: MapObjectType;
+    sprite: SpriteItem;
 }
