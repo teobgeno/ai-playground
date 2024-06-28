@@ -6,10 +6,10 @@ import { GenericItem } from "./GenericItem";
 import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
 export class Rock extends BaseItem implements MapObject {
+    public objectType: MapObjectType.Rock;
     public destruct: DestructItem;
     public sprite: SpriteItem;
-    public objectType:MapObjectType.Rock;
-
+   
     constructor(
         id: number,
         title: string,
@@ -23,11 +23,13 @@ export class Rock extends BaseItem implements MapObject {
             {
                 x: coords.x,
                 y: coords.y,
-                pixelX: coords.pixelX + 16,
-                pixelY: coords.pixelY + 16,
+                pixelX: coords.pixelX,
+                pixelY: coords.pixelY,
             },
-            1
+            16,
+            16
         );
+        this.sprite.setDepth(1);
         this.destruct = new DestructItem();
         this.destruct.addResource(
             new GenericItem(10, "stone", new InventoryItem())

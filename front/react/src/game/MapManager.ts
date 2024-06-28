@@ -1,11 +1,13 @@
 import { Tilemaps } from "phaser";
 import { LandProperties } from "./farm/types";
 import { FarmLand } from "./farm/FarmLand";
+import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
 export class MapManager {
     private map: Tilemaps.Tilemap;
-    private plotLandCoords: Map<string, LandProperties> = new Map();
-    private plotLandEntities: Array<FarmLand> = [];
+    private plotLandCoords: Map<string, MapObject> = new Map();
+    // private plotLandCoords: Map<string, LandProperties> = new Map();
+    // private plotLandEntities: Array<FarmLand> = [];
     constructor(map: Tilemaps.Tilemap) {
         this.map = map;
     }
@@ -41,18 +43,18 @@ export class MapManager {
         this.plotLandCoords.set(key, {...current, ...entity});
     }
 
-    public getPlotLandEntities() {
-        return this.plotLandEntities;
-    }
+    // public getPlotLandEntities() {
+    //     return this.plotLandEntities;
+    // }
 
-    public addPlotLandEntity(entity: FarmLand) {
-        this.plotLandEntities.push(entity);
-    }
+    // public addPlotLandEntity(entity: FarmLand) {
+    //     this.plotLandEntities.push(entity);
+    // }
 
-    public deletePlotLandEntityByCoords(x:number, y:number) {
-        const landIndex = this.plotLandEntities.findIndex(e=> e.getPixelX() === x && e.getPixelY() === y);
-        this.plotLandEntities.splice(landIndex, 1);
-    }
+    // public deletePlotLandEntityByCoords(x:number, y:number) {
+    //     const landIndex = this.plotLandEntities.findIndex(e=> e.getPixelX() === x && e.getPixelY() === y);
+    //     this.plotLandEntities.splice(landIndex, 1);
+    // }
 
     public isTilePlotExist(x: number, y: number) {
         const land = this.plotLandCoords.get(x + "-" + y);

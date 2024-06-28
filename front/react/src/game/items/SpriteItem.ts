@@ -10,21 +10,19 @@ export class SpriteItem {
         scene: Phaser.Scene,
         textureData: TextureData,
         coordsData: CoordsData,
-        depth: number
+        padPosX: number,
+        padPosY: number
     ) {
         this.scene = scene;
         this.textureData = textureData;
         this.coordsData = coordsData;
-        this.depth = depth;
-        
+
         this.sprite = this.scene.add.sprite(
-            this.coordsData.pixelX,
-            this.coordsData.pixelY,
+            this.coordsData.pixelX + padPosX,
+            this.coordsData.pixelY + padPosY,
             this.textureData.texture,
             this.textureData.frame
         );
-
-        this.sprite.setDepth(this.depth);
     }
 
     public getSprite() {
@@ -47,7 +45,19 @@ export class SpriteItem {
         return this.coordsData.pixelY;
     }
 
-    public remove() {
+    public setDepth(depth: number) {
+        this.sprite.setDepth(depth);
+    }
+
+    public setAlpha(alpha: number) {
+        this.sprite.setAlpha(alpha);
+    }
+
+    public setFrame(frame: number) {
+        this.sprite.setFrame(frame);
+    }
+
+    public destroy() {
         this.sprite.destroy();
     }
 

@@ -6,21 +6,18 @@ import { LandState, LandElements } from "./types";
 import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
 export class FarmLand implements MapObject{
+    public objectType: MapObjectType.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprite: SpriteItem;
-    private sprite: Phaser.GameObjects.Sprite;
     private landState: number;
-    private x: number;
-    private y: number;
-    private pixelX: number;
-    private pixelY: number;
     private elements: LandElements;
 
     //status plowed, planted
 
     constructor(
         scene: Phaser.Scene,
+        coords: CoordsData,
         x: number,
         y: number,
         pixelX: number,
@@ -29,37 +26,26 @@ export class FarmLand implements MapObject{
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
-        this.x = x;
-        this.y = y;
-        this.pixelX = pixelX;
-        this.pixelY = pixelY;
-        this.sprite = this.scene.add.sprite(
-            this.pixelX + 16,
-            this.pixelY + 16,
-            "land",
-            19
-        );
-
         this.sprite = new SpriteItem(
             scene,
-            { texture: "landTiles", frame: 4 },
+            { texture: "land", frame: 19 },
             {
                 x: x,
                 y: y,
-                pixelX: pixelX + 16,
-                pixelY: pixelY + 16,
+                pixelX: pixelX,
+                pixelY: pixelY,
             },
-            1
-        );
+            16, 16
 
+        );
+        this.sprite.setDepth(1);
+        this.sprite.setAlpha(0.4)
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,
         //     "fence",
         //     'sprite8'
         // );
-        this.sprite.setDepth(1);
-        this.sprite.setAlpha(0.4);
 
         // const r = Math.floor(Math.random() * 10)
         // if(r > 5) {
@@ -99,34 +85,18 @@ export class FarmLand implements MapObject{
         this.destroyCrop();
     }
 
-    public getX() {
-        return this.x;
-    }
-
-    public getY() {
-        return this.y;
-    }
-
-    public getPixelX() {
-        return this.pixelX;
-    }
-
-    public getPixelY() {
-        return this.pixelY;
-    }
-
     public getState() {
         return this.landState;
     }
 
     public water() {
-        this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
+        //this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
         this.elements.water = 100;
     }
 
     public createCrop(seed: Seed) {
         if (this.landState === LandState.PLOWED) {
-            this.crop = new Crop(this.scene, seed, this.pixelX, this.pixelY);
+            this.crop = new Crop(this.scene, seed, this.sprite.getPixelX(), this.sprite.getPixelY());
         }
     }
 
@@ -189,8 +159,6 @@ export class FarmLand implements MapObject{
         }
     }
     updateTile() {
-        //this.scene.events.emit('tileUpdate', this);
-
         let frame = 0;
         switch (this.landState) {
             case LandState.PLOWED:
@@ -200,8 +168,6 @@ export class FarmLand implements MapObject{
                 frame = 19;
                 break;
             case LandState.READY:
-                //frame = this.crop.frame + 12;
-                //frame = 12;
                 break;
             default:
                 frame = 18;
