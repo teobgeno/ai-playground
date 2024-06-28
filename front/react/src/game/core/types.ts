@@ -27,4 +27,5 @@ export enum ObjectItems {
 export interface MapObject {
     objectType: MapObjectType;
     sprite: SpriteItem;
+    update?: (time: number) => void
 }

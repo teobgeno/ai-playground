@@ -540,9 +540,16 @@ export class Game extends Scene {
 
     update(time: number, delta: number): void {
         this.hero.update(delta);
-        for (const land of this.mapManager.getPlotLandEntities()) {
-            land.update(time);
-        }
+
+        this.mapManager.getPlotLandCoords().forEach((item)=>{
+            if (typeof item?.update !== "undefined") { 
+                item.update(time);
+            }
+        })
+
+        // for (const land of this.mapManager.getPlotLandEntities()) {
+        //     land.update(time);
+        // }
     }
 
     setActiveItem(item: Storable) {
@@ -550,9 +557,13 @@ export class Game extends Scene {
         const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
         
         //disable interactions to game objects when cursor exists 
-        for (const land of this.mapManager.getPlotLandEntities()) {
-            land.toggleInteraction(enableObjInteractions);
-        }
+        // for (const land of this.mapManager.getPlotLandEntities()) {
+        //     land.toggleInteraction(enableObjInteractions);
+        // }
+
+        this.mapManager.getPlotLandCoords().forEach((item)=>{
+            //item.toggleInteraction(enableObjInteractions);
+        })
 
         for (const [, character] of this.charactersMap) {
             if(character.getId() !== 'hero') {
