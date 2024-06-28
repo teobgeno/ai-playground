@@ -1,4 +1,5 @@
 import { SpriteItem } from "../items/SpriteItem";
+import { Cursor } from "../cursors/types";
 export interface CoordsData {
     x: number;
     y: number;
@@ -32,4 +33,6 @@ export interface MapObject {
     objectType: MapObjectType;
     sprite: SpriteItem;
     update?: (time: number) => void
+    setExternalActiveCursor?: (cursor: Cursor | null) => void
+    interactWithItem?: () => void
 }

@@ -359,7 +359,7 @@ export class Game extends Scene {
             .setIcon('⛏️')
             .setIsStackable(false)
             .setAmount(1)
-            .setCursorType(CursorType.HOE)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
         const seedCrop = new GenericItem(ObjectItems.Corn,'Corn', new InventoryItem().setIcon('🌽'));
@@ -375,7 +375,7 @@ export class Game extends Scene {
         .setCrop(seedCrop);
        
 
-        const fencePart = new GenericItem(8, 'Fence', 
+        const fencePart = new GenericItem(18, 'Fence', 
             new InventoryItem().setIsStackable(true)
             .setAmount(4)
             .setIcon('𓊐')
@@ -575,6 +575,9 @@ export class Game extends Scene {
 
         this.mapManager.getPlotLandCoords().forEach((item)=>{
             //item.toggleInteraction(enableObjInteractions);
+            if (typeof item?.setExternalActiveCursor !== "undefined") { 
+                item?.setExternalActiveCursor(this.cursorManager.getCurrentCursor());
+            }
         })
 
         for (const [, character] of this.charactersMap) {

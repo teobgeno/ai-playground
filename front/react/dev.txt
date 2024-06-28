@@ -29,6 +29,14 @@ https://codepen.io/ramilulu/pen/mrNoXw
 - set growth for crop based on time from clock and not from phaser
 - tasks remove timeout and set interval. On each interval check for cancel status
 - land do not set interactive when crop ready and there is a selected cursor. 
+- at cursors remove  
+    const tileGround = this.map.getTileAt(
+                    pointerTileX,
+                    pointerTileY,
+                    false,
+                    "Ground"
+    );
+find landEntity directly from pointer x, y check ExternalInteractionCursor
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false

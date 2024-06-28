@@ -5,7 +5,7 @@ import { Storable } from "../items/types";
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
     private inventorySize = 24;
-    private hotbarSize = 4;
+    private hotbarSize = 5;
     constructor() {}
 
     public addItem(item: Storable) {

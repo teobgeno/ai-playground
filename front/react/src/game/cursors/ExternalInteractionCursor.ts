@@ -10,7 +10,7 @@ import { Storable } from "../items/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
 
-export class HoeCursor implements Cursor {
+export class ExternalInteractionCursor implements Cursor {
     private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
@@ -18,7 +18,7 @@ export class HoeCursor implements Cursor {
     private character: Humanoid;
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
-    private hoe: Hoe;
+    private tool: Storable;
 
     constructor(
         scene: Phaser.Scene,
@@ -36,12 +36,16 @@ export class HoeCursor implements Cursor {
         this.marker = marker;
     }
 
-    public setItem(hoe: Storable) {
-        this.hoe = hoe as Hoe;
+    public setItem(tool: Storable) {
+        this.tool = tool;
     }
 
     public getItem() {
-        return this.hoe;
+        return this.tool;
+    }
+
+    public setCanExecute(canExecute: boolean) {
+        this.canExecute = canExecute;
     }
 
     public hidePointer() {
@@ -55,21 +59,15 @@ export class HoeCursor implements Cursor {
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
 
-        const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
+        //const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
 
-        if (
-            this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            mapObj === null &&
-            !this.gridEngine.isBlocked({ x: pointerTileX, y: pointerTileY },"CharLayer")
-        ) {
-            this.canExecute = true;
+        if (this.canExecute) {
             this.marker.setStrokeStyle(
                 2,
                 Phaser.Display.Color.GetColor(0, 153, 0),
                 1
             );
         } else {
-            this.canExecute = false;
             this.marker.setStrokeStyle(
                 2,
                 Phaser.Display.Color.GetColor(204, 0, 0),
@@ -80,32 +78,14 @@ export class HoeCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (this.canExecute) {
-            const tileGround = this.map.getTileAt(
+            const landItem = this.mapManager.getPlotLandCoord(
                 pointerTileX,
-                pointerTileY,
-                false,
-                "Ground"
+                pointerTileY
             );
-            
-            if (tileGround) {
-
-                const landEntity = new FarmLand(
-                    this.scene,
-                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
-                );
-                
-
-                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, landEntity);
-
-                
-                const t = new TillageTask(
-                    this.mapManager,
-                    this.gridEngine,
-                    this.character,
-                    landEntity,
-                    this.hoe
-                );
-                this.character.addTask(t);
+            if (landItem) {
+                if (typeof landItem?.interactWithItem !== "undefined") {
+                    landItem?.interactWithItem();
+                }
             }
         }
     }

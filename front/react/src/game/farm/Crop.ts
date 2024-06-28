@@ -18,12 +18,26 @@ export class Crop {
         );
         this.sprite.setDepth(2);
         this.sprite.setAlpha(0.8);
+        
+        
     }
     public init() {
         this.sprite.setAlpha(1);
         const dp = 2 + this.shiftPad(this.sprite.y + this.sprite.displayHeight/2, 7);
         console.log(dp)
         this.sprite.setDepth(dp)
+
+        //wiggle anim test
+        // this.scene.tweens.add({
+        //     targets: [ this.sprite ],
+        //     x: this.sprite.x+1,
+        //     y: this.sprite.y-1,
+        //     yoyo: true,
+        //     duration: 400,
+        //     ease: 'Easing.Bounce.InOut',
+        //     repeat: -1,
+        // });
+
     }
 
     private shiftPad(t:number, e:number) {
