@@ -40,6 +40,13 @@ export class MapManager {
         return this.plotLandCoords.has(x + "-" + y);
     }
 
+    public setTileCollition(x: number, y: number, collide: boolean) {
+        const tile = this.map.getTileAt(x, y, false, "Ground");
+        if (tile) {
+            tile.properties = { ge_collide: collide };
+        }
+    }
+
     // public updatePlotLandCoords(key:string, entity: LandProperties) {
     //     const current = this.plotLandCoords.get(key);
     //     //this.plotLandCoords.set(key, {...current, ...entity});
@@ -58,7 +65,6 @@ export class MapManager {
     //     this.plotLandEntities.splice(landIndex, 1);
     // }
 
-    
     // public hasTilePlotConstruction(x: number, y: number) {
     //     const land = this.plotLandCoords.get(x + "-" + y);
     //     return land?.hasFence

@@ -58,7 +58,7 @@ export class SeedTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.sprite.getX(), this.landEntity.sprite.getY());
+                    this.moveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY());
                     break;
                 case 2:
                     this.plantSeed();

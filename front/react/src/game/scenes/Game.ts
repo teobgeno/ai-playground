@@ -5,7 +5,7 @@ import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 //import { FarmLand } from "../farm/FarmLand";
-// import {DayNight} from "../DayNight";
+ import {DayNight} from "../DayNight";
 //import { Item } from "../items/item";
 import { Hoe } from "../items/Hoe";
 import { PickAxe } from "../items/PickAxe";
@@ -19,6 +19,7 @@ import { MapManager } from "../MapManager";
 import { InventoryItem } from "../items/InventoryItem"
 import { GenericItem } from "../items/GenericItem";
 import { Rock } from "../items/Rock";
+import { Tree } from "../items/Tree";
 
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
@@ -142,6 +143,12 @@ export class Game extends Scene {
             "assets/sprites/fence_remix.png",
             "assets/sprites/fence_remix.json"
         );
+
+        this.load.atlas(
+            "map",
+            "assets/sprites/map.png",
+            "assets/sprites/map.json"
+        );
     }
 
     create() {
@@ -216,9 +223,21 @@ export class Game extends Scene {
             this.marker
         );
 
-        // const d = new DayNight(this,0,0,1024,768)
+        // const d = new DayNight(this,0,0,10000,10000)
         // d.update(512,384);
+        // d.setAlpha(1)
         // d.setDepth(4)
+        // d.setPipeline('Light2D');
+        // const light = this.lights.addLight(0, 0, 200).setScrollFactor(0).setIntensity(2);
+        // this.lights.enable().setAmbientColor(0x555555);
+        // this.input.on('pointermove', pointer =>
+        // {
+        //     light.x = pointer.x;
+        //     light.y = pointer.y;
+        // });
+
+      
+      
         this.test();
         EventBus.emit("current-scene-ready", this);
     }
@@ -226,8 +245,20 @@ export class Game extends Scene {
     private test() {
         //landTiles
 
-        const rockItem = new Rock(this, {x:11, y:10, pixelX:352, pixelY:320});
-        this.mapManager.setPlotLandCoords(11, 10, rockItem);
+        const rockItem = new Rock(this, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
+         this.mapManager.setPlotLandCoords(11, 16, rockItem);
+
+        const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
+        this.mapManager.setPlotLandCoords(11, 10, treeItem);
+
+        this.mapManager.setPlotLandCoords(10, 10, treeItem);
+        this.mapManager.setPlotLandCoords(12, 10, treeItem);
+
+        this.mapManager.setPlotLandCoords(11, 11, treeItem);
+        this.mapManager.setPlotLandCoords(10, 11, treeItem);
+        this.mapManager.setPlotLandCoords(12, 11, treeItem);
+
+
         return;
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
@@ -426,6 +457,7 @@ export class Game extends Scene {
                     id: hero?.getId() || "",
                     sprite: hero,
                     startPosition: { x: 15, y: 10 },
+                    speed:4
                     // collides: {
                     //     collisionGroups: ['cg1']
                     // }

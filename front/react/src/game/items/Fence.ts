@@ -14,7 +14,7 @@ import {
 export class Fence extends BaseItem implements MapObject {
     public objectType: MapObjectType = MapObjectType.Fence;
     public destruct: DestructItem;
-    public sprite: SpriteItem;
+    public sprites: Array<SpriteItem> = [];
 
     constructor(
         scene: Phaser.Scene,
@@ -23,9 +23,8 @@ export class Fence extends BaseItem implements MapObject {
         padX: number,
         padY: number
     ) {
-        //TODO:: generate id ????
         super(ObjectItems.FencePart, "Fence Part");
-        this.sprite = new SpriteItem(
+        this.sprites.push(new SpriteItem(
             scene,
             { texture: texture.texture, frame: texture.frame },
             {
@@ -36,8 +35,8 @@ export class Fence extends BaseItem implements MapObject {
             },
             padX,
             padY
-        );
-        this.sprite.setDepth(2);
+        ));
+        this.sprites[0].setDepth(2);
         this.destruct = new DestructItem();
         this.destruct.addResource(
             new GenericItem(ObjectItems.Wood, "wood", new InventoryItem())
@@ -56,6 +55,6 @@ export class Fence extends BaseItem implements MapObject {
     }
 
     public getSprite() {
-        return this.sprite;
+        return this.sprites[0];
     }
 }

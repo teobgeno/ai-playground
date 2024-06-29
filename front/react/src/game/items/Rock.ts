@@ -14,15 +14,14 @@ import { Cursor } from "../cursors/types";
 export class Rock extends BaseItem implements MapObject {
     public objectType: MapObjectType = MapObjectType.Rock;
     public destruct: DestructItem;
-    public sprite: SpriteItem;
+    public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
 
     constructor(scene: Phaser.Scene, coords: CoordsData) {
-        //TODO:: generate id ????
         super(ObjectItems.Rock, "Rock");
-        this.sprite = new SpriteItem(
+        this.sprites.push(new SpriteItem(
             scene,
-            { texture: "landTiles", frame: 4 },
+            { texture: "map", frame: "rock" },
             {
                 x: coords.x,
                 y: coords.y,
@@ -31,18 +30,18 @@ export class Rock extends BaseItem implements MapObject {
             },
             16,
             16
-        );
-        this.sprite.setDepth(1);
+        ));
+        this.sprites[0].setDepth(1);
         this.destruct = new DestructItem();
         this.destruct.addResource(
             new GenericItem(ObjectItems.Stone, "stone", new InventoryItem())
         );
 
-        this.sprite.getSprite().setInteractive({
+        this.sprites[0].getSprite().setInteractive({
             cursor: "cursor",
         });
-        this.sprite.getSprite().on("pointerover", () => this.toggleCursorExecution(true));
-        this.sprite.getSprite().on("pointerout",  () => this.toggleCursorExecution(false));
+        this.sprites[0].getSprite().on("pointerover", () => this.toggleCursorExecution(true));
+        this.sprites[0].getSprite().on("pointerout",  () => this.toggleCursorExecution(false));
     }
 
     // public static clone(orig: GenericItem) {
@@ -74,6 +73,6 @@ export class Rock extends BaseItem implements MapObject {
     }
 
     public getSprite() {
-        return this.sprite;
+        return this.sprites[0];
     }
 }

@@ -41,7 +41,7 @@ export class TillageTask extends BaseTask implements Task{
         this.gridEngine.stopMovement(this.character.getId());
         this.landEntity.rollbackLand();
 
-        this.mapManager.setPlotLandCoords(this.landEntity.sprite.getX(), this.landEntity.sprite.getY(), null);
+        this.mapManager.setPlotLandCoords(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY(), null);
 
         // this.mapManager.updatePlotLandCoords(this.landEntity.sprite.getX() + "-" + this.landEntity.sprite.getY(), { isWeeded: false, hasCrop: false });
         // this.mapManager.deletePlotLandEntityByCoords(this.landEntity.sprite.getPixelX(), this.landEntity.sprite.getPixelY());
@@ -53,7 +53,7 @@ export class TillageTask extends BaseTask implements Task{
         if(this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.sprite.getX(), this.landEntity.sprite.getY());
+                    this.moveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY());
                     break;
                 case 2:
                    this.weedGround();

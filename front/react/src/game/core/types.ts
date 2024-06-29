@@ -16,6 +16,7 @@ export enum MapObjectType {
     FarmLand = 1,
     Rock = 2,
     Fence = 3,
+    Tree = 4,
 }
 
 export enum ObjectItems {
@@ -31,7 +32,7 @@ export enum ObjectItems {
 
 export interface MapObject {
     objectType: MapObjectType;
-    sprite: SpriteItem;
+    sprites: Array<SpriteItem>;
     update?: (time: number) => void
     setExternalActiveCursor?: (cursor: Cursor | null) => void
     interactWithItem?: () => void

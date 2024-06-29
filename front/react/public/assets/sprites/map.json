@@ -1,0 +1,24 @@
+{
+  "frames":[
+    {
+      "filename":"tree",
+      "frame": {"x":0,"y":296,"w":132,"h":154}
+    },
+	{
+      "filename":"tree_branch",
+      "frame": {"x":0,"y":395,"w":132,"h":54}
+    },
+	{
+      "filename":"tree_top",
+      "frame": {"x":0,"y":296,"w":132,"h":100}
+    },
+	{
+      "filename":"tree_cut",
+      "frame": {"x":11,"y":449,"w":73,"h":63}
+    },
+	{
+      "filename":"rock",
+      "frame": {"x":0,"y":32,"w":32,"h":32}
+    }
+  ]
+}

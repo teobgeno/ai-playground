@@ -9,7 +9,7 @@ export class FarmLand implements MapObject {
     public objectType: MapObjectType = MapObjectType.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
-    public sprite: SpriteItem;
+    public sprites: Array<SpriteItem> = [];
     private landState: number;
     private elements: LandElements;
 
@@ -19,7 +19,7 @@ export class FarmLand implements MapObject {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
-        this.sprite = new SpriteItem(
+        this.sprites.push(new SpriteItem(
             scene,
             { texture: "land", frame: 19 },
             {
@@ -30,9 +30,9 @@ export class FarmLand implements MapObject {
             },
             16,
             16
-        );
-        this.sprite.setDepth(1);
-        this.sprite.setAlpha(0.4);
+        ));
+        this.sprites[0].setDepth(1);
+        this.sprites[0].setAlpha(0.4);
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,
@@ -67,11 +67,11 @@ export class FarmLand implements MapObject {
             fertilizer: 0,
         };
 
-        this.sprite.setAlpha(1);
+        this.sprites[0].setAlpha(1);
     }
 
     public rollbackLand() {
-        this.sprite.destroy();
+        this.sprites[0].destroy();
     }
 
     public rollbackCrop() {
@@ -92,8 +92,8 @@ export class FarmLand implements MapObject {
             this.crop = new Crop(
                 this.scene,
                 seed,
-                this.sprite.getPixelX(),
-                this.sprite.getPixelY()
+                this.sprites[0].getPixelX(),
+                this.sprites[0].getPixelY()
             );
         }
     }
@@ -172,6 +172,10 @@ export class FarmLand implements MapObject {
                 break;
         }
 
-        this.sprite.setFrame(frame);
+        this.sprites[0].setFrame(frame);
+    }
+
+    public getSprite() {
+        return this.sprites[0];
     }
 }
