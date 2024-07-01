@@ -245,8 +245,11 @@ export class Game extends Scene {
     private test() {
         //landTiles
 
-        new Rock(this, this.mapManager, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
-        new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
+        const stoneItem = new Rock(this, this.mapManager, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
+        stoneItem.setResource(new GenericItem(ObjectId.Stone, "stone", new InventoryItem().setIcon('💎')));
+
+        const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
+        treeItem.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('🌳')));
 
         // this.mapManager.setPlotLandCoords(11, 10, treeItem);
 

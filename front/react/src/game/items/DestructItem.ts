@@ -7,7 +7,7 @@ export class DestructItem {
     //     return new DestructItem()
     // }
 
-    public getResources(func: (resources: Array<GenericItem>) => number) {
+    public getResources(func: (resources: Array<GenericItem>) => Array<GenericItem>) {
         return func(this.resources);
     }
 

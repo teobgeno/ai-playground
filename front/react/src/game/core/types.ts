@@ -1,5 +1,6 @@
 import { SpriteItem } from "../items/SpriteItem";
 import { Cursor } from "../cursors/types";
+import { GenericItem } from "../items/GenericItem";
 export interface CoordsData {
     x: number;
     y: number;
@@ -51,4 +52,5 @@ export interface MapObject {
     update?: (time: number) => void
     setExternalActiveCursor?: (cursor: Cursor | null) => void
     interactWithItem?: () => void
+    getDestruct?: () => Array<GenericItem>
 }

@@ -77,37 +77,37 @@ export class Tree extends BaseItem implements MapObject {
         this.sprites[2].setAlpha(0);
 
         this.destruct = new DestructItem();
-        this.destruct.addResource(
-            new GenericItem(ObjectId.Stone, "stone", new InventoryItem())
-        );
-
+        
         this.addSriteListeners();
-        this.addCollisions();
+        this.toggleCollisions(true);
         this.addMapObject();
     }
-    
 
-    private addCollisions() {
+    public setResource(resource: GenericItem) {
+        this.destruct.addResource(resource);
+    }
+
+    private toggleCollisions(collide: boolean) {
 
         this.mapManager.setTileCollition(
             this.sprites[0].getX(),
             this.sprites[0].getY(),
-            true
+            collide
         );
         this.mapManager.setTileCollition(
             this.sprites[0].getX() - 1,
             this.sprites[0].getY(),
-            true
+            collide
         );
         this.mapManager.setTileCollition(
             this.sprites[0].getX() + 1,
             this.sprites[0].getY(),
-            true
+            collide
         );
         this.mapManager.setTileCollition(
             this.sprites[0].getX(),
             this.sprites[0].getY() - 1,
-            true
+            collide
         );
     }
 
@@ -160,10 +160,17 @@ export class Tree extends BaseItem implements MapObject {
         this.sprites[0].setAlpha(0);
         this.sprites[1].setAlpha(0);
         this.sprites[2].setAlpha(1);
+        this.toggleCollisions(false);
     }
 
     public getDestruct() {
-        return this.destruct;
+        return this.destruct.getResources((resources) => {
+            for (const resource of resources) {
+                const rand =  Math.floor(Math.random() * (6 - 1) + 1);
+                resource.getInventory().setAmount(rand);
+            }
+            return resources;
+        });
     }
 
     public getSprite() {

@@ -49,7 +49,13 @@ export class Fence extends BaseItem implements MapObject {
     //     )
     // }
     public getDestruct() {
-        return this.destruct;
+        return this.destruct.getResources((resources) => {
+            for (const resource of resources) {
+                const rand =  Math.floor(Math.random() * (6 - 1) + 1);
+                resource.getInventory().setAmount(rand);
+            }
+            return resources;
+        });
     }
 
     public getSprite() {

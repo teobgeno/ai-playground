@@ -86,6 +86,13 @@ export class ExternalInteractionCursor implements Cursor {
                 if (typeof landItem?.interactWithItem !== "undefined") {
                     landItem?.interactWithItem();
                 }
+                if (typeof landItem?.getDestruct !== "undefined") {
+                    console.log(landItem?.getDestruct());
+                    const resources = landItem?.getDestruct();
+                    for (const resource of resources) {
+                        this.character.getInventory().addItem(resource);
+                    }
+                }
             }
         }
     }
