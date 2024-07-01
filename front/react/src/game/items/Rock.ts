@@ -7,20 +7,20 @@ import { GenericItem } from "./GenericItem";
 import {
     CoordsData,
     MapObject,
-    MapObjectType,
-    ObjectItems,
+    ObjectType,
 } from "../core/types";
 import { Cursor } from "../cursors/types";
+import { Utils } from "../core/Utils";
 
 export class Rock extends BaseItem implements MapObject {
     private mapManager: MapManager;
-    public objectType: MapObjectType = MapObjectType.Rock;
+    public objectType: ObjectType = ObjectType.Rock;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
 
     constructor(scene: Phaser.Scene, mapManager: MapManager,coords: CoordsData) {
-        super(ObjectItems.Rock, "Rock");
+        super(Utils.generateId(), "Rock");
         this.mapManager = mapManager;
         this.sprites.push(new SpriteItem(
             scene,

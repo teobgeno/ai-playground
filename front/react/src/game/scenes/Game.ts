@@ -24,7 +24,7 @@ import { Tree } from "../items/Tree";
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
 import { CursorType } from "../cursors/types";
-import { MapObject, ObjectItems } from "../core/types";
+import { MapObject, ObjectId } from "../core/types";
 // type gridEngineConfigChar = {
 //     id?:string,
 //     sprite?:Physics.Arcade.Sprite
@@ -392,8 +392,8 @@ export class Game extends Scene {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const seedCrop = new GenericItem(ObjectItems.Corn,'Corn', new InventoryItem().setIcon('🌽'));
-        const cornSeed = new Seed(ObjectItems.CornSeeds, 'Corn Seeds', 
+        const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('🌽'));
+        const cornSeed = new Seed(ObjectId.CornSeeds, 'Corn Seeds', 
             new InventoryItem()
             .setIsStackable(true)
             .setAmount(4).setIcon('🌱')

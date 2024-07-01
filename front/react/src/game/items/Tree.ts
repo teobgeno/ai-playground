@@ -7,14 +7,14 @@ import { GenericItem } from "./GenericItem";
 import {
     CoordsData,
     MapObject,
-    MapObjectType,
-    ObjectItems,
+    ObjectType,
 } from "../core/types";
 import { Cursor } from "../cursors/types";
+import { Utils } from "../core/Utils";
 
 export class Tree extends BaseItem implements MapObject {
     private mapManager: MapManager;
-    public objectType: MapObjectType = MapObjectType.Tree;
+    public objectType: ObjectType = ObjectType.Tree;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
@@ -25,7 +25,7 @@ export class Tree extends BaseItem implements MapObject {
         coords: CoordsData
     ) {
         //TODO:: generate id ????
-        super(ObjectItems.Rock, "Tree");
+        super(Utils.generateId(), "Tree");
         this.mapManager = mapManager;
         this.sprites.push(
             new SpriteItem(

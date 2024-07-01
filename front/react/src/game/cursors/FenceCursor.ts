@@ -10,7 +10,7 @@ import { Fence } from "../items/Fence";
 // import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
-import { MapObjectType } from "../core/types";
+import { ObjectType } from "../core/types";
 
 export class FenceCursor implements Cursor {
     private scene: Phaser.Scene;
@@ -87,7 +87,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + pointerTileY)?.objectType === MapObjectType.Fence
+                .get(pointerTileX + "-" + pointerTileY)?.objectType === ObjectType.Fence
         ) {
             hasFence = true;
         }
@@ -96,7 +96,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === MapObjectType.Fence
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnDown";
         }
@@ -104,7 +104,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === MapObjectType.Fence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnUp";
         }
@@ -112,10 +112,10 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === MapObjectType.Fence &&
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectType === ObjectType.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === MapObjectType.Fence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneColumnBoth";
         }
@@ -123,7 +123,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowRight";
         }
@@ -131,7 +131,7 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowLeft";
         }
@@ -139,10 +139,10 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence &&
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectType === ObjectType.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === MapObjectType.Fence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectType === ObjectType.Fence
         ) {
             this.activeMarkerKey = "oneRowBoth";
         }
