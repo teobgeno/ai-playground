@@ -30,8 +30,10 @@ export class MapManager {
     }
 
     public setPlotLandCoords(x: number, y: number, obj: MapObject | null) {
-        if(obj === null){
-            this.deleteMapObject(this.getPlotLandCoord(x, y))
+        if(obj === null) {
+            this.deleteMapObject(this.getPlotLandCoord(x, y) as MapObject)
+        } else {
+            this.addMapObject(obj)
         }
         this.plotLandCoords.set(x + "-" + y, obj);
     }
@@ -62,7 +64,7 @@ export class MapManager {
         }
     }
 
-    private deleteMapObject(obj: MapObject ) {
+    private deleteMapObject(obj: MapObject) {
         this.mapObjects = this.mapObjects.filter(x=> x.id !== obj.id);
     }
 
