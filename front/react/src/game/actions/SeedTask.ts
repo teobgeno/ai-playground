@@ -5,13 +5,12 @@ import { GridEngine } from "grid-engine";
 import { FarmLand } from "../farm/FarmLand";
 import { Seed } from "../farm/Seed";
 
-import {TaskStatus, Task} from "./types";
-import {Humanoid} from "../characters/Humanoid";
+import { TaskStatus, Task } from "./types";
+import { Humanoid } from "../characters/Humanoid";
 
-export class SeedTask extends BaseTask implements Task{
-
+export class SeedTask extends BaseTask implements Task {
     private mapManager: MapManager;
-    private landEntity:FarmLand;
+    private landEntity: FarmLand;
     private seed: Seed;
 
     constructor(
@@ -30,7 +29,6 @@ export class SeedTask extends BaseTask implements Task{
         this.status = TaskStatus.Initialized;
     }
 
-
     public start() {
         this.status =
             this.status === TaskStatus.Initialized
@@ -46,9 +44,6 @@ export class SeedTask extends BaseTask implements Task{
 
         this.gridEngine.stopMovement(this.character.getId());
         this.landEntity.rollbackCrop();
-
-        //this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
-        
         this.character.getInventory().addItem(this.seed);
 
         this.status = TaskStatus.Completed;
@@ -58,7 +53,15 @@ export class SeedTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY());
+                    this.shouldMoveCharacter(
+                        this.landEntity.getSprite().getX(),
+                        this.landEntity.getSprite().getY()
+                    )
+                        ? this.moveCharacter(
+                              this.landEntity.getSprite().getX(),
+                              this.landEntity.getSprite().getY()
+                          )
+                        : this.next();
                     break;
                 case 2:
                     this.plantSeed();
@@ -66,7 +69,6 @@ export class SeedTask extends BaseTask implements Task{
             }
         }
     };
-
 
     private plantSeed() {
         console.log("seed");

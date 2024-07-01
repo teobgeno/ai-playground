@@ -42,9 +42,6 @@ export class HarvestTask extends BaseTask implements Task{
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getId());
-
-        //this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: true });
-     
         this.status = TaskStatus.Completed;
     };
 
@@ -52,7 +49,7 @@ export class HarvestTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.moveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY());
+                    this.shouldMoveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY()) ? this.moveCharacter(this.landEntity.getSprite().getX(), this.landEntity.getSprite().getY()): this.next();
                     break;
                 case 2:
                     this.harvestCrop();
@@ -74,7 +71,6 @@ export class HarvestTask extends BaseTask implements Task{
                 if(crop) {
                     this.character.getInventory().addItem(GenericItem.clone(crop));
                     this.landEntity.endCrop();
-                    //this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 }
                 this.status = TaskStatus.Completed;
             }
