@@ -3,18 +3,20 @@ import { GenericItem } from "../items/GenericItem";
 import { InventoryItem } from "../items/InventoryItem";
 import { Storable } from "../items/types";
 import {
-    ObjectType,
+    ObjectId,
 } from "../core/types";
+import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
-    public objectType: ObjectType = ObjectType.Seed;
+    public objectId: ObjectId;
     public inventory: InventoryItem;
     public crop: GenericItem;
     public growthStageDuration: number;
     public currentGrowthStageFrame: number;
     public maxGrowthStageFrame: number;
 
-    constructor(id: number, title: string, inventory: InventoryItem) {
-        super(id, title);
+    constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
+        super(Utils.generateId(), title);
+        this.objectId = objectId;
         this.inventory = inventory;
         return this;
     }

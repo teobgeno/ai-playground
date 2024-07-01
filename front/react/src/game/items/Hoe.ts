@@ -2,11 +2,11 @@
 import { BaseItem } from "../items/BaseItem";
 import { InventoryItem } from "../items/InventoryItem";
 import { Storable } from "../items/types";
-import { ObjectType, ObjectId } from "../core/types";
+import { ObjectId } from "../core/types";
 
 export class Hoe extends BaseItem implements Storable {
     public inventory: InventoryItem;
-    public objectType: ObjectType = ObjectType.Tool;
+    public objectId: ObjectId = ObjectId.Hoe;
     public weedSpeed:number
 
     constructor(inventory: InventoryItem) {

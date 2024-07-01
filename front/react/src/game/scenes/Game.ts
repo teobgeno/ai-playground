@@ -393,7 +393,7 @@ export class Game extends Scene {
         )
 
         const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('🌽'));
-        const cornSeed = new Seed(ObjectId.CornSeeds, 'Corn Seeds', 
+        const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
             new InventoryItem()
             .setIsStackable(true)
             .setAmount(4).setIcon('🌱')

@@ -7,14 +7,14 @@ import { GenericItem } from "./GenericItem";
 import {
     CoordsData,
     MapObject,
-    ObjectType,
+    ObjectId,
 } from "../core/types";
 import { Cursor } from "../cursors/types";
 import { Utils } from "../core/Utils";
 
 export class Rock extends BaseItem implements MapObject {
     private mapManager: MapManager;
-    public objectType: ObjectType = ObjectType.Rock;
+    public objectId: ObjectId = ObjectId.Rock;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
@@ -37,7 +37,7 @@ export class Rock extends BaseItem implements MapObject {
         this.sprites[0].setDepth(1);
         this.destruct = new DestructItem();
         this.destruct.addResource(
-            new GenericItem(ObjectItems.Stone, "stone", new InventoryItem())
+            new GenericItem(ObjectId.Stone, "stone", new InventoryItem())
         );
 
         this.addSriteListeners();
@@ -71,7 +71,7 @@ export class Rock extends BaseItem implements MapObject {
     }
 
     private toggleCursorExecution = (canExecute: boolean) => {
-        if(this.activeCursor && typeof this.activeCursor?.getItem !== "undefined" && this.activeCursor?.getItem().id === ObjectItems.PickAxe) {
+        if(this.activeCursor && typeof this.activeCursor?.getItem !== "undefined" && this.activeCursor?.getItem().id === ObjectId.PickAxe) {
            if(typeof this.activeCursor?.setCanExecute !== "undefined") {
             this.activeCursor?.setCanExecute(canExecute);
            }

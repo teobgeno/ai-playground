@@ -13,32 +13,39 @@ export interface TextureData {
 }
 
 
-export enum ObjectType {
-    Stone = 1,
-    Wood = 2,
-    FencePart = 3,
-    Rock = 4,
-    PickAxe = 5,
-    Hoe = 6,
-    Corn = 7,
-    CornSeeds = 8,
-    Seed = 9,
-    Tree = 10,
-    Fence = 11,
-    Tool = 12,
-}
+// export enum ObjectType {
+//     Stone = 1,
+//     Wood = 2,
+//     FencePart = 3,
+//     Rock = 4,
+//     PickAxe = 5,
+//     Hoe = 6,
+//     Corn = 7,
+//     CornSeeds = 8,
+//     Seed = 9,
+//     Tree = 10,
+//     Fence = 11,
+//     Tool = 12,
+// }
 
 export enum ObjectId {
-    Corn = 1,
-    CornSeeds = 2,
-    Wood = 3,
-    Hoe = 4,
-    PickAxe = 5,
+    Hoe = 1,
+    PickAxe = 2,
+    FarmLand = 3,
+    Rock = 4,
+    Tree = 5,
+    Seed = 6,
+    Fence = 7,
+    Wood = 8,
+    Stone = 9,
+    Corn = 10,
+    CornSeed = 11,
+
 }
 
 export interface MapObject {
     id: number;
-    objectType: ObjectType;
+    objectId: ObjectId;
     sprites: Array<SpriteItem>;
     update?: (time: number) => void
     setExternalActiveCursor?: (cursor: Cursor | null) => void

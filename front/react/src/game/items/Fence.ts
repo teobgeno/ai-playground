@@ -6,13 +6,12 @@ import { GenericItem } from "./GenericItem";
 import {
     CoordsData,
     MapObject,
-    MapObjectType,
+    ObjectId,
     TextureData,
-    ObjectItems,
 } from "../core/types";
-
+import { Utils } from "../core/Utils";
 export class Fence extends BaseItem implements MapObject {
-    public objectType: MapObjectType = MapObjectType.Fence;
+    public objectId: ObjectId = ObjectId.Fence;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
 
@@ -23,7 +22,7 @@ export class Fence extends BaseItem implements MapObject {
         padX: number,
         padY: number
     ) {
-        super(ObjectItems.FencePart, "Fence Part");
+        super(Utils.generateId(), "Fence Part");
         this.sprites.push(new SpriteItem(
             scene,
             { texture: texture.texture, frame: texture.frame },
@@ -39,7 +38,7 @@ export class Fence extends BaseItem implements MapObject {
         this.sprites[0].setDepth(2);
         this.destruct = new DestructItem();
         this.destruct.addResource(
-            new GenericItem(ObjectItems.Wood, "wood", new InventoryItem())
+            new GenericItem(ObjectId.Wood, "wood", new InventoryItem())
         );
     }
 

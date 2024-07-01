@@ -3,11 +3,10 @@ import { SpriteItem } from "../items/SpriteItem";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
-import { CoordsData, MapObject, MapObjectType } from "../core/types";
-
+import { CoordsData, MapObject, ObjectId } from "../core/types";
 export class FarmLand implements MapObject {
     public id: number;
-    public objectType: MapObjectType = MapObjectType.FarmLand;
+    public objectId: ObjectId = ObjectId.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
