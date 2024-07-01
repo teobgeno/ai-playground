@@ -4,6 +4,7 @@ import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
 import { CoordsData, MapObject, ObjectId } from "../core/types";
+import { Utils } from "../core/Utils";
 export class FarmLand implements MapObject {
     public id: number;
     public objectId: ObjectId = ObjectId.FarmLand;
@@ -19,6 +20,7 @@ export class FarmLand implements MapObject {
         //https://github.com/Blockost/farming-rpg/blob/master/src/app/objects/crops/crop.ts
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
+        this.id = Utils.generateId();
         this.sprites.push(new SpriteItem(
             scene,
             { texture: "land", frame: 19 },
