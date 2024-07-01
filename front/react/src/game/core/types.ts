@@ -17,9 +17,10 @@ export enum MapObjectType {
     Rock = 2,
     Fence = 3,
     Tree = 4,
+    Seed = 5,
 }
 
-export enum ObjectItems {
+export enum ObjectType {
     Stone = 1,
     Wood = 2,
     FencePart = 3,
@@ -27,7 +28,8 @@ export enum ObjectItems {
     PickAxe = 5,
     Hoe = 6,
     Corn = 7,
-    CornSeeds = 8
+    CornSeeds = 8,
+    Seed = 9
 }
 
 export interface MapObject {

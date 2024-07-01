@@ -59,6 +59,24 @@ export class Tree extends BaseItem implements MapObject {
         );
         this.sprites[1].setDepth(3);
 
+
+        this.sprites.push(
+            new SpriteItem(
+                scene,
+                { texture: "map", frame: "tree_cut" },
+                {
+                    x: coords.x,
+                    y: coords.y,
+                    pixelX: coords.pixelX,
+                    pixelY: coords.pixelY,
+                },
+                16,
+                16
+            )
+        );
+        this.sprites[2].setDepth(1);
+        this.sprites[2].setAlpha(0);
+
         this.destruct = new DestructItem();
         this.destruct.addResource(
             new GenericItem(ObjectItems.Stone, "stone", new InventoryItem())
@@ -137,6 +155,9 @@ export class Tree extends BaseItem implements MapObject {
     public interactWithItem() {
         //item (axe), character -> addInventory
         console.log("destruct tree");
+        this.sprites[0].setAlpha(0);
+        this.sprites[1].setAlpha(0);
+        this.sprites[2].setAlpha(1);
     }
 
     public getDestruct() {

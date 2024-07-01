@@ -2,7 +2,11 @@ import { BaseItem } from "../items/BaseItem";
 import { GenericItem } from "../items/GenericItem";
 import { InventoryItem } from "../items/InventoryItem";
 import { Storable } from "../items/types";
+import {
+    ObjectType,
+} from "../core/types";
 export class Seed extends BaseItem implements Storable{
+    public objectType: ObjectType = ObjectType.Seed;
     public inventory: InventoryItem;
     public crop: GenericItem;
     public growthStageDuration: number;
