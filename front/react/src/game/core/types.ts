@@ -29,6 +29,7 @@ export interface TextureData {
 // }
 
 export enum ObjectId {
+    None = 0,
     Hoe = 1,
     PickAxe = 2,
     FarmLand = 3,

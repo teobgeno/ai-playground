@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { InventoryAction } from "./types";
 import { Storable } from "../items/types";
+import { ObjectId } from "../core/types";
 
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
@@ -30,12 +31,12 @@ export class CharacterInventory {
         this.updateItem(item, InventoryAction.Remove);
     }
 
-    public removeItemById(itemId: number, amount: number) {
-        const remItem = this.getItem(itemId);
+    public removeItemByObjectId(itemObjectId: ObjectId, amount: number) {
+        const remItem = this.getItem(itemObjectId);
         if (remItem) {
             remItem.getInventory().amount = remItem.getInventory().amount - amount;
             if (remItem.getInventory().amount === 0) {
-                const itemIndex = this.items.findIndex((x) => x?.id === itemId);
+                const itemIndex = this.items.findIndex((x) => x?.objectId === itemObjectId);
                 if (itemIndex > -1) {
                     this.items[itemIndex] = null;
                 }
@@ -54,8 +55,8 @@ export class CharacterInventory {
         }
     }
 
-    private getItem(itemId: number) {
-        return this.items.find((x) => x?.objectId === itemId);
+    private getItem(itemObjectId: ObjectId) {
+        return this.items.find((x) => x?.objectId === itemObjectId);
     }
     public getHotbarItems() {
         const ret: Array<Storable | null> = [];

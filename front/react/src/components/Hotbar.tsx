@@ -1,4 +1,5 @@
 import { Storable } from "../game/items/types";
+import { ObjectId } from "../game/core/types";
 import { InventoryItem } from "../game/items/InventoryItem";
 import { useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
@@ -11,7 +12,7 @@ export type HotbarProps = {
 };
 
 export function Hotbar(props: HotbarProps) {
-    const [activeItemId, setActiveItemId] = useState(0);
+    const [activeItemId, setActiveItemId] = useState<ObjectId>(ObjectId.None);
 
     useEffect(() => {
         EventBus.on("on-character-controller-esc-key", () => {
@@ -32,13 +33,13 @@ export function Hotbar(props: HotbarProps) {
     }, [props.items]);
 
     const handleSelectItem = (item: Storable) => {
-        if (activeItemId === item.id) {
+        if (activeItemId === item.objectId) {
             deSelectItem();
         } else {
             if (activeItemId) {
                 deSelectItem();
             }
-            setActiveItemId(item.id);
+            setActiveItemId(item.objectId);
             props.setActiveItem(item);
         }
 
@@ -51,9 +52,10 @@ export function Hotbar(props: HotbarProps) {
     };
 
     const deSelectItem = () => {
-        setActiveItemId(0);
+        setActiveItemId(ObjectId.None);
         props.setActiveItem({
             id: 0,
+            objectId: ObjectId.None,
             getInventory() {
                 return new InventoryItem()
             },
@@ -70,7 +72,7 @@ export function Hotbar(props: HotbarProps) {
                             <li
                                 key={i}
                                 className={
-                                    activeItemId === item.id
+                                    activeItemId === item.objectId
                                         ? "active_item"
                                         : ""
                                 }

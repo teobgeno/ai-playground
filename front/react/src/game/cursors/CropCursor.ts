@@ -9,7 +9,7 @@ import { SeedTask } from "../actions/SeedTask";
 import { Storable } from "../items/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
-import { MapObjectType } from "../core/types";
+import { ObjectId } from "../core/types";
 import { FarmLand } from "../farm/FarmLand";
 import { LandState } from "../farm/types";
 
@@ -56,7 +56,7 @@ export class CropCursor implements Cursor {
         const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            mapObj?.objectType === MapObjectType.FarmLand &&
+            mapObj?.objectId === ObjectId.FarmLand &&
             (mapObj as FarmLand)?.getState() !== LandState.PLANTED &&
             this.seed.getInventory().amount > 0 &&
             !this.gridEngine.isBlocked(
@@ -103,7 +103,7 @@ export class CropCursor implements Cursor {
                     cloneSeed.getInventory().amount = 1;
 
                     (landEntity as FarmLand).createCrop(cloneSeed);
-                    this.character.getInventory().removeItemById(cloneSeed.id, 1);
+                    this.character.getInventory().removeItemByObjectId(cloneSeed.objectId, 1);
                     console.log(cloneSeed)
           
                     const s = new SeedTask(
