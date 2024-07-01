@@ -125,12 +125,15 @@ export class Tree extends BaseItem implements MapObject {
 
     private addMapObject() {
 
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY(), this);
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY() - 1, this);
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY()-1, this);
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY()-1, this);
 
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY(), this);
         this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY(), this);
         this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY(), this);
 
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), 11, this);
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY() + 1, this);
         this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY() + 1, this);
         this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY() + 1, this);
     }
