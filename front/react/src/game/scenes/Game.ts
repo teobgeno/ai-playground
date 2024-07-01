@@ -247,16 +247,16 @@ export class Game extends Scene {
 
         const rockItem = new Rock(this, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
          this.mapManager.setPlotLandCoords(11, 16, rockItem);
-
         const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
-        this.mapManager.setPlotLandCoords(11, 10, treeItem);
+        
+        // this.mapManager.setPlotLandCoords(11, 10, treeItem);
 
-        this.mapManager.setPlotLandCoords(10, 10, treeItem);
-        this.mapManager.setPlotLandCoords(12, 10, treeItem);
+        // this.mapManager.setPlotLandCoords(10, 10, treeItem);
+        // this.mapManager.setPlotLandCoords(12, 10, treeItem);
 
-        this.mapManager.setPlotLandCoords(11, 11, treeItem);
-        this.mapManager.setPlotLandCoords(10, 11, treeItem);
-        this.mapManager.setPlotLandCoords(12, 11, treeItem);
+        // this.mapManager.setPlotLandCoords(11, 11, treeItem);
+        // this.mapManager.setPlotLandCoords(10, 11, treeItem);
+        // this.mapManager.setPlotLandCoords(12, 11, treeItem);
 
 
         return;
@@ -584,16 +584,11 @@ export class Game extends Scene {
 
     update(time: number, delta: number): void {
         this.hero.update(delta);
-
-        this.mapManager.getPlotLandCoords().forEach((item)=>{
+        for (const item of this.mapManager.getMapObjects()) {
             if (typeof item?.update !== "undefined") { 
                 item.update(time);
             }
-        })
-
-        // for (const land of this.mapManager.getPlotLandEntities()) {
-        //     land.update(time);
-        // }
+        }
     }
 
     setActiveItem(item: Storable) {

@@ -1,3 +1,4 @@
+import { MapManager } from "../MapManager";
 import { BaseItem } from "./BaseItem";
 import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
@@ -12,13 +13,15 @@ import {
 import { Cursor } from "../cursors/types";
 
 export class Rock extends BaseItem implements MapObject {
+    private mapManager: MapManager;
     public objectType: MapObjectType = MapObjectType.Rock;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
 
-    constructor(scene: Phaser.Scene, coords: CoordsData) {
+    constructor(scene: Phaser.Scene, mapManager: MapManager,coords: CoordsData) {
         super(ObjectItems.Rock, "Rock");
+        this.mapManager = mapManager;
         this.sprites.push(new SpriteItem(
             scene,
             { texture: "map", frame: "rock" },
@@ -37,6 +40,21 @@ export class Rock extends BaseItem implements MapObject {
             new GenericItem(ObjectItems.Stone, "stone", new InventoryItem())
         );
 
+        this.addSriteListeners();
+        this.addCollisions();
+        this.addMapObject();
+    }
+
+    private addCollisions() {
+
+        this.mapManager.setTileCollition(
+            this.sprites[0].getX(),
+            this.sprites[0].getY(),
+            true
+        );
+    }
+
+    private addSriteListeners() {
         this.sprites[0].getSprite().setInteractive({
             cursor: "cursor",
         });
@@ -44,13 +62,10 @@ export class Rock extends BaseItem implements MapObject {
         this.sprites[0].getSprite().on("pointerout",  () => this.toggleCursorExecution(false));
     }
 
-    // public static clone(orig: GenericItem) {
-    //     return new GenericItem(
-    //         orig.id,
-    //         orig.title,
-    //         InventoryItem.clone(orig.getInventory())
-    //     )
-    // }
+    private addMapObject() {
+        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY(), this);
+    }
+
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
     }

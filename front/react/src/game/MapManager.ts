@@ -54,7 +54,7 @@ export class MapManager {
     }
 
 
-    private getMapObjects() {
+    public  getMapObjects() {
         return this.mapObjects;
     }
 
