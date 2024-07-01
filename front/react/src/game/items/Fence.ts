@@ -11,7 +11,6 @@ import {
 } from "../core/types";
 import { Utils } from "../core/Utils";
 export class Fence extends BaseItem implements MapObject {
-    public objectId: ObjectId = ObjectId.Fence;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
 
@@ -22,7 +21,7 @@ export class Fence extends BaseItem implements MapObject {
         padX: number,
         padY: number
     ) {
-        super(Utils.generateId(), "Fence Part");
+        super(Utils.generateId(), ObjectId.Fence, "Fence Part");
         this.sprites.push(new SpriteItem(
             scene,
             { texture: texture.texture, frame: texture.frame },

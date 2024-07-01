@@ -7,7 +7,6 @@ import {
 } from "../core/types";
 import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
-    public objectId: ObjectId;
     public inventory: InventoryItem;
     public crop: GenericItem;
     public growthStageDuration: number;
@@ -15,7 +14,7 @@ export class Seed extends BaseItem implements Storable{
     public maxGrowthStageFrame: number;
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
-        super(Utils.generateId(), title);
+        super(Utils.generateId(), objectId, title);
         this.objectId = objectId;
         this.inventory = inventory;
         return this;

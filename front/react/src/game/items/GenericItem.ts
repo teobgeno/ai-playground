@@ -7,11 +7,10 @@ import {
 import { Utils } from "../core/Utils";
 
 export class GenericItem extends BaseItem implements Storable {
-    public objectId: ObjectId;
     public inventory: InventoryItem;
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
-        super(Utils.generateId(), title);
+        super(Utils.generateId(), objectId, title);
         this.objectId = objectId;
         this.inventory = inventory;
         return this;

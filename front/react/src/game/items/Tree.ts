@@ -13,7 +13,6 @@ import { Cursor } from "../cursors/types";
 import { Utils } from "../core/Utils";
 
 export class Tree extends BaseItem implements MapObject {
-    public objectId: ObjectId = ObjectId.Tree;
     private mapManager: MapManager;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
@@ -25,7 +24,7 @@ export class Tree extends BaseItem implements MapObject {
         coords: CoordsData
     ) {
         //TODO:: generate id ????
-        super(Utils.generateId(), "Tree");
+        super(Utils.generateId(), ObjectId.Tree, "Tree");
         this.mapManager = mapManager;
         this.sprites.push(
             new SpriteItem(
@@ -144,7 +143,7 @@ export class Tree extends BaseItem implements MapObject {
         if (
             this.activeCursor &&
             typeof this.activeCursor?.getItem !== "undefined" &&
-            this.activeCursor?.getItem().id === ObjectItems.PickAxe
+            this.activeCursor?.getItem().objectId === ObjectId.PickAxe
         ) {
             if (typeof this.activeCursor?.setCanExecute !== "undefined") {
                 this.activeCursor?.setCanExecute(canExecute);

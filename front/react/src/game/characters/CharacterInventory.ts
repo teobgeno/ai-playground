@@ -9,7 +9,7 @@ export class CharacterInventory {
     constructor() {}
 
     public addItem(item: Storable) {
-        if (!this.getItem(item.id) || (item && !item.getInventory().isStackable)) {
+        if (!this.getItem(item.objectId) || (item && !item.getInventory().isStackable)) {
             //find next available slot
             for (let i = 0; i < this.inventorySize; i++) {
                 if (
@@ -45,7 +45,7 @@ export class CharacterInventory {
     }
 
     private updateItem(item: Storable, action: InventoryAction) {
-        const updItem = this.getItem(item.id);
+        const updItem = this.getItem(item.objectId);
         if (updItem && action === InventoryAction.Add) {
             updItem.getInventory().amount += item.getInventory().amount;
         }
@@ -55,7 +55,7 @@ export class CharacterInventory {
     }
 
     private getItem(itemId: number) {
-        return this.items.find((x) => x?.id === itemId);
+        return this.items.find((x) => x?.objectId === itemId);
     }
     public getHotbarItems() {
         const ret: Array<Storable | null> = [];

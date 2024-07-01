@@ -6,11 +6,10 @@ import { ObjectId } from "../core/types";
 
 export class Hoe extends BaseItem implements Storable {
     public inventory: InventoryItem;
-    public objectId: ObjectId = ObjectId.Hoe;
     public weedSpeed:number
 
     constructor(inventory: InventoryItem) {
-        super(ObjectId.Hoe, 'Hoe');
+        super(ObjectId.Hoe, ObjectId.Hoe, 'Hoe');
         this.inventory = inventory;
         this.weedSpeed = 1000;
     }

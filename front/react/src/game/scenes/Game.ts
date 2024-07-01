@@ -405,7 +405,7 @@ export class Game extends Scene {
         .setCrop(seedCrop);
        
 
-        const fencePart = new GenericItem(18, 'Fence', 
+        const fencePart = new GenericItem(ObjectId.Fence, 'Fence', 
             new InventoryItem().setIsStackable(true)
             .setAmount(4)
             .setIcon('𓊐')

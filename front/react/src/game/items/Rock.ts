@@ -14,13 +14,12 @@ import { Utils } from "../core/Utils";
 
 export class Rock extends BaseItem implements MapObject {
     private mapManager: MapManager;
-    public objectId: ObjectId = ObjectId.Rock;
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
 
     constructor(scene: Phaser.Scene, mapManager: MapManager,coords: CoordsData) {
-        super(Utils.generateId(), "Rock");
+        super(Utils.generateId(), ObjectId.Rock, "Rock");
         this.mapManager = mapManager;
         this.sprites.push(new SpriteItem(
             scene,
@@ -71,7 +70,7 @@ export class Rock extends BaseItem implements MapObject {
     }
 
     private toggleCursorExecution = (canExecute: boolean) => {
-        if(this.activeCursor && typeof this.activeCursor?.getItem !== "undefined" && this.activeCursor?.getItem().id === ObjectId.PickAxe) {
+        if(this.activeCursor && typeof this.activeCursor?.getItem !== "undefined" && this.activeCursor?.getItem().objectId === ObjectId.PickAxe) {
            if(typeof this.activeCursor?.setCanExecute !== "undefined") {
             this.activeCursor?.setCanExecute(canExecute);
            }
