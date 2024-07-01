@@ -25,13 +25,15 @@ export enum ObjectType {
     Seed = 9,
     Tree = 10,
     Fence = 11,
+    Tool = 12,
 }
 
 export enum ObjectId {
     Corn = 1,
     CornSeeds = 2,
     Wood = 3,
-    Hoe = 4
+    Hoe = 4,
+    PickAxe = 5,
 }
 
 export interface MapObject {
