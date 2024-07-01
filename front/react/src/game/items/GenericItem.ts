@@ -18,7 +18,7 @@ export class GenericItem extends BaseItem implements Storable {
 
     public static clone(orig: GenericItem) {
         return new GenericItem(
-            orig.id,
+            orig.objectId,
             orig.title,
             InventoryItem.clone(orig.getInventory())
         )

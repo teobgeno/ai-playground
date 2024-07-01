@@ -26,7 +26,7 @@ export function Hotbar(props: HotbarProps) {
 
     useEffect(() => {
         console.log("change props");
-        const activeItem = props.items.find((x) => x?.id === activeItemId);
+        const activeItem = props.items.find((x) => x?.objectId === activeItemId);
         if (!activeItem) {
             deSelectItem();
         }
