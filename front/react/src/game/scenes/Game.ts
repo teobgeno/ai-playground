@@ -24,7 +24,7 @@ import { Tree } from "../items/Tree";
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
 import { CursorType } from "../cursors/types";
-import { ObjectItems } from "../core/types";
+import { MapObject, ObjectItems } from "../core/types";
 // type gridEngineConfigChar = {
 //     id?:string,
 //     sprite?:Physics.Arcade.Sprite
@@ -628,13 +628,13 @@ export class Game extends Scene {
         // }
     }
 
-    addPlayerTask(task: string, params : Land) {
+    addPlayerTask(task: string, params : MapObject) {
         console.log('add harvest task')
         const h = new HarvestTask(
             this.mapManager,
             this.gridEngine,
             this.hero,
-            params,
+            params as FarmLand,
         );
         this.hero.addTask(h);
     }

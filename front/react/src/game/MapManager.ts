@@ -3,6 +3,7 @@ import { MapObject } from "./core/types";
 
 export class MapManager {
     private map: Tilemaps.Tilemap;
+    private mapObjects: Array<MapObject> = [];
     private plotLandCoords: Map<string, MapObject | null> = new Map();
     // private plotLandCoords: Map<string, LandProperties> = new Map();
     // private plotLandEntities: Array<FarmLand> = [];
@@ -29,6 +30,9 @@ export class MapManager {
     }
 
     public setPlotLandCoords(x: number, y: number, obj: MapObject | null) {
+        if(obj === null){
+            this.deleteMapObject(this.getPlotLandCoord(x, y))
+        }
         this.plotLandCoords.set(x + "-" + y, obj);
     }
 
@@ -45,6 +49,21 @@ export class MapManager {
         if (tile) {
             tile.properties = { ge_collide: collide };
         }
+    }
+
+
+    private getMapObjects() {
+        return this.mapObjects;
+    }
+
+    private addMapObject(obj: MapObject ) {
+        if(!this.mapObjects.find(x=> x.id === obj.id)) {
+            this.mapObjects.push(obj)
+        }
+    }
+
+    private deleteMapObject(obj: MapObject ) {
+        this.mapObjects = this.mapObjects.filter(x=> x.id !== obj.id);
     }
 
     // public updatePlotLandCoords(key:string, entity: LandProperties) {

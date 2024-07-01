@@ -6,6 +6,7 @@ import { LandState, LandElements } from "./types";
 import { CoordsData, MapObject, MapObjectType } from "../core/types";
 
 export class FarmLand implements MapObject {
+    public id: number;
     public objectType: MapObjectType = MapObjectType.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;

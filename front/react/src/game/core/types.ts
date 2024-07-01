@@ -31,6 +31,7 @@ export enum ObjectItems {
 }
 
 export interface MapObject {
+    id: number;
     objectType: MapObjectType;
     sprites: Array<SpriteItem>;
     update?: (time: number) => void
