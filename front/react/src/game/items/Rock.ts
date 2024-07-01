@@ -80,6 +80,7 @@ export class Rock extends BaseItem implements MapObject {
     public interactWithItem() {
         //item (axe), character -> addInventory
         console.log('destruct stone')
+        this.sprites[0].setAlpha(0);
     }
 
     public getDestruct() {
