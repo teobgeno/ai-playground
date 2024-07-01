@@ -22,7 +22,7 @@ export class Seed extends BaseItem implements Storable{
 
     public static clone(orig: Seed) {
         return new Seed(
-            orig.id,
+            orig.objectId,
             orig.title,
             InventoryItem.clone(orig.getInventory())
         )

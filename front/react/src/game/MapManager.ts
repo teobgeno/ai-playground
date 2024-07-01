@@ -36,6 +36,7 @@ export class MapManager {
             this.addMapObject(obj);
         }
         this.plotLandCoords.set(x + "-" + y, obj);
+        console.log( this.mapObjects)
     }
 
     public getPlotLandCoord(x: number, y: number) {
