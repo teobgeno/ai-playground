@@ -9,7 +9,7 @@ export type ChatBoxMessage = {
 };
 
 export const ChatWidget = () => {
-    const [islVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [messages, setMessages] = useState<ChatBoxMessage[]>([]);
     const [playerMessage, setPlayerMessage] = useState("");
 
@@ -75,7 +75,7 @@ export const ChatWidget = () => {
 
     return (
         <>
-            <section className={islVisible ? "avenue-messenger" : "hidden"}>
+            <section className={isVisible ? "avenue-messenger" : "hidden"}>
                 <div className="menu">
                     <div className="items">
                         <span>

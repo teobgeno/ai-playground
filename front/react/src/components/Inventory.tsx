@@ -11,17 +11,19 @@ export const Inventory = () => {
 
     useEffect(() => {
         EventBus.on("on-character-controller-i-key", () => {
-            toggleVisibility();
+            console.log(isVisible)
+            setIsVisible(true);
+        });
+
+        EventBus.on("on-character-controller-esc-key", () => {
+            console.log(isVisible)
+            setIsVisible(false);
         });
 
         return () => {
             EventBus.removeListener("on-character-controller-i-key");
         };
     }, []);
-
-    const toggleVisibility = () => {
-        setIsVisible( isVisible ? false : true)
-    }
 
     return (
         <>
