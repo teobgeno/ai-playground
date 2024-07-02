@@ -381,7 +381,7 @@ export class Game extends Scene {
       
         const hoe = new Hoe(
             new InventoryItem()
-            .setIcon('🧹')
+            .setIcon('https://assets.codepen.io/7237686/iridium_hoe.svg?format=auto')
             .setIsStackable(false)
             .setAmount(1)
             .setCursorType(CursorType.HOE)
@@ -389,17 +389,17 @@ export class Game extends Scene {
 
         const pickAxe = new PickAxe(
             new InventoryItem()
-            .setIcon('⛏️')
+            .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')
             .setIsStackable(false)
             .setAmount(1)
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('🌽'));
+        const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
         const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
             new InventoryItem()
             .setIsStackable(true)
-            .setAmount(4).setIcon('🌱')
+            .setAmount(4).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
             .setCursorType(CursorType.CROP)
         )
         .setGrowthStageDuration(1000)
@@ -411,7 +411,7 @@ export class Game extends Scene {
         const fencePart = new GenericItem(ObjectId.Fence, 'Fence', 
             new InventoryItem().setIsStackable(true)
             .setAmount(4)
-            .setIcon('𓊐')
+            .setIcon('https://stardewvalleywiki.com/mediawiki/images/1/1e/Wood_Fence.png')
             .setCursorType(CursorType.FENCE)
         );
 

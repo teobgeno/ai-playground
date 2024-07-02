@@ -63,8 +63,8 @@ function App() {
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={hotbarItems} setActiveItem={setActiveItem} />
             </div>
-            <ChatWidget items={inventoryItems}/>
-            <Inventory/>
+            <ChatWidget />
+            <Inventory items={inventoryItems}/>
         </div>
     );
 }

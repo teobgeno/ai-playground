@@ -78,7 +78,9 @@ export function Hotbar(props: HotbarProps) {
                                     href="#"
                                     onClick={() => handleSelectItem(item)}
                                 >
-                                    <i className="icon-home">{item.getInventory().icon}</i>
+                                    <div className="icon-home" style={{width:'75%', display:"flex", alignItems:"center"}}>
+                                        <img src={item.getInventory().icon} />
+                                    </div>
 
                                     {item.getInventory().isStackable && (
                                         <>

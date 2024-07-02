@@ -7,7 +7,7 @@ export type InventoryProps = {
     items: Array<Storable | null>;
 };
 
-export const Inventory = () => {
+export const Inventory = (props: InventoryProps) => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
@@ -97,6 +97,8 @@ export const Inventory = () => {
                 <div className="menu__content">
                     <div className="menu__content__inventory">
                         <div className="inventory--hotbar">
+                          
+
                             <div className="items__container">
                                 <span className="items__number items__number--first">
                                     1
@@ -316,6 +318,77 @@ export const Inventory = () => {
                             </div>
                         </div>
                         <div className="inventory--rows">
+
+                            {props.items.map((item, i) => {
+                                if (item) {
+                                    return (
+                                            
+                                            <div className="items__container">
+                                            <div
+                                                className="item__container"
+                                                draggable="true"
+                                            >
+                                                <img
+                                                    className="item__img"
+                                                    src={item.getInventory().icon}
+                                                    alt="triple_shot_espresso"
+                                                    draggable="false"
+                                                />
+
+                                                
+                                                {item.getInventory().isStackable && (
+                                                    <>
+                                                       <span className="item__quantity">{item.getInventory().amount}</span>
+                                                    </>
+                                                )}
+
+                                                
+                                                <div
+                                                    className="item__tooltip"
+                                                    draggable="false"
+                                                >
+                                                    <div className="item__tooltip__title">
+                                                        <h2>Triple Shot Espresso</h2>
+                                                        <h3 className="item__tooltip__category item__tooltip__category--cooking">
+                                                            Cooking
+                                                        </h3>
+                                                    </div>
+                                                    <div className="item__tooltip__info">
+                                                        It's more potent than regular
+                                                        coffee!
+                                                        <ul className="health">
+                                                            <li>
+                                                                <img
+                                                                    src="https://assets.codepen.io/7237686/energy.svg?format=auto"
+                                                                    alt="energy"
+                                                                />
+                                                                +8 Energy
+                                                            </li>
+                                                            <li>
+                                                                <img
+                                                                    src="https://assets.codepen.io/7237686/health.svg?format=auto"
+                                                                    alt="health"
+                                                                />
+                                                                +3 Health
+                                                            </li>
+                                                            <li>
+                                                                <img
+                                                                    src="https://assets.codepen.io/7237686/speed.svg?format=auto"
+                                                                    alt="speed"
+                                                                />
+                                                                +1 Speed
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        )
+                                }
+                            
+                            })}
+
+
                             <div className="items__container">
                                 <div
                                     className="item__container"
