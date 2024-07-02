@@ -15,17 +15,19 @@ export type Message = {
 };
 
 function App() {
-    const [hotbarItems, setHotbarItems] = useState<Array<Storable | null>>([]);
-    const [inventoryItems, setInventoryItems] = useState<Array<Storable | null>>([]);
+    const [inventoryHotbarItems, setInventoryHotbarItems] = useState<Array<Storable | null>>([]);
+    const [inventoryRestItems, setInventoryRestItems] = useState<Array<Storable | null>>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
 
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Phaser.Scene) => {
-        setHotbarItems((scene as Game).getHotbarItems());
-        setInventoryItems((scene as Game).getInventoryItems());
+        setInventoryHotbarItems((scene as Game).getInventoryItems(true));
+        setInventoryRestItems((scene as Game).getInventoryItems(false));
     };
+
+ 
 
     const setActiveItem = (item: Storable) => {
         if (phaserRef.current) {
@@ -40,7 +42,8 @@ function App() {
         EventBus.on("on-character-inventory-update", () => {
             const scene = phaserRef?.current?.scene as Game;
             if(scene) {
-                setHotbarItems((scene as Game).getHotbarItems());
+                setInventoryHotbarItems((scene as Game).getInventoryItems(true));
+                setInventoryRestItems((scene as Game).getInventoryItems(false));
             }
         });
 
@@ -61,10 +64,10 @@ function App() {
         <div id="app">
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-                <Hotbar items={hotbarItems} setActiveItem={setActiveItem} />
+                <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
             </div>
             <ChatWidget />
-            <Inventory items={inventoryItems}/>
+            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems}/>
         </div>
     );
 }

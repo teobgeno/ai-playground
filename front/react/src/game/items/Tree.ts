@@ -160,7 +160,7 @@ export class Tree extends BaseItem implements MapObject {
         this.sprites[0].setAlpha(0);
         this.sprites[1].setAlpha(0);
         this.sprites[2].setAlpha(1);
-        this.toggleCollisions(false);
+        //this.toggleCollisions(false);
     }
 
     public getDestruct() {

@@ -4,7 +4,8 @@ import { Storable } from "../game/items/types";
 import "./Inventory.css";
 
 export type InventoryProps = {
-    items: Array<Storable | null>;
+    hotbarItems: Array<Storable | null>;
+    restItems: Array<Storable | null>;
 };
 
 export const Inventory = (props: InventoryProps) => {
@@ -97,6 +98,48 @@ export const Inventory = (props: InventoryProps) => {
                 <div className="menu__content">
                     <div className="menu__content__inventory">
                         <div className="inventory--hotbar">
+                            
+                        {props.hotbarItems.map((item, i) => {
+                            if (item) {
+                                return (
+                                    <div className="items__container">
+                                        <span className="items__number items__number--first">
+                                            {i + 1}
+                                        </span>
+                                        <div
+                                            className="item__container"
+                                            draggable="true"
+                                        >
+                                            <img
+                                                className="item__img"
+                                                src={item.getInventory().icon}
+                                                alt="infinity_blade"
+                                                draggable="false"
+                                            />
+                                            <div
+                                                className="item__tooltip"
+                                                draggable="false"
+                                            >
+                                                <div className="item__tooltip__title">
+                                                    <h2>Infinity Blade</h2>
+                                                </div>
+                                                <div className="item__tooltip__info">
+                                                    The true form of the Galaxy Sword
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                )
+                            } else {
+                                return (
+                                <div className="items__container">
+                                    <span className="items__number"></span>
+                                    <div className="item__container" />
+                                </div>
+                                        
+                                )
+                            }
+                        })}
                           
 
                             <div className="items__container">
@@ -296,30 +339,10 @@ export const Inventory = (props: InventoryProps) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="items__container">
-                                <span className="items__number">8</span>
-                                <div className="item__container" />
-                            </div>
-                            <div className="items__container">
-                                <span className="items__number">9</span>
-                                <div className="item__container" />
-                            </div>
-                            <div className="items__container">
-                                <span className="items__number">0</span>
-                                <div className="item__container" />
-                            </div>
-                            <div className="items__container">
-                                <span className="items__number">-</span>
-                                <div className="item__container" />
-                            </div>
-                            <div className="items__container">
-                                <span className="items__number">=</span>
-                                <div className="item__container" />
-                            </div>
                         </div>
                         <div className="inventory--rows">
 
-                            {props.items.map((item, i) => {
+                            {props.restItems.map((item) => {
                                 if (item) {
                                     return (
                                             
@@ -384,8 +407,13 @@ export const Inventory = (props: InventoryProps) => {
                                             </div>
                                         </div>
                                     )
+                                } else {
+                                    return (
+                                        <div className="items__container">
+                                            <div className="item__container" />
+                                        </div>
+                                    )
                                 }
-                            
                             })}
 
 

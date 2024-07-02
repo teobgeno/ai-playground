@@ -71,6 +71,14 @@ export class CharacterInventory {
         return ret;
     }
 
+    public getRestItems() {
+        const ret: Array<Storable | null> = [];
+        for (let i =  this.hotbarSize; i < this.inventorySize; i++) {
+            ret.push(this.items[i]);
+        }
+        return ret;
+    }
+
     
 
     //id
