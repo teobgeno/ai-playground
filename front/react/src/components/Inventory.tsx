@@ -1,9 +1,31 @@
+import { useState, useEffect } from "react";
+import { EventBus } from "../game/EventBus";
 import "./Inventory.css";
 
+// export type InventoryProps = {
+//     items: Array<Storable | null>;
+// };
+
 export const Inventory = () => {
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
+    useEffect(() => {
+        EventBus.on("on-character-controller-i-key", () => {
+            toggleVisibility();
+        });
+
+        return () => {
+            EventBus.removeListener("on-character-controller-i-key");
+        };
+    }, []);
+
+    const toggleVisibility = () => {
+        setIsVisible( isVisible ? false : true)
+    }
+
     return (
         <>
-            <div className="menu">
+            <div className="menu" style={{display : isVisible ? 'flex': 'none'}}>
                 <div className="menu__tabs__container">
                     <div className="btn menu__tab menu__tab--active disabled">
                         <img

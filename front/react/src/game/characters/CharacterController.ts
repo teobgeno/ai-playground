@@ -11,6 +11,7 @@ export class CharacterController {
     private keyS: Input.Keyboard.Key;
     private keyD: Input.Keyboard.Key;
     private keyESC: Input.Keyboard.Key;
+    private keyI: Input.Keyboard.Key;
     private stateMachine: StateMachine;
     private id: string;
 
@@ -30,6 +31,7 @@ export class CharacterController {
             this.keyS = this.scene.input.keyboard.addKey("S", false);
             this.keyD = this.scene.input.keyboard.addKey("D", false);
             this.keyESC = this.scene.input.keyboard.addKey("ESC", false);
+            this.keyI = this.scene.input.keyboard.addKey("I", false);
         }
 
         this.stateMachine
@@ -55,6 +57,10 @@ export class CharacterController {
         if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
             EventBus.emit("on-character-controller-esc-key", {});
             console.log("escape");
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.keyI)) {
+            EventBus.emit("on-character-controller-i-key", {});
         }
     }
 
