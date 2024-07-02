@@ -11,22 +11,24 @@ export const Inventory = () => {
 
     useEffect(() => {
         EventBus.on("on-character-controller-i-key", () => {
-            setIsVisible(true);
+            toggleVisibility();
         });
 
         EventBus.on("on-character-controller-esc-key", () => {
-            console.log(isVisible)
             setIsVisible(false);
         });
 
-    }, []);
+    }, [isVisible]);
+
+    const toggleVisibility = () => {
+        setIsVisible(isVisible ? false : true);
+    };
 
     return (
         <>
             <div className="menu" style={{display : isVisible ? 'flex': 'none'}}>
                 <div className="menu__tabs__container">
                     <div className="btn menu__tab menu__tab--active disabled">
-                        {isVisible.toString()}
                         <img
                             src="https://assets.codepen.io/7237686/backpack.svg?format=auto"
                             className="menu__img"
