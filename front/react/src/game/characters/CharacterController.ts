@@ -56,7 +56,6 @@ export class CharacterController {
     private gameControllsUpdate() {
         if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
             EventBus.emit("on-character-controller-esc-key", {});
-            console.log("escape");
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keyI)) {

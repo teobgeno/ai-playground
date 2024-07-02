@@ -43,6 +43,7 @@ https://phaser.discourse.group/t/how-to-correctly-switch-back-and-forth-between-
                     "Ground"
     );
 find landEntity directly from pointer x, y check ExternalInteractionCursor
+- when chat disable inventory button
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false
