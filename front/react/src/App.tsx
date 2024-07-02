@@ -5,6 +5,7 @@ import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
+import { Inventory } from "./components/Inventory";
 import "./App.css";
 
 export type Message = {
@@ -57,6 +58,7 @@ function App() {
                 <Hotbar items={hotbarItems} setActiveItem={setActiveItem} />
             </div>
             <ChatWidget />
+            <Inventory/>
         </div>
     );
 }
