@@ -11,7 +11,6 @@ export const Inventory = () => {
 
     useEffect(() => {
         EventBus.on("on-character-controller-i-key", () => {
-            console.log(isVisible)
             setIsVisible(true);
         });
 
@@ -24,7 +23,7 @@ export const Inventory = () => {
 
     return (
         <>
-            <div className="menu" style={{display : isVisible ? 'flex': 'flex'}}>
+            <div className="menu" style={{display : isVisible ? 'flex': 'none'}}>
                 <div className="menu__tabs__container">
                     <div className="btn menu__tab menu__tab--active disabled">
                         {isVisible.toString()}
