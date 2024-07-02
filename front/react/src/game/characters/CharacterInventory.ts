@@ -58,6 +58,11 @@ export class CharacterInventory {
     private getItem(itemObjectId: ObjectId) {
         return this.items.find((x) => x?.objectId === itemObjectId);
     }
+
+    public getAllItems() {
+        return this.items;
+    }
+
     public getHotbarItems() {
         const ret: Array<Storable | null> = [];
         for (let i = 0; i < this.hotbarSize; i++) {
@@ -65,6 +70,8 @@ export class CharacterInventory {
         }
         return ret;
     }
+
+    
 
     //id
     //isStackable

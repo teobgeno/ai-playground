@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
+import { Storable } from "../game/items/types";
 import "./Inventory.css";
 
-// export type InventoryProps = {
-//     items: Array<Storable | null>;
-// };
+export type InventoryProps = {
+    items: Array<Storable | null>;
+};
 
 export const Inventory = () => {
     const [isVisible, setIsVisible] = useState<boolean>(false);

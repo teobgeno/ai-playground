@@ -618,11 +618,10 @@ export class Game extends Scene {
 
     getHotbarItems() {
         return this.hero.getInventory().getHotbarItems();
-        // if(this.activeTool && this.activeTool === tool) {
-        //     this.activeTool = 0;
-        // } else {
-        //     this.activeTool = tool;
-        // }
+    }
+
+    getInventoryItems() {
+        return this.hero.getInventory().getAllItems();
     }
 
     addPlayerTask(task: string, params : MapObject) {

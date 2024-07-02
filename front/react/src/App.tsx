@@ -16,6 +16,7 @@ export type Message = {
 
 function App() {
     const [hotbarItems, setHotbarItems] = useState<Array<Storable | null>>([]);
+    const [inventoryItems, setInventoryItems] = useState<Array<Storable | null>>([]);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -23,6 +24,7 @@ function App() {
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Phaser.Scene) => {
         setHotbarItems((scene as Game).getHotbarItems());
+        setInventoryItems((scene as Game).getInventoryItems());
     };
 
     const setActiveItem = (item: Storable) => {
@@ -61,7 +63,7 @@ function App() {
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={hotbarItems} setActiveItem={setActiveItem} />
             </div>
-            <ChatWidget />
+            <ChatWidget items={inventoryItems}/>
             <Inventory/>
         </div>
     );
