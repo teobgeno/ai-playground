@@ -320,7 +320,7 @@ export const Inventory = (props: InventoryProps) => {
                         <div className="inventory--rows">
 
                             {props.items.map((item, i) => {
-                                if (item) { 
+                                if (item) {
                                     return (
                                             
                                             <div className="items__container">
