@@ -20,16 +20,14 @@ export const Inventory = () => {
             setIsVisible(false);
         });
 
-        return () => {
-            EventBus.removeListener("on-character-controller-i-key");
-        };
     }, []);
 
     return (
         <>
-            <div className="menu" style={{display : isVisible ? 'flex': 'none'}}>
+            <div className="menu" style={{display : isVisible ? 'flex': 'flex'}}>
                 <div className="menu__tabs__container">
                     <div className="btn menu__tab menu__tab--active disabled">
+                        {isVisible.toString()}
                         <img
                             src="https://assets.codepen.io/7237686/backpack.svg?format=auto"
                             className="menu__img"

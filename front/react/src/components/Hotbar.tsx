@@ -19,9 +19,6 @@ export function Hotbar(props: HotbarProps) {
             deSelectItem();
         });
 
-        return () => {
-            EventBus.removeListener("on-character-controller-esc-key");
-        };
     }, []);
 
     useEffect(() => {

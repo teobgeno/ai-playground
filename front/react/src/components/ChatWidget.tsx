@@ -39,11 +39,6 @@ export const ChatWidget = () => {
             setIsVisible(false);
         });
 
-        return () => {
-            EventBus.removeListener("on-chat-start-conversation");
-            EventBus.removeListener("on-chat-add-message");
-            EventBus.removeListener("on-chat-end-conversation");
-        };
     }, []);
 
    

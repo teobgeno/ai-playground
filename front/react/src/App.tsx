@@ -44,6 +44,10 @@ function App() {
 
         return () => {
             EventBus.removeListener("on-character-inventory-update");
+            EventBus.removeListener("on-character-controller-i-key");
+            EventBus.removeListener("on-chat-start-conversation");
+            EventBus.removeListener("on-chat-add-message");
+            EventBus.removeListener("on-chat-end-conversation");
         };
     }, []);
 
