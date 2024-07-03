@@ -42,10 +42,7 @@ export class Fence extends BaseItem implements MapObject {
         ));
         this.sprites[0].setDepth(2);
         this.destruct = new DestructItem();
-        this.destruct.addResource(
-            new GenericItem(ObjectId.Wood, "wood", new InventoryItem())
-        );
-
+        
         this.addSriteListeners();
         this.toggleCollisions(true);
         this.addMapObject();
