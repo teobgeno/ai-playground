@@ -89,7 +89,8 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + pointerTileY)?.objectId === ObjectId.Fence
+                .get(pointerTileX + "-" + pointerTileY)?.objectId ===
+            ObjectId.Fence
         ) {
             hasFence = true;
         }
@@ -98,7 +99,8 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectId === ObjectId.Fence
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectId ===
+            ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneColumnDown";
         }
@@ -106,7 +108,8 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectId === ObjectId.Fence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectId ===
+            ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneColumnUp";
         }
@@ -114,10 +117,12 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectId === ObjectId.Fence &&
+                .get(pointerTileX + "-" + (pointerTileY - 1))?.objectId ===
+                ObjectId.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectId === ObjectId.Fence
+                .get(pointerTileX + "-" + (pointerTileY + 1))?.objectId ===
+                ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneColumnBoth";
         }
@@ -125,7 +130,8 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectId === ObjectId.Fence
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectId ===
+            ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneRowRight";
         }
@@ -133,7 +139,8 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectId === ObjectId.Fence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectId ===
+            ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneRowLeft";
         }
@@ -141,10 +148,12 @@ export class FenceCursor implements Cursor {
         if (
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectId === ObjectId.Fence &&
+                .get(pointerTileX - 1 + "-" + pointerTileY)?.objectId ===
+                ObjectId.Fence &&
             this.mapManager
                 .getPlotLandCoords()
-                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectId === ObjectId.Fence
+                .get(pointerTileX + 1 + "-" + pointerTileY)?.objectId ===
+                ObjectId.Fence
         ) {
             this.activeMarkerKey = "oneRowBoth";
         }
@@ -158,7 +167,8 @@ export class FenceCursor implements Cursor {
         this.canExecute = false;
         if (
             this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY) === null &&
+            this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY) ===
+                null &&
             !this.gridEngine.isBlocked(
                 { x: pointerTileX, y: pointerTileY },
                 "CharLayer"
@@ -178,7 +188,6 @@ export class FenceCursor implements Cursor {
             );
 
             if (tileGround) {
-                
                 let padX = 16;
                 let padY = 16;
 
@@ -202,13 +211,29 @@ export class FenceCursor implements Cursor {
                 const fenceEntity = new Fence(
                     this.scene,
                     this.mapManager,
-                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY},
-                    { texture: 'fence', frame: this.activeMarker.frame.customData.filename },
+                    {
+                        x: tileGround.x,
+                        y: tileGround.y,
+                        pixelX: tileGround.pixelX,
+                        pixelY: tileGround.pixelY,
+                    },
+                    {
+                        texture: "fence",
+                        frame: this.activeMarker.frame.customData.filename,
+                    },
                     padX,
                     padY
                 );
 
-                fenceEntity.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('https://assets.codepen.io/7237686/wood.svg?format=auto')));
+                fenceEntity.setResource(
+                    new GenericItem(
+                        ObjectId.Wood,
+                        "wood",
+                        new InventoryItem().setIcon(
+                            "https://assets.codepen.io/7237686/wood.svg?format=auto"
+                        )
+                    )
+                );
 
                 //this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
                 //tileGround.properties = { ge_collide: true };
