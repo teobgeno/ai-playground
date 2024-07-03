@@ -102,7 +102,7 @@ export const Inventory = (props: InventoryProps) => {
                         {props.hotbarItems.map((item, i) => {
                             if (item) {
                                 return (
-                                    <div className="items__container">
+                                    <div className="items__container" key={item.id}>
                                         <span className="items__number items__number--first">
                                             {i + 1}
                                         </span>
@@ -346,7 +346,7 @@ export const Inventory = (props: InventoryProps) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container">
+                                            <div className="items__container"  key={item.id}>
                                             <div
                                                 className="item__container"
                                                 draggable="true"

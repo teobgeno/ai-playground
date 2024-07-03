@@ -62,8 +62,7 @@ export class Fence extends BaseItem implements MapObject {
             collide
         );
     }
-
-   
+    
     private addSriteListeners() {
         this.sprites[0].getSprite().setInteractive({
             cursor: "cursor",
@@ -113,6 +112,7 @@ export class Fence extends BaseItem implements MapObject {
         this.sprites[0].setAlpha(0);
         this.toggleCollisions(false);
         this.removeMapObject();
+        this.sprites[0].destroy();
     }
 
     public getDestruct() {
