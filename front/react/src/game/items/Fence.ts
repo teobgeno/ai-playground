@@ -70,8 +70,13 @@ export class Fence extends BaseItem implements MapObject {
         this.sprites[0]
             .getSprite()
             .on("pointerout", () => this.toggleCursorExecution(false));
+        this.sprites[0]
+            .getSprite()
+            .on("pointerdown", (pointer) => this.interactDoor(pointer));
     }
-
+    private interactDoor(pointer) {
+        console.log(pointer.rightButtonDown())
+    }
     private addMapObject() {
         this.mapManager.setPlotLandCoords(
             this.sprites[0].getX(),

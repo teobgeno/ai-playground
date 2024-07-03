@@ -152,6 +152,7 @@ export class Game extends Scene {
     }
 
     create() {
+        this.input.mouse?.disableContextMenu();
         this.charactersMap = new Map();
         this.initMap();
         this.initHero();
