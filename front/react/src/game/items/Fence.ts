@@ -17,6 +17,8 @@ export class Fence extends BaseItem implements MapObject {
     public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
     public activeCursor: Cursor | null;
+    private isDoor: boolean;
+    private isDoorOpen: boolean = false;
 
     constructor(
         scene: Phaser.Scene,
@@ -42,7 +44,8 @@ export class Fence extends BaseItem implements MapObject {
         ));
         this.sprites[0].setDepth(2);
         this.destruct = new DestructItem();
-        
+        this.isDoor = true;
+
         this.addSriteListeners();
         this.toggleCollisions(true);
         this.addMapObject();
@@ -75,7 +78,10 @@ export class Fence extends BaseItem implements MapObject {
             .on("pointerdown", (pointer:Phaser.Input.Pointer) => this.interactDoor(pointer));
     }
     private interactDoor(pointer:Phaser.Input.Pointer) {
-        console.log(pointer.rightButtonDown())
+        if(pointer.rightButtonDown()) {
+            this.isDoorOpen = this.isDoorOpen ? false : true;
+            this.toggleCollisions(this.isDoorOpen);
+        }
     }
     private addMapObject() {
         this.mapManager.setPlotLandCoords(
