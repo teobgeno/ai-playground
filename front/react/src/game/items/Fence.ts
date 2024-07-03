@@ -80,7 +80,8 @@ export class Fence extends BaseItem implements MapObject {
     private interactDoor(pointer:Phaser.Input.Pointer) {
         if(pointer.rightButtonDown()) {
             this.isDoorOpen = this.isDoorOpen ? false : true;
-            this.toggleCollisions(this.isDoorOpen);
+            this.sprites[0].setAlpha(this.isDoorOpen ? 0.4 : 1);
+            this.toggleCollisions(!this.isDoorOpen);
         }
     }
     private addMapObject() {
