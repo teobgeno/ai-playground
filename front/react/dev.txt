@@ -44,6 +44,7 @@ https://phaser.discourse.group/t/how-to-correctly-switch-back-and-forth-between-
     );
 find landEntity directly from pointer x, y check ExternalInteractionCursor
 - when chat disable inventory button
+- item destroy sprites. Check memory
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false

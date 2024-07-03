@@ -6,6 +6,8 @@ import { GridEngine } from "grid-engine";
 // import { TillageTask } from "../actions/TillageTask";
 import { FarmLand } from "../farm/FarmLand";
 import { Fence } from "../items/Fence";
+import { GenericItem } from "../items/GenericItem";
+import { InventoryItem } from "../items/InventoryItem";
 
 // import { InventoryItem } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
@@ -199,14 +201,17 @@ export class FenceCursor implements Cursor {
 
                 const fenceEntity = new Fence(
                     this.scene,
+                    this.mapManager,
                     {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY},
                     { texture: 'fence', frame: this.activeMarker.frame.customData.filename },
                     padX,
                     padY
-                )
+                );
 
-                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
-                tileGround.properties = { ge_collide: true };
+                fenceEntity.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('https://assets.codepen.io/7237686/wood.svg?format=auto')));
+
+                //this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, fenceEntity);
+                //tileGround.properties = { ge_collide: true };
 
                 // const t = new TillageTask(
                 //     this.mapManager,
