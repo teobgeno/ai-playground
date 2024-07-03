@@ -253,14 +253,42 @@ export class Game extends Scene {
         const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
         treeItem.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('https://assets.codepen.io/7237686/wood.svg?format=auto')));
 
-        // this.mapManager.setPlotLandCoords(11, 10, treeItem);
 
-        // this.mapManager.setPlotLandCoords(10, 10, treeItem);
-        // this.mapManager.setPlotLandCoords(12, 10, treeItem);
+        // const spr = this.add.sprite(0, 0, "cow");
+        // this.physics.add.existing(spr);
+        // spr.scale = 1.1;
+        // (spr.body as Phaser.Physics.Arcade.Body ).setSize(32, 64);
+        // this.gridEngine.addCharacter({
+        //     id: `cow`,
+        //     sprite: spr,
+        //     walkingAnimationMapping: {
+        //         up: {
+        //           leftFoot: 0,
+        //           standing: 1,
+        //           rightFoot: 2
+        //         },
+        //         down: {
+        //           leftFoot: 8,
+        //           standing: 9,
+        //           rightFoot: 10
+        //         },
+        //         left: {
+        //           leftFoot: 4,
+        //           standing: 5,
+        //           rightFoot: 6
+        //         },
+        //         right: {
+        //           leftFoot: 12,
+        //           standing: 13,
+        //           rightFoot: 14
+        //         },
+        //       },
+        //     startPosition: { x:28, y:12 },
+        //     speed: 2
+        // })
+		
+		// this.gridEngine.moveRandomly("cow", 1000);
 
-        // this.mapManager.setPlotLandCoords(11, 11, treeItem);
-        // this.mapManager.setPlotLandCoords(10, 11, treeItem);
-        // this.mapManager.setPlotLandCoords(12, 11, treeItem);
 
 
         return;
@@ -486,42 +514,7 @@ export class Game extends Scene {
             npc0.scale = 0.9;
         }
 
-        // const spr = this.add.sprite(0, 0, "cow");
-        // this.physics.add.existing(spr);
-        // spr.scale = 1.1;
-        // (spr.body as Phaser.Physics.Arcade.Body ).setSize(32, 64);
-        // gridEngineConfig.characters.push({
-        //     id: `cow`,
-        //     sprite: spr,
-        //     walkingAnimationMapping: {
-        //         up: {
-        //           leftFoot: 0,
-        //           standing: 1,
-        //           rightFoot: 2
-        //         },
-        //         down: {
-        //           leftFoot: 8,
-        //           standing: 9,
-        //           rightFoot: 10
-        //         },
-        //         left: {
-        //           leftFoot: 4,
-        //           standing: 5,
-        //           rightFoot: 6
-        //         },
-        //         right: {
-        //           leftFoot: 12,
-        //           standing: 13,
-        //           rightFoot: 14
-        //         },
-        //       },
-        //     startPosition: { x:12, y:15 },
-        //     speed: 2
-        // })
-        
-
         this.gridEngine.create(this.map, gridEngineConfig);
-        //this.gridEngine.moveRandomly("cow", 1000);
         //this.gridEngine.turnTowards("cow", Direction.LEFT);
 
         this.gridEngine.movementStarted().subscribe(({ charId, direction }) => {
