@@ -1,6 +1,5 @@
 import { MapManager } from "../MapManager";
 import { BaseItem } from "./BaseItem";
-import { InventoryItem } from "./InventoryItem";
 import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
 import { GenericItem } from "./GenericItem";

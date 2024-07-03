@@ -4,7 +4,6 @@ import { GridEngine } from "grid-engine";
 
 // import { Hoe } from "../items/Hoe";
 // import { TillageTask } from "../actions/TillageTask";
-import { FarmLand } from "../farm/FarmLand";
 import { Fence } from "../items/Fence";
 import { GenericItem } from "../items/GenericItem";
 import { InventoryItem } from "../items/InventoryItem";
