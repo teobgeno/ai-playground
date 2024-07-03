@@ -99,6 +99,7 @@ export class Game extends Scene {
             url: "assets/tiles/farm.png",
         });
         this.load.tilemapTiledJSON("farm", "assets/tilemaps/farm.json");
+        //http://192.168.1.182:8000/game/new -> chatzi_redis
         //this.load.tilemapTiledJSON("farm", "assets/tilemaps/map.json");
 
         //this.load.image('hero', 'assets/sprites/hero.png');

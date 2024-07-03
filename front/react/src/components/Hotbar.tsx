@@ -52,6 +52,7 @@ export function Hotbar(props: HotbarProps) {
         setActiveItemId(ObjectId.None);
         props.setActiveItem({
             id: 0,
+            title: '',
             objectId: ObjectId.None,
             getInventory() {
                 return new InventoryItem()

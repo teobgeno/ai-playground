@@ -6,6 +6,7 @@ import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
 import { Inventory } from "./components/Inventory";
+import { StaminaBar } from "./components/StaminaBar";
 import "./App.css";
 
 export type Message = {
@@ -65,6 +66,7 @@ function App() {
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
+                <StaminaBar stamina={25} />
             </div>
             <ChatWidget />
             <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems}/>
