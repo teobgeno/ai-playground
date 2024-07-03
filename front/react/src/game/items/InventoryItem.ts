@@ -13,6 +13,7 @@ export class InventoryItem  {
             .setIsStackable(orig.isStackable)
             .setAmount(orig.amount)
             .setIcon(orig.icon)
+            .setCursorType(orig.cursorType)
     }
 
     public setIsStackable(isStackable: boolean) {
