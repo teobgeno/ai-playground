@@ -1,0 +1,142 @@
+// this.propertiesText = this.add.text(
+    //     16,
+    //     16,
+    //     "Click on a tile to view its properties.",
+    //     {
+    //         font: "20px Arial",
+    //         color: "#000",
+    //     }
+    // );
+
+    //this.marker = this.add.graphics();
+    // this.marker.lineStyle(2, 0x000000, 1);
+    // this.marker.strokeRect(0, 0, this.map.tileWidth, this.map.tileHeight);
+
+
+
+
+// this.input.on('pointerup', (pointer:any) => {
+//     // Get the WORLD x and y position of the pointer
+//     const {worldX, worldY} = pointer;
+//     console.log(pointer)
+//     const t = this.add.sprite(worldX, worldY, 'items', 'basic_axe');
+//     t.setDepth(1)
+//     // Assign the world x and y to our vector
+//     // const target ={x:0,y:0};
+//     // target.x = worldX;
+//     // target.y = worldY;
+
+//     // // Position the arrow at our world x and y
+//     // this.arrow.body.reset(worldX, worldY);
+//     // this.arrow.setVisible(true);
+// });
+
+
+----------------- DayNight ----------------
+ import {DayNight} from "../DayNight";
+
+// const d = new DayNight(this,0,0,10000,10000)
+// d.update(512,384);
+// d.setAlpha(1)
+// d.setDepth(4)
+// d.setPipeline('Light2D');
+// const light = this.lights.addLight(0, 0, 200).setScrollFactor(0).setIntensity(2);
+// this.lights.enable().setAmbientColor(0x555555);
+// this.input.on('pointermove', pointer =>
+// {
+//     light.x = pointer.x;
+//     light.y = pointer.y;
+// });
+
+
+
+----------------- Add Cow ----------------
+// const spr = this.add.sprite(0, 0, "cow");
+// this.physics.add.existing(spr);
+// spr.scale = 1.1;
+// (spr.body as Phaser.Physics.Arcade.Body ).setSize(32, 64);
+// this.gridEngine.addCharacter({
+//     id: `cow`,
+//     sprite: spr,
+//     walkingAnimationMapping: {
+//         up: {
+//           leftFoot: 0,
+//           standing: 1,
+//           rightFoot: 2
+//         },
+//         down: {
+//           leftFoot: 8,
+//           standing: 9,
+//           rightFoot: 10
+//         },
+//         left: {
+//           leftFoot: 4,
+//           standing: 5,
+//           rightFoot: 6
+//         },
+//         right: {
+//           leftFoot: 12,
+//           standing: 13,
+//           rightFoot: 14
+//         },
+//       },
+//     startPosition: { x:28, y:12 },
+//     speed: 2
+// })
+
+// this.gridEngine.moveRandomly("cow", 1000);
+
+
+----------------- Collide with sprite ----------------
+
+//works
+//this.physics.add.collider(this.hero, s, ()=>{console.log('sdsad')}, null, this);
+
+
+
+----------------- graphics for map.tmx ----------------
+
+// const fencesTiles = this.map.addTilesetImage('Fences', 'fences');
+// const grassTiles = this.map.addTilesetImage('Grass', 'grass');
+// const hillsTiles = this.map.addTilesetImage('Hills', 'hills');
+// const houseTiles = this.map.addTilesetImage('House', 'house');
+// const houseDecorationTiles = this.map.addTilesetImage('House Decoration', 'houseDecoration');
+// const interactionTiles = this.map.addTilesetImage('interaction', 'interaction');
+// const pathsTiles = this.map.addTilesetImage('Paths', 'paths');
+// const plantDecorationTiles = this.map.addTilesetImage('Plant Decoration', 'plantDecoration');
+// const waterTiles = this.map.addTilesetImage('Water', 'water');
+// const objectTiles = this.map.addTilesetImage('Objects', 'objects');
+// const allTiles = [fencesTiles,grassTiles,hillsTiles,houseTiles,houseDecorationTiles,interactionTiles,pathsTiles,plantDecorationTiles,waterTiles,objectTiles];
+// console.log(allTiles)
+// console.log(this.map.layers)
+
+
+-----------------collisions during layer creation  ----------------
+
+// trees?.setCollisionByProperty({ collides: true });
+// if (trees) {
+//     this.physics.add.collider(this.hero, trees);
+// }
+
+// trees?.setInteractive(
+//     new Phaser.Geom.Rectangle(0, 0, 32, 64),
+//     Phaser.Geom.Rectangle.Contains
+// );
+// trees?.on("pointerdown", function () {
+//     console.log("@@");
+// });
+
+// for (let i = 0; i < map.layers.length; i++) {
+//     console.log(map.layers[i].name)
+//     const layer = map.createLayer(i, tilesets, 0, 0);
+//     if(map.layers[i].name === 'Trees'){
+//         layer?.setCollisionByProperty({ collides: true });
+//         layer?.setInteractive(new Phaser.Geom.Rectangle(0, 0, 32, 64), Phaser.Geom.Rectangle.Contains);
+//         layer?.on('pointerdown', function () {
+//          console.log('arxidia');
+
+//         })
+
+//     }
+
+// }

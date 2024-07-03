@@ -27,6 +27,9 @@ https://www.leshylabs.com/apps/sstool/
 -----  scene change -------
 https://phaser.discourse.group/t/how-to-correctly-switch-back-and-forth-between-scenes/8011/2
 
+-----  bullets -------
+https://github.com/phaserjs/examples/blob/master/public/src/physics/matterjs/bullet%20pool.js
+
 - deselect toolbar with different button
 - nearby tile map utils
 - seed cursor corn - tomato cursor must be on

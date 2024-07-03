@@ -13,7 +13,7 @@ export class CharacterInventory {
         if (!this.getItem(item.objectId) || (item && !item.getInventory().isStackable)) {
             //find next available slot
             for (let i = 0; i < this.inventorySize; i++) {
-                console.log(this.items[i])
+                //console.log(this.items[i])
                 if (
                     typeof this.items[i] === "undefined" || 
                     this.items[i] === null

@@ -1,7 +1,9 @@
-//import { Boot } from "./scenes/Boot";
-//import { GameOver } from "./scenes/GameOver";
+import { Boot } from "./scenes/Boot";
 import { Game as MainGame } from "./scenes/Game";
+// import { OutDoor } from "./scenes/OutDoor";
+//import { GameOver } from "./scenes/GameOver";
 //import { MainMenu } from "./scenes/MainMenu";
+
 import { Game } from "phaser";
 //import { Preloader } from "./scenes/Preloader";
 import GridEngine from "grid-engine";
@@ -53,7 +55,7 @@ const config: Phaser.Types.Core.GameConfig = {
     //     autoCenter: Phaser.Scale.CENTER_BOTH,
     //   },
     //scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
-    scene: [MainGame],
+    scene: [Boot, MainGame],
 };
 
 const StartGame = (parent: string) => {
