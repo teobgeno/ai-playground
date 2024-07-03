@@ -72,9 +72,9 @@ export class Fence extends BaseItem implements MapObject {
             .on("pointerout", () => this.toggleCursorExecution(false));
         this.sprites[0]
             .getSprite()
-            .on("pointerdown", (pointer) => this.interactDoor(pointer));
+            .on("pointerdown", (pointer:Phaser.Input.Pointer) => this.interactDoor(pointer));
     }
-    private interactDoor(pointer) {
+    private interactDoor(pointer:Phaser.Input.Pointer) {
         console.log(pointer.rightButtonDown())
     }
     private addMapObject() {
