@@ -50,7 +50,6 @@ export class Game extends Scene {
     }
     
     create() {
-        console.log(data)
         this.input.mouse?.disableContextMenu();
         this.charactersMap = new Map();
         this.initMap();
