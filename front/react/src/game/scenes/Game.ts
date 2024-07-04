@@ -48,8 +48,9 @@ export class Game extends Scene {
     preload() {
        
     }
-  
+    
     create() {
+        console.log(data)
         this.input.mouse?.disableContextMenu();
         this.charactersMap = new Map();
         this.initMap();
@@ -95,14 +96,11 @@ export class Game extends Scene {
         );
 
 
-        // this.scene.start('OutDoor', { 
-        //     hero: this.hero,
-        //     gridEngine : this.gridEngine,
-        //     charactersMap : this.charactersMap,
-        //     cursorManager : this.cursorManager,
-        //     mapManager :this.mapManager
-        //  });
-        this.test();
+      
+        // setTimeout(() => {
+        //     this.scene.restart({ level: 1 });
+        //   }, 4000);
+        // this.test();
         EventBus.emit("current-scene-ready", this);
     }
 

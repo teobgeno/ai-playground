@@ -1,6 +1,5 @@
 import { Boot } from "./scenes/Boot";
 import { Game as MainGame } from "./scenes/Game";
-// import { OutDoor } from "./scenes/OutDoor";
 //import { GameOver } from "./scenes/GameOver";
 //import { MainMenu } from "./scenes/MainMenu";
 
