@@ -17,6 +17,7 @@ import { InventoryItem } from "../items/InventoryItem"
 import { GenericItem } from "../items/GenericItem";
 import { Rock } from "../items/Rock";
 import { Tree } from "../items/Tree";
+import { Lake } from "../items/Lake";
 
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
@@ -99,7 +100,7 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-        // this.test();
+        this.test();
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -111,6 +112,8 @@ export class Game extends Scene {
 
         const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
         treeItem.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('https://assets.codepen.io/7237686/wood.svg?format=auto')));
+
+        const lakeItem = new Lake(this, this.mapManager, {x:25, y:14, pixelX:(this.map.tileToWorldX(25) || 0), pixelY:(this.map.tileToWorldY(14) || 0)});
 
 
         return;
@@ -134,7 +137,7 @@ export class Game extends Scene {
         });
         
       
-        const tilesets = this.map.addTilesetImage("farm", "tiles");
+        const tilesets = this.map.addTilesetImage("farm", "farmTiles");
         if (tilesets) {
 
             for (let i = 0; i < this.map.layers.length; i++) {

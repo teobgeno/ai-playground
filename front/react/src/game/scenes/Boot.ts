@@ -48,10 +48,15 @@ export class Boot extends Scene
 
         // MAP LOADING
         this.load.image({
-            key: "tiles",
+            key: "farmTiles",
             url: "assets/tiles/farm.png",
         });
+        this.load.image({
+            key: "houseTiles",
+            url: "assets/tiles/house.png",
+        });
         this.load.tilemapTiledJSON("farm", "assets/tilemaps/farm.json");
+        this.load.tilemapTiledJSON("house", "assets/tilemaps/house.json");
         //http://192.168.1.182:8000/game/new -> chatzi_redis
         //this.load.tilemapTiledJSON("farm", "assets/tilemaps/map.json");
 
