@@ -48,6 +48,14 @@ https://github.com/phaserjs/examples/blob/master/public/src/physics/matterjs/bul
 find landEntity directly from pointer x, y check ExternalInteractionCursor
 - when chat disable inventory button
 - item destroy sprites. Check memory
+- h function 
+public setResource(resource: GenericItem) {
+        this.destruct.addResource(resource);
+}
+ na fixei apo ta map objects kai ta external call na ginontai
+
+
+ 
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false

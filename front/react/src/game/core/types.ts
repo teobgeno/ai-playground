@@ -42,6 +42,7 @@ export enum ObjectId {
     Stone = 9,
     Corn = 10,
     CornSeed = 11,
+    Lake = 12,
 
 }
 
