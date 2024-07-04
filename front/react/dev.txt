@@ -54,8 +54,8 @@ public setResource(resource: GenericItem) {
 }
  na fixei apo ta map objects kai ta external call na ginontai
 
+item.getDestruct().addResource(resource)
 
- 
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false
