@@ -115,5 +115,6 @@ export class Rock
         this.sprites[0].setAlpha(0);
         this.toggleCollisions(false);
         this.removeMapObject();
+        this.sprites[0].destroy();
     }
 }
