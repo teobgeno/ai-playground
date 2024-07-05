@@ -41,6 +41,8 @@ export class Hero extends Humanoid {
         //console.log(this.displayHeight);
         this.characterController.update(dt);
         this.updateTasksQueue();
+        //https://www.html5gamedevs.com/topic/40592-how-do-i-call-a-callback-function-when-two-objects-stop-overlapping/
+        //sconsole.log(this.getBody().embedded)
     }
 
     private updateTasksQueue() {
