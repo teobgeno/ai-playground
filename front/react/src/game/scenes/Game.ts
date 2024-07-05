@@ -116,7 +116,9 @@ export class Game extends Scene {
         const lakeItem = new Lake(this, this.mapManager, {x:25, y:14, pixelX:(this.map.tileToWorldX(25) || 0), pixelY:(this.map.tileToWorldY(14) || 0)});
 
         const house = this.add.sprite(700, 150, 'workshopBuilding');
+        this.physics.add.existing(house);
         house.setDepth(2);
+        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, ()=>{return true;}, this)
         return;
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
        
@@ -128,6 +130,11 @@ export class Game extends Scene {
 
         s.setDepth(2)
 
+    }
+
+    private testCollision(a,b) {
+        console.log(a)
+        console.log(b)
     }
 
     private initMap() {
