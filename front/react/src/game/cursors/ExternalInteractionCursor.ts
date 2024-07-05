@@ -83,12 +83,12 @@ export class ExternalInteractionCursor implements Cursor {
                 pointerTileY
             );
             if (landItem) {
-                if (typeof landItem?.interactWithItem !== "undefined") {
-                    landItem?.interactWithItem();
+                if (typeof landItem?.getInteractive !== "undefined") {
+                    landItem?.getInteractive().interactWithItem();
                 }
                 if (typeof landItem?.getDestruct !== "undefined") {
                     console.log(landItem?.getDestruct());
-                    const resources = landItem?.getDestruct();
+                    const resources = landItem?.getDestruct().getResources();
                     for (const resource of resources) {
                         this.character.getInventory().addItem(resource);
                     }

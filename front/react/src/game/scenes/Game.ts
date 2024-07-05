@@ -6,6 +6,7 @@ import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 import { Hoe } from "../items/Hoe";
 import { PickAxe } from "../items/PickAxe";
+import { WaterCan } from "../items/WaterCan";
 import { Seed } from "../farm/Seed";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
@@ -42,7 +43,7 @@ export class Game extends Scene {
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
     private mapManager: MapManager;
-    private collideObjects:Map<string, boolean> = new Map();
+    private collideObjects:Map<string, boolean>;
     constructor() {
         super("Game");
     }
@@ -54,6 +55,7 @@ export class Game extends Scene {
     create(props: SceneProps) {
         this.input.mouse?.disableContextMenu();
         this.charactersMap = new Map();
+        this.collideObjects = new Map();
         this.initMap(props);
         this.initHero();
         this.chatManager = new ChatManager(this.charactersMap);
@@ -231,6 +233,14 @@ export class Game extends Scene {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
+        const waterCan = new WaterCan(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_watering_can.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
+        )
+
         const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
         const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
             new InventoryItem()
@@ -253,6 +263,7 @@ export class Game extends Scene {
 
         this.hero.getInventory().addItem(hoe);
         this.hero.getInventory().addItem(pickAxe);
+        this.hero.getInventory().addItem(waterCan);
         this.hero.getInventory().addItem(cornSeed);
         this.hero.getInventory().addItem(fencePart);
    
@@ -368,8 +379,8 @@ export class Game extends Scene {
 
         this.mapManager.getPlotLandCoords().forEach((item)=>{
             //item.toggleInteraction(enableObjInteractions);
-            if (typeof item?.setExternalActiveCursor !== "undefined") { 
-                item?.setExternalActiveCursor(this.cursorManager.getCurrentCursor());
+            if (typeof item?.getInteractive !== "undefined") { 
+                item?.getInteractive().setExternalActiveCursor(this.cursorManager.getCurrentCursor());
             }
         })
 

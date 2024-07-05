@@ -13,8 +13,8 @@ import { Cursor } from "../cursors/types";
 import { Utils } from "../core/Utils";
 export class Fence extends BaseItem implements MapObject {
     private mapManager: MapManager;
-    public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
+    public destruct: DestructItem;
     public activeCursor: Cursor | null;
     private isDoor: boolean;
     private isDoorOpen: boolean = false;

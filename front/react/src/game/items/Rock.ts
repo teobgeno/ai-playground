@@ -1,18 +1,26 @@
 import { MapManager } from "../MapManager";
 import { BaseItem } from "./BaseItem";
-import { InventoryItem } from "./InventoryItem";
-import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
+import { DestructItem } from "./DestructItem";
+import { InteractiveItem } from "./InteractiveItem";
 import { GenericItem } from "./GenericItem";
-import { CoordsData, MapObject, ObjectId } from "../core/types";
-import { Cursor } from "../cursors/types";
+import {
+    CoordsData,
+    MapObject,
+    MapObjectInteractable,
+    MapObjectDestructable,
+    ObjectId,
+} from "../core/types";
 import { Utils } from "../core/Utils";
 
-export class Rock extends BaseItem implements MapObject {
+export class Rock
+    extends BaseItem
+    implements MapObject, MapObjectDestructable, MapObjectInteractable
+{
     private mapManager: MapManager;
-    public destruct: DestructItem;
     public sprites: Array<SpriteItem> = [];
-    public activeCursor: Cursor | null;
+    private destruct: DestructItem;
+    private interactive: InteractiveItem;
 
     constructor(
         scene: Phaser.Scene,
@@ -36,11 +44,22 @@ export class Rock extends BaseItem implements MapObject {
             )
         );
         this.sprites[0].setDepth(1);
-        this.destruct = new DestructItem();
-        
-        this.addSriteListeners();
+
         this.toggleCollisions(true);
         this.addMapObject();
+
+        this.destruct = new DestructItem();
+        this.destruct.setDestructionResult((resources) => {
+            return this.destructItem(resources);
+        });
+
+        this.interactive = new InteractiveItem();
+        this.interactive.setSprites(this.sprites);
+        this.interactive.setInteractiveObjectIds([ObjectId.PickAxe]);
+        this.interactive.setInteractionResult(() => {
+            this.interactWithItem();
+        });
+        this.interactive.startInteraction();
     }
 
     public setResource(resource: GenericItem) {
@@ -53,18 +72,6 @@ export class Rock extends BaseItem implements MapObject {
             this.sprites[0].getY(),
             collide
         );
-    }
-
-    private addSriteListeners() {
-        this.sprites[0].getSprite().setInteractive({
-            cursor: "cursor",
-        });
-        this.sprites[0]
-            .getSprite()
-            .on("pointerover", () => this.toggleCursorExecution(true));
-        this.sprites[0]
-            .getSprite()
-            .on("pointerout", () => this.toggleCursorExecution(false));
     }
 
     private addMapObject() {
@@ -83,40 +90,30 @@ export class Rock extends BaseItem implements MapObject {
         );
     }
 
-    public setExternalActiveCursor(cursor: Cursor | null) {
-        this.activeCursor = cursor;
+    public getSprite() {
+        return this.sprites[0];
     }
 
-    private toggleCursorExecution = (canExecute: boolean) => {
-        if (
-            this.activeCursor &&
-            typeof this.activeCursor?.getItem !== "undefined" &&
-            this.activeCursor?.getItem().objectId === ObjectId.PickAxe
-        ) {
-            if (typeof this.activeCursor?.setCanExecute !== "undefined") {
-                this.activeCursor?.setCanExecute(canExecute);
-            }
+    public getDestruct() {
+        return this.destruct;
+    }
+
+    public destructItem(resources: Array<GenericItem>) {
+        for (const resource of resources) {
+            const rand = Math.floor(Math.random() * (6 - 1) + 1);
+            resource.getInventory().setAmount(rand);
         }
-    };
+        return resources;
+    }
+
+    public getInteractive() {
+        return this.interactive;
+    }
 
     public interactWithItem() {
         //item (axe), character -> addInventory
         this.sprites[0].setAlpha(0);
         this.toggleCollisions(false);
         this.removeMapObject();
-    }
-
-    public getDestruct() {
-        return this.destruct.getResources((resources) => {
-            for (const resource of resources) {
-                const rand =  Math.floor(Math.random() * (6 - 1) + 1);
-                resource.getInventory().setAmount(rand);
-            }
-            return resources;
-        });
-    }
-
-    public getSprite() {
-        return this.sprites[0];
     }
 }

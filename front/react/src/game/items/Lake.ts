@@ -1,21 +1,20 @@
 import { MapManager } from "../MapManager";
 import { BaseItem } from "./BaseItem";
-import { DestructItem } from "./DestructItem";
 import { SpriteItem } from "./SpriteItem";
-import { GenericItem } from "./GenericItem";
+import { InteractiveItem } from "./InteractiveItem";
 import {
     CoordsData,
     MapObject,
+    MapObjectInteractable,
     ObjectId,
 } from "../core/types";
-import { Cursor } from "../cursors/types";
 import { Utils } from "../core/Utils";
 
-export class Lake extends BaseItem implements MapObject {
+export class Lake extends BaseItem implements MapObject, MapObjectInteractable {
     private mapManager: MapManager;
     public sprites: Array<SpriteItem> = [];
-    public activeCursor: Cursor | null;
-
+    private interactive: InteractiveItem;
+  
     constructor(
         scene: Phaser.Scene,
         mapManager: MapManager,
@@ -39,9 +38,14 @@ export class Lake extends BaseItem implements MapObject {
         );
         this.sprites[0].setDepth(1);
 
-        this.addSriteListeners();
         this.toggleCollisions(true);
         this.addMapObject();
+
+        this.interactive = new InteractiveItem();
+        this.interactive.setSprites(this.sprites);
+        this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
+        this.interactive.setInteractionResult(()=>{console.log('water')});
+        this.interactive.startInteraction();
     }
 
     private toggleCollisions(collide: boolean) {
@@ -68,18 +72,6 @@ export class Lake extends BaseItem implements MapObject {
         );
     }
 
-    private addSriteListeners() {
-        this.sprites[0].getSprite().setInteractive({
-            cursor: "cursor",
-        });
-        this.sprites[0]
-            .getSprite()
-            .on("pointerover", () => this.toggleCursorExecution(true));
-        this.sprites[0]
-            .getSprite()
-            .on("pointerout", () => this.toggleCursorExecution(false));
-    }
-
     private addMapObject() {
 
         this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY() - 1, this);
@@ -95,25 +87,8 @@ export class Lake extends BaseItem implements MapObject {
         this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY() + 1, this);
     }
 
-    public setExternalActiveCursor(cursor: Cursor | null) {
-        this.activeCursor = cursor;
-    }
-
-    private toggleCursorExecution = (canExecute: boolean) => {
-        if (
-            this.activeCursor &&
-            typeof this.activeCursor?.getItem !== "undefined" &&
-            this.activeCursor?.getItem().objectId === ObjectId.PickAxe
-        ) {
-            if (typeof this.activeCursor?.setCanExecute !== "undefined") {
-                this.activeCursor?.setCanExecute(canExecute);
-            }
-        }
-    };
-
-    public interactWithItem() {
-        //item (axe), character -> addInventory
-        console.log("get water");
+    public getInteractive() {
+        return this.interactive;
     }
 
 }

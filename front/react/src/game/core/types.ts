@@ -1,6 +1,8 @@
 import { SpriteItem } from "../items/SpriteItem";
 import { Cursor } from "../cursors/types";
 import { GenericItem } from "../items/GenericItem";
+import { InteractiveItem } from "../items/InteractiveItem";
+import { DestructItem } from "../items/DestructItem";
 
 export interface SceneProps {
     map?: string;
@@ -48,15 +50,21 @@ export enum ObjectId {
     Corn = 10,
     CornSeed = 11,
     Lake = 12,
-
+    WaterCan = 13
 }
 
 export interface MapObject {
     id: number;
     objectId: ObjectId;
     sprites: Array<SpriteItem>;
-    update?: (time: number) => void
-    setExternalActiveCursor?: (cursor: Cursor | null) => void
-    interactWithItem?: () => void
-    getDestruct?: () => Array<GenericItem>
+    update?: (time: number) => void;
+    getDestruct?: () => DestructItem
+    getInteractive?: () => InteractiveItem
+}
+
+export interface MapObjectDestructable {
+    getDestruct: () => DestructItem
+}
+export interface MapObjectInteractable {
+    getInteractive: () => InteractiveItem
 }
