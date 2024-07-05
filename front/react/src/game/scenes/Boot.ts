@@ -95,6 +95,12 @@ export class Boot extends Scene
             "assets/sprites/items.json"
         );
 
+
+        this.load.spritesheet("workshopBuilding", "assets/sprites/workshop.png", {
+            frameWidth: 244,
+            frameHeight: 177,
+        });
+
         // /https://phaser.discourse.group/t/image-atlas-how-to-create/1699
         //https://www.leshylabs.com/apps/sstool/
         this.load.atlas(
