@@ -42,7 +42,7 @@ export class Game extends Scene {
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
     private mapManager: MapManager;
-    private collideObjects:Map<string, Humanoid>;
+    private collideObjects:Map<string, boolean> = new Map();
     constructor() {
         super("Game");
     }
@@ -120,8 +120,9 @@ export class Game extends Scene {
         this.physics.add.existing(house);
         house.setDepth(2);
 
-        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setCollision(a,b)}, this)
+        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setTestCollision(a,b)}, this)
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide
+        //https://codepen.io/samme/pen/WaZQOX
         
         // house.body.onOverlap = true;
         // this.hero.getBody().onOverlap = true;
@@ -146,10 +147,15 @@ export class Game extends Scene {
         s.setDepth(2)
 
     }
-    private setCollision(a,b) {
+    private setTestCollision(a,b) {
         // console.log(a)
         // console.log(b)
-        return false;
+        if(this.collideObjects.get('hh')) {
+            return false;
+        } else {
+            this.collideObjects.set('hh', true)
+        }
+       
     }
     private testCollision(a,b) {
         console.log('collition')
