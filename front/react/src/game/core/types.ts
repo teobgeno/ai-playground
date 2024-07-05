@@ -1,6 +1,11 @@
 import { SpriteItem } from "../items/SpriteItem";
 import { Cursor } from "../cursors/types";
 import { GenericItem } from "../items/GenericItem";
+
+export interface SceneProps {
+    map?: string;
+}
+
 export interface CoordsData {
     x: number;
     y: number;

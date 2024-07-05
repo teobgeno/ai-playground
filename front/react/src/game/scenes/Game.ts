@@ -22,7 +22,7 @@ import { Lake } from "../items/Lake";
 import { HarvestTask } from "../actions/HarvestTask";
 import { FarmLand } from "../farm/FarmLand";
 import { CursorType } from "../cursors/types";
-import { MapObject, ObjectId } from "../core/types";
+import { MapObject, ObjectId, SceneProps } from "../core/types";
 
 
 export class Game extends Scene {
@@ -51,10 +51,10 @@ export class Game extends Scene {
        
     }
     
-    create() {
+    create(props: SceneProps) {
         this.input.mouse?.disableContextMenu();
         this.charactersMap = new Map();
-        this.initMap();
+        this.initMap(props);
         this.initHero();
         this.chatManager = new ChatManager(this.charactersMap);
         this.initNpcs();
@@ -101,7 +101,10 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-        this.test();
+        if(props.map == undefined || props.map ==='farm') {
+            this.test();
+        }
+       
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -158,20 +161,38 @@ export class Game extends Scene {
        
     }
     private testCollision(a,b) {
-        console.log('collition')
+        console.log('collition');
+        //this.cameras.main.fadeOut();
+        //this.scene.restart({ map: 'house' });
         // console.log(a)
         // console.log(b)
+        this.cameras.main.fadeOut();
+        this.cameras.main.once(
+            'camerafadeoutcomplete',
+            () => {
+              this.scene.restart({ map: 'house' });
+            },
+          );
     }
 
-    private initMap() {
+    private initMap(props: SceneProps) {
+
+        let map = 'farm';
+        let mapTiles = 'farmTiles';
+
+        if(props.map !== undefined  && props.map !=='') {
+            map = props.map;
+            mapTiles = props.map + 'Tiles';
+        }
+
         this.map = this.make.tilemap({
-            key: "farm",
+            key: map,
             tileWidth: 32,
             tileHeight: 32,
         });
         
       
-        const tilesets = this.map.addTilesetImage("farm", "farmTiles");
+        const tilesets = this.map.addTilesetImage(map, mapTiles);
         if (tilesets) {
 
             for (let i = 0; i < this.map.layers.length; i++) {
@@ -324,6 +345,7 @@ export class Game extends Scene {
             map.widthInPixels,
             map.heightInPixels
         );
+        this.cameras.main.fadeIn();
     }
 
     update(time: number, delta: number): void {
