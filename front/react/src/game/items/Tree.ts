@@ -13,7 +13,10 @@ import {
 } from "../core/types";
 import { Utils } from "../core/Utils";
 
-export class Tree extends BaseItem implements MapObject, MapObjectDestructable, MapObjectInteractable {
+export class Tree
+    extends BaseItem
+    implements MapObject, MapObjectDestructable, MapObjectInteractable
+{
     private mapManager: MapManager;
     public sprites: Array<SpriteItem> = [];
     private destruct: DestructItem;
@@ -59,7 +62,6 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
         );
         this.sprites[1].setDepth(3);
 
-
         this.sprites.push(
             new SpriteItem(
                 scene,
@@ -99,7 +101,6 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
     }
 
     private toggleCollisions(collide: boolean) {
-
         this.mapManager.setTileCollition(
             this.sprites[0].getX(),
             this.sprites[0].getY(),
@@ -123,18 +124,53 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
     }
 
     private addMapObject() {
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX(),
+            this.sprites[0].getY() - 1,
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() - 1,
+            this.sprites[0].getY() - 1,
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() + 1,
+            this.sprites[0].getY() - 1,
+            this
+        );
 
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY() - 1, this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY()-1, this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY()-1, this);
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX(),
+            this.sprites[0].getY(),
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() - 1,
+            this.sprites[0].getY(),
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() + 1,
+            this.sprites[0].getY(),
+            this
+        );
 
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY(), this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY(), this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY(), this);
-
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX(), this.sprites[0].getY() + 1, this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() - 1, this.sprites[0].getY() + 1, this);
-        this.mapManager.setPlotLandCoords(this.sprites[0].getX() + 1, this.sprites[0].getY() + 1, this);
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX(),
+            this.sprites[0].getY() + 1,
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() - 1,
+            this.sprites[0].getY() + 1,
+            this
+        );
+        this.mapManager.setPlotLandCoords(
+            this.sprites[0].getX() + 1,
+            this.sprites[0].getY() + 1,
+            this
+        );
     }
 
     public getSprite() {
@@ -147,7 +183,7 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
 
     public destructItem(resources: Array<GenericItem>) {
         for (const resource of resources) {
-            const rand =  Math.floor(Math.random() * (6 - 1) + 1);
+            const rand = Math.floor(Math.random() * (6 - 1) + 1);
             resource.getInventory().setAmount(rand);
         }
         return resources;
