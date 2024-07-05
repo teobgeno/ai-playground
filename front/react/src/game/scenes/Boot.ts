@@ -114,6 +114,7 @@ export class Boot extends Scene
             "assets/sprites/map.png",
             "assets/sprites/map.json"
         );
+        this.load.svg('cur', 'assets/cursors/pickaxe.svg', { scale: 1.1 });
         
     }
 

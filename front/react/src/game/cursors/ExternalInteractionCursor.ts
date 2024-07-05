@@ -19,6 +19,7 @@ export class ExternalInteractionCursor implements Cursor {
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
     private tool: Storable;
+    private activeMarker: Phaser.GameObjects.Sprite;
 
     constructor(
         scene: Phaser.Scene,
@@ -38,6 +39,9 @@ export class ExternalInteractionCursor implements Cursor {
 
     public setItem(tool: Storable) {
         this.tool = tool;
+        this.activeMarker =  this.scene.add
+        .sprite(-1000, -1000, "cur")
+        .setDepth(8);
     }
 
     public getItem() {
@@ -52,6 +56,10 @@ export class ExternalInteractionCursor implements Cursor {
         this.marker.x = -1000;
         this.marker.y = -1000;
         this.marker.setAlpha(0);
+
+        this.activeMarker.x = -1000;
+        this.activeMarker.y = -1000;
+        this.activeMarker.setAlpha(0);
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
@@ -59,9 +67,14 @@ export class ExternalInteractionCursor implements Cursor {
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
 
+        this.activeMarker.setAlpha(0.4);
+        this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+        this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+
         //const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
 
         if (this.canExecute) {
+            this.activeMarker.setAlpha(1);
             this.marker.setStrokeStyle(
                 2,
                 Phaser.Display.Color.GetColor(0, 153, 0),
