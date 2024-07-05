@@ -11,7 +11,6 @@ import {
     MapObjectDestructable,
     ObjectId,
 } from "../core/types";
-import { Cursor } from "../cursors/types";
 import { Utils } from "../core/Utils";
 
 export class Tree extends BaseItem implements MapObject, MapObjectDestructable, MapObjectInteractable {
@@ -19,7 +18,6 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
     public sprites: Array<SpriteItem> = [];
     private destruct: DestructItem;
     private interactive: InteractiveItem;
-    public activeCursor: Cursor | null;
 
     constructor(
         scene: Phaser.Scene,
@@ -79,9 +77,6 @@ export class Tree extends BaseItem implements MapObject, MapObjectDestructable, 
         this.sprites[2].setDepth(1);
         this.sprites[2].setAlpha(0);
 
-        this.destruct = new DestructItem();
-        
-        //this.addSriteListeners();
         this.toggleCollisions(true);
         this.addMapObject();
 
