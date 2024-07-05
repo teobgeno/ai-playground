@@ -121,7 +121,8 @@ export class Game extends Scene {
         house.setDepth(2);
 
         this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setCollision(a,b)}, this)
-
+        //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide
+        
         // house.body.onOverlap = true;
         // this.hero.getBody().onOverlap = true;
        
