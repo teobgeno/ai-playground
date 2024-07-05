@@ -42,7 +42,7 @@ export class Game extends Scene {
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
     private mapManager: MapManager;
-    //private collideObjects:
+    private collideObjects:Map<string, Humanoid>;
     constructor() {
         super("Game");
     }
@@ -120,7 +120,7 @@ export class Game extends Scene {
         this.physics.add.existing(house);
         house.setDepth(2);
 
-        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, ()=>{return true;}, this)
+        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setCollision(a,b)}, this)
 
         // house.body.onOverlap = true;
         // this.hero.getBody().onOverlap = true;
@@ -145,10 +145,15 @@ export class Game extends Scene {
         s.setDepth(2)
 
     }
-
+    private setCollision(a,b) {
+        // console.log(a)
+        // console.log(b)
+        return false;
+    }
     private testCollision(a,b) {
-        console.log(a)
-        console.log(b)
+        console.log('collition')
+        // console.log(a)
+        // console.log(b)
     }
 
     private initMap() {
