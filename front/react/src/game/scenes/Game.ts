@@ -120,17 +120,18 @@ export class Game extends Scene {
         this.physics.add.existing(house);
         house.setDepth(2);
 
-        //this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, ()=>{return true;}, this)
-        house.body.onOverlap = true;
-        this.hero.getBody().onOverlap = true;
+        this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, ()=>{return true;}, this)
+
+        // house.body.onOverlap = true;
+        // this.hero.getBody().onOverlap = true;
        
-        this.physics.add.overlap(this.hero, house);
-        this.physics.world.on('overlap', (gameObject1, gameObject2, body1, body2) =>
-            {
-                console.log('sasadsad')
-                gameObject1.setAlpha(0.5);
-                gameObject2.setAlpha(0.5);
-            });
+        // this.physics.add.overlap(this.hero, house);
+        // this.physics.world.on('overlap', (gameObject1, gameObject2, body1, body2) =>
+        //     {
+        //         console.log('sasadsad')
+        //         gameObject1.setAlpha(0.5);
+        //         gameObject2.setAlpha(0.5);
+        //     });
 
         return;
         const s = this.add.sprite(420+16, 350+16, 'items', 'wood');
