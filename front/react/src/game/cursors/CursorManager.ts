@@ -139,6 +139,7 @@ export class CursorManager {
                 break;
             case CursorType.EXTERNAL_INTERACTION:
                 this.externalInteractionCursor.setItem(item);
+                this.externalInteractionCursor.setCursorImage();
                 this.currentCursor = this.externalInteractionCursor;
                 break;
             default:

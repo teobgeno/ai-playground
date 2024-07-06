@@ -102,7 +102,7 @@ export const Inventory = (props: InventoryProps) => {
                         {props.hotbarItems.map((item, i) => {
                             if (item) {
                                 return (
-                                    <div className="items__container">
+                                    <div className="items__container" key={i}>
                                         <span className="items__number items__number--first">
                                             {i + 1}
                                         </span>
@@ -132,7 +132,7 @@ export const Inventory = (props: InventoryProps) => {
                                 )
                             } else {
                                 return (
-                                <div className="items__container">
+                                <div className="items__container" key={i}>
                                     <span className="items__number"></span>
                                     <div className="item__container" />
                                 </div>
@@ -342,11 +342,11 @@ export const Inventory = (props: InventoryProps) => {
                         </div>
                         <div className="inventory--rows">
 
-                            {props.restItems.map((item) => {
+                            {props.restItems.map((item, i) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container">
+                                            <div className="items__container" key={i}>
                                             <div
                                                 className="item__container"
                                                 draggable="true"
@@ -409,7 +409,7 @@ export const Inventory = (props: InventoryProps) => {
                                     )
                                 } else {
                                     return (
-                                        <div className="items__container">
+                                        <div className="items__container" key={i}>
                                             <div className="item__container" />
                                         </div>
                                     )

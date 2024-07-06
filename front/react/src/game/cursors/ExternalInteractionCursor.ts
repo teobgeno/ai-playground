@@ -19,7 +19,7 @@ export class ExternalInteractionCursor implements Cursor {
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
     private tool: Storable;
-    private activeMarker: Phaser.GameObjects.Sprite;
+    private activeMarker: Phaser.GameObjects.Sprite | null;
 
     constructor(
         scene: Phaser.Scene,
@@ -39,9 +39,26 @@ export class ExternalInteractionCursor implements Cursor {
 
     public setItem(tool: Storable) {
         this.tool = tool;
-        this.activeMarker =  this.scene.add
-        .sprite(-1000, -1000, "cur")
-        .setDepth(8);
+    }
+
+    public setCursorImage() {
+         const imgName = this.tool.getInventory().icon.substr( this.tool.getInventory().icon.lastIndexOf("/") + 1 );
+        if( !imgName || imgName == "") return this;
+       
+        if( !this.scene.textures.exists( imgName ) ){
+            this.scene.load.svg( imgName,  this.tool.getInventory().icon, { scale: 1.1 })
+            this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+                this.activeMarker =  this.scene.add
+                .sprite(-1000, -1000, imgName)
+                .setDepth(8);
+            })
+            this.scene.load.start()
+        }else{
+           console.log('already loaded')
+           this.activeMarker =  this.scene.add
+           .sprite(-1000, -1000, imgName)
+           .setDepth(8);
+        }
     }
 
     public getItem() {
@@ -53,39 +70,38 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public hidePointer() {
-        this.marker.x = -1000;
-        this.marker.y = -1000;
-        this.marker.setAlpha(0);
-
-        this.activeMarker.x = -1000;
-        this.activeMarker.y = -1000;
-        this.activeMarker.setAlpha(0);
+        // this.marker.x = -1000;
+        // this.marker.y = -1000;
+        // this.marker.setAlpha(0);
+        this.activeMarker?.destroy();
+        this.activeMarker = null;
+        this.canExecute = false;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
-        this.marker.setAlpha(1);
+        // this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+        // this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+        // this.marker.setAlpha(1);
 
-        this.activeMarker.setAlpha(0.4);
-        this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-        this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
-
-        //const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
-
+        if(this.activeMarker) {
+            this.activeMarker.setAlpha(0.4);
+            this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+            this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+        }
+       
         if (this.canExecute) {
-            this.activeMarker.setAlpha(1);
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(0, 153, 0),
-                1
-            );
+            this.activeMarker?.setAlpha(1);
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(0, 153, 0),
+            //     1
+            // );
         } else {
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(204, 0, 0),
-                1
-            );
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(204, 0, 0),
+            //     1
+            // );
         }
     }
 
@@ -105,6 +121,7 @@ export class ExternalInteractionCursor implements Cursor {
                     for (const resource of resources) {
                         this.character.getInventory().addItem(resource);
                     }
+                    this.canExecute = false;
                 }
             }
         }

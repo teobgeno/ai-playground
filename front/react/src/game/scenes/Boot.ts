@@ -114,7 +114,7 @@ export class Boot extends Scene
             "assets/sprites/map.png",
             "assets/sprites/map.json"
         );
-        this.load.svg('cur', 'assets/cursors/pickaxe.svg', { scale: 1.1 });
+        //this.load.svg('cur', 'https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto', { scale: 1.1 });
         
     }
 
