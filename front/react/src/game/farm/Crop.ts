@@ -1,6 +1,7 @@
 import { SpriteItem } from "../items/SpriteItem";
 import { InteractiveItem } from "../items/InteractiveItem";
 import { Seed } from "./Seed";
+import { Utils } from "../core/Utils";
 import { LandElements } from "./types";
 import {
     CoordsData,
@@ -42,15 +43,15 @@ export class Crop implements MapObject, MapObjectInteractable{
         //     "crops",
         //     this.seed.currentGrowthStageFrame
         // );
-        this.sprites[0].getSprite().setDepth(2);
-        this.sprites[0].getSprite().setAlpha(0.8);
+        this.sprites[0].setDepth(2);
+        this.sprites[0].setAlpha(0.8);
         
         
     }
     public init() {
-        this.sprites[0].getSprite().setAlpha(1);
-        const dp = 2 + this.shiftPad(this.sprite.y + this.sprite.displayHeight/2, 7);
-        this.sprites[0].getSprite().setDepth(dp)
+        this.sprites[0].setAlpha(1);
+        const dp = 2 + Utils.shiftPad(this.sprite.y + this.sprite.displayHeight/2, 7);
+        this.sprites[0].setDepth(dp)
 
         //wiggle anim test
         // this.scene.tweens.add({
@@ -63,12 +64,6 @@ export class Crop implements MapObject, MapObjectInteractable{
         //     repeat: -1,
         // });
 
-    }
-
-    private shiftPad(t:number, e:number) {
-        const i = Math.floor(t),
-            o = `${i}`.padStart(e, "0").length;
-        return i / Math.pow(10, o)
     }
 
     public getSprite() {
