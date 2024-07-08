@@ -7,6 +7,7 @@ export class InteractiveItem {
     private sprites: Array<SpriteItem> = [];
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
+    private selectedObjectId: ObjectId;
     private interactionResult : () => void;
 
 
@@ -28,6 +29,13 @@ export class InteractiveItem {
 
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
+        if(this.activeCursor && this.activeCursor.getItem) {
+            this.setIntercativeObjectId(this.activeCursor?.getItem().objectId);
+        }
+    }
+
+    public setIntercativeObjectId(obejectId : ObjectId) {
+        this.selectedObjectId = obejectId;
     }
 
     private addSpriteListeners() {
