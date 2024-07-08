@@ -41,6 +41,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.sprites[0].setAlpha(0.4);
 
         this.interactive = new InteractiveItem();
+        this.interactive.setScene(scene);
         this.interactive.setSprites(this.sprites[0]);
         this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
         this.interactive.setSelfInteraction(true);

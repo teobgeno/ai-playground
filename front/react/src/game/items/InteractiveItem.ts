@@ -58,6 +58,7 @@ export class InteractiveItem {
                 this.toggleCursorExecution(true);
             }
             if (!this.activeCursor && this.hasSelfInteraction) {
+                this.scene.input.setDefaultCursor('url(assets/input/cursors/blue.cur), pointer');
                 console.log('self over');
             }
             
