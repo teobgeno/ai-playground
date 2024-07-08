@@ -246,7 +246,7 @@ export class Game extends Scene {
             new InventoryItem()
             .setIsStackable(true)
             .setAmount(4).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
-            .setCursorType(CursorType.CROP)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
         .setGrowthStageDuration(1000)
         .setCurrentGrowthStageFrame(30)

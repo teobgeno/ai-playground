@@ -50,7 +50,8 @@ export enum ObjectId {
     Corn = 10,
     CornSeed = 11,
     Lake = 12,
-    WaterCan = 13
+    WaterCan = 13,
+    Crop = 14
 }
 
 export interface MapObject {

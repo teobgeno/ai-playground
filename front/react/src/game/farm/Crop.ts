@@ -6,21 +6,24 @@ import { LandElements } from "./types";
 import {
     CoordsData,
     MapObject,
-    MapObjectInteractable,
     ObjectId,
 } from "../core/types";
 
-export class Crop implements MapObject, MapObjectInteractable{
-    private scene: Phaser.Scene;
+export class Crop implements MapObject{
+    public id: number;
+    public objectId: ObjectId = ObjectId.FarmLand;
+    //private scene: Phaser.Scene;
     private sprite: Phaser.GameObjects.Sprite;
     public sprites: Array<SpriteItem> = [];
-    private interactive: InteractiveItem;
+    //private interactive: InteractiveItem;
     private seed: Seed;
     public lastTimestamp: number = 0;
     //https://docs.google.com/spreadsheets/d/1DPAq3AyaXIlqML1KummuMHDS_MV3uH0Z7kXAZXKFsSQ/edit?pli=1&gid=0#gid=0  List crops
     constructor(scene: Phaser.Scene, seed: Seed, coords: CoordsData) {
-        this.scene = scene;
+        this.id = Utils.generateId();
+        //this.scene = scene;
         this.seed = seed;
+        //this.interactive = interactive;
         this.lastTimestamp = 0;
 
         this.sprites.push(
@@ -50,7 +53,7 @@ export class Crop implements MapObject, MapObjectInteractable{
     }
     public init() {
         this.sprites[0].setAlpha(1);
-        const dp = 2 + Utils.shiftPad(this.sprite.y + this.sprite.displayHeight/2, 7);
+        const dp = 2 + Utils.shiftPad(this.sprites[0].getSprite().y + this.sprites[0].getSprite().displayHeight/2, 7);
         this.sprites[0].setDepth(dp)
 
         //wiggle anim test
@@ -66,9 +69,9 @@ export class Crop implements MapObject, MapObjectInteractable{
 
     }
 
-    public getSprite() {
-        return this.sprite;
-    }
+    // public getSprite() {
+    //     return this.sprite;
+    // }
 
     public getCurrentGrowthStage() {
         return this.seed.currentGrowthStageFrame;
@@ -84,7 +87,7 @@ export class Crop implements MapObject, MapObjectInteractable{
         return this.seed.getCropFromHarvest();
     }
 
-    public update(time: number, elements: LandElements) {
+    public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
             //TODO:: use clock to calculate growth. Time is not always available. Scene chage, tab browser not active....
             if (
@@ -103,37 +106,38 @@ export class Crop implements MapObject, MapObjectInteractable{
     }
     updateTile() {
         const frame = this.getCurrentGrowthStage();
-        this.sprite.setFrame(frame);
+        this.sprites[0].getSprite().setFrame(frame);
     }
 
-    public initHarvestInteractive() {
-        this.sprite.setInteractive({
-            cursor: "url(assets/cursors/axe.cur), pointer",
-        });
-    }
+    // public initHarvestInteractive() {
+    //     this.sprite.setInteractive({
+    //         cursor: "url(assets/cursors/axe.cur), pointer",
+    //     });
+    // }
 
-    public removeHarvestInteractive() {
-        this.sprite.removeInteractive();
-    }
+    // public removeHarvestInteractive() {
+    //     this.sprite.removeInteractive();
+    // }
 
-    public pauseHarvestInteractive() {
-        if (this.sprite.input && this.sprite.input.enabled) {
-            this.sprite.disableInteractive();
-        }
-    }
+    // public pauseHarvestInteractive() {
+    //     if (this.sprite.input && this.sprite.input.enabled) {
+    //         this.sprite.disableInteractive();
+    //     }
+    // }
 
-    public resumeHarvestInteractive() {
-        if (this.sprite.input && !this.sprite.input.enabled) {
-            this.sprite.setInteractive();
-        }
-    }
+    // public resumeHarvestInteractive() {
+    //     if (this.sprite.input && !this.sprite.input.enabled) {
+    //         this.sprite.setInteractive();
+    //     }
+    // }
 
     public remove() {
-        this.sprite.destroy();
+        this.sprites[0].destroy();
+        this.sprites = [];
     }
 
-    public getInteractive() {
-        return this.interactive;
-    }
+    // public getInteractive() {
+    //     return this.interactive;
+    // }
     
 }

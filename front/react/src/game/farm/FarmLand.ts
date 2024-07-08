@@ -12,9 +12,9 @@ import {
     ObjectId,
 } from "../core/types";
 import { Utils } from "../core/Utils";
-export class FarmLand implements MapObject, MapObjectInteractable {
+export class FarmLand implements MapObject {
     public id: number;
-    public objectId: ObjectId = ObjectId.FarmLand;
+    public objectId: ObjectId = ObjectId.Crop;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
@@ -49,14 +49,15 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.interactive = new InteractiveItem();
         this.interactive.setScene(scene);
         this.interactive.setSprites(this.sprites[0]);
-        this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
-        this.interactive.setSelfInteraction(true);
+        this.interactive.setInteractiveObjectIds([ObjectId.WaterCan, ObjectId.CornSeed]);
         this.interactive.setInteractionResult(
             (selectedObject: Storable | null) => {
                 this.interactWithItem(selectedObject);
             }
         );
         this.interactive.startInteraction();
+
+
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,
@@ -84,15 +85,23 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         //this.bar = scene.add.rectangle(x - 16, y - 16, 0, 2, 0x00ee00);
     }
 
-    public interactWithItem = (selectedObject: Storable | null) => {
+    public interactWithItem = (selectedObject: Storable | Seed | null) => {
         if (selectedObject) {
-            switch (selectedObject.id) {
+            //console.log(selectedObject);
+            switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
-                    console.log(selectedObject);
                     break;
+                case ObjectId.CornSeed:{
+                    const cloneSeed = Seed.clone((selectedObject as Seed));
+                    cloneSeed.getInventory().amount = 1;
+                    this.createCrop(cloneSeed);
+                    this. plantCrop();
+                }
+                break;
             }
         }
         if (!selectedObject) {
+            (this.scene as Game).addPlayerTask("harvest", this);
             console.log("harvest");
         }
     };
@@ -141,25 +150,25 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         }
     }
 
-    private initInteractive = () => {
-        this.crop?.initHarvestInteractive();
-        this.crop?.getSprite().on("pointerup", this.onHarvestCrop);
-    };
+    // private initInteractive = () => {
+    //     this.crop?.initHarvestInteractive();
+    //     this.crop?.getSprite().on("pointerup", this.onHarvestCrop);
+    // };
 
-    private removeInteractive = () => {
-        this.crop?.removeHarvestInteractive();
-        this.crop?.getSprite().off("pointerup", this.onHarvestCrop);
-    };
+    // private removeInteractive = () => {
+    //     this.crop?.removeHarvestInteractive();
+    //     this.crop?.getSprite().off("pointerup", this.onHarvestCrop);
+    // };
 
-    public toggleInteraction(doInteract: boolean) {
-        doInteract
-            ? this.crop?.resumeHarvestInteractive()
-            : this.crop?.pauseHarvestInteractive();
-    }
+    // public toggleInteraction(doInteract: boolean) {
+    //     doInteract
+    //         ? this.crop?.resumeHarvestInteractive()
+    //         : this.crop?.pauseHarvestInteractive();
+    // }
 
-    private onHarvestCrop = () => {
-        (this.scene as Game).addPlayerTask("harvest", this);
-    };
+    // private onHarvestCrop = () => {
+    //     (this.scene as Game).addPlayerTask("harvest", this);
+    // };
 
     public executeHarvestCrop() {
         return this.crop?.executeHarvest();
@@ -171,7 +180,8 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     }
 
     public destroyCrop() {
-        this.removeInteractive();
+        //this.removeInteractive();
+        this.interactive.setSelfInteraction(false);
         this.crop?.remove();
         this.crop = null;
         this.updateTile();
@@ -183,11 +193,12 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
         if (this.landState === LandState.PLANTED) {
-            this.crop?.update(time, this.elements);
+            this.crop?.updateGrow(time, this.elements);
             if (this.crop?.isFullGrown()) {
                 this.landState = LandState.READY;
-                this.initInteractive();
-                console.log(this.crop);
+                //this.initInteractive();
+                this.interactive.setSelfInteraction(true);
+                //console.log(this.crop);
             }
         }
     }
