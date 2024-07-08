@@ -4,6 +4,7 @@ import { ObjectId } from "../core/types";
 import { Storable } from "./types";
 
 export class InteractiveItem {
+    private scene: Phaser.Scene;
     private sprite: SpriteItem;
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
@@ -13,6 +14,10 @@ export class InteractiveItem {
 
     public startInteraction() {
         this.addSpriteListeners();
+    }
+
+    public setScene(scene: Phaser.Scene) {
+        this.scene = scene;
     }
 
     public setSprites(sprite: SpriteItem) {
