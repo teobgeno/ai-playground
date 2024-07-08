@@ -29,6 +29,10 @@ export class InteractiveItem {
         this.interactiveObjectIds = interactiveObjectIds;
     }
 
+    public setSelfInteraction(hasSelfInteraction: boolean) {
+        this.hasSelfInteraction = hasSelfInteraction;
+    }
+
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
         this.activeCursor && this.activeCursor.getItem
