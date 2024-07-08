@@ -4,23 +4,23 @@ import { ObjectId } from "../core/types";
 import { Storable } from "./types";
 
 export class InteractiveItem {
-
-    private sprites: Array<SpriteItem> = [];
+    private sprite: SpriteItem;
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
-    private selectedObject: Storable;
-    private interactionResult : (selectedObject: Storable) => void;
-
+    private selectedObject: Storable | null;
+    private interactionResult: (selectedObject: Storable | null) => void;
 
     public startInteraction() {
         this.addSpriteListeners();
     }
 
-    public setSprites(sprites: Array<SpriteItem>) {
-        this.sprites = sprites;
+    public setSprites(sprite: SpriteItem) {
+        this.sprite = sprite;
     }
 
-    public setInteractionResult(func: (selectedObject: Storable) => void) {
+    public setInteractionResult(
+        func: (selectedObject: Storable | null) => void
+    ) {
         this.interactionResult = func;
     }
 
@@ -30,23 +30,23 @@ export class InteractiveItem {
 
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
-        if(this.activeCursor && this.activeCursor.getItem) {
-            this.setIntercativeObject(this.activeCursor?.getItem());
-        }
+        this.activeCursor && this.activeCursor.getItem
+            ? this.setIntercativeObject(this.activeCursor?.getItem())
+            : this.setIntercativeObject(null);
     }
 
-    public setIntercativeObject(obeject : Storable) {
-        this.selectedObject = obeject;
+    public setIntercativeObject(object: Storable | null) {
+        this.selectedObject = object;
     }
 
     private addSpriteListeners() {
-        this.sprites[0].getSprite().setInteractive({
+        this.sprite.getSprite().setInteractive({
             cursor: "cursor",
         });
-        this.sprites[0]
+        this.sprite
             .getSprite()
             .on("pointerover", () => this.toggleCursorExecution(true));
-        this.sprites[0]
+        this.sprite
             .getSprite()
             .on("pointerout", () => this.toggleCursorExecution(false));
     }
@@ -55,7 +55,9 @@ export class InteractiveItem {
         if (
             this.activeCursor &&
             typeof this.activeCursor?.getItem !== "undefined" &&
-            this.interactiveObjectIds.includes(this.activeCursor?.getItem().objectId)
+            this.interactiveObjectIds.includes(
+                this.activeCursor?.getItem().objectId
+            )
         ) {
             if (typeof this.activeCursor?.setCanExecute !== "undefined") {
                 this.activeCursor?.setCanExecute(canExecute);

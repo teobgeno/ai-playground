@@ -42,7 +42,7 @@ export class Lake extends BaseItem implements MapObject, MapObjectInteractable {
         this.addMapObject();
 
         this.interactive = new InteractiveItem();
-        this.interactive.setSprites(this.sprites);
+        this.interactive.setSprites(this.sprites[0]);
         this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
         this.interactive.setInteractionResult(()=>{console.log('water')});
         this.interactive.startInteraction();
