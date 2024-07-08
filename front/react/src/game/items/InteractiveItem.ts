@@ -9,7 +9,7 @@ export class InteractiveItem {
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
     private selectedObject: Storable | null;
-    private hasSelfInteraction:boolean = false;
+    private hasSelfInteraction: boolean = false;
     private interactionResult: (selectedObject: Storable | null) => void;
 
     public startInteraction() {
@@ -58,7 +58,7 @@ export class InteractiveItem {
                 this.toggleCursorExecution(true);
             }
             if (!this.activeCursor && this.hasSelfInteraction) {
-                this.scene.input.setDefaultCursor('url(assets/input/cursors/blue.cur), pointer');
+                this.scene.input.setDefaultCursor('url(assets/cursors/axe.cur), pointer');
                 console.log('self over');
             }
             
@@ -69,6 +69,7 @@ export class InteractiveItem {
             }
 
             if (!this.activeCursor && this.hasSelfInteraction) {
+                this.scene.input.setDefaultCursor('pointer');
                 console.log('self out');
             }
         });
