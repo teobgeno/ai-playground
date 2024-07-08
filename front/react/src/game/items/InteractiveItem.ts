@@ -1,14 +1,15 @@
 import { Cursor } from "../cursors/types";
 import { SpriteItem } from "./SpriteItem";
 import { ObjectId } from "../core/types";
+import { Storable } from "./types";
 
 export class InteractiveItem {
 
     private sprites: Array<SpriteItem> = [];
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
-    private selectedObjectId: ObjectId;
-    private interactionResult : (selectedObjectId: ObjectId) => void;
+    private selectedObject: Storable;
+    private interactionResult : (selectedObject: Storable) => void;
 
 
     public startInteraction() {
@@ -19,7 +20,7 @@ export class InteractiveItem {
         this.sprites = sprites;
     }
 
-    public setInteractionResult(func: (selectedObjectId: ObjectId) => void) {
+    public setInteractionResult(func: (selectedObject: Storable) => void) {
         this.interactionResult = func;
     }
 
@@ -30,12 +31,12 @@ export class InteractiveItem {
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
         if(this.activeCursor && this.activeCursor.getItem) {
-            this.setIntercativeObjectId(this.activeCursor?.getItem().objectId);
+            this.setIntercativeObject(this.activeCursor?.getItem());
         }
     }
 
-    public setIntercativeObjectId(obejectId : ObjectId) {
-        this.selectedObjectId = obejectId;
+    public setIntercativeObject(obeject : Storable) {
+        this.selectedObject = obeject;
     }
 
     private addSpriteListeners() {
@@ -63,6 +64,6 @@ export class InteractiveItem {
     };
 
     public interactWithItem() {
-        this.interactionResult(this.selectedObjectId);
+        this.interactionResult(this.selectedObject);
     }
 }

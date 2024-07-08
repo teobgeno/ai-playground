@@ -4,6 +4,8 @@ import { InteractiveItem } from "../items/InteractiveItem";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
+import { Storable } from "../items/types";
+
 import { CoordsData, MapObject, MapObjectInteractable, ObjectId } from "../core/types";
 import { Utils } from "../core/Utils";
 export class FarmLand implements MapObject, MapObjectInteractable {
@@ -41,9 +43,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.interactive = new InteractiveItem();
         this.interactive.setSprites(this.sprites);
         this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
-        this.interactive.setInteractionResult((selectedObjectId: ObjectId)=>{
+        this.interactive.setInteractionResult((selectedObject: Storable)=>{
             console.log('water')
-            console.log(selectedObjectId)
+            console.log(selectedObject)
         });
         this.interactive.startInteraction();
         // this.sprite = scene.add.sprite(
