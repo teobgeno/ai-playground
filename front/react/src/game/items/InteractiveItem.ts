@@ -43,12 +43,16 @@ export class InteractiveItem {
         this.sprite.getSprite().setInteractive({
             cursor: "cursor",
         });
-        this.sprite
-            .getSprite()
-            .on("pointerover", () => this.toggleCursorExecution(true));
-        this.sprite
-            .getSprite()
-            .on("pointerout", () => this.toggleCursorExecution(false));
+        this.sprite.getSprite().on("pointerover", () => {
+            if (this.activeCursor) {
+                this.toggleCursorExecution(true);
+            }
+        });
+        this.sprite.getSprite().on("pointerout", () => {
+            if (this.activeCursor) {
+                this.toggleCursorExecution(false);
+            }
+        });
         this.sprite.getSprite().on("pointerup", () => {
             if (!this.activeCursor) {
                 this.interactWithItem();
@@ -58,7 +62,6 @@ export class InteractiveItem {
 
     private toggleCursorExecution = (canExecute: boolean) => {
         if (
-            this.activeCursor &&
             typeof this.activeCursor?.getItem !== "undefined" &&
             this.interactiveObjectIds.includes(
                 this.activeCursor?.getItem().objectId
