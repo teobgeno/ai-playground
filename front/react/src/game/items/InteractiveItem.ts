@@ -57,32 +57,37 @@ export class InteractiveItem {
         this.sprite.getSprite().setInteractive({
             cursor: "cursor",
         });
-        this.sprite.getSprite().on("pointerover", () => {
-            if (this.activeCursor) {
-                this.toggleCursorExecution(true);
-            }
-            if (!this.activeCursor && this.hasSelfInteraction) {
-                this.scene.input.setDefaultCursor('url(' + this.selfInteractionCursor + '), pointer');
-                console.log('self over');
-            }
-            
-        });
-        this.sprite.getSprite().on("pointerout", () => {
-            if (this.activeCursor) {
-                this.toggleCursorExecution(false);
-            }
+        this.sprite.getSprite().on("pointerover", this.onPointerOver);
+        this.sprite.getSprite().on("pointerout", this.onPointerOut);
+        this.sprite.getSprite().on("pointerup", this.onPointerUp);
+    }
 
-            if (!this.activeCursor && this.hasSelfInteraction) {
-                this.scene.input.setDefaultCursor('pointer');
-                console.log('self out');
-            }
-        });
-        this.sprite.getSprite().on("pointerup", () => {
-            if (!this.activeCursor && this.hasSelfInteraction) {
-                console.log('self click');
-                this.interactWithItem();
-            }
-        });
+    private onPointerOver = () =>  { 
+        if (this.activeCursor) {
+            this.toggleCursorExecution(true);
+        }
+        if (!this.activeCursor && this.hasSelfInteraction) {
+            this.scene.input.setDefaultCursor('url(' + this.selfInteractionCursor + '), pointer');
+            console.log('self over');
+        }
+    }
+
+    private onPointerOut = () => {
+        if (this.activeCursor) {
+            this.toggleCursorExecution(false);
+        }
+
+        if (!this.activeCursor && this.hasSelfInteraction) {
+            this.scene.input.setDefaultCursor('pointer');
+            console.log('self out');
+        }
+    }
+
+    private onPointerUp = () => {
+        if (!this.activeCursor && this.hasSelfInteraction) {
+            console.log('self click');
+            this.interactWithItem();
+        }
     }
 
     private toggleCursorExecution = (canExecute: boolean) => {
@@ -100,5 +105,20 @@ export class InteractiveItem {
 
     public interactWithItem() {
         this.interactionResult(this.selectedObject);
+    }
+
+    public pauseInteraction() {
+        this.sprite.getSprite().disableInteractive();
+    }
+
+    public resumeInteraction() {
+        this.sprite.getSprite().setInteractive();
+    }
+
+    public destroyInteraction() {
+        this.sprite.getSprite().removeInteractive();
+        this.sprite.getSprite().off("pointerover", this.onPointerOver);
+        this.sprite.getSprite().off("pointerout", this.onPointerOut);
+        this.sprite.getSprite().off("pointerup", this.onPointerUp);
     }
 }

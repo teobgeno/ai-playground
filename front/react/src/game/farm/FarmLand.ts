@@ -5,8 +5,12 @@ import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
 import { Storable } from "../items/types";
-
-import { CoordsData, MapObject, MapObjectInteractable, ObjectId } from "../core/types";
+import {
+    CoordsData,
+    MapObject,
+    MapObjectInteractable,
+    ObjectId,
+} from "../core/types";
 import { Utils } from "../core/Utils";
 export class FarmLand implements MapObject, MapObjectInteractable {
     public id: number;
@@ -25,18 +29,20 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         //https://github.com/amcolash/farming-game/blob/master/src/farm/land.ts
         this.scene = scene;
         this.id = Utils.generateId();
-        this.sprites.push(new SpriteItem(
-            scene,
-            { texture: "land", frame: 19 },
-            {
-                x: coords.x,
-                y: coords.y,
-                pixelX: coords.pixelX,
-                pixelY: coords.pixelY,
-            },
-            16,
-            16
-        ));
+        this.sprites.push(
+            new SpriteItem(
+                scene,
+                { texture: "land", frame: 19 },
+                {
+                    x: coords.x,
+                    y: coords.y,
+                    pixelX: coords.pixelX,
+                    pixelY: coords.pixelY,
+                },
+                16,
+                16
+            )
+        );
         this.sprites[0].setDepth(1);
         this.sprites[0].setAlpha(0.4);
 
@@ -45,18 +51,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.interactive.setSprites(this.sprites[0]);
         this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
         this.interactive.setSelfInteraction(true);
-        this.interactive.setInteractionResult((selectedObject: Storable | null)=>{
-           if(selectedObject) {
-            switch(selectedObject.id) {
-                case ObjectId.WaterCan:
-                    console.log(selectedObject)
-                break;
+        this.interactive.setInteractionResult(
+            (selectedObject: Storable | null) => {
+                this.interactWithItem(selectedObject);
             }
-           }
-           if(!selectedObject) {
-            console.log('harvest')
-           }
-        });
+        );
         this.interactive.startInteraction();
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
@@ -84,6 +83,19 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         //this.sprite.setTint(0xff0000)
         //this.bar = scene.add.rectangle(x - 16, y - 16, 0, 2, 0x00ee00);
     }
+
+    public interactWithItem = (selectedObject: Storable | null) => {
+        if (selectedObject) {
+            switch (selectedObject.id) {
+                case ObjectId.WaterCan:
+                    console.log(selectedObject);
+                    break;
+            }
+        }
+        if (!selectedObject) {
+            console.log("harvest");
+        }
+    };
 
     public init() {
         this.landState = LandState.PLOWED;
@@ -117,8 +129,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             this.crop = new Crop(
                 this.scene,
                 seed,
-                this.sprites[0].getPixelX(),
-                this.sprites[0].getPixelY()
+                {x: this.sprites[0].getX(), y: this.sprites[0].getY(), pixelX:  this.sprites[0].getPixelX(), pixelY:  this.sprites[0].getPixelY()}
             );
         }
     }
@@ -206,5 +217,4 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public getInteractive() {
         return this.interactive;
     }
-
 }
