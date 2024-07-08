@@ -88,7 +88,7 @@ export class Tree
         });
 
         this.interactive = new InteractiveItem();
-        this.interactive.setSprites(this.sprites);
+        this.interactive.setSprites(this.sprites[0]);
         this.interactive.setInteractiveObjectIds([ObjectId.PickAxe]);
         this.interactive.setInteractionResult(() => {
             this.interactWithItem();

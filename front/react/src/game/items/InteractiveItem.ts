@@ -49,6 +49,11 @@ export class InteractiveItem {
         this.sprite
             .getSprite()
             .on("pointerout", () => this.toggleCursorExecution(false));
+        this.sprite.getSprite().on("pointerup", () => {
+            if (!this.activeCursor) {
+                this.interactWithItem();
+            }
+        });
     }
 
     private toggleCursorExecution = (canExecute: boolean) => {

@@ -51,6 +51,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                 break;
             }
            }
+           if(!selectedObject) {
+            console.log('harvest')
+           }
         });
         this.interactive.startInteraction();
         // this.sprite = scene.add.sprite(
