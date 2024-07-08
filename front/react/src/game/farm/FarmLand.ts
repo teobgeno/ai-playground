@@ -1,16 +1,18 @@
 import { Game } from "../scenes/Game";
 import { SpriteItem } from "../items/SpriteItem";
+import { InteractiveItem } from "../items/InteractiveItem";
 import { Seed } from "./Seed";
 import { Crop } from "./Crop";
 import { LandState, LandElements } from "./types";
-import { CoordsData, MapObject, ObjectId } from "../core/types";
+import { CoordsData, MapObject, MapObjectInteractable, ObjectId } from "../core/types";
 import { Utils } from "../core/Utils";
-export class FarmLand implements MapObject {
+export class FarmLand implements MapObject, MapObjectInteractable {
     public id: number;
     public objectId: ObjectId = ObjectId.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
+    private interactive: InteractiveItem;
     private landState: number;
     private elements: LandElements;
 
@@ -35,6 +37,12 @@ export class FarmLand implements MapObject {
         ));
         this.sprites[0].setDepth(1);
         this.sprites[0].setAlpha(0.4);
+
+        this.interactive = new InteractiveItem();
+        this.interactive.setSprites(this.sprites);
+        this.interactive.setInteractiveObjectIds([ObjectId.WaterCan]);
+        this.interactive.setInteractionResult(()=>{console.log('water')});
+        this.interactive.startInteraction();
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
         //     this.pixelY,
@@ -132,7 +140,6 @@ export class FarmLand implements MapObject {
     }
 
     public endCrop() {
-        //TODO::add to player inventory
         this.landState = LandState.PLOWED;
         this.destroyCrop();
     }
@@ -180,4 +187,9 @@ export class FarmLand implements MapObject {
     public getSprite() {
         return this.sprites[0];
     }
+
+    public getInteractive() {
+        return this.interactive;
+    }
+
 }
