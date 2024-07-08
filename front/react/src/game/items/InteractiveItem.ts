@@ -8,6 +8,7 @@ export class InteractiveItem {
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
     private selectedObject: Storable | null;
+    private hasSelfInteraction:boolean = false;
     private interactionResult: (selectedObject: Storable | null) => void;
 
     public startInteraction() {
@@ -47,14 +48,23 @@ export class InteractiveItem {
             if (this.activeCursor) {
                 this.toggleCursorExecution(true);
             }
+            if (!this.activeCursor && this.hasSelfInteraction) {
+                console.log('self over');
+            }
+            
         });
         this.sprite.getSprite().on("pointerout", () => {
             if (this.activeCursor) {
                 this.toggleCursorExecution(false);
             }
+
+            if (!this.activeCursor && this.hasSelfInteraction) {
+                console.log('self out');
+            }
         });
         this.sprite.getSprite().on("pointerup", () => {
-            if (!this.activeCursor) {
+            if (!this.activeCursor && this.hasSelfInteraction) {
+                console.log('self click');
                 this.interactWithItem();
             }
         });
