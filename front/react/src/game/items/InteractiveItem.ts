@@ -8,7 +8,7 @@ export class InteractiveItem {
     private activeCursor: Cursor | null;
     private interactiveObjectIds: Array<ObjectId>;
     private selectedObjectId: ObjectId;
-    private interactionResult : () => void;
+    private interactionResult : (selectedObjectId: ObjectId) => void;
 
 
     public startInteraction() {
@@ -19,7 +19,7 @@ export class InteractiveItem {
         this.sprites = sprites;
     }
 
-    public setInteractionResult(func: () => void) {
+    public setInteractionResult(func: (selectedObjectId: ObjectId) => void) {
         this.interactionResult = func;
     }
 
@@ -63,7 +63,6 @@ export class InteractiveItem {
     };
 
     public interactWithItem() {
-        this.interactionResult();
+        this.interactionResult(this.selectedObjectId);
     }
-
 }
