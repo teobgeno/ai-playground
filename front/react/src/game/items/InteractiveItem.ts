@@ -10,6 +10,7 @@ export class InteractiveItem {
     private interactiveObjectIds: Array<ObjectId>;
     private selectedObject: Storable | null;
     private hasSelfInteraction: boolean = false;
+    private selfInteractionCursor: string = 'assets/cursors/axe.cur';
     private interactionResult: (selectedObject: Storable | null) => void;
 
     public startInteraction() {
@@ -37,6 +38,9 @@ export class InteractiveItem {
     public setSelfInteraction(hasSelfInteraction: boolean) {
         this.hasSelfInteraction = hasSelfInteraction;
     }
+    public setSelfInteractionCursor(selfInteractionCursor: string) {
+        this.selfInteractionCursor = selfInteractionCursor;
+    }
 
     public setExternalActiveCursor(cursor: Cursor | null) {
         this.activeCursor = cursor;
@@ -58,7 +62,7 @@ export class InteractiveItem {
                 this.toggleCursorExecution(true);
             }
             if (!this.activeCursor && this.hasSelfInteraction) {
-                this.scene.input.setDefaultCursor('url(assets/cursors/axe.cur), pointer');
+                this.scene.input.setDefaultCursor('url(' + this.selfInteractionCursor + '), pointer');
                 console.log('self over');
             }
             
