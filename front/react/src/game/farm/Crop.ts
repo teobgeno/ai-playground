@@ -87,25 +87,30 @@ export class Crop implements MapObject{
 
     public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
+            console.log(Utils.getTimeStamp() - this.lastTimestamp)
             //TODO:: use clock to calculate growth. Time is not always available. Scene change, tab browser not active....
             if (
-                time - this.lastTimestamp >= this.seed.growthStageDuration &&
+                ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageDuration &&
                 this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
             ) {
                 // console.log((time*1000) + ' - '+ this.lastTimestamp)
                 //console.log(Math.floor(time/this.lastTimestamp)) update currentGrowthStage based on this
-                this.lastTimestamp = time;
+                this.lastTimestamp = Utils.getTimeStamp();
                 this.seed.currentGrowthStageFrame++;
                 this.updateTile();
             }
         } else {
-            this.lastTimestamp = time;
+            //this.lastTimestamp = time;
+            this.lastTimestamp = Utils.getTimeStamp();
+            
         }
     }
     updateTile() {
         const frame = this.getCurrentGrowthStage();
         this.sprites[0].getSprite().setFrame(frame);
     }
+
+    
 
     // public initHarvestInteractive() {
     //     this.sprite.setInteractive({

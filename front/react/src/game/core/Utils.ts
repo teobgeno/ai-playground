@@ -7,5 +7,10 @@ export class Utils {
         const i = Math.floor(t),
             o = `${i}`.padStart(e, "0").length;
         return i / Math.pow(10, o)
-      }
+    }
+
+    static getTimeStamp() {
+        return  Math.round(new Date().getTime() / 1000);
+    }
+     
 }
