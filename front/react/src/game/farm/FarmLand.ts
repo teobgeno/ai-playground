@@ -158,21 +158,19 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     }
 
     private consumeWater() {
-        if(this.elements.water) {
-            if (this.lastTimestamp) {
-                const diff = (Utils.getTimeStamp() - this.lastTimestamp);
-                if((diff * 1000) >= 1000) {
-                    this.elements.water = this.elements.water - diff >=0 ? this.elements.water - diff : 0;
-                   
-                    let tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
-                    tintPerc = tintPerc <= 65 ? tintPerc : 65;
-                    this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
+        if (this.lastTimestamp) {
+            const diff = (Utils.getTimeStamp() - this.lastTimestamp);
+            if((diff * 1000) >= 1000) {
+                this.elements.water = this.elements.water - diff >=0 ? this.elements.water - diff : 0;
+                
+                let tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
+                tintPerc = tintPerc <= 65 ? tintPerc : 65;
+                this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
 
-                    this.lastTimestamp = Utils.getTimeStamp();
-                }
-            } else {
                 this.lastTimestamp = Utils.getTimeStamp();
             }
+        } else {
+            this.lastTimestamp = Utils.getTimeStamp();
         }
     }
 
@@ -235,8 +233,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
-
-        this.consumeWater();
+        if(this.elements.water) {
+            this.consumeWater();
+        }
 
         if (this.landState === LandState.PLANTED) {
             this.crop?.updateGrow(time, this.elements);
