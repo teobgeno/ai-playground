@@ -15,6 +15,7 @@ export class Crop implements MapObject{
     public sprites: Array<SpriteItem> = [];
     //private interactive: InteractiveItem;
     private seed: Seed;
+    public initTimestamp: number = 0;
     public lastTimestamp: number = 0;
     //https://docs.google.com/spreadsheets/d/1DPAq3AyaXIlqML1KummuMHDS_MV3uH0Z7kXAZXKFsSQ/edit?pli=1&gid=0#gid=0  List crops
     constructor(scene: Phaser.Scene, seed: Seed, coords: CoordsData) {
@@ -86,24 +87,29 @@ export class Crop implements MapObject{
     }
 
     public updateGrow(time: number, elements: LandElements) {
-        if (this.lastTimestamp) {
-            console.log(Utils.getTimeStamp() - this.lastTimestamp)
-            //TODO:: use clock to calculate growth. Time is not always available. Scene change, tab browser not active....
-            if (
-                ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageDuration &&
-                this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
-            ) {
-                // console.log((time*1000) + ' - '+ this.lastTimestamp)
-                //console.log(Math.floor(time/this.lastTimestamp)) update currentGrowthStage based on this
+        if(elements.water > 0) {
+            if (this.lastTimestamp) {
+                if (
+                    ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageDuration &&
+                    this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
+                ) {
+                    this.lastTimestamp = Utils.getTimeStamp();
+                    let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
+                    if(growthFrame > this.seed.maxGrowthStageFrame) {
+                        growthFrame = this.seed.maxGrowthStageFrame
+                    }
+                    this.seed.currentGrowthStageFrame = growthFrame;
+                    this.updateTile();
+                }
+            } else {
                 this.lastTimestamp = Utils.getTimeStamp();
-                this.seed.currentGrowthStageFrame++;
-                this.updateTile();
+                this.initTimestamp =  this.lastTimestamp;
             }
         } else {
-            //this.lastTimestamp = time;
             this.lastTimestamp = Utils.getTimeStamp();
-            
+            this.initTimestamp =  this.lastTimestamp;
         }
+        
     }
     updateTile() {
         const frame = this.getCurrentGrowthStage();

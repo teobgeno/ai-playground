@@ -250,6 +250,7 @@ export class Game extends Scene {
         )
         .setGrowthStageDuration(1000)
         .setCurrentGrowthStageFrame(30)
+        .setStartGrowthStageFrame(30)
         .setMaxGrowthStageFrame(34)
         .setCrop(seedCrop);
        

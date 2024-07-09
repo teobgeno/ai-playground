@@ -11,6 +11,7 @@ export class Seed extends BaseItem implements Storable{
     public crop: GenericItem;
     public growthStageDuration: number;
     public currentGrowthStageFrame: number;
+    public startGrowthStageFrame: number;
     public maxGrowthStageFrame: number;
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
@@ -28,6 +29,7 @@ export class Seed extends BaseItem implements Storable{
         )
         .setGrowthStageDuration(orig.growthStageDuration)
         .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
+        .setStartGrowthStageFrame(orig.startGrowthStageFrame)
         .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
         .setCrop(GenericItem.clone(orig.crop));
     }
@@ -43,6 +45,11 @@ export class Seed extends BaseItem implements Storable{
 
     public setCurrentGrowthStageFrame(currentGrowthStageFrame: number) {
         this.currentGrowthStageFrame = currentGrowthStageFrame;
+        return this;
+    }
+
+    public setStartGrowthStageFrame(startGrowthStageFrame: number) {
+        this.startGrowthStageFrame = startGrowthStageFrame;
         return this;
     }
 

@@ -20,7 +20,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public sprites: Array<SpriteItem> = [];
     private interactive: InteractiveItem;
     private landState: number;
-    private elements: LandElements;
+    private elements: LandElements = {
+        water: 0,
+        fertilizer: 0,
+    };
+    public lastTimestamp: number;
 
     //status plowed, planted
 
@@ -117,6 +121,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         if (selectedObject) {
             switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
+                    this.elements.water = 100;
                     return true;
                 case ObjectId.CornSeed:
                     if(this.landState === LandState.PLOWED && selectedObject.getInventory().amount > 0) {
@@ -132,11 +137,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     public init() {
         this.landState = LandState.PLOWED;
-        this.elements = {
-            water: 0,
-            fertilizer: 0,
-        };
-
         this.sprites[0].setAlpha(1);
     }
 
@@ -155,6 +155,20 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public water() {
         //this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
         this.elements.water = 100;
+    }
+
+    private consumeWater() {
+        if(this.elements.water) {
+            if (this.lastTimestamp) {
+                if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) == 1000) {
+                    this.elements.water = this.elements.water - (Utils.getTimeStamp() - this.lastTimestamp);
+                    this.lastTimestamp = Utils.getTimeStamp();
+                    console.log(this.elements.water)
+                }
+            } else {
+                this.lastTimestamp = Utils.getTimeStamp();
+            }
+        }
     }
 
     public createCrop(seed: Seed) {
@@ -216,6 +230,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
+
+        this.consumeWater();
+
         if (this.landState === LandState.PLANTED) {
             this.crop?.updateGrow(time, this.elements);
             if (this.crop?.isFullGrown()) {
@@ -223,6 +240,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                 this.interactive.setSelfInteraction(true);
             }
         }
+        
     }
     updateTile() {
         let frame = 0;
