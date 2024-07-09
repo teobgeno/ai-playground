@@ -12,7 +12,7 @@ import {
     ObjectId,
 } from "../core/types";
 import { Utils } from "../core/Utils";
-export class FarmLand implements MapObject {
+export class FarmLand implements MapObject, MapObjectInteractable {
     public id: number;
     public objectId: ObjectId = ObjectId.Crop;
     private crop: Crop | null;
@@ -196,9 +196,7 @@ export class FarmLand implements MapObject {
             this.crop?.updateGrow(time, this.elements);
             if (this.crop?.isFullGrown()) {
                 this.landState = LandState.READY;
-                //this.initInteractive();
                 this.interactive.setSelfInteraction(true);
-                //console.log(this.crop);
             }
         }
     }

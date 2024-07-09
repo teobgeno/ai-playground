@@ -37,6 +37,9 @@ export class InteractiveItem {
 
     public setSelfInteraction(hasSelfInteraction: boolean) {
         this.hasSelfInteraction = hasSelfInteraction;
+        if(!hasSelfInteraction) {
+            this.scene.input.setDefaultCursor('pointer');
+        }
     }
     public setSelfInteractionCursor(selfInteractionCursor: string) {
         this.selfInteractionCursor = selfInteractionCursor;
