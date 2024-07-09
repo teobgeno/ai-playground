@@ -95,6 +95,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             //console.log(selectedObject);
             switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
+                    this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190, 190, 190));
                     break;
                 case ObjectId.CornSeed:{
                     const cloneSeed = Seed.clone((selectedObject as Seed));

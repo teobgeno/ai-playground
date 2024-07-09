@@ -87,7 +87,7 @@ export class Crop implements MapObject{
 
     public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
-            //TODO:: use clock to calculate growth. Time is not always available. Scene chage, tab browser not active....
+            //TODO:: use clock to calculate growth. Time is not always available. Scene change, tab browser not active....
             if (
                 time - this.lastTimestamp >= this.seed.growthStageDuration &&
                 this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
