@@ -99,6 +99,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             //console.log(selectedObject);
             switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
+                    this.elements.water = 100;
                     this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190, 190, 190));
                     break;
                 case ObjectId.CornSeed:{
@@ -121,7 +122,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         if (selectedObject) {
             switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
-                    this.elements.water = 100;
                     return true;
                 case ObjectId.CornSeed:
                     if(this.landState === LandState.PLOWED && selectedObject.getInventory().amount > 0) {
@@ -160,9 +160,13 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     private consumeWater() {
         if(this.elements.water) {
             if (this.lastTimestamp) {
-                if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= 1000) {
-                    this.elements.water = this.elements.water - (Utils.getTimeStamp() - this.lastTimestamp);
+                const diff = (Utils.getTimeStamp() - this.lastTimestamp);
+                if((diff*1000) >= 1000) {
+                    this.elements.water = this.elements.water - diff;
                     this.lastTimestamp = Utils.getTimeStamp();
+                    const tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
+                    console.log(tintPerc);
+                    this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
                     console.log(this.elements.water)
                 }
             } else {
