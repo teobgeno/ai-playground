@@ -1,5 +1,4 @@
 import { SpriteItem } from "../items/SpriteItem";
-import { InteractiveItem } from "../items/InteractiveItem";
 import { Seed } from "./Seed";
 import { Utils } from "../core/Utils";
 import { LandElements } from "./types";
@@ -13,7 +12,6 @@ export class Crop implements MapObject{
     public id: number;
     public objectId: ObjectId = ObjectId.FarmLand;
     //private scene: Phaser.Scene;
-    private sprite: Phaser.GameObjects.Sprite;
     public sprites: Array<SpriteItem> = [];
     //private interactive: InteractiveItem;
     private seed: Seed;

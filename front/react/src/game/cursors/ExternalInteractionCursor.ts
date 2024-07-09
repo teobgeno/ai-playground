@@ -2,10 +2,6 @@ import { Tilemaps } from "phaser";
 import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
-import { Hoe } from "../items/Hoe";
-import { TillageTask } from "../actions/TillageTask";
-import { FarmLand } from "../farm/FarmLand";
-
 import { Storable } from "../items/types";
 import { Humanoid } from "../characters/Humanoid";
 import { Cursor } from "./types";
