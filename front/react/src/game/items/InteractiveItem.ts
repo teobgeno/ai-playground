@@ -11,6 +11,7 @@ export class InteractiveItem {
     private selectedObject: Storable | null;
     private hasSelfInteraction: boolean = false;
     private selfInteractionCursor: string = 'assets/cursors/axe.cur';
+    private interactionfactors: (selectedObject: Storable | null) => boolean = ()=> {return true};
     private interactionResult: (selectedObject: Storable | null) => void;
 
     public startInteraction() {
@@ -23,6 +24,12 @@ export class InteractiveItem {
 
     public setSprites(sprite: SpriteItem) {
         this.sprite = sprite;
+    }
+
+    public setInteractionFactors(
+        func: (selectedObject: Storable | null) => boolean
+    ) {
+        this.interactionfactors = func;
     }
 
     public setInteractionResult(
@@ -71,7 +78,6 @@ export class InteractiveItem {
         }
         if (!this.activeCursor && this.hasSelfInteraction) {
             this.scene.input.setDefaultCursor('url(' + this.selfInteractionCursor + '), pointer');
-            console.log('self over');
         }
     }
 
@@ -82,23 +88,26 @@ export class InteractiveItem {
 
         if (!this.activeCursor && this.hasSelfInteraction) {
             this.scene.input.setDefaultCursor('default');
-            console.log('self out');
         }
     }
 
     private onPointerUp = () => {
         if (!this.activeCursor && this.hasSelfInteraction) {
-            console.log('self click');
             this.interactWithItem();
+        }
+    }
+
+    public setCursorExecution(canExecute: boolean) {
+        if (typeof this.activeCursor?.setCanExecute !== "undefined") {
+            this.activeCursor?.setCanExecute(canExecute);
         }
     }
 
     private toggleCursorExecution = (canExecute: boolean) => {
         if (
             typeof this.activeCursor?.getItem !== "undefined" &&
-            this.interactiveObjectIds.includes(
-                this.activeCursor?.getItem().objectId
-            )
+            this.interactiveObjectIds.includes(this.activeCursor?.getItem().objectId) &&
+            this.interactionfactors(this.activeCursor?.getItem())
         ) {
             if (typeof this.activeCursor?.setCanExecute !== "undefined") {
                 this.activeCursor?.setCanExecute(canExecute);

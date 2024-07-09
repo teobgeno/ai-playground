@@ -42,22 +42,25 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public setCursorImage() {
-         const imgName = this.tool.getInventory().icon.substr( this.tool.getInventory().icon.lastIndexOf("/") + 1 );
-        if( !imgName || imgName == "") return this;
-       
-        if( !this.scene.textures.exists( imgName ) ){
-            this.scene.load.svg( imgName,  this.tool.getInventory().icon, { scale: 1.1 })
+        const imgName = this.tool
+            .getInventory()
+            .icon.substr(this.tool.getInventory().icon.lastIndexOf("/") + 1);
+        if (!imgName || imgName == "") return this;
+
+        if (!this.scene.textures.exists(imgName)) {
+            this.scene.load.svg(imgName, this.tool.getInventory().icon, {
+                scale: 1.1,
+            });
             this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
-                this.activeMarker =  this.scene.add
+                this.activeMarker = this.scene.add
+                    .sprite(-1000, -1000, imgName)
+                    .setDepth(8);
+            });
+            this.scene.load.start();
+        } else {
+            this.activeMarker = this.scene.add
                 .sprite(-1000, -1000, imgName)
                 .setDepth(8);
-            })
-            this.scene.load.start()
-        }else{
-           console.log('already loaded')
-           this.activeMarker =  this.scene.add
-           .sprite(-1000, -1000, imgName)
-           .setDepth(8);
         }
     }
 
@@ -67,6 +70,7 @@ export class ExternalInteractionCursor implements Cursor {
 
     public setCanExecute(canExecute: boolean) {
         this.canExecute = canExecute;
+        this.activeMarker?.setAlpha(canExecute ? 1 : 0.4);
     }
 
     public hidePointer() {
@@ -83,12 +87,14 @@ export class ExternalInteractionCursor implements Cursor {
         // this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         // this.marker.setAlpha(1);
 
-        if(this.activeMarker) {
+        if (this.activeMarker) {
             this.activeMarker.setAlpha(0.4);
-            this.activeMarker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-            this.activeMarker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+            this.activeMarker.x =
+                (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+            this.activeMarker.y =
+                (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         }
-       
+
         if (this.canExecute) {
             this.activeMarker?.setAlpha(1);
             // this.marker.setStrokeStyle(

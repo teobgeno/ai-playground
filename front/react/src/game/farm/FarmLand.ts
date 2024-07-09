@@ -55,6 +55,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                 this.interactWithItem(selectedObject);
             }
         );
+        this.interactive.setInteractionFactors(
+            (selectedObject: Storable | null) => {
+                return this.interactFactors(selectedObject);
+            }
+        );
         this.interactive.startInteraction();
 
 
@@ -85,7 +90,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         //this.bar = scene.add.rectangle(x - 16, y - 16, 0, 2, 0x00ee00);
     }
 
-    public interactWithItem = (selectedObject: Storable | Seed | null) => {
+    private interactWithItem = (selectedObject: Storable | Seed | null) => {
         if (selectedObject) {
             //console.log(selectedObject);
             switch (selectedObject.objectId) {
@@ -95,7 +100,8 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                     const cloneSeed = Seed.clone((selectedObject as Seed));
                     cloneSeed.getInventory().amount = 1;
                     this.createCrop(cloneSeed);
-                    this. plantCrop();
+                    this.plantCrop();
+                    this.interactive.setCursorExecution(false);
                 }
                 break;
             }
@@ -104,6 +110,23 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             (this.scene as Game).addPlayerTask("harvest", this);
             console.log("harvest");
         }
+    };
+
+    public interactFactors = (selectedObject: Storable | null) => {
+        if (selectedObject) {
+            switch (selectedObject.objectId) {
+                case ObjectId.WaterCan:
+                    return true;
+                case ObjectId.CornSeed:
+                    if(this.landState === LandState.PLOWED && selectedObject.getInventory().amount > 0) {
+                        return true;
+                    }
+                    return false;
+                default:
+                    return true;
+            }
+        }
+        return false;
     };
 
     public init() {
