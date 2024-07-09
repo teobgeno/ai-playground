@@ -162,12 +162,10 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             if (this.lastTimestamp) {
                 const diff = (Utils.getTimeStamp() - this.lastTimestamp);
                 if((diff*1000) >= 1000) {
-                    this.elements.water = this.elements.water - diff;
+                    this.elements.water = this.elements.water - diff >=0 ? this.elements.water - diff : 0;
                     this.lastTimestamp = Utils.getTimeStamp();
                     const tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
-                    console.log(tintPerc);
                     this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
-                    console.log(this.elements.water)
                 }
             } else {
                 this.lastTimestamp = Utils.getTimeStamp();
