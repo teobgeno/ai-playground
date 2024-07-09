@@ -160,7 +160,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     private consumeWater() {
         if(this.elements.water) {
             if (this.lastTimestamp) {
-                if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) == 1000) {
+                if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= 1000) {
                     this.elements.water = this.elements.water - (Utils.getTimeStamp() - this.lastTimestamp);
                     this.lastTimestamp = Utils.getTimeStamp();
                     console.log(this.elements.water)
