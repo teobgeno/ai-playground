@@ -152,11 +152,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         return this.landState;
     }
 
-    public water() {
-        //this.sprite.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
-        this.elements.water = 100;
-    }
-
     private consumeWater() {
         if (this.lastTimestamp) {
             const diff = (Utils.getTimeStamp() - this.lastTimestamp);
@@ -190,26 +185,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             this.landState = LandState.PLANTED;
         }
     }
-
-    // private initInteractive = () => {
-    //     this.crop?.initHarvestInteractive();
-    //     this.crop?.getSprite().on("pointerup", this.onHarvestCrop);
-    // };
-
-    // private removeInteractive = () => {
-    //     this.crop?.removeHarvestInteractive();
-    //     this.crop?.getSprite().off("pointerup", this.onHarvestCrop);
-    // };
-
-    // public toggleInteraction(doInteract: boolean) {
-    //     doInteract
-    //         ? this.crop?.resumeHarvestInteractive()
-    //         : this.crop?.pauseHarvestInteractive();
-    // }
-
-    // private onHarvestCrop = () => {
-    //     (this.scene as Game).addPlayerTask("harvest", this);
-    // };
 
     public executeHarvestCrop() {
         return this.crop?.executeHarvest();
