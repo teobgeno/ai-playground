@@ -38,7 +38,7 @@ export class InteractiveItem {
     public setSelfInteraction(hasSelfInteraction: boolean) {
         this.hasSelfInteraction = hasSelfInteraction;
         if(!hasSelfInteraction) {
-            this.scene.input.setDefaultCursor('pointer');
+            this.scene.input.setDefaultCursor('default');
         }
     }
     public setSelfInteractionCursor(selfInteractionCursor: string) {
@@ -81,7 +81,7 @@ export class InteractiveItem {
         }
 
         if (!this.activeCursor && this.hasSelfInteraction) {
-            this.scene.input.setDefaultCursor('pointer');
+            this.scene.input.setDefaultCursor('default');
             console.log('self out');
         }
     }
