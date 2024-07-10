@@ -76,18 +76,18 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public hidePointer() {
-        // this.marker.x = -1000;
-        // this.marker.y = -1000;
-        // this.marker.setAlpha(0);
+        this.marker.x = -1000;
+        this.marker.y = -1000;
+        this.marker.setAlpha(0);
         this.activeMarker?.destroy();
         this.activeMarker = null;
         this.canExecute = false;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-        // this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-        // this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
-        // this.marker.setAlpha(1);
+        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+        this.marker.setAlpha(1);
 
         if (this.activeMarker) {
             this.activeMarker.setAlpha(0.4);
@@ -99,17 +99,17 @@ export class ExternalInteractionCursor implements Cursor {
 
         if (this.canExecute) {
             this.activeMarker?.setAlpha(1);
-            // this.marker.setStrokeStyle(
-            //     2,
-            //     Phaser.Display.Color.GetColor(0, 153, 0),
-            //     1
-            // );
+            this.marker.setStrokeStyle(
+                2,
+                Phaser.Display.Color.GetColor(0, 153, 0),
+                1
+            );
         } else {
-            // this.marker.setStrokeStyle(
-            //     2,
-            //     Phaser.Display.Color.GetColor(204, 0, 0),
-            //     1
-            // );
+            this.marker.setStrokeStyle(
+                2,
+                Phaser.Display.Color.GetColor(204, 0, 0),
+                1
+            );
         }
     }
 
