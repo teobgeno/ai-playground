@@ -86,18 +86,35 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-        this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
-        this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+      
         this.marker.setAlpha(1);
-        console.log(this.marker?.getBounds());
-        console.log(this.activeMarker?.getBounds());
+      
+        const b = this.activeMarker?.getBounds();
+        let checkPoints = [];
+        if(b) {
+            checkPoints = [
+                {x: b.x, y: ( (b.y + b.height) - 32)},
+                {x: (b.x + 32), y: ( (b.y + b.height) - 32)},
+                {x: (b.x + 64), y: ( (b.y + b.height) - 32)},
+                {x: (b.x + 96), y: ( (b.y + b.height) - 32)},
+            ]
+        }
+        const key  = 3;
+        this.marker.x = (checkPoints[key].x || 0) + 16;
+        this.marker.y = (checkPoints[key].y || 0) + 16;
 
+       
         if (this.activeMarker) {
             this.activeMarker.setAlpha(0.4);
             this.activeMarker.x =
                 (this.map.tileToWorldX(pointerTileX) || 0) + 16;
             this.activeMarker.y =
                 (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+        }
+
+        for (const element of checkPoints) {
+            console.log(element);
+            const mapObj = this.mapManager.getPlotLandCoord(element.x, element.y);
         }
 
         if (this.canExecute) {
