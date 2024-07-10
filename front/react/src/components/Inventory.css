@@ -40,7 +40,7 @@
     font-family: pixelFont;
     src: url(https://assets.codepen.io/7237686//pixelFont.woff) format("woff");
   }
-  body {
+  .menu {
     /* background-image: url("https://assets.codepen.io/7237686/bg.png?format=auto"); */
     background-size: cover;
     background-repeat: no-repeat;

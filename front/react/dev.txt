@@ -60,7 +60,7 @@ public setResource(resource: GenericItem) {
 
 item.getDestruct().addResource(resource)
 
-
+- diagonal movement ( https://annoraaq.github.io/grid-engine/examples/8-dir-crowd/ )
 -------- done -----
 - when pick crop farmLandMap set hasCrop false
 - task abstract class
