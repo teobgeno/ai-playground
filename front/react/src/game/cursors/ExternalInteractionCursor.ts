@@ -93,15 +93,15 @@ export class ExternalInteractionCursor implements Cursor {
         let checkPoints = [];
         if(b) {
             checkPoints = [
-                {x: b.x, y: ( (b.y + b.height) - 32)},
-                {x: (b.x + 32), y: ( (b.y + b.height) - 32)},
-                {x: (b.x + 64), y: ( (b.y + b.height) - 32)},
-                {x: (b.x + 96), y: ( (b.y + b.height) - 32)},
+                {x: b.x, y: ( (b.y + b.height))},
+                {x: (b.x + 32), y: ( (b.y + b.height))},
+                {x: (b.x + 64), y: ( (b.y + b.height))},
+                {x: (b.x + 96), y: ( (b.y + b.height))},
             ]
         }
         const key  = 3;
-        this.marker.x = (checkPoints[key].x || 0) + 16;
-        this.marker.y = (checkPoints[key].y || 0) + 16;
+        this.marker.x = (checkPoints[key].x || 0);
+        this.marker.y = (checkPoints[key].y || 0);
 
        
         if (this.activeMarker) {
@@ -111,12 +111,18 @@ export class ExternalInteractionCursor implements Cursor {
             this.activeMarker.y =
                 (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         }
-
+        let hasObstacle = false;
         for (const element of checkPoints) {
-            console.log(element);
-            const mapObj = this.mapManager.getPlotLandCoord(element.x, element.y);
+            const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(element.x) || 0, this.map.worldToTileY(element.y) || 0); 
+            if(
+                mapObj !== null
+                
+            ) {
+                hasObstacle = true;
+            }
         }
-
+        console.log(hasObstacle)
+        this.canExecute = !hasObstacle;
         if (this.canExecute) {
             this.activeMarker?.setAlpha(1);
             this.marker.setStrokeStyle(
