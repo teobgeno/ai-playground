@@ -38,6 +38,12 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public setCursorImage() {
+
+        this.activeMarker = this.scene.add
+        .sprite(-1000, -1000,'map', 'tree')
+        .setDepth(8);
+        return;
+
         const imgName = this.item
             .getInventory()
             .icon.substr(this.item.getInventory().icon.lastIndexOf("/") + 1);
