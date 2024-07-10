@@ -14,7 +14,7 @@ export class ExternalInteractionCursor implements Cursor {
     private character: Humanoid;
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
-    private tool: Storable;
+    private item: Storable;
     private activeMarker: Phaser.GameObjects.Sprite | null;
 
     constructor(
@@ -33,18 +33,18 @@ export class ExternalInteractionCursor implements Cursor {
         this.marker = marker;
     }
 
-    public setItem(tool: Storable) {
-        this.tool = tool;
+    public setItem(item: Storable) {
+        this.item = item;
     }
 
     public setCursorImage() {
-        const imgName = this.tool
+        const imgName = this.item
             .getInventory()
-            .icon.substr(this.tool.getInventory().icon.lastIndexOf("/") + 1);
+            .icon.substr(this.item.getInventory().icon.lastIndexOf("/") + 1);
         if (!imgName || imgName == "") return this;
 
         if (!this.scene.textures.exists(imgName)) {
-            this.scene.load.svg(imgName, this.tool.getInventory().icon, {
+            this.scene.load.svg(imgName, this.item.getInventory().icon, {
                 scale: 1.1,
             });
             this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
@@ -61,7 +61,7 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public getItem() {
-        return this.tool;
+        return this.item;
     }
 
     public setCanExecute(canExecute: boolean) {
