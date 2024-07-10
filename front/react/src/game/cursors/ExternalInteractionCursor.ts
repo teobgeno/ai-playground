@@ -42,6 +42,7 @@ export class ExternalInteractionCursor implements Cursor {
         this.activeMarker = this.scene.add
         .sprite(-1000, -1000,'map', 'tree')
         .setDepth(8);
+        
         return;
 
         const imgName = this.item
@@ -88,6 +89,8 @@ export class ExternalInteractionCursor implements Cursor {
         this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
+        console.log(this.marker?.getBounds());
+        console.log(this.activeMarker?.getBounds());
 
         if (this.activeMarker) {
             this.activeMarker.setAlpha(0.4);
