@@ -38,13 +38,6 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public setCursorImage() {
-
-        this.activeMarker = this.scene.add
-        .sprite(-1000, -1000,'map', 'tree')
-        .setDepth(8);
-        
-        return;
-
         const imgName = this.item
             .getInventory()
             .icon.substr(this.item.getInventory().icon.lastIndexOf("/") + 1);
@@ -77,33 +70,19 @@ export class ExternalInteractionCursor implements Cursor {
     }
 
     public hidePointer() {
-        this.marker.x = -1000;
-        this.marker.y = -1000;
-        this.marker.setAlpha(0);
+        // this.marker.x = -1000;
+        // this.marker.y = -1000;
+        // this.marker.setAlpha(0);
         this.activeMarker?.destroy();
         this.activeMarker = null;
         this.canExecute = false;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
-      
-        this.marker.setAlpha(1);
-      
-        const b = this.activeMarker?.getBounds();
-        let checkPoints = [];
-        if(b) {
-            checkPoints = [
-                {x: b.x, y: ( (b.y + b.height))},
-                {x: (b.x + 32), y: ( (b.y + b.height))},
-                {x: (b.x + 64), y: ( (b.y + b.height))},
-                {x: (b.x + 96), y: ( (b.y + b.height))},
-            ]
-        }
-        const key  = 3;
-        this.marker.x = (checkPoints[key].x || 0);
-        this.marker.y = (checkPoints[key].y || 0);
+        // this.marker.x = (this.map.tileToWorldX(pointerTileX) || 0) + 16;
+        // this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
+        // this.marker.setAlpha(1);
 
-       
         if (this.activeMarker) {
             this.activeMarker.setAlpha(0.4);
             this.activeMarker.x =
@@ -111,31 +90,20 @@ export class ExternalInteractionCursor implements Cursor {
             this.activeMarker.y =
                 (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         }
-        let hasObstacle = false;
-        for (const element of checkPoints) {
-            const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(element.x) || 0, this.map.worldToTileY(element.y) || 0); 
-            if(
-                mapObj !== null
-                
-            ) {
-                hasObstacle = true;
-            }
-        }
-        console.log(hasObstacle)
-        this.canExecute = !hasObstacle;
+
         if (this.canExecute) {
             this.activeMarker?.setAlpha(1);
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(0, 153, 0),
-                1
-            );
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(0, 153, 0),
+            //     1
+            // );
         } else {
-            this.marker.setStrokeStyle(
-                2,
-                Phaser.Display.Color.GetColor(204, 0, 0),
-                1
-            );
+            // this.marker.setStrokeStyle(
+            //     2,
+            //     Phaser.Display.Color.GetColor(204, 0, 0),
+            //     1
+            // );
         }
     }
 

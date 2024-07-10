@@ -4,7 +4,7 @@ export enum CursorType {
     NONE = 0,
     HOE = 1,
     CROP = 2,
-    WATERING_CAN = 3,
+    PLACE_ITEM = 3,
     FENCE = 4,
     EXTERNAL_INTERACTION = 5,
    

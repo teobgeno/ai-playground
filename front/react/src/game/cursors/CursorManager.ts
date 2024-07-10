@@ -3,7 +3,7 @@ import { GridEngine } from "grid-engine";
 import { MapManager } from "../MapManager";
 
 import { HoeCursor } from "./HoeCursor";
-import { WateringCanCursor } from "./WateringCanCursor";
+import { PlaceItemCursor } from "./PlaceItemCursor";
 import { CropCursor } from "./CropCursor";
 import { FenceCursor } from "./FenceCursor";
 import { ExternalInteractionCursor } from "./ExternalInteractionCursor";
@@ -16,7 +16,7 @@ export class CursorManager {
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private hoeCursor: HoeCursor;
-    private wateringCanCursor: WateringCanCursor;
+    private placeItemCanCursor: PlaceItemCursor;
     private cropCursor: CropCursor;
     private fenceCursor: FenceCursor;
     private externalInteractionCursor: ExternalInteractionCursor;
@@ -44,7 +44,7 @@ export class CursorManager {
             marker
         );
 
-        this.wateringCanCursor = new WateringCanCursor(
+        this.placeItemCanCursor = new PlaceItemCursor(
             scene,
             map,
             this.mapManager,
@@ -131,8 +131,10 @@ export class CursorManager {
                 this.cropCursor.setItem(item);
                 this.currentCursor = this.cropCursor;
                 break;
-            case CursorType.WATERING_CAN:
-                this.currentCursor = this.wateringCanCursor;
+            case CursorType.PLACE_ITEM:
+                this.externalInteractionCursor.setItem(item);
+                this.externalInteractionCursor.setCursorImage();
+                this.currentCursor = this.placeItemCanCursor;
                 break;
             case CursorType.FENCE:
                 this.currentCursor = this.fenceCursor;

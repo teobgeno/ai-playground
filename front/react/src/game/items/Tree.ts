@@ -60,7 +60,8 @@ export class Tree
                 16
             )
         );
-        this.sprites[1].setDepth(3);
+        const dp = 3 + Utils.shiftPad(this.sprites[1].getSprite().y + this.sprites[1].getSprite().displayHeight/2, 7);
+        this.sprites[1].setDepth(dp); 
 
         this.sprites.push(
             new SpriteItem(
