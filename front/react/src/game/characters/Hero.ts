@@ -63,6 +63,7 @@ export class Hero extends Humanoid {
 
     private createMovementAnimations() {
         this.createAnimation("right", this.id, 143, 147, 15, true, true);
+        this.createAnimation("down-right", this.id, 143, 147, 15, true, true);
         this.createAnimation("up", this.id, 104, 112, 15, true, true);
         this.createAnimation("down", this.id, 130, 138, 15, true, true);
         this.createAnimation("left", this.id, 117, 121, 15, true, true);
@@ -202,6 +203,7 @@ export class Hero extends Humanoid {
         switch (direction) {
             case "up":
                 return 104;
+            case "down-right":
             case "right":
                 return 143;
             case "down":

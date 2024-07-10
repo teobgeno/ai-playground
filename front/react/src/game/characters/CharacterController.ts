@@ -79,7 +79,10 @@ export class CharacterController {
     };
     private walkOnEnter() {}
     private walkOnUpdate = () => {
-        if (this.keyW?.isDown) {
+        if(this.keyS?.isDown && this.keyD?.isDown) {
+            this.gridEngine.move(this.id, Direction.DOWN_RIGHT);
+        }
+        else if (this.keyW?.isDown) {
             this.gridEngine.move(this.id, Direction.UP);
         } else if (this.keyA?.isDown) {
             this.gridEngine.move(this.id, Direction.LEFT);

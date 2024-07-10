@@ -303,6 +303,7 @@ export class Game extends Scene {
                     speed:4
                 },
             ],
+            numberOfDirections: 8,
         };
 
 
