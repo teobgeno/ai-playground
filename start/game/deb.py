@@ -75,8 +75,10 @@ def resolve_gpt_tasks(gpt_tasks):
 
 
 def test_action():
-    ch = Character.create(1, 'Alex')
+    ch = Character.create(1, 'Isabella Rodriguez')
     ch.testFunc()
+    ch.setScartchMemory('data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
+    print(ch)
 
 
 def test_whatever(db):
