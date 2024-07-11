@@ -75,7 +75,8 @@ def resolve_gpt_tasks(gpt_tasks):
 
 
 def test_action():
-    pass
+    ch = Character.create(1, 'Alex')
+    ch.testFunc()
 
 
 def test_whatever(db):

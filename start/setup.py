@@ -2,9 +2,11 @@ from api import main
 import noise
 import numpy as np
 import matplotlib.pyplot as plt
+from game.deb import test_whatever
+from game.deb import test_action
 
-
-main.init()
+# main.init()
+test_action()
 
 # def generate_terrain(width, height, scale):
 #     terrain = np.zeros((width, height))
