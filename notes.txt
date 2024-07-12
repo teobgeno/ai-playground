@@ -750,3 +750,35 @@ prompt.push(
     `Below is the current chat history between you and ${otherPlayer.name}.`,
     `How would you like to tell them that you're leaving? Your response should be brief and within 200 characters.`,
 );
+
+---- summarize ------
+ const llmMessages: LLMMessage[] = [
+    {
+      role: 'user',
+      content: `You are ${player.name}, and you just finished a conversation with ${otherPlayer.name}. I would
+      like you to summarize the conversation from ${player.name}'s perspective, using first-person pronouns like
+      "I," and add if you liked or disliked this interaction.`,
+    },
+  ];
+
+
+calculateImportance
+On the scale of 0 to 9, where 0 is purely mundane (e.g., brushing teeth, making bed) and 9 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following piece of memory.
+
+insertMemory, {
+    agentId,
+    playerId: player.id,
+    description,
+    importance,
+    lastAccess: messages[messages.length - 1]._creationTime,
+    data: {
+      type: 'conversation',
+      conversationId,
+      playerIds: [...authors],
+    },
+    embedding,
+  }
+
+
+
+persona.a_mem.add_thought(created, expiration, s, p, o, thought, keywords, thought_poignancy, thought_embedding_pair, None)
