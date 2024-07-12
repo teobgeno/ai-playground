@@ -4,6 +4,7 @@ import spacy
 from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
+from game.character.cognitive_modules.retrieve import *
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
 from game.actions import GenericAction, DecideLocationAction, DecideItemAction, DecideResourceAction
@@ -80,11 +81,14 @@ def test_action():
         'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
     ch.setAssociativeMemory(
         'data/test/Isabella Rodriguez/bootstrap_memory/associative_memory')
-
     ch.setScratchMemory(
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
-    print(ch)
+    focal_points = [" Maria Lopez"]
+    retrieved = new_retrieve(ch, focal_points, 50)
+
+    # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
+    print('ok')
 
 
 def test_whatever(db):

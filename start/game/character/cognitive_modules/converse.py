@@ -89,13 +89,11 @@ def agent_chat_v1(maze, init_persona, target_persona):
     for p_1, p_2 in part_pairs:
         focal_points = [f"{p_2.scratch.name}"]
         retrieved = new_retrieve(p_1, focal_points, 50)
-        relationship = generate_summarize_agent_relationship(
-            p_1, p_2, retrieved)
+        relationship = generate_summarize_agent_relationship(p_1, p_2, retrieved)
         focal_points = [f"{relationship}",
                         f"{p_2.scratch.name} is {p_2.scratch.act_description}"]
         retrieved = new_retrieve(p_1, focal_points, 25)
-        summarized_idea = generate_agent_chat_summarize_ideas(
-            p_1, p_2, retrieved, curr_context)
+        summarized_idea = generate_agent_chat_summarize_ideas(p_1, p_2, retrieved, curr_context)
         summarized_ideas += [summarized_idea]
 
     return generate_agent_chat(maze, init_persona, target_persona,
@@ -148,8 +146,7 @@ def agent_chat_v2(init_persona, target_persona):
             focal_points = [f"{relationship}",
                             f"{target_persona.scratch.name} is {target_persona.scratch.act_description}"]
         retrieved = new_retrieve(init_persona, focal_points, 15)
-        utt, end = generate_one_utterance(
-            init_persona, target_persona, retrieved, curr_chat)
+        utt, end = generate_one_utterance(init_persona, target_persona, retrieved, curr_chat)
 
         curr_chat += [[init_persona.scratch.name, utt]]
         if end:
@@ -172,8 +169,7 @@ def agent_chat_v2(init_persona, target_persona):
             focal_points = [f"{relationship}",
                             f"{init_persona.scratch.name} is {init_persona.scratch.act_description}"]
         retrieved = new_retrieve(target_persona, focal_points, 15)
-        utt, end = generate_one_utterance(
-            target_persona, init_persona, retrieved, curr_chat)
+        utt, end = generate_one_utterance(target_persona, init_persona, retrieved, curr_chat)
 
         curr_chat += [[target_persona.scratch.name, utt]]
         if end:
@@ -191,8 +187,7 @@ def generate_summarize_ideas(persona, nodes, question):
     statements = ""
     for n in nodes:
         statements += f"{n.embedding_key}\n"
-    summarized_idea = run_gpt_prompt_summarize_ideas(
-        persona, statements, question)[0]
+    summarized_idea = run_gpt_prompt_summarize_ideas(persona, statements, question)[0]
     return summarized_idea
 
 
@@ -210,8 +205,7 @@ def generate_next_line(persona, interlocutor_desc, curr_convo, summarized_idea):
 
 
 def generate_inner_thought(persona, whisper):
-    inner_thought = run_gpt_prompt_generate_whisper_inner_thought(persona, whisper)[
-        0]
+    inner_thought = run_gpt_prompt_generate_whisper_inner_thought(persona, whisper)[0]
     return inner_thought
 
 
@@ -278,8 +272,7 @@ def open_convo_session(persona, convo_mode):
 
             else:
                 retrieved = new_retrieve(persona, [line], 50)[line]
-                summarized_idea = generate_summarize_ideas(
-                    persona, retrieved, line)
+                summarized_idea = generate_summarize_ideas(persona, retrieved, line)
                 curr_convo += [[interlocutor_desc, line]]
 
                 next_line = generate_next_line(
