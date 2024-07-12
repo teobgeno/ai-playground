@@ -13,10 +13,10 @@ from game.map import Sections
 # @@ vars @@
 time_scale = 20
 
-with open('game/tasks.json') as f:
-    tasks_data = json.load(f)
+# with open('game/tasks.json') as f:
+#     tasks_data = json.load(f)
 
-nlp = spacy.load("en_core_web_lg")
+# nlp = spacy.load("en_core_web_lg")
 
 # @@ Helper @@
 
@@ -76,8 +76,14 @@ def resolve_gpt_tasks(gpt_tasks):
 
 def test_action():
     ch = Character.create(1, 'Isabella Rodriguez')
-    ch.testFunc()
-    ch.setScartchMemory('data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
+    ch.setSpatialMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
+    ch.setAssociativeMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/associative_memory')
+
+    ch.setScratchMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
+
     print(ch)
 
 

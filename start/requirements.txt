@@ -6,3 +6,4 @@ mysql-connector-python>=8.2.0
 configparser>=6.0.0
 noise>=1.2.2
 matplotlib>=3.8.2
+utils>=1.0.2

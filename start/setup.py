@@ -1,5 +1,5 @@
 from api import main
-import noise
+# import noise
 import numpy as np
 import matplotlib.pyplot as plt
 from game.deb import test_whatever
