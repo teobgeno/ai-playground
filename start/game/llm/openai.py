@@ -1,3 +1,8 @@
+from typing import List
+
+# https://github.com/mluogh/eastworld/blob/main/llm/openai.py
+
+
 class OpenAIAPI:
     def __init__(
         self,
@@ -8,6 +13,13 @@ class OpenAIAPI:
 
     def request():
         pass
+
+    def embed(self, query: str) -> List[float]:
+        return (
+            await openai.Embedding.acreate(  # type: ignore
+                input=query, model="text-embedding-ada-002"
+            )
+        )["data"][0]["embedding"]
 
     # prompt = 'GPT-3 Prompt:\n"""\n' + prompt + '\n"""\n'
     # prompt += f"Output the response to the prompt above in json. {special_instruction}\n"

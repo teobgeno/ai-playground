@@ -86,6 +86,7 @@ def test_action():
 
     focal_points = [" Maria Lopez"]
     retrieved = new_retrieve(ch, focal_points, 50)
+    llm = LLMProvider()
 
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
     print('ok')
