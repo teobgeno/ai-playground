@@ -689,3 +689,64 @@ https://blog.pbbg.com/dynamic-and-repeatable-tilemap-generation/
 https://github.com/Descrout/2D-Terrain-Generator
 https://github.com/leodeslf/perlin-noise
 https://github.com/thetarby/noise-js
+
+
+---- start conv ------
+
+ const embedding = await embeddingsCache.fetch(
+    ctx,
+    `${player.name} is talking to ${otherPlayer.name}`,
+  );
+
+
+`You are ${player.name}, and you just started a conversation with ${otherPlayer.name}.`,
+  if (agent) {
+    prompt.push(`About you: ${agent.identity}`);
+    prompt.push(`Your goals for the conversation: ${agent.plan}`);
+  }
+  if (otherAgent) {
+    prompt.push(`About ${otherPlayer.name}: ${otherAgent.identity}`);
+  }
+
+  prompt.push(
+      `Last time you chatted with ${
+        otherPlayer.name
+      } it was ${prev.toLocaleString()}. It's now ${now.toLocaleString()}.`,
+    );
+
+    if (memories.length > 0) {
+    prompt.push(`Here are some related memories in decreasing relevance order:`);
+    for (const memory of memories) {
+      prompt.push(' - ' + memory.description);
+    }
+  }
+
+  ---- continue conv ------
+
+    const embedding = await embeddingsCache.fetch(
+    ctx,
+    `What do you think about ${otherPlayer.name}?`,
+  );
+
+    const prompt = [
+    `You are ${player.name}, and you're currently in a conversation with ${otherPlayer.name}.`,
+    `The conversation started at ${started.toLocaleString()}. It's now ${now.toLocaleString()}.`,
+  ];
+
+
+    prompt.push(
+    `Below is the current chat history between you and ${otherPlayer.name}.`,
+    `DO NOT greet them again. Do NOT use the word "Hey" too often. Your response should be brief and within 200 characters.`,
+  );
+
+---- end conv ------
+
+const prompt = [
+    `You are ${player.name}, and you're currently in a conversation with ${otherPlayer.name}.`,
+    `You've decided to leave the question and would like to politely tell them you're leaving the conversation.`,
+];
+
+prompt.push(
+    `Below is the current chat history between you and ${otherPlayer.name}.`,
+    `How would you like to tell them that you're leaving? Your response should be brief and within 200 characters.`,
+);
