@@ -1,6 +1,7 @@
 import sys
 import json
 import spacy
+import configparser
 from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
@@ -85,9 +86,17 @@ def test_action():
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
     focal_points = [" Maria Lopez"]
-    retrieved = new_retrieve(ch, focal_points, 50)
-    llm = LLMProvider()
 
+    parser = configparser.ConfigParser()
+    parser.read("config.ini")
+    api_key = parser.get("OPENAI", "key")
+    llm = LLMProvider(api_key)
+    # embed = llm.get_embed("Maria Lopez")
+    # text_file = open("embed_test.txt", "w")
+    # text_file.write("Purchase Amount: %s" % embed)
+    # text_file.close()
+
+    retrieved = new_retrieve(ch, focal_points, 50)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
     print('ok')
 

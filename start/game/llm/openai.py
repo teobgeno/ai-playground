@@ -1,5 +1,5 @@
 from typing import List
-
+import openai
 # https://github.com/mluogh/eastworld/blob/main/llm/openai.py
 
 
@@ -9,14 +9,15 @@ class OpenAIAPI:
         api_key: str = "",
         model: str = "gpt-3.5-turbo",
     ):
-        self.api_key = api_key
+        if api_key:
+            openai.api_key = api_key
 
     def request():
         pass
 
     def embed(self, query: str) -> List[float]:
         return (
-            await openai.Embedding.acreate(  # type: ignore
+            openai.Embedding.create(  # type: ignore
                 input=query, model="text-embedding-ada-002"
             )
         )["data"][0]["embedding"]

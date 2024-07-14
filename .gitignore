@@ -1,6 +1,7 @@
 devmaterials/
 node_modules/
 *.pyc
+*.ini
 
 # Logs
 logs
