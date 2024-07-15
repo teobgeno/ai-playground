@@ -102,7 +102,51 @@ def test_action():
     curr_chat = []
     generate_one_utterance(ch, ch, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
+    # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
+
+
+def run_gpt_prompt_summarize_conversation(persona, conversation, test_input=None, verbose=False):
+    def create_prompt_input(conversation, test_input=None):
+        convo_str = ""
+        for row in conversation:
+            convo_str += f'{row[0]}: "{row[1]}"\n'
+
+        prompt_input = [convo_str]
+        return prompt_input
+
+    def __func_clean_up(gpt_response, prompt=""):
+        ret = "conversing about " + gpt_response.strip()
+        return ret
+
+    def __func_validate(gpt_response, prompt=""):
+        try:
+            __func_clean_up(gpt_response, prompt)
+            return True
+        except:
+            return False
+
+    def get_fail_safe():
+        return "conversing with a housemate about morning greetings"
+
+    # ChatGPT Plugin ===========================================================
+    def __chat_func_clean_up(gpt_response, prompt=""):
+        ret = "conversing about " + gpt_response.strip()
+        return ret
+
+    def __chat_func_validate(gpt_response, prompt=""):
+        try:
+            __func_clean_up(gpt_response, prompt)
+            return True
+        except:
+            return False
+
+    prompt_template = "persona/prompt_template/v3_ChatGPT/summarize_conversation_v1.txt"
+    prompt_input = create_prompt_input(conversation, test_input)
+    prompt = generate_prompt(prompt_input, prompt_template)
+    print(prompt)
+
+    # ChatGPT Plugin ===========================================================
 
 
 def generate_one_utterance(init_persona: Character, target_persona: Character, retrieved, curr_chat):
