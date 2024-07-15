@@ -8,12 +8,13 @@ from numpy.linalg import norm
 from numpy import dot
 from core.global_methods import *
 from game.llm import LLMProvider
+from game.character.character import *
 
 class RetrieveAction:
     def __init__(self, llm: LLMProvider):
         self._llm = llm
 
-    def retrieve(self, persona, perceived):
+    def retrieve(self, persona: Character, perceived):
       """
       This function takes the events that are perceived by the persona as input
       and returns a set of related events and thoughts that the persona would 
@@ -45,7 +46,7 @@ class RetrieveAction:
 
       return retrieved
     
-    def new_retrieve(self, persona, focal_points, n_count=30):
+    def new_retrieve(self, persona: Character, focal_points: List[str], n_count=30):
       """
       Given the current persona and focal points (focal points are events or 
       thoughts for which we are retrieving), we retrieve a set of nodes for each
