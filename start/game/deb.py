@@ -5,7 +5,7 @@ import configparser
 from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
-from game.character.cognitive_modules.retrieve import *
+from game.character.cognitive_modules.retrieve import RetrieveAction
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
 from game.actions import GenericAction, DecideLocationAction, DecideItemAction, DecideResourceAction
@@ -85,8 +85,6 @@ def test_action():
     ch.setScratchMemory(
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
-    focal_points = [" Maria Lopez"]
-
     parser = configparser.ConfigParser()
     parser.read("config.ini")
     api_key = parser.get("OPENAI", "key")
@@ -96,7 +94,10 @@ def test_action():
     # text_file.write("Purchase Amount: %s" % embed)
     # text_file.close()
 
-    retrieved = new_retrieve(ch, focal_points, 50)
+    focal_points = [" Maria Lopez"]
+    retrieve_action = RetrieveAction(llm)
+    retrieved = retrieve_action.new_retrieve(ch, focal_points, 50)
+
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
     print('ok')
 
