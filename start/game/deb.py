@@ -101,6 +101,7 @@ def test_action():
     # generate_summarize_agent_relationship(ch, ch, retrieved)
     curr_chat = []
     generate_one_utterance(ch, ch, retrieved, curr_chat)
+    # curr_chat += [[ch.name, utt]]
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
 
 
