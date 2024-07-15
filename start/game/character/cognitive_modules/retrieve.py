@@ -206,7 +206,7 @@ class RetrieveAction:
       return top_v
 
 
-    def extract_recency(self, persona, nodes):
+    def extract_recency(self, persona: Character, nodes):
       """
       Gets the current Persona object and a list of nodes that are in a 
       chronological order, and outputs a dictionary that has the recency score
