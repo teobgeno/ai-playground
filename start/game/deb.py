@@ -98,7 +98,78 @@ def test_action():
     retrieve_action = RetrieveAction(llm)
     retrieved = retrieve_action.new_retrieve(ch, focal_points, 50)
 
-    # set type to add distinct items
+    # generate_summarize_agent_relationship(ch, ch, retrieved)
+    curr_chat = []
+    generate_one_utterance(ch, ch, retrieved, curr_chat)
+    # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
+
+
+def generate_one_utterance(init_persona: Character, target_persona: Character, retrieved, curr_chat):
+    # Chat version optimized for speed via batch generation
+    curr_context = (f"{init_persona.scratch_memory.name} " +
+                    f"was {init_persona.scratch_memory.act_description} " +
+                    f"when {init_persona.scratch_memory.name} " +
+                    f"saw {target_persona.scratch_memory.name} " +
+                    f"in the middle of {target_persona.scratch_memory.act_description}.\n")
+    curr_context += (f"{init_persona.scratch_memory.name} " +
+                     f"is initiating a conversation with " +
+                     f"{target_persona.scratch_memory.name}.")
+
+    run_gpt_generate_iterative_chat_utt(
+        init_persona, target_persona, retrieved, curr_context, curr_chat)[0]
+
+
+def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona: Character, retrieved, curr_context, curr_chat, test_input=None, verbose=False):
+    def create_prompt_input(init_persona: Character, target_persona: Character, retrieved, curr_context, curr_chat, test_input=None):
+        persona = init_persona
+        prev_convo_insert = "\n"
+        if persona.associative_memory.seq_chat:
+            for i in persona.associative_memory.seq_chat:
+                if i.object == target_persona.scratch_memory.name:
+                    v1 = int((persona.scratch_memory.curr_time - i.created).total_seconds()/60)
+                    prev_convo_insert += f'{str(v1)} minutes ago, {persona.scratch_memory.name} and {target_persona.scratch_memory.name} were already {
+                        i.description} This context takes place after that conversation.'
+                    break
+        if prev_convo_insert == "\n":
+            prev_convo_insert = ""
+        if persona.associative_memory.seq_chat:
+            if int((persona.scratch_memory.curr_time - persona.associative_memory.seq_chat[-1].created).total_seconds()/60) > 480:
+                prev_convo_insert = ""
+        print(prev_convo_insert)
+
+        curr_sector = "Isabella Rodriguez's apartment"
+        curr_arena = "bathroom"
+        curr_location = f"{curr_arena} in {curr_sector}"
+
+        retrieved_str = ""
+        for key, vals in retrieved.items():
+            for v in vals:
+                retrieved_str += f"- {v.description}\n"
+
+        convo_str = ""
+        for i in curr_chat:
+            convo_str += ": ".join(i) + "\n"
+        if convo_str == "":
+            convo_str = "[The conversation has not started yet -- start it!]"
+
+        init_iss = f"Here is Here is a brief description of {
+            init_persona.scratch_memory.name}.\n{init_persona.scratch_memory.get_str_iss()}"
+        prompt_input = [init_iss, init_persona.scratch_memory.name, retrieved_str, prev_convo_insert,
+                        curr_location, curr_context, init_persona.scratch_memory.name, target_persona.scratch_memory.name,
+                        convo_str, init_persona.scratch_memory.name, target_persona.scratch_memory.name,
+                        init_persona.scratch_memory.name, init_persona.scratch_memory.name,
+                        init_persona.scratch_memory.name
+                        ]
+        return prompt_input
+
+    prompt_template = "prompt_template/v3_ChatGPT/iterative_convo_v1.txt"
+    prompt_input = create_prompt_input(
+        init_persona, target_persona, retrieved, curr_context, curr_chat)
+    prompt = generate_prompt(prompt_input, prompt_template)
+    print(prompt)
+
+
+def generate_summarize_agent_relationship(init_persona, target_persona, retrieved):
     all_embedding_keys = set()
     for key, val in retrieved.items():
         for i in val:
@@ -107,18 +178,21 @@ def test_action():
     for i in all_embedding_keys:
         all_embedding_key_str += f"{i}\n"
 
-    # print(all_embedding_key_str)
+    run_gpt_prompt_agent_chat_summarize_relationship(
+        init_persona, target_persona, all_embedding_key_str)
+
+
+def run_gpt_prompt_agent_chat_summarize_relationship(persona, target_persona, statements, test_input=None, verbose=False):
+    def create_prompt_input(persona, target_persona, statements, test_input=None):
+        prompt_input = [statements, persona.scratch_memory.name, target_persona.scratch_memory.name]
+        return prompt_input
 
     prompt_template = "prompt_template/v3_ChatGPT/summarize_chat_relationship_v2.txt"
-    prompt_input = create_prompt_input(ch, ch, all_embedding_key_str)
+    prompt_input = create_prompt_input(persona, target_persona, statements)
     prompt = generate_prompt(prompt_input, prompt_template)
+    example_output = 'Jane Doe is working on a project'
+    special_instruction = 'The output should be a string that responds to the question.'
     print(prompt)
-    # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
-
-
-def create_prompt_input(persona: Character, target_persona, statements, test_input=None):
-    prompt_input = [statements, persona.name, target_persona.name]
-    return prompt_input
 
 
 def generate_prompt(curr_input, prompt_lib_file):
