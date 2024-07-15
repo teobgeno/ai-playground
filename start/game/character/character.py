@@ -27,6 +27,10 @@ class Character:
     def id(self):
         return self._id
 
+    @property
+    def name(self):
+        return self._name
+
     def setSpatialMemory(self, data):
         self.spatial_memory = MemoryTree(data)
 

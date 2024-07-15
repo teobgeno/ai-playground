@@ -107,18 +107,17 @@ def test_action():
     for i in all_embedding_keys:
         all_embedding_key_str += f"{i}\n"
 
-    print(all_embedding_key_str)
+    # print(all_embedding_key_str)
 
     prompt_template = "prompt_template/v3_ChatGPT/summarize_chat_relationship_v2.txt"
     prompt_input = create_prompt_input(ch, ch, all_embedding_key_str)
     prompt = generate_prompt(prompt_input, prompt_template)
-
+    print(prompt)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
-    print('ok')
 
 
-def create_prompt_input(persona, target_persona, statements, test_input=None):
-    prompt_input = [statements, persona.scratch.name, target_persona.scratch.name]
+def create_prompt_input(persona: Character, target_persona, statements, test_input=None):
+    prompt_input = [statements, persona.name, target_persona.name]
     return prompt_input
 
 
