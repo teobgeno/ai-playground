@@ -98,8 +98,57 @@ def test_action():
     retrieve_action = RetrieveAction(llm)
     retrieved = retrieve_action.new_retrieve(ch, focal_points, 50)
 
+    # set type to add distinct items
+    all_embedding_keys = set()
+    for key, val in retrieved.items():
+        for i in val:
+            all_embedding_keys.add(i.embedding_key)
+    all_embedding_key_str = ""
+    for i in all_embedding_keys:
+        all_embedding_key_str += f"{i}\n"
+
+    print(all_embedding_key_str)
+
+    prompt_template = "prompt_template/v3_ChatGPT/summarize_chat_relationship_v2.txt"
+    prompt_input = create_prompt_input(ch, ch, all_embedding_key_str)
+    prompt = generate_prompt(prompt_input, prompt_template)
+
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
     print('ok')
+
+
+def create_prompt_input(persona, target_persona, statements, test_input=None):
+    prompt_input = [statements, persona.scratch.name, target_persona.scratch.name]
+    return prompt_input
+
+
+def generate_prompt(curr_input, prompt_lib_file):
+    """
+    Takes in the current input (e.g. comment that you want to classifiy) and 
+    the path to a prompt file. The prompt file contains the raw str prompt that
+    will be used, which contains the following substr: !<INPUT>! -- this 
+    function replaces this substr with the actual curr_input to produce the 
+    final promopt that will be sent to the GPT3 server. 
+    ARGS:
+      curr_input: the input we want to feed in (IF THERE ARE MORE THAN ONE
+                  INPUT, THIS CAN BE A LIST.)
+      prompt_lib_file: the path to the promopt file. 
+    RETURNS: 
+      a str prompt that will be sent to OpenAI's GPT server.  
+    """
+    if type(curr_input) == type("string"):
+        curr_input = [curr_input]
+    curr_input = [str(i) for i in curr_input]
+
+    f = open(prompt_lib_file, "r")
+    prompt = f.read()
+    f.close()
+    for count, i in enumerate(curr_input):
+        prompt = prompt.replace(f"!<INPUT {count}>!", i)
+    if "<commentblockmarker>###</commentblockmarker>" in prompt:
+        prompt = prompt.split(
+            "<commentblockmarker>###</commentblockmarker>")[1]
+    return prompt.strip()
 
 
 def test_whatever(db):
