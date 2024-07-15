@@ -132,10 +132,10 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
                     break
         if prev_convo_insert == "\n":
             prev_convo_insert = ""
-        if persona.associative_memory.seq_chat:
-            if int((persona.scratch_memory.curr_time - persona.associative_memory.seq_chat[-1].created).total_seconds()/60) > 480:
-                prev_convo_insert = ""
-        print(prev_convo_insert)
+        # if persona.associative_memory.seq_chat:
+        #     if int((persona.scratch_memory.curr_time - persona.associative_memory.seq_chat[-1].created).total_seconds()/60) > 480:
+        #         prev_convo_insert = ""
+        # print(prev_convo_insert)
 
         curr_sector = "Isabella Rodriguez's apartment"
         curr_arena = "bathroom"
