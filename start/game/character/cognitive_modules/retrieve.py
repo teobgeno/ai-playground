@@ -9,6 +9,8 @@ from numpy import dot
 from core.global_methods import *
 from game.llm import LLMProvider
 from game.character.character import *
+from game.character.memory_structures.associative_memory import ConceptNode
+
 
 class RetrieveAction:
     def __init__(self, llm: LLMProvider):
@@ -206,7 +208,7 @@ class RetrieveAction:
       return top_v
 
 
-    def extract_recency(self, persona: Character, nodes):
+    def extract_recency(self, persona: Character, nodes: List[ConceptNode]):
       """
       Gets the current Persona object and a list of nodes that are in a 
       chronological order, and outputs a dictionary that has the recency score
@@ -229,7 +231,7 @@ class RetrieveAction:
       return recency_out
 
 
-    def extract_importance(self, persona, nodes):
+    def extract_importance(self, persona: Character, nodes: List[ConceptNode]):
       """
       Gets the current Persona object and a list of nodes that are in a 
       chronological order, and outputs a dictionary that has the importance score
