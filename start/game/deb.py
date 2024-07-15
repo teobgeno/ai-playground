@@ -116,7 +116,7 @@ def generate_one_utterance(init_persona: Character, target_persona: Character, r
                      f"{target_persona.scratch_memory.name}.")
 
     run_gpt_generate_iterative_chat_utt(
-        init_persona, target_persona, retrieved, curr_context, curr_chat)[0]
+        init_persona, target_persona, retrieved, curr_context, curr_chat)
 
 
 def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona: Character, retrieved, curr_context, curr_chat, test_input=None, verbose=False):

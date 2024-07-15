@@ -168,8 +168,8 @@ class Scratch:
             self.retention = scratch_load["retention"]
 
             if scratch_load["curr_time"]:
-                self.curr_time = datetime.datetime.strptime(scratch_load["curr_time"],
-                                                            "%B %d, %Y, %H:%M:%S")
+                self.curr_time = datetime.datetime.strptime(
+                    scratch_load["curr_time"], "%B %d, %Y, %H:%M:%S")
             else:
                 self.curr_time = None
             self.curr_tile = scratch_load["curr_tile"]
@@ -211,7 +211,7 @@ class Scratch:
                     scratch_load["act_start_time"],
                     "%B %d, %Y, %H:%M:%S")
             else:
-                self.curr_time = None
+                self.act_start_time = None
             self.act_duration = scratch_load["act_duration"]
             self.act_description = scratch_load["act_description"]
             self.act_pronunciatio = scratch_load["act_pronunciatio"]
