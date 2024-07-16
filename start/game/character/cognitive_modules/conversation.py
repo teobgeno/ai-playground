@@ -12,8 +12,8 @@ class Conversation:
         # skills List of skill(class)
         # traits List of trait(class)
 
-    def get_relationship_with_participant(self, init_person: Character, traget_person: Character):
-        focal_points = [traget_person.name]
+    def get_relationship_with_participant(self, init_person: Character, target_person: Character):
+        focal_points = [target_person.name]
         retrieve_action = RetrieveAction(self._llm)
         retrieved = retrieve_action.new_retrieve(init_person, focal_points, 50)
         all_embedding_keys = set()
