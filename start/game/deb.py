@@ -84,6 +84,8 @@ def test_action():
     llm = LLMProvider(api_key)
 
     player = Character.create(2, 'Maria Lopez')
+    player.setBlankMemory()
+
     npc = Character.create(1, 'Isabella Rodriguez')
     npc.setSpatialMemory(
         'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
@@ -101,7 +103,7 @@ def test_action():
     retrieve_action = RetrieveAction(llm)
     retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
 
-    generate_summarize_agent_relationship(npc, npc, retrieved)
+    # generate_summarize_agent_relationship(npc, npc, retrieved)
     curr_chat = []
     # generate_one_utterance(ch, ch, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]

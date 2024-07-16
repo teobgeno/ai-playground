@@ -39,3 +39,8 @@ class Character:
 
     def setScratchMemory(self, data):
         self.scratch_memory = Scratch(data)
+
+    def setBlankMemory(self):
+        self.spatial_memory = MemoryTree('')
+        self.spatial_memory = AssociativeMemory('')
+        self.spatial_memory = Scratch('')
