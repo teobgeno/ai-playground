@@ -15,20 +15,23 @@ class OpenAIAPI:
     def request():
         pass
 
-    def completition(self, query: str, gpt_params):
+    def completition(self, params, prompt: str):
         try:
+            print(params)
+            print(prompt)
+            return "test response"
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 response_format={"type": "json_object"},
-                max_tokens=200,
-                temperature=0.5,
-                top_p=1,
-                stream=False,
-                frequency_penalty=0,
-                presence_penalty=0,
-                stop=None
+                max_tokens=params['max_tokens'],
+                temperature=params['temperature'],
+                top_p=params['top_p'],
+                stream=params['stream'],
+                frequency_penalty=params['frequency_penalty'],
+                presence_penalty=params['presence_penalty'],
+                stop=None,
                 messages=[
-                    {"role": "user", "content": query}
+                    {"role": "user", "content": prompt}
                 ]
             )
             return completion["choices"][0]["message"]["content"]

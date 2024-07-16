@@ -22,7 +22,7 @@ class Conversation:
         for i in all_embedding_keys:
             all_embedding_key_str += f"{i}\n"
 
-        self._relation_prompt.execute(self._action_descr, game_objects)
+        self._relation_prompt.execute(all_embedding_key_str, init_person.name, target_person.name)
     pass
 
     def add_conversation_message():

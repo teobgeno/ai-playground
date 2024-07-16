@@ -13,5 +13,8 @@ class LLMProvider:
     def request(self, llm_params, prompt):
         return self._api.request(llm_params, prompt)
 
+    def completition(self, llm_params, prompt):
+        return self._api.completition(llm_params, prompt)
+
     def get_embed(self, query: str) -> List[float]:
         return self._api.embed(query)

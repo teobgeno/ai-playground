@@ -18,16 +18,15 @@ class GetRelationshipPrompt(BasePrompt):
         self._llm: LLMProvider = props["llm"]
 
     def execute(self, statements: str, init_person_name: str, target_person_name: str):
-        # TODO:: query llm
-        game_objects_str = ','.join([e for e in game_objects])
 
         prompt_data = []
-        prompt_data.append({"keyword": "ACTION", "value": action_descr})
-        prompt_data.append(
-            {"keyword": "GAMEOBJECTS", "value": game_objects_str})
-        prompt_file = "game/llm/prompts/decide_item/decide_item_resource.txt"
+        prompt_data.append({"keyword": "STATEMENTS", "value": statements})
+        prompt_data.append({"keyword": "INIT_PERSON_NAME", "value": init_person_name})
+        prompt_data.append({"keyword": "TARGET_PERSON_NAME", "value": target_person_name})
+
+        prompt_file = "game/llm/prompts/get_relationship/get_relationship.txt"
         prompt = self.parse_prompt(prompt_file, prompt_data)
-        response = self._llm(self.get_llm_params(), prompt)
+        response = self._llm.completition(self.get_llm_params(), prompt)
         parsed_response: GetRelationshipPrompt = self.get_valid_response(response)
         if parsed_response is not None:
             return [e["item"] for e in parsed_response]
