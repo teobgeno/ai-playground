@@ -31,7 +31,7 @@ class PromptParser:
     def print_run_prompts(self, prompt_template=None,
                           gpt_param=None):
         print("~~~ prompt_template ----------------------------------------------")
-        print(f"=== {prompt_template}")
+        print(prompt_template, "\n")
         print("~~~ gpt_param ----------------------------------------------------")
         print(gpt_param, "\n")
         print("=== END ==========================================================")

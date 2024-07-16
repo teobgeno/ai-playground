@@ -183,9 +183,9 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
         if persona.associative_memory.seq_chat:
             for i in persona.associative_memory.seq_chat:
                 if i.object == target_persona.name:
-                    v1 = int((persona.scratch_memory.curr_time - i.created).total_seconds()/60)
-                    prev_convo_insert += f'{str(v1)} minutes ago, {persona.scratch_memory.name} and {target_persona.name} were already {
-                        i.description} This context takes place after that conversation.'
+                    v1 = int((persona.scratch_memory.curr_time -
+                             i.created).total_seconds()/60)
+                    prev_convo_insert += f'{str(v1)} minutes ago, {persona.scratch_memory.name} and {target_persona.name} were already {i.description} This context takes place after that conversation.'
                     break
         if prev_convo_insert == "\n":
             prev_convo_insert = ""
@@ -209,8 +209,7 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
         if convo_str == "":
             convo_str = "[The conversation has not started yet -- start it!]"
 
-        init_iss = f"Here is Here is a brief description of {
-            init_persona.scratch_memory.name}.\n{init_persona.scratch_memory.get_str_iss()}"
+        init_iss = f"Here is Here is a brief description of {init_persona.scratch_memory.name}.\n{init_persona.scratch_memory.get_str_iss()}"
         prompt_input = [init_iss, init_persona.scratch_memory.name, retrieved_str, prev_convo_insert,
                         curr_location, curr_context, init_persona.scratch_memory.name, target_persona.name,
                         convo_str, init_persona.scratch_memory.name, target_persona.name,

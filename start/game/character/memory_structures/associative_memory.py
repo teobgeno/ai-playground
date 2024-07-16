@@ -274,15 +274,13 @@ class AssociativeMemory:
     def get_str_seq_events(self):
         ret_str = ""
         for count, event in enumerate(self.seq_event):
-            ret_str += f'{"Event", len(self.seq_event) - count, ": ",
-                          event.spo_summary(), " -- ", event.description}\n'
+            ret_str += f'{"Event", len(self.seq_event) - count, ": ", event.spo_summary(), " -- ", event.description}\n'
         return ret_str
 
     def get_str_seq_thoughts(self):
         ret_str = ""
         for count, event in enumerate(self.seq_thought):
-            ret_str += f'{"Thought", len(self.seq_thought) - count, ": ",
-                          event.spo_summary(), " -- ", event.description}'
+            ret_str += f'{"Thought", len(self.seq_thought) - count, ": ", event.spo_summary(), " -- ", event.description}'
         return ret_str
 
     def get_str_seq_chats(self):
