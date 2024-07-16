@@ -15,6 +15,27 @@ class OpenAIAPI:
     def request():
         pass
 
+    def completition(self, query: str, gpt_params):
+        try:
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                response_format={"type": "json_object"},
+                max_tokens=200,
+                temperature=0.5,
+                top_p=1,
+                stream=False,
+                frequency_penalty=0,
+                presence_penalty=0,
+                stop=None
+                messages=[
+                    {"role": "user", "content": query}
+                ]
+            )
+            return completion["choices"][0]["message"]["content"]
+        except:
+            print("ChatGPT ERROR")
+            return "ChatGPT ERROR"
+
     def embed(self, query: str) -> List[float]:
         return (
             openai.Embedding.create(  # type: ignore
