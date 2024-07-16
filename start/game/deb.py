@@ -102,10 +102,13 @@ def test_action():
     focal_points = [player.name]
     retrieve_action = RetrieveAction(llm)
     retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
+    # generate_summarize_agent_relationship(npc, player, retrieved)
 
-    generate_summarize_agent_relationship(npc, player, retrieved)
+    # relationship = generate_summarize_agent_relationship(npc, player, retrieved)
+    # focal_points = [f"{relationship}"],
+
     curr_chat = []
-    # generate_one_utterance(npc, player, retrieved, curr_chat)
+    generate_one_utterance(npc, player, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
     # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
@@ -156,14 +159,14 @@ def run_gpt_prompt_summarize_conversation(persona, conversation, test_input=None
 
 def generate_one_utterance(init_persona: Character, target_persona: Character, retrieved, curr_chat):
     # Chat version optimized for speed via batch generation
+    # curr_context = (f"{init_persona.scratch_memory.name} " +
+    #                 f"was {init_persona.scratch_memory.act_description} " +
+    #                 f"when {init_persona.scratch_memory.name} " +
+    #                 f"saw {target_persona.name}.\n")
+    # f"in the middle of {target_persona.scratch_memory.act_description}.\n")
     curr_context = (f"{init_persona.scratch_memory.name} " +
-                    f"was {init_persona.scratch_memory.act_description} " +
-                    f"when {init_persona.scratch_memory.name} " +
-                    f"saw {target_persona.scratch_memory.name} " +
-                    f"in the middle of {target_persona.scratch_memory.act_description}.\n")
-    curr_context += (f"{init_persona.scratch_memory.name} " +
-                     f"is initiating a conversation with " +
-                     f"{target_persona.scratch_memory.name}.")
+                    f"is initiating a conversation with " +
+                    f"{target_persona.name}.")
 
     run_gpt_generate_iterative_chat_utt(
         init_persona, target_persona, retrieved, curr_context, curr_chat)
@@ -175,9 +178,9 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
         prev_convo_insert = "\n"
         if persona.associative_memory.seq_chat:
             for i in persona.associative_memory.seq_chat:
-                if i.object == target_persona.scratch_memory.name:
+                if i.object == target_persona.name:
                     v1 = int((persona.scratch_memory.curr_time - i.created).total_seconds()/60)
-                    prev_convo_insert += f'{str(v1)} minutes ago, {persona.scratch_memory.name} and {target_persona.scratch_memory.name} were already {
+                    prev_convo_insert += f'{str(v1)} minutes ago, {persona.scratch_memory.name} and {target_persona.name} were already {
                         i.description} This context takes place after that conversation.'
                     break
         if prev_convo_insert == "\n":
@@ -187,8 +190,8 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
         #         prev_convo_insert = ""
         # print(prev_convo_insert)
 
-        curr_sector = "Isabella Rodriguez's apartment"
-        curr_arena = "bathroom"
+        curr_sector = f"{init_persona.name} apartment"
+        curr_arena = "living room"
         curr_location = f"{curr_arena} in {curr_sector}"
 
         retrieved_str = ""
@@ -205,8 +208,8 @@ def run_gpt_generate_iterative_chat_utt(init_persona: Character, target_persona:
         init_iss = f"Here is Here is a brief description of {
             init_persona.scratch_memory.name}.\n{init_persona.scratch_memory.get_str_iss()}"
         prompt_input = [init_iss, init_persona.scratch_memory.name, retrieved_str, prev_convo_insert,
-                        curr_location, curr_context, init_persona.scratch_memory.name, target_persona.scratch_memory.name,
-                        convo_str, init_persona.scratch_memory.name, target_persona.scratch_memory.name,
+                        curr_location, curr_context, init_persona.scratch_memory.name, target_persona.name,
+                        convo_str, init_persona.scratch_memory.name, target_persona.name,
                         init_persona.scratch_memory.name, init_persona.scratch_memory.name,
                         init_persona.scratch_memory.name
                         ]
@@ -247,17 +250,17 @@ def run_gpt_prompt_agent_chat_summarize_relationship(persona, target_persona, st
 
 def generate_prompt(curr_input, prompt_lib_file):
     """
-    Takes in the current input (e.g. comment that you want to classifiy) and 
+    Takes in the current input (e.g. comment that you want to classifiy) and
     the path to a prompt file. The prompt file contains the raw str prompt that
-    will be used, which contains the following substr: !<INPUT>! -- this 
-    function replaces this substr with the actual curr_input to produce the 
-    final promopt that will be sent to the GPT3 server. 
+    will be used, which contains the following substr: !<INPUT>! -- this
+    function replaces this substr with the actual curr_input to produce the
+    final promopt that will be sent to the GPT3 server.
     ARGS:
       curr_input: the input we want to feed in (IF THERE ARE MORE THAN ONE
                   INPUT, THIS CAN BE A LIST.)
-      prompt_lib_file: the path to the promopt file. 
-    RETURNS: 
-      a str prompt that will be sent to OpenAI's GPT server.  
+      prompt_lib_file: the path to the promopt file.
+    RETURNS:
+      a str prompt that will be sent to OpenAI's GPT server.
     """
     if type(curr_input) == type("string"):
         curr_input = [curr_input]
