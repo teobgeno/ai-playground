@@ -84,7 +84,7 @@ def test_action():
     llm = LLMProvider(api_key)
 
     player = Character.create(2, 'Maria Lopez')
-    player.setBlankMemory()
+    # player.setBlankMemory()
 
     npc = Character.create(1, 'Isabella Rodriguez')
     npc.setSpatialMemory(
@@ -103,9 +103,9 @@ def test_action():
     retrieve_action = RetrieveAction(llm)
     retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
 
-    # generate_summarize_agent_relationship(npc, npc, retrieved)
+    generate_summarize_agent_relationship(npc, player, retrieved)
     curr_chat = []
-    # generate_one_utterance(ch, ch, retrieved, curr_chat)
+    # generate_one_utterance(npc, player, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
     # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party
@@ -234,7 +234,7 @@ def generate_summarize_agent_relationship(init_persona, target_persona, retrieve
 
 def run_gpt_prompt_agent_chat_summarize_relationship(persona, target_persona, statements, test_input=None, verbose=False):
     def create_prompt_input(persona, target_persona, statements, test_input=None):
-        prompt_input = [statements, persona.scratch_memory.name, target_persona.scratch_memory.name]
+        prompt_input = [statements, persona.name, target_persona.name]
         return prompt_input
 
     prompt_template = "prompt_template/v3_ChatGPT/summarize_chat_relationship_v2.txt"
