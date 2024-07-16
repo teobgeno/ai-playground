@@ -6,6 +6,7 @@ from pprint import pprint
 from game.character.character import *
 from game.character.character_skill import CharacterSkill
 from game.character.cognitive_modules.retrieve import RetrieveAction
+from game.character.cognitive_modules.conversation import Conversation
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
 from game.actions import GenericAction, DecideLocationAction, DecideItemAction, DecideResourceAction
@@ -99,16 +100,19 @@ def test_action():
     # text_file.write("Purchase Amount: %s" % embed)
     # text_file.close()
 
-    focal_points = [player.name]
-    retrieve_action = RetrieveAction(llm)
-    retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
+    conversation = Conversation(llm, [npc, player])
+    conversation.add_conversation_message()
+
+    # focal_points = [player.name]
+    # retrieve_action = RetrieveAction(llm)
+    # retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
     # generate_summarize_agent_relationship(npc, player, retrieved)
 
     # relationship = generate_summarize_agent_relationship(npc, player, retrieved)
     # focal_points = [f"{relationship}"],
 
     curr_chat = []
-    generate_one_utterance(npc, player, retrieved, curr_chat)
+    # generate_one_utterance(npc, player, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
     # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party

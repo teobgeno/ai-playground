@@ -25,5 +25,5 @@ class Conversation:
         self._relation_prompt.execute(all_embedding_key_str, init_person.name, target_person.name)
     pass
 
-    def add_conversation_message():
-        pass
+    def add_conversation_message(self):
+        self.get_relationship_with_participant(self._paricipants[0], self._paricipants[1])

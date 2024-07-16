@@ -7,7 +7,7 @@ Variables:
 
 <commentblockmarker>###</commentblockmarker>
 [Statements]
-!<INPUT STATEMENTS!
+!<INPUT STATEMENTS>!
 
 Based on the statements above, summarize !<INPUT INIT_PERSON_NAME>! and !<INPUT TARGET_PERSON_NAME>!'s relationship. What do they feel or know about each other?
 

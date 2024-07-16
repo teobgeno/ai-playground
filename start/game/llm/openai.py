@@ -17,8 +17,7 @@ class OpenAIAPI:
 
     def completition(self, params, prompt: str):
         try:
-            print(params)
-            print(prompt)
+            # print(params)
             return "test response"
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
