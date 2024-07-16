@@ -77,30 +77,33 @@ def resolve_gpt_tasks(gpt_tasks):
 
 
 def test_action():
-    ch = Character.create(1, 'Isabella Rodriguez')
-    ch.setSpatialMemory(
-        'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
-    ch.setAssociativeMemory(
-        'data/test/Isabella Rodriguez/bootstrap_memory/associative_memory')
-    ch.setScratchMemory(
-        'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
     parser = configparser.ConfigParser()
     parser.read("config.ini")
     api_key = parser.get("OPENAI", "key")
     llm = LLMProvider(api_key)
+
+    player = Character.create(2, 'Maria Lopez')
+    npc = Character.create(1, 'Isabella Rodriguez')
+    npc.setSpatialMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
+    npc.setAssociativeMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/associative_memory')
+    npc.setScratchMemory(
+        'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
+
     # embed = llm.get_embed("Maria Lopez")
     # text_file = open("embed_test.txt", "w")
     # text_file.write("Purchase Amount: %s" % embed)
     # text_file.close()
 
-    focal_points = [" Maria Lopez"]
+    focal_points = [player.name]
     retrieve_action = RetrieveAction(llm)
-    retrieved = retrieve_action.new_retrieve(ch, focal_points, 50)
+    retrieved = retrieve_action.new_retrieve(npc, focal_points, 50)
 
-    # generate_summarize_agent_relationship(ch, ch, retrieved)
+    generate_summarize_agent_relationship(npc, npc, retrieved)
     curr_chat = []
-    generate_one_utterance(ch, ch, retrieved, curr_chat)
+    # generate_one_utterance(ch, ch, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
     # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)
     # Isabella Rodriguez and Maria Lopez are conversing about preparations for the Valentine's Day party

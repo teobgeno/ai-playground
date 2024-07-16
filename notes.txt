@@ -761,9 +761,20 @@ prompt.push(
     },
   ];
 
+ai-town/convex/agent/memory.ts
 
 calculateImportance
 On the scale of 0 to 9, where 0 is purely mundane (e.g., brushing teeth, making bed) and 9 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following piece of memory.
+
+ const llmMessages: LLMMessage[] = [
+    {
+      role: 'user',
+      content: `You are ${player.name}, and you just finished a conversation with ${otherPlayer.name}. I would
+      like you to summarize the conversation from ${player.name}'s perspective, using first-person pronouns like
+      "I," and add if you liked or disliked this interaction.`,
+    },
+  ];
+
 
 insertMemory, {
     agentId,
