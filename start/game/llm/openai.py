@@ -15,27 +15,23 @@ class OpenAIAPI:
     def request():
         pass
 
-    def completition(self, params, prompt: str):
+    def completition(self, params, messages):
         try:
-            # print(params)
-            return "test response"
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
-                response_format={"type": "json_object"},
+                messages= messages,
                 max_tokens=params['max_tokens'],
                 temperature=params['temperature'],
                 top_p=params['top_p'],
                 stream=params['stream'],
                 frequency_penalty=params['frequency_penalty'],
                 presence_penalty=params['presence_penalty'],
-                stop=None,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
+                stop=params['stop']
             )
+            print(completion)
             return completion["choices"][0]["message"]["content"]
-        except:
-            print("ChatGPT ERROR")
+        except Exception as error:
+            print("ChatGPT ERROR", error)
             return "ChatGPT ERROR"
 
     def embed(self, query: str) -> List[float]:
