@@ -22,7 +22,6 @@ class Conversation:
         for i in all_embedding_keys:
             all_embedding_key_str += f"{i}\n"
 
-        # self._relation_prompt.execute(all_embedding_key_str, init_person.name, target_person.name)
         content=self.get_relation_prompt({'statements': all_embedding_key_str, 'init_person_name': init_person.name, 'target_person_name': target_person.name })
         print(content)
 
