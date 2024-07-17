@@ -61,5 +61,3 @@ class Conversation:
         #  \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
         return tpl.format(props=props)
     
-    def get_llm_params(self):
-        return {"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": True, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
