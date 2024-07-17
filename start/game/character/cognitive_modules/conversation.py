@@ -3,15 +3,6 @@ from game.character.character import *
 from game.character.cognitive_modules.retrieve import RetrieveAction
 from game.llm import GetRelationshipPrompt
 
-
-_GET_RELATIONSHIP_TMPL = """
-[Statements]
-\n
-{input_statements}
-\nBased on the statements above, summarize {input_init_person_name} and {input_target_person_name}'s relationship. What do they feel or know about each other?
-"""
-
-
 class Conversation:
     def __init__(self, llm: LLMProvider, participants: List[Character]):
         self._id = 0
@@ -32,8 +23,7 @@ class Conversation:
             all_embedding_key_str += f"{i}\n"
 
         # self._relation_prompt.execute(all_embedding_key_str, init_person.name, target_person.name)
-
-        content=_GET_RELATIONSHIP_TMPL.format(input_statements=all_embedding_key_str, input_init_person_name=init_person.name)
+        content=self.get_relation_prompt({'statements': all_embedding_key_str, 'init_person_name': init_person.name, 'target_person_name': target_person.name })
         print(content)
 
     pass
@@ -43,3 +33,14 @@ class Conversation:
         pass
     def add_conversation_message(self):
         self.get_relationship_with_participant(self._paricipants[0], self._paricipants[1])
+
+
+    def get_relation_prompt(self, props):
+        print(props['statements'])
+        # tpl = """
+        # [Statements]
+        # \n
+        # {props.statements}
+        # \nBased on the statements above, summarize {props.init_person_name} and {props.target_person_name}'s relationship. What do they feel or know about each other?
+        # """
+        # return tpl.format(props=props)
