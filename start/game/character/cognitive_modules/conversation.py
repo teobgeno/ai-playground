@@ -36,11 +36,10 @@ class Conversation:
 
 
     def get_relation_prompt(self, props):
-        print(props['statements'])
-        # tpl = """
-        # [Statements]
-        # \n
-        # {props.statements}
-        # \nBased on the statements above, summarize {props.init_person_name} and {props.target_person_name}'s relationship. What do they feel or know about each other?
-        # """
-        # return tpl.format(props=props)
+        tpl = """
+        [Statements]
+        \n
+        {props[statements]}
+        \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
+        """
+        return tpl.format(props=props)
