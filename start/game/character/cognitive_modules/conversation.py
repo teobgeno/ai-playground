@@ -5,7 +5,14 @@ from game.character.character import *
 from core.db.json_db_manager import JsonDBManager
 
 
-MessageDict = TypedDict({'id':int, 'character_id': int, 'message': str})
+class Message(TypedDict):
+    id: int
+    character_id: int
+    message: str
+
+class Participant(TypedDict):
+    character: Character
+    is_talking: bool
 
 class Conversation:
     def __init__(self, db:JsonDBManager, llm: LLMProvider):
@@ -15,17 +22,17 @@ class Conversation:
         self._participants = None
         self._messages = []
 
-    def create_conversation(self, participants: List[Character]):
-        self._id = self._db.add_record({"participants": [e.id for e in participants], "messages":[], "type":"conversation"})
-        self._participants = participants
+    def create_conversation(self, participants: List[Participant]):
+        self._id = self._db.add_record({"participants": [e.character.id for e in participants], "messages":[], "type":"conversation"})
+        self.add_participants(participants)
 
     def load_conversation(conversation_id):
         pass
 
-    def add_participants(self, participants: List[Character]):
+    def add_participants(self, participants: List[Participant]):
         self._participants = participants
         
-    def add_messages(self, messages: List[MessageDict]):
+    def add_messages(self, messages: List[Message]):
         self._messages = messages
 
     def get_relationship_with_participant(self, init_person: Character, target_person: Character):

@@ -102,7 +102,9 @@ def test_action():
 
     db = JsonDBManager()
     conversation = Conversation(db, llm)
-    conversation.create_conversation([npc, player])
+    participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+    conversation.create_conversation(participants)
+    
     #conversation.add_conversation_message()
 
     # focal_points = [player.name]
