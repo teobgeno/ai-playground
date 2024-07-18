@@ -7,6 +7,7 @@ from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
 from game.character.cognitive_modules.conversation import Conversation
+from core.db.json_db_manager import JsonDBManager
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
 from game.actions import GenericAction, DecideLocationAction, DecideItemAction, DecideResourceAction
@@ -103,8 +104,10 @@ def test_action():
     # text_file.write("Purchase Amount: %s" % embed)
     # text_file.close()
 
-    conversation = Conversation(llm, [npc, player])
-    conversation.add_conversation_message()
+    db = JsonDBManager()
+    conversation = Conversation(db, llm, [npc, player])
+    conversation.start_conversation()
+    #conversation.add_conversation_message()
 
     # focal_points = [player.name]
     # retrieve_action = RetrieveAction(llm)

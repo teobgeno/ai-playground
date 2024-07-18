@@ -1,12 +1,16 @@
+import hashlib
 from game.llm import LLMProvider
 from game.character.character import *
 from game.character.cognitive_modules.retrieve import RetrieveAction
 from game.llm import GetRelationshipPrompt
+from core.db.json_db_manager import JsonDBManager
+
 
 
 class Conversation:
-    def __init__(self, llm: LLMProvider, participants: List[Character]):
+    def __init__(self, db:JsonDBManager, llm: LLMProvider, participants: List[Character]):
         self._id = 0
+        self._db = db
         self._llm = llm
         self._paricipants = participants
         self._retrieve_action = RetrieveAction(self._llm)
@@ -44,7 +48,12 @@ class Conversation:
     pass
 
     def start_conversation(self):
+        text = 'From Isabella Rodriguez perspective'
+        result = hashlib.sha1(text.encode())
+        print(result.hexdigest())
+        # self._db.add_record({"text":"From Isabella Rodriguez's perspective, Maria Lopez is a close friend who is actively involved in preparing for the Valentine's Day party at Hobbs Cafe. Isabella values their friendship and appreciates Maria's willingness to help with setting up decorations and bringing snacks for the party. Isabella sees Maria as a reliable and supportive friend who shares her excitement for the event. Overall, Isabella has a positive view of Maria Lopez.","type":"GPT"})
         # create conversation generate id
+        # self._db.get_gpt_response_by_text()
         pass
 
     def add_conversation_message(self):

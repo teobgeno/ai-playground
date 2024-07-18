@@ -2,7 +2,7 @@ from pysondb import db
 
 class JsonDBManager:
 
-    def get_db():
+    def get_db(self):
         return db.getDb("data/test/db.json")
     
     def add_record(self, record):
@@ -16,6 +16,11 @@ class JsonDBManager:
     def get_gpt_response_by_text(self, where):
         db = self.get_db()
         db.getBy({"text":where})
+
+    def get_all(self):
+        db = self.get_db()
+        return db.getAll()
+
 
     def getGameSections(self):
         return [{'id': 1, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 1'},
