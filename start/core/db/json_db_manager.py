@@ -1,4 +1,22 @@
+from pysondb import db
+
 class JsonDBManager:
+
+    def get_db():
+        return db.getDb("data/test/db.json")
+    
+    def add_record(self, record):
+        db = self.get_db()
+        db.add(record)
+
+    def get_embed_by_text(self, where):
+        db = self.get_db()
+        db.getBy({"text":where})
+
+    def get_gpt_response_by_text(self, where):
+        db = self.get_db()
+        db.getBy({"text":where})
+
     def getGameSections(self):
         return [{'id': 1, 'parent_id': 0, 'keyword': 'forest', 'title': 'Forest 1'},
                 {'id': 2, 'parent_id': 0, 'keyword': 'lake'},
