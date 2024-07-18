@@ -6,8 +6,7 @@ class JsonDBManager:
         return db.getDb("data/test/db.json")
     
     def add_record(self, record):
-        db = self.get_db()
-        db.add(record)
+        return self.get_db().add(record)
 
     def get_embed_by_text(self, where):
         db = self.get_db()
@@ -16,6 +15,9 @@ class JsonDBManager:
     def get_gpt_response_by_text(self, where):
         db = self.get_db()
         db.getBy({"text":where})
+
+    def get_conversation_by_id(self, id: int):
+        return self.get_db().getById(id)
 
     def get_all(self):
         db = self.get_db()

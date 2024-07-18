@@ -1,20 +1,32 @@
 import hashlib
+from typing import TypedDict
 from game.llm import LLMProvider
 from game.character.character import *
-from game.character.cognitive_modules.retrieve import RetrieveAction
-from game.llm import GetRelationshipPrompt
 from core.db.json_db_manager import JsonDBManager
 
 
+MessageDict = TypedDict({'id':int, 'character_id': int, 'message': str})
 
 class Conversation:
-    def __init__(self, db:JsonDBManager, llm: LLMProvider, participants: List[Character]):
+    def __init__(self, db:JsonDBManager, llm: LLMProvider):
         self._id = 0
         self._db = db
         self._llm = llm
+        self._paricipants = None
+        self._messages = []
+
+    def create_conversation(self, participants: List[Character]):
+        self._id = self._db.add_record({"participants": [e.id for e in participants], "messages":[], "type":"conversation"})
         self._paricipants = participants
-        self._retrieve_action = RetrieveAction(self._llm)
-        self._relation_prompt = GetRelationshipPrompt({'llm': self._llm})
+
+    def load_conversation(conversation_id):
+        pass
+
+    def add_participants(self, participants: List[Character]):
+        self._paricipants = participants
+        
+    def add_messages(self, messages: List[MessageDict]):
+        self._messages = messages
 
     def get_relationship_with_participant(self, init_person: Character, target_person: Character):
         focal_points = [target_person.name]

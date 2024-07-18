@@ -105,8 +105,8 @@ def test_action():
     # text_file.close()
 
     db = JsonDBManager()
-    conversation = Conversation(db, llm, [npc, player])
-    conversation.start_conversation()
+    conversation = Conversation(db, llm)
+    conversation.create_conversation([npc, player])
     #conversation.add_conversation_message()
 
     # focal_points = [player.name]
