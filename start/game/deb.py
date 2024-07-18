@@ -85,9 +85,9 @@ def test_action():
     api_key = parser.get("OPENAI", "key")
     llm = LLMProvider(api_key)
 
+
     player_memory = CharacterMemory()
     player = Character.create(2, 'Maria Lopez', player_memory)
-    # player.setBlankMemory()
 
     npm_memory = CharacterMemory()
     npm_memory.setSpatial(
@@ -99,10 +99,6 @@ def test_action():
 
     npc = Character.create(1, 'Isabella Rodriguez', npm_memory)
 
-    # embed = llm.get_embed("Maria Lopez")
-    # text_file = open("embed_test.txt", "w")
-    # text_file.write("Purchase Amount: %s" % embed)
-    # text_file.close()
 
     db = JsonDBManager()
     conversation = Conversation(db, llm)
