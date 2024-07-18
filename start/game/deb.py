@@ -103,7 +103,8 @@ def test_action():
     db = JsonDBManager()
     conversation = Conversation(db, llm)
     participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    conversation.create_conversation(participants)
+    conversation.add_participants(participants)
+    conversation.start_conversation()
     
     #conversation.add_conversation_message()
 
