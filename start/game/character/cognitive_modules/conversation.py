@@ -12,18 +12,18 @@ class Conversation:
         self._id = 0
         self._db = db
         self._llm = llm
-        self._paricipants = None
+        self._participants = None
         self._messages = []
 
     def create_conversation(self, participants: List[Character]):
         self._id = self._db.add_record({"participants": [e.id for e in participants], "messages":[], "type":"conversation"})
-        self._paricipants = participants
+        self._participants = participants
 
     def load_conversation(conversation_id):
         pass
 
     def add_participants(self, participants: List[Character]):
-        self._paricipants = participants
+        self._participants = participants
         
     def add_messages(self, messages: List[MessageDict]):
         self._messages = messages
