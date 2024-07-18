@@ -16,8 +16,11 @@ class JsonDBManager:
         db = self.get_db()
         db.getBy({"text":where})
 
-    def get_conversation_by_id(self, id: int):
+    def get_record_by_id(self, id: int):
         return self.get_db().getById(id)
+    
+    def update_record_by_id(self, id: int, data: dict):
+        self.get_db().updateById(id, data)
 
     def get_all(self):
         db = self.get_db()

@@ -28,7 +28,7 @@ class OpenAIAPI:
                 presence_penalty=params['presence_penalty'],
                 stop=params['stop']
             )
-            print(completion)
+            #print(completion)
             return completion["choices"][0]["message"]["content"]
         except Exception as error:
             print("ChatGPT ERROR", error)

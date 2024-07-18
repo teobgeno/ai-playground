@@ -1,4 +1,7 @@
 import hashlib
+import random
+import string
+import time
 from typing import TypedDict
 from game.llm import LLMProvider
 from game.character.character import *
@@ -6,9 +9,9 @@ from core.db.json_db_manager import JsonDBManager
 
 
 class Message(TypedDict):
-    id: int
     character_id: int
     message: str
+    added_at: float
 
 class Participant(TypedDict):
     character: Character
@@ -20,29 +23,26 @@ class Conversation:
         self._db = db
         self._llm = llm
         self._participants = None
+        self._init_person = None
+        self._target_person = None
         self._messages = []
 
     def create_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record({"participants": [e.character.id for e in participants], "messages":[], "type":"conversation"})
+        self._id = self._db.add_record({"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
         self.add_participants(participants)
 
     def load_conversation(conversation_id):
         pass
 
     def add_participants(self, participants: List[Participant]):
+        self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
+        self._target_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
         self._participants = participants
         
     def add_messages(self, messages: List[Message]):
         self._messages = messages
-
-    def get_relationship_with_participant(self, init_person: Character, target_person: Character):
-        focal_points = [target_person.name]
         
-        embed = self._llm.get_embed(target_person.name)
-        focal_points=[{'text':target_person.name, 'embed':embed}]
-        
-        retrieved = init_person.memory.new_retrieve(focal_points, 50)
-        
+    def get_unique_memories_text(self, retrieved: dict):
         all_embedding_keys = set()
         for key, val in retrieved.items():
             for i in val:
@@ -50,45 +50,68 @@ class Conversation:
         all_embedding_key_str = ""
         for i in all_embedding_keys:
             all_embedding_key_str += f"{i}\n"
-
-        prompt = self.get_relation_prompt({'statements': all_embedding_key_str, 'init_person_name': init_person.name, 'target_person_name': target_person.name})
+            
+        return all_embedding_key_str
+            
+    def get_memories_with_participant(self):
+        # TODO:: pass focal points as parameter
+        focal_points = [self._target_person.name]
+        embed = self._llm.get_embed(self._target_person.name)
+        focal_points=[{'text':self._target_person.name, 'embed':embed}]
+        retrieved = self._init_person.memory.new_retrieve(focal_points, 50)
         
-        messages=[{"role": "user", "content": prompt}]
+        return retrieved
         
-        relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
-        # relationship = "From Isabella Rodriguez's perspective, Maria Lopez is a close friend who is actively involved in preparing for the Valentine's Day party at Hobbs Cafe. Isabella values their friendship and appreciates Maria's willingness to help with setting up decorations and bringing snacks for the party. Isabella sees Maria as a reliable and supportive friend who shares her excitement for the event. Overall, Isabella has a positive view of Maria Lopez."
         
+    def get_relationship_with_participant(self, retrieved_memories_str: str, relationship: str = ''):
+        
+        if relationship == '' :
+            prompt = self.get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
+            messages=[{"role": "user", "content": prompt}]
+            relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+ 
         embed = self._llm.get_embed(relationship)
         focal_points=[{'text':relationship, 'embed':embed}]
-        retrieved = init_person.memory.new_retrieve(focal_points, 15)
+        retrieved = self._init_person.memory.new_retrieve(focal_points, 15)
         
-        print('ok')
+        return retrieved
 
-    pass
 
     def start_conversation(self):
+       
+        
+        # retrieved_person = self.get_memories_with_participant()
+        # retrieved_person_str = self.get_unique_memories_text(retrieved_person)
+        
+        # retrieved_relation = self.get_relationship_with_participant(retrieved_person_str)
+        # retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
+        
+        # utterance = self.add_conversation_message(retrieved_relation_str)
+        utterance = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        self._messages.append({"character_id": self._init_person.id, "message": utterance, "added_at": time.time()})
+        self._db.update_record_by_id(self._id, {"messages": self._messages})
+        
         # text = 'From Isabella Rodriguez perspective'
         # result = hashlib.sha1(text.encode())
         # print(result.hexdigest())
-        init_person: Character = self._participants[0]['character']
-        target_person: Character = self._participants[1]['character']
-        prompt = self.get_utterance_prompt({'target_person_name': target_person.name, 'init_person_name': init_person.name, 'init_person_iis': init_person.memory.scratch.get_str_iss(), 'messages': [], 'init_person_retrieved_memories' :""})
-        print(prompt)
-        # self._db.add_record({"text":"From Isabella Rodriguez's perspective, Maria Lopez is a close friend who is actively involved in preparing for the Valentine's Day party at Hobbs Cafe. Isabella values their friendship and appreciates Maria's willingness to help with setting up decorations and bringing snacks for the party. Isabella sees Maria as a reliable and supportive friend who shares her excitement for the event. Overall, Isabella has a positive view of Maria Lopez.","type":"GPT"})
-        # create conversation generate id
-        # self._db.get_gpt_response_by_text()
-        pass
+        
+       
+        
 
-    def add_conversation_message(self):
-        self.get_relationship_with_participant(self._paricipants[0], self._paricipants[1])
+    def add_conversation_message(self, retrieved_memories: str):
+        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': [], 'init_person_retrieved_memories': retrieved_memories})
+        messages=[{"role": "user", "content": prompt}]
+        print(prompt)
+        utternace = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        return utternace
+
        
         
     def get_relation_prompt(self, props):
         tpl = """
-        [Statements]
-        \n
-        {props[statements]}
-        \nWhat do you think about {props[target_person_name]}?
+[Statements]
+{props[statements]}\n
+What do you think about {props[target_person_name]}?
         """
         #  \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
         return tpl.format(props=props)

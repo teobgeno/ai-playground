@@ -103,8 +103,17 @@ def test_action():
     db = JsonDBManager()
     conversation = Conversation(db, llm)
     participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    conversation.add_participants(participants)
+    conversation.create_conversation(participants)
     conversation.start_conversation()
+    conversation.start_conversation()
+    conversation.start_conversation()
+    conversation.start_conversation()
+    conversation.start_conversation()
+    conversation.start_conversation()
+    # time  self.curr_time += datetime.timedelta(seconds=self.sec_per_step) ( reverie/backend_server/reverie.py )
+    # when end convo
+    # generate_convo_summary (plan.py)
+    # chat_poignancy = generate_poig_score(persona, "chat", persona.scratch.act_description) (perceive.py)
     
     #conversation.add_conversation_message()
 
