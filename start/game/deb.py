@@ -112,10 +112,13 @@ def test_action():
     # conversation.insert_conversation(participants)
     # conversation.set_participants(participants)
 
-    # existing conversation
+    # existing conversation continue
     conv = db.get_record_by_id(126857685978703099)
     conversation.set_participants(participants)
     conversation.set_messages(conv['messages'])
+
+    # existing conversation end
+    conversation.summarize_conversation()
 
 
     # db.get_record_by_id
