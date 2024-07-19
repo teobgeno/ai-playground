@@ -13,6 +13,7 @@ class Cache:
             embed = self._llm.get_embed(self._target_person.name)
             self._db.add_record({"text": key, "value":embed, "type":"embed"})
         else:
+            print('from cache')
             embed = embed[0]['embed']
 
         return embed
