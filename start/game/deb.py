@@ -3,6 +3,7 @@ import json
 import spacy
 import configparser
 from pprint import pprint
+from core.db.json_db_manager import JsonDBManager
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
@@ -103,13 +104,19 @@ def test_action():
     db = JsonDBManager()
     conversation = Conversation(db, llm)
     participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    conversation.create_conversation(participants)
-    conversation.start_conversation()
-    conversation.start_conversation()
-    conversation.start_conversation()
-    conversation.start_conversation()
-    conversation.start_conversation()
-    conversation.start_conversation()
+    
+    # new conversation
+    # conversation.insert_conversation(participants)
+
+    # existing conversation
+    conv = db.get_record_by_id(126857685978703099)
+    conversation.set_messages(conv['messages'])
+    print(conv['messages'])
+    # conversation.set_participants(participants)
+    # conversation.start_conversation()
+
+
+    # db.get_record_by_id
     # time  self.curr_time += datetime.timedelta(seconds=self.sec_per_step) ( reverie/backend_server/reverie.py )
     # when end convo
     # generate_convo_summary (plan.py)

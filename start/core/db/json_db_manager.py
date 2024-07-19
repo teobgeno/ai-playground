@@ -1,5 +1,4 @@
 from pysondb import db
-
 class JsonDBManager:
 
     def get_db(self):
@@ -18,6 +17,9 @@ class JsonDBManager:
 
     def get_record_by_id(self, id: int):
         return self.get_db().getById(id)
+    
+    def get_records(self, where):
+        return self.get_db().getBy(where)
     
     def update_record_by_id(self, id: int, data: dict):
         self.get_db().updateById(id, data)

@@ -27,19 +27,15 @@ class Conversation:
         self._target_person = None
         self._messages = []
 
-    def create_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record({"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
-        self.add_participants(participants)
-
     def load_conversation(conversation_id):
         pass
 
-    def add_participants(self, participants: List[Participant]):
+    def set_participants(self, participants: List[Participant]):
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
         self._target_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
         self._participants = participants
         
-    def add_messages(self, messages: List[Message]):
+    def set_messages(self, messages: List[Message]):
         self._messages = messages
         
     def get_unique_memories_text(self, retrieved: dict):
@@ -89,14 +85,12 @@ class Conversation:
         # utterance = self.add_conversation_message(retrieved_relation_str)
         utterance = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         self._messages.append({"character_id": self._init_person.id, "message": utterance, "added_at": time.time()})
-        self._db.update_record_by_id(self._id, {"messages": self._messages})
+        
         
         # text = 'From Isabella Rodriguez perspective'
         # result = hashlib.sha1(text.encode())
         # print(result.hexdigest())
-        
-       
-        
+
 
     def add_conversation_message(self, retrieved_memories: str):
         prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': [], 'init_person_retrieved_memories': retrieved_memories})
@@ -134,15 +128,9 @@ You are {props[init_person_name]}, and you're currently in a conversation with {
         if  len(props["messages"]):
             tpl +="""
             Below is the current conversation history between you and {props[target_person_name]}.\n
-            {props[conversation_history]}\n\n
             """
-            # for (const message of prevMessages) {
-            # llmMessages.push({
-            # role: 'user',
-            # content: `${author.name} to ${recipient.name}: ${message.text}`,
-            # });
-            # }
-
+            for i in self._messages:
+                 tpl += [e['character'].name for e in self._participants if e['character'].id == self._messages[i]['character_id']][0] + ' :' + self._messages[i]['message'] + '\n'
         else:
             tpl +="""The conversation has not started yet -- start it!.\n"""
 
@@ -160,3 +148,9 @@ Output format: Output a json of the following format:
 
         return "\n".join(query_fragments)
     
+
+    def insert_conversation(self, participants: List[Participant]):
+        self._id = self._db.add_record({"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
+
+    def update_conversation(self):
+        self._db.update_record_by_id(self._id, {"messages": self._messages})
