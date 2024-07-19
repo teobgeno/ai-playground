@@ -137,7 +137,7 @@ def test_action():
     # existing conversation continue(player)
     # conv_id = 320715896220655764
     # participants = [{'character':npc, 'is_talking': False}, {'character':player, 'is_talking': True}]
-    # test_cont_conv(conv_id, participants, False, "The thing Maria is that I have feelings for you. Actually I have a crush on you. I cannot continue working with you if do not feel the same way.")
+    # test_cont_conv(conv_id, participants, False, "bla bla bla user")
     
     
     # existing conversation continue(npc)
