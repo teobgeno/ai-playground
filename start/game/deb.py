@@ -4,6 +4,7 @@ import spacy
 import configparser
 from pprint import pprint
 from core.db.json_db_manager import JsonDBManager
+from core.cache import Cache
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
@@ -84,7 +85,9 @@ def test_action():
     parser = configparser.ConfigParser()
     parser.read("config.ini")
     api_key = parser.get("OPENAI", "key")
+    db = JsonDBManager()
     llm = LLMProvider(api_key)
+    cache = Cache(db, llm)
 
 
     player_memory = CharacterMemory()
@@ -101,19 +104,18 @@ def test_action():
     npc = Character.create(1, 'Isabella Rodriguez', npm_memory)
 
 
-    db = JsonDBManager()
-    conversation = Conversation(db, llm)
+   
+    conversation = Conversation(db, llm, cache)
     participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     
     # new conversation
     # conversation.insert_conversation(participants)
+    # conversation.set_participants(participants)
 
     # existing conversation
     conv = db.get_record_by_id(126857685978703099)
+    conversation.set_participants(participants)
     conversation.set_messages(conv['messages'])
-    print(conv['messages'])
-    # conversation.set_participants(participants)
-    # conversation.start_conversation()
 
 
     # db.get_record_by_id

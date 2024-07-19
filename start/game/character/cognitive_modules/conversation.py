@@ -3,9 +3,10 @@ import random
 import string
 import time
 from typing import TypedDict
-from game.llm import LLMProvider
-from game.character.character import *
 from core.db.json_db_manager import JsonDBManager
+from game.llm import LLMProvider
+from core.cache import Cache
+from game.character.character import *
 
 
 class Message(TypedDict):
@@ -18,10 +19,11 @@ class Participant(TypedDict):
     is_talking: bool
 
 class Conversation:
-    def __init__(self, db:JsonDBManager, llm: LLMProvider):
+    def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache):
         self._id = 0
         self._db = db
         self._llm = llm
+        self._cache = cache
         self._participants = None
         self._init_person = None
         self._target_person = None
@@ -49,13 +51,15 @@ class Conversation:
             
         return all_embedding_key_str
             
-    def get_memories_with_participant(self):
-        # TODO:: pass focal points as parameter
-        focal_points = [self._target_person.name]
-        embed = self._llm.get_embed(self._target_person.name)
-        focal_points=[{'text':self._target_person.name, 'embed':embed}]
-        retrieved = self._init_person.memory.new_retrieve(focal_points, 50)
-        
+    def get_memories_with_participant(self, focal_points):
+
+        focal_points_embeds = []
+        for i in focal_points:
+             embed = self._cache.get_embed(self._target_person.name)
+             focal_points_embeds.append({'text':self._target_person.name, 'embed':embed})
+
+        retrieved = self._init_person.memory.new_retrieve(focal_points_embeds, 50)
+
         return retrieved
         
         
@@ -66,7 +70,7 @@ class Conversation:
             messages=[{"role": "user", "content": prompt}]
             relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
  
-        embed = self._llm.get_embed(relationship)
+        embed = self._cache.get_embed(relationship)
         focal_points=[{'text':relationship, 'embed':embed}]
         retrieved = self._init_person.memory.new_retrieve(focal_points, 15)
         
@@ -75,8 +79,7 @@ class Conversation:
 
     def start_conversation(self):
        
-        
-        # retrieved_person = self.get_memories_with_participant()
+        # retrieved_person = self.get_memories_with_participant([self._target_person.name])
         # retrieved_person_str = self.get_unique_memories_text(retrieved_person)
         
         # retrieved_relation = self.get_relationship_with_participant(retrieved_person_str)
@@ -91,6 +94,8 @@ class Conversation:
         # result = hashlib.sha1(text.encode())
         # print(result.hexdigest())
 
+    def continue_conversation(self):
+        pass
 
     def add_conversation_message(self, retrieved_memories: str):
         prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': [], 'init_person_retrieved_memories': retrieved_memories})
