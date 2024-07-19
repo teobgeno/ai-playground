@@ -2,6 +2,7 @@ import hashlib
 import random
 import string
 import time
+import json
 from typing import TypedDict
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
@@ -19,8 +20,8 @@ class Participant(TypedDict):
     is_talking: bool
 
 class Conversation:
-    def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache):
-        self._id = 0
+    def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache, id: int = 0):
+        self._id = id
         self._db = db
         self._llm = llm
         self._cache = cache
@@ -28,9 +29,10 @@ class Conversation:
         self._init_person = None
         self._target_person = None
         self._messages = []
-
-    def load_conversation(conversation_id):
-        pass
+        
+    @property
+    def id(self):
+        return self._id
 
     def set_participants(self, participants: List[Participant]):
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
@@ -39,6 +41,9 @@ class Conversation:
         
     def set_messages(self, messages: List[Message]):
         self._messages = messages
+        
+    def add_message(self, message: str):
+        self._messages.append({'character_id': self._init_person.id, 'message': message, 'added_at': time.time()})
         
     def get_unique_memories_text(self, retrieved: dict):
         all_embedding_keys = set()
@@ -69,6 +74,8 @@ class Conversation:
             prompt = self.get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
             messages=[{"role": "user", "content": prompt}]
             relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        else:
+            print('cached relationship')
  
         embed = self._cache.get_embed(relationship)
         focal_points=[{'text':relationship, 'embed':embed}]
@@ -78,29 +85,48 @@ class Conversation:
 
 
     def start_conversation(self):
-       
-        # retrieved_person = self.get_memories_with_participant([self._target_person.name])
-        # retrieved_person_str = self.get_unique_memories_text(retrieved_person)
-        
-        # retrieved_relation = self.get_relationship_with_participant(retrieved_person_str)
-        # retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
-        
-        # utterance = self.add_conversation_message(retrieved_relation_str)
-        utterance = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        self._messages.append({"character_id": self._init_person.id, "message": utterance, "added_at": time.time()})
-        
+        # utterance = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        # self._messages.append({"character_id": self._init_person.id, "message": utterance, "added_at": time.time()})
         
         # text = 'From Isabella Rodriguez perspective'
         # result = hashlib.sha1(text.encode())
         # print(result.hexdigest())
-
-    def continue_conversation(self):
         pass
 
-    def add_conversation_message(self, retrieved_memories: str):
-        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': [], 'init_person_retrieved_memories': retrieved_memories})
+    def talk_npc(self):
+        utterance ='...'
+        retrieved_relation_str = ''
+        
+        # if person curently talking has previous memories with the other participatn retrieve
+        retrieved_person = self.get_memories_with_participant([self._target_person.name])
+        if retrieved_person:
+            retrieved_person_str = self.get_unique_memories_text(retrieved_person)
+            retrieved_relation = self.get_relationship_with_participant(retrieved_person_str)
+            retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
+            
+        resp = self.generate_conversation_message(retrieved_relation_str)
+        
+        try:
+            # Attempt to parse the JSON data
+            json_dict = json.loads(resp)
+            utterance = json_dict['utterance']
+        except json.JSONDecodeError:
+            print('parse error')
+            print(resp)
+            return None
+        
+        self.add_message(utterance)
+            
+        return utterance
+   
+    
+    def talk_player(self, utterance: str):
+        self.add_message(utterance)
+        pass
+
+    def generate_conversation_message(self, retrieved_memories: str):
+        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
         messages=[{"role": "user", "content": prompt}]
-        print(prompt)
         utternace = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
         return utternace
     
@@ -122,6 +148,7 @@ You are {props[init_person_name]}, and you just finished a conversation with {pr
 like you to summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
 "I," and add if you liked or disliked this interaction.
          """
+        print(tpl.format(props=props))
         return tpl.format(props=props)
         
     def get_relation_prompt(self, props):
@@ -131,6 +158,7 @@ like you to summarize the conversation from {props[init_person_name]}'s perspect
 What do you think about {props[target_person_name]}?
         """
         #  \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
+        print(tpl.format(props=props))
         return tpl.format(props=props)
     
     def get_utterance_prompt(self, props):
@@ -138,7 +166,7 @@ What do you think about {props[target_person_name]}?
         tpl = """
 Context for the task:\n
 PART 1.\n
-Here is Here is a brief description of {props[init_person_name]}
+Here is a brief description of {props[init_person_name]}
 {props[init_person_iis]}
 Here is the memory that is in {props[init_person_name]}'s head:
 {props[init_person_retrieved_memories]}
@@ -152,8 +180,8 @@ You are {props[init_person_name]}, and you're currently in a conversation with {
             tpl +="""
             Below is the current conversation history between you and {props[target_person_name]}.\n
             """
-            for i in self._messages:
-                 tpl += [e['character'].name for e in self._participants if e['character'].id == self._messages[i]['character_id']][0] + ' :' + self._messages[i]['message'] + '\n'
+            for message in self._messages:
+                tpl += [e['character'].name for e in self._participants if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
         else:
             tpl +="""The conversation has not started yet -- start it!.\n"""
 
@@ -169,11 +197,12 @@ Output format: Output a json of the following format:
 
         query_fragments.append(tpl.format(props=props))
 
+        print(tpl.format(props=props))
         return "\n".join(query_fragments)
     
 
     def insert_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record({"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
+        self._id = self._db.add_record('conversations', {"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
 
     def update_conversation(self):
-        self._db.update_record_by_id(self._id, {"messages": self._messages})
+        self._db.update_record_by_id('conversations', self._id, {"messages": self._messages})

@@ -222,8 +222,7 @@ class CharacterMemory:
                                 + self.scratch.relevance_w*relevance_out[key]*gw[1] 
                                 + self.scratch.importance_w*importance_out[key]*gw[2])
 
-            master_out = self.top_highest_x_values(master_out, len(master_out.keys()))
-            
+            # master_out = self.top_highest_x_values(master_out, len(master_out.keys()))
             # for key, val in master_out.items(): 
             #     print (self.associative.id_to_node[key].embedding_key, val)
             #     print (self.scratch.recency_w*recency_out[key]*1, 
@@ -236,8 +235,7 @@ class CharacterMemory:
             # highest x values, we want to translate the node.id into nodes and return
             # the list of nodes.
             master_out = self.top_highest_x_values(master_out, n_count)
-            master_nodes = [self.associative.id_to_node[key] 
-                            for key in list(master_out.keys())]
+            master_nodes = [self.associative.id_to_node[key] for key in list(master_out.keys())]
 
             for n in master_nodes: 
                 n.last_accessed = self.scratch.curr_time

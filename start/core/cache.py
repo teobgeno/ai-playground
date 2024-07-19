@@ -8,12 +8,12 @@ class Cache:
         self._llm = llm
 
     def get_embed(self, key: str):
-        embed = self._db.get_records({'text': key})
+        embed = self._db.get_records('embeds', {'text': key})
         if not embed:
-            embed = self._llm.get_embed(self._target_person.name)
-            self._db.add_record({"text": key, "value":embed, "type":"embed"})
+            embed = self._llm.get_embed(key)
+            self._db.add_record('embeds', {"text": key, "value":embed, "type":"embed"})
         else:
             print('from cache')
-            embed = embed[0]['embed']
+            embed = embed[0]['value']
 
         return embed

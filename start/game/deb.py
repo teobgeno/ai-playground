@@ -79,7 +79,27 @@ def resolve_gpt_tasks(gpt_tasks):
     # print(tasks)
     # print(unresolved_gpt_tasks)
 
-
+def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str):
+    
+    parser = configparser.ConfigParser()
+    parser.read("config.ini")
+    api_key = parser.get("OPENAI", "key")
+    db = JsonDBManager()
+    llm = LLMProvider(api_key)
+    cache = Cache(db, llm)
+    
+    conv = db.get_record_by_id('conversations', conv_id)
+    conversation = Conversation(db, llm, cache, conv_id)
+    conversation.set_participants(participants)
+    conversation.set_messages(conv['messages'])
+    if isNpc:
+        conversation.talk_npc()
+    else :
+        conversation.talk_player(player_message)
+        
+    conversation.update_conversation()
+    
+    
 def test_action():
 
     parser = configparser.ConfigParser()
@@ -102,23 +122,32 @@ def test_action():
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
     npc = Character.create(1, 'Isabella Rodriguez', npm_memory)
-
-
+    
    
-    conversation = Conversation(db, llm, cache)
-    participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+   
     
     # new conversation
+    # conversation = Conversation(db, llm, cache)
+    # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     # conversation.insert_conversation(participants)
     # conversation.set_participants(participants)
+    # conversation.talk_npc()
+    # conversation.update_conversation()
 
-    # existing conversation continue
-    conv = db.get_record_by_id(126857685978703099)
-    conversation.set_participants(participants)
-    conversation.set_messages(conv['messages'])
+    # existing conversation continue(player)
+    # conv_id = 320715896220655764
+    # participants = [{'character':npc, 'is_talking': False}, {'character':player, 'is_talking': True}]
+    # test_cont_conv(conv_id, participants, False, "The thing Maria is that I have feelings for you. Actually I have a crush on you. I cannot continue working with you if do not feel the same way.")
+    
+    
+    # existing conversation continue(npc)
+    conv_id = 320715896220655764
+    participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+    test_cont_conv(conv_id, participants, True, '')
+    
 
     # existing conversation end
-    conversation.summarize_conversation()
+    #conversation.summarize_conversation()
 
 
     # db.get_record_by_id
@@ -137,7 +166,6 @@ def test_action():
     # relationship = generate_summarize_agent_relationship(npc, player, retrieved)
     # focal_points = [f"{relationship}"],
 
-    curr_chat = []
     # generate_one_utterance(npc, player, retrieved, curr_chat)
     # curr_chat += [[ch.name, utt]]
     # convo_summary = run_gpt_prompt_summarize_conversation(persona, curr_chat)

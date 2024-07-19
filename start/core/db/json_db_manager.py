@@ -1,32 +1,20 @@
 from pysondb import db
 class JsonDBManager:
 
-    def get_db(self):
-        return db.getDb("data/test/db.json")
+    def get_table(self, table: str):
+        return db.getDb("data/test/db_tbl_" + table +".json")
     
-    def add_record(self, record):
-        return self.get_db().add(record)
+    def add_record(self, table: str, record):
+        return self.get_table(table).add(record)
 
-    def get_embed_by_text(self, where):
-        db = self.get_db()
-        db.getBy({"text":where})
-
-    def get_gpt_response_by_text(self, where):
-        db = self.get_db()
-        db.getBy({"text":where})
-
-    def get_record_by_id(self, id: int):
-        return self.get_db().getById(id)
+    def get_record_by_id(self, table: str, id: int):
+        return self.get_table(table).getById(id)
     
-    def get_records(self, where):
-        return self.get_db().getBy(where)
+    def get_records(self, table: str, where):
+        return self.get_table(table).getBy(where)
     
-    def update_record_by_id(self, id: int, data: dict):
-        self.get_db().updateById(id, data)
-
-    def get_all(self):
-        db = self.get_db()
-        return db.getAll()
+    def update_record_by_id(self, table: str, id: int, data: dict):
+        self.get_table(table).updateById(id, data)
 
 
     def getGameSections(self):
