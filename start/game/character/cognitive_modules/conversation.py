@@ -103,8 +103,26 @@ class Conversation:
         print(prompt)
         utternace = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
         return utternace
+    
+    def summarize_conversation(self):
+        prompt = self.get_summary_prompt({'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
+        messages=[{"role": "user", "content": prompt}]
+        summarize = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        return summarize
 
-       
+    def get_summary_prompt(self, props):
+        tpl = """
+        Conversation: 
+        """
+        for i in self._messages:
+            tpl += [e['character'].name for e in self._participants if e['character'].id == self._messages[i]['character_id']][0] + ' :' + self._messages[i]['message'] + '\n'
+
+        tpl += """
+You are {props[init_person_name]}, and you just finished a conversation with {props[target_person_name]}. I would
+like you to summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
+"I," and add if you liked or disliked this interaction.
+         """
+        return tpl.format(props=props)
         
     def get_relation_prompt(self, props):
         tpl = """
