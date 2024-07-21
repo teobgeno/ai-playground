@@ -8,8 +8,9 @@ from game.character.memory_structures.scratch import Scratch
 
 
 class Character:
-    def __init__(self, id: int, name: str, memory: CharacterMemory):
+    def __init__(self, id: int, is_npc: bool, name: str, memory: CharacterMemory):
         self._id = id
+        self._is_npc = is_npc
         self._name = name
         self._memory = memory
         # self._state = "idle"
@@ -21,12 +22,16 @@ class Character:
         # traits List of trait(class)
 
     @classmethod
-    def create(cls, id: int, name: str, memory: CharacterMemory):
-        return cls(id, name, memory)
+    def create(cls, id: int, is_npc:bool, name: str, memory: CharacterMemory):
+        return cls(id, is_npc, name, memory)
 
     @property
     def id(self):
         return self._id
+    
+    @property
+    def is_npc(self):
+        return self._is_npc
 
     @property
     def name(self):

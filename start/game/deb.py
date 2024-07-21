@@ -112,7 +112,7 @@ def test_action():
 
 
     player_memory = CharacterMemory()
-    player = Character.create(2, 'Maria Lopez', player_memory)
+    player = Character.create(2, False, 'Maria Lopez', player_memory)
 
     npm_memory = CharacterMemory()
     npm_memory.setSpatial(
@@ -122,7 +122,7 @@ def test_action():
     npm_memory.setScratch(
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
-    npc = Character.create(1, 'Isabella Rodriguez', npm_memory)
+    npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
     
    
    
@@ -148,7 +148,8 @@ def test_action():
     
 
     # existing conversation end
-    #conversation.summarize_conversation()
+    # foreach npc participant #conversation.summarize_conversation()
+
 
 
     # db.get_record_by_id
