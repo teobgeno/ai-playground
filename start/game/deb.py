@@ -92,6 +92,7 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     conversation = Conversation(db, llm, cache, conv_id)
     conversation.set_participants(participants)
     conversation.set_messages(conv['messages'])
+    conversation.set_relationships(conv['relationships'])
     if isNpc:
         conversation.talk_npc()
     else :
@@ -135,13 +136,13 @@ def test_action():
     # conversation.update_conversation()
 
     # existing conversation continue(player)
-    # conv_id = 320715896220655764
+    # conv_id = 220429115740840017
     # participants = [{'character':npc, 'is_talking': False}, {'character':player, 'is_talking': True}]
     # test_cont_conv(conv_id, participants, False, "bla bla bla user")
     
     
     # existing conversation continue(npc)
-    conv_id = 320715896220655764
+    conv_id = 220429115740840017
     participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     test_cont_conv(conv_id, participants, True, '')
     

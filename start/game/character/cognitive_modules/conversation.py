@@ -18,17 +18,22 @@ class Message(TypedDict):
 class Participant(TypedDict):
     character: Character
     is_talking: bool
+    
+class Relationship(TypedDict):
+    character_id: int
+    descr: str
 
 class Conversation:
     def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache, id: int = 0):
         self._id = id
         self._db = db
-        self._llm = llm
+        self._llm  = llm
         self._cache = cache
-        self._participants = None
-        self._init_person = None
-        self._target_person = None
-        self._messages = []
+        self._participants: List[Participant] = []
+        self._init_person: Character = None
+        self._target_person: Character = None
+        self._messages: List[Message] = []
+        self._relationships: List[Relationship] = []
         
     @property
     def id(self):
@@ -42,9 +47,21 @@ class Conversation:
     def set_messages(self, messages: List[Message]):
         self._messages = messages
         
+    def set_relationships(self, relationships: List[Relationship]):
+        self._relationships = relationships
+        
     def add_message(self, message: str):
         self._messages.append({'character_id': self._init_person.id, 'message': message, 'added_at': time.time()})
         
+    def add_relatioship(self, relationship: str):
+        self._relationships.append({"character_id": self._init_person.id, "descr": relationship})
+        
+    def get_cached_relatioship(self):
+        relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
+        if relations:
+            return relations[0]
+        return ''
+
     def get_unique_memories_text(self, retrieved: dict):
         all_embedding_keys = set()
         for key, val in retrieved.items():
@@ -60,20 +77,21 @@ class Conversation:
 
         focal_points_embeds = []
         for i in focal_points:
-             embed = self._cache.get_embed(self._target_person.name)
-             focal_points_embeds.append({'text':self._target_person.name, 'embed':embed})
+            embed = self._cache.get_embed(self._target_person.name)
+            focal_points_embeds.append({'text':self._target_person.name, 'embed':embed})
 
         retrieved = self._init_person.memory.new_retrieve(focal_points_embeds, 50)
 
         return retrieved
         
         
-    def get_relationship_with_participant(self, retrieved_memories_str: str, relationship: str = ''):
+    def get_relationship_memories_with_participant(self, retrieved_memories_str: str, relationship: str = ''):
         
         if relationship == '' :
             prompt = self.get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
             messages=[{"role": "user", "content": prompt}]
             relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+            self.add_relatioship(relationship)
         else:
             print('cached relationship')
  
@@ -84,15 +102,6 @@ class Conversation:
         return retrieved
 
 
-    def start_conversation(self):
-        # utterance = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        # self._messages.append({"character_id": self._init_person.id, "message": utterance, "added_at": time.time()})
-        
-        # text = 'From Isabella Rodriguez perspective'
-        # result = hashlib.sha1(text.encode())
-        # print(result.hexdigest())
-        pass
-
     def talk_npc(self):
         utterance ='...'
         retrieved_relation_str = ''
@@ -101,7 +110,8 @@ class Conversation:
         retrieved_person = self.get_memories_with_participant([self._target_person.name])
         if retrieved_person:
             retrieved_person_str = self.get_unique_memories_text(retrieved_person)
-            retrieved_relation = self.get_relationship_with_participant(retrieved_person_str)
+            relationship = self.get_cached_relatioship()
+            retrieved_relation = self.get_relationship_memories_with_participant(retrieved_person_str, relationship)
             retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
             
         resp = self.generate_conversation_message(retrieved_relation_str)
@@ -202,7 +212,7 @@ Output format: Output a json of the following format:
     
 
     def insert_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record('conversations', {"participants": [e['character'].id for e in participants], "messages":self._messages, "type":"conversation"})
+        self._id = self._db.add_record('conversations', {"participants": [e['character'].id for e in participants], "messages":self._messages, "relationships":self._relationships, "type":"conversation"})
 
     def update_conversation(self):
-        self._db.update_record_by_id('conversations', self._id, {"messages": self._messages})
+        self._db.update_record_by_id('conversations', self._id, {"messages": self._messages, "relationships":self._relationships})

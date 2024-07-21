@@ -1,5 +1,25 @@
 {
    "data": [
-      
+      {
+         "participants": [
+            1,
+            2
+         ],
+         "messages": [
+            {
+               "character_id": 1,
+               "message": "Hey Isabella! I just wanted to remind you about the Valentine's Day party we're planning at Hobbs Cafe on February 14th. Do you need any help with the preparations?",
+               "added_at": 1721559806.528154
+            }
+         ],
+         "relationships": [
+            {
+               "character_id": 1,
+               "descr": "Based on the statements provided, it seems like Isabella Rodriguez is a hard-working and dedicated individual who is heavily involved in planning events at Hobbs Cafe, particularly the Valentine's Day party. She has a close relationship with Maria Lopez and is a regular visitor to the cafe. Overall, Isabella Rodriguez appears to be a reliable and enthusiastic friend and employee."
+            }
+         ],
+         "type": "conversation",
+         "id": 220429115740840017
+      }
    ]
 }
