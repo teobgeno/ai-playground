@@ -1,8 +1,9 @@
 import sys
 import json
 import spacy
-import configparser
+from datetime import datetime
 from pprint import pprint
+import configparser
 from core.db.json_db_manager import JsonDBManager
 from core.cache import Cache
 from game.character.character import *
@@ -87,6 +88,7 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     db = JsonDBManager()
     llm = LLMProvider(api_key)
     cache = Cache(db, llm)
+    game_time = datetime.now()
     
     conv = db.get_record_by_id('conversations', conv_id)
     conversation = Conversation(db, llm, cache, conv_id)
@@ -94,7 +96,7 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     conversation.set_messages(conv['messages'])
     conversation.set_relationships(conv['relationships'])
     if isNpc:
-        conversation.talk_npc()
+        conversation.talk_npc(game_time)
     else :
         conversation.talk_player(player_message)
         
@@ -109,6 +111,8 @@ def test_action():
     db = JsonDBManager()
     llm = LLMProvider(api_key)
     cache = Cache(db, llm)
+    # game_time = datetime(2024, 7, 22, 11, 56)
+    game_time = datetime.now()
 
 
     player_memory = CharacterMemory()
@@ -123,6 +127,9 @@ def test_action():
         'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
 
     npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
+
+    
+
     
    
    
@@ -131,6 +138,7 @@ def test_action():
     # conversation = Conversation(db, llm, cache)
     # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     # conversation.insert_conversation(participants)
+    # conversation.set_start_date(game_time)
     # conversation.set_participants(participants)
     # conversation.talk_npc()
     # conversation.update_conversation()
@@ -142,9 +150,9 @@ def test_action():
     
     
     # existing conversation continue(npc)
-    conv_id = 220429115740840017
-    participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    test_cont_conv(conv_id, participants, True, '')
+    # conv_id = 220429115740840017
+    # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+    # test_cont_conv(conv_id, participants, True, '')
     
 
     # existing conversation end

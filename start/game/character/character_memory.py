@@ -1,5 +1,8 @@
 from numpy import dot
 from numpy.linalg import norm
+from game.llm import LLMProvider
+from core.cache import Cache
+from core.prompt_generator import generate_conversation_poig_score
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -243,3 +246,9 @@ class CharacterMemory:
             retrieved[focal_pt['text']] = master_nodes
 
         return retrieved
+    
+    def calculate_conversation_poig_score(self, conversation_summary: str):
+        prompt = generate_conversation_poig_score({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
+        messages=[{"role": "user", "content": prompt}]
+        summarize = self._llm.completition({"max_tokens": 1, "temperature": 0, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        return summarize

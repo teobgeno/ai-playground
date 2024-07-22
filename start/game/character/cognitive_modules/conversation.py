@@ -29,6 +29,7 @@ class Conversation:
         self._db = db
         self._llm  = llm
         self._cache = cache
+        self._start_date = None
         self._participants: List[Participant] = []
         self._init_person: Character = None
         self._target_person: Character = None
@@ -38,6 +39,9 @@ class Conversation:
     @property
     def id(self):
         return self._id
+    
+    def set_start_date(self, date: datetime):
+        self._start_date = date
 
     def set_participants(self, participants: List[Participant]):
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
@@ -102,7 +106,7 @@ class Conversation:
         return retrieved
 
 
-    def talk_npc(self):
+    def talk_npc(self, current_date: datetime):
         utterance ='...'
         retrieved_relation_str = ''
         
@@ -114,7 +118,7 @@ class Conversation:
             retrieved_relation = self.get_relationship_memories_with_participant(retrieved_person_str, relationship)
             retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
             
-        resp = self.generate_conversation_message(retrieved_relation_str)
+        resp = self.generate_conversation_message(retrieved_relation_str, current_date)
         
         try:
             # Attempt to parse the JSON data
@@ -134,8 +138,8 @@ class Conversation:
         self.add_message(utterance)
         pass
 
-    def generate_conversation_message(self, retrieved_memories: str):
-        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
+    def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
+        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
         messages=[{"role": "user", "content": prompt}]
         utternace = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
         return utternace
@@ -183,7 +187,7 @@ Here is the memory that is in {props[init_person_name]}'s head:
 PART 2.\n
 Current Location: {props[target_person_name]} Farm\n
 Current Context:
-You are {props[init_person_name]}, and you're currently in a conversation with {props[target_person_name]}.The conversation started at HOUR. It's now HOUR.\n
+You are {props[init_person_name]}, and you're currently in a conversation with {props[target_person_name]}.The conversation started at {props[start_date]}. It's now {props[current_date]}.\n
 """
         
         if  len(props["messages"]):
