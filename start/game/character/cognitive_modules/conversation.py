@@ -68,7 +68,7 @@ class Conversation:
     def add_relatioship(self, relationship: str):
         self._relationships.append({'character_id': self._init_person.id, 'descr': relationship})
         
-    def get_cached_relatioship(self):
+    def get_cached_relationship(self):
         relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
         if relations:
             return relations[0]
@@ -122,7 +122,7 @@ class Conversation:
         retrieved_person = self.get_memories_with_participant([self._target_person.name])
         if retrieved_person:
             retrieved_person_str = self.get_unique_memories_text(retrieved_person)
-            relationship = self.get_cached_relatioship()
+            relationship = self.get_cached_relationship()
             retrieved_relation = self.get_relationship_memories_with_participant(retrieved_person_str, relationship)
             retrieved_relation_str = self.get_unique_memories_text(retrieved_relation)
             
