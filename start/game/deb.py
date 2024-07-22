@@ -172,6 +172,14 @@ def test_action():
             subject = participant['character'].name
             predicate = 'chat with'
             object = target_person.name
+            summary_embed = llm.get_embed(summary)
+            chat_embedding_pair = (summary, summary_embed)
+
+            #  chat_node = persona.a_mem.add_chat(persona.scratch.curr_time, None,
+            #           curr_event[0], curr_event[1], curr_event[2], 
+            #           persona.scratch.act_description, keywords, 
+            #           chat_poignancy, chat_embedding_pair, 
+            #           persona.scratch.chat)
           
 
 

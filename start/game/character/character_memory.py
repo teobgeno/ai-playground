@@ -271,6 +271,9 @@ class CharacterMemory:
             print(error)
 
         return score
+    
+    def add_coversation_memory(self, target_person_name: str, conversation: Conversation) -> str:
+        pass
 
 
 
