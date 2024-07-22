@@ -40,6 +40,14 @@ class Conversation:
     def id(self):
         return self._id
     
+    @property
+    def participants(self):
+        return self._participants
+    
+    @property
+    def messages(self):
+        return self._messages
+    
     def set_start_date(self, date: datetime):
         self._start_date = date
 

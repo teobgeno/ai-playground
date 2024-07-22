@@ -2,6 +2,7 @@ from numpy import dot
 from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
+from game.character.cognitive_modules.conversation import Conversation
 from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
@@ -10,10 +11,11 @@ from game.character.memory_structures.scratch import Scratch
 
 class CharacterMemory:
 
-    def __init__(self):
+    def __init__(self, llm: LLMProvider):
         self.spatial = None
         self.associative = None
         self.scratch = None
+        self._llm = llm
 
     def setSpatial(self, data):
         self.spatial = MemoryTree(data)
@@ -247,10 +249,9 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str) -> str:
-        prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name})
+    def create_conversation_summary(self, target_person_name: str, conversation: Conversation) -> str:
+        prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conversation.messages, 'participants': conversation.participants})
         messages=[{'role': 'user', 'content': prompt}]
-       
         summarize = ''
         try:
             summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)

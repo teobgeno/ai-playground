@@ -115,10 +115,10 @@ def test_action():
     game_time = datetime.now()
 
 
-    player_memory = CharacterMemory()
+    player_memory = CharacterMemory(llm)
     player = Character.create(2, False, 'Maria Lopez', player_memory)
 
-    npm_memory = CharacterMemory()
+    npm_memory = CharacterMemory(llm)
     npm_memory.setSpatial(
         'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
     npm_memory.setAssociative(
@@ -157,10 +157,18 @@ def test_action():
 
     # existing conversation end
     # foreach npc participant #conversation.summarize_conversation()
+    conv_id = 220429115740840017
+    conv = db.get_record_by_id('conversations', conv_id)
+    conversation = Conversation(db, llm, cache, conv_id)
+    conversation.set_participants(participants)
+    conversation.set_messages(conv['messages'])
+    conversation.set_relationships(conv['relationships'])
     participants: List[Participant] = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     for participant in participants:
         if participant['character'].is_npc:
-            participant['character'].memory.calculate_conversation_poig_score()
+            target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
+            summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
+            score = participant['character'].memory.calculate_conversation_poig_score(summary)
 
 
 
