@@ -2,7 +2,7 @@ from numpy import dot
 from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
-from game.character.cognitive_modules.conversation import Conversation
+# from game.character.cognitive_modules.conversation import Conversation
 from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
@@ -249,7 +249,7 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str, conversation: Conversation) -> str:
+    def create_conversation_summary(self, target_person_name: str, conversation) -> str:
         prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conversation.messages, 'participants': conversation.participants})
         messages=[{'role': 'user', 'content': prompt}]
         summarize = ''

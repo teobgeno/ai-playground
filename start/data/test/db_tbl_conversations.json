@@ -8,18 +8,48 @@
          "messages": [
             {
                "character_id": 1,
-               "message": "Hey Isabella! I just wanted to remind you about the Valentine's Day party we're planning at Hobbs Cafe on February 14th. Do you need any help with the preparations?",
-               "added_at": 1721559806.528154
+               "message": "Hey Maria, I'm so excited about the Valentine's Day party at Hobbs Cafe! Have you thought about what decorations we should use?",
+               "added_at": 1721662964.4948776
+            },
+            {
+               "character_id": 2,
+               "message": "You see Isabella I have spent a lot of time with these preparations and from your side you seem to have settled down and left it all to me to do it all myself. Frankly, I have no desire to continue under these circumstances.",
+               "added_at": 1721663541.2269409
+            },
+            {
+               "character_id": 1,
+               "message": "I'm so sorry Maria, I didn't mean to leave everything to you. Let's sit down together and discuss the decorations and preparations for the Valentine's Day party at Hobbs Cafe.",
+               "added_at": 1721663637.7691073
+            },
+            {
+               "character_id": 2,
+               "message": "You don not seem to understand. I just told you that I am pissed of with this situation and your reply was to discuss about the preparations. I do not want be a part of this anymore. Find another sucker to run your errands",
+               "added_at": 1721663909.5184162
+            },
+            {
+               "character_id": 1,
+               "message": "I apologize for the misunderstanding, Maria. I value your input and would like to work together on the decorations and preparations for the Valentine's Day party at Hobbs Cafe. Let's find a solution that works for both of us.",
+               "added_at": 1721663927.1627808
+            },
+            {
+               "character_id": 2,
+               "message": "No there is no solution for this. I DO NOT WANT TO PARTICIPATE ON THIS. This is my final answer. Please leave me alone.",
+               "added_at": 1721664077.5975492
+            },
+            {
+               "character_id": 1,
+               "message": "I understand your decision, Maria. I will respect your choice and handle the preparations for the Valentine's Day party at Hobbs Cafe on my own. Thank you for your previous help.",
+               "added_at": 1721664094.7722538
             }
          ],
          "relationships": [
             {
                "character_id": 1,
-               "descr": "Based on the statements provided, it seems like Isabella Rodriguez is a hard-working and dedicated individual who is heavily involved in planning events at Hobbs Cafe, particularly the Valentine's Day party. She has a close relationship with Maria Lopez and is a regular visitor to the cafe. Overall, Isabella Rodriguez appears to be a reliable and enthusiastic friend and employee."
+               "descr": "Maria Lopez seems to be a dedicated and involved friend who is actively participating in the preparations for the Valentine's Day party at Hobbs Cafe. She also appears to have a close relationship with Isabella Rodriguez and is willing to help out with setting up decorations and bringing snacks for the party. Overall, Maria Lopez seems to be a supportive and reliable friend."
             }
          ],
          "type": "conversation",
-         "id": 220429115740840017
+         "id": 709835299195158552
       }
    ]
 }

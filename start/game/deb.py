@@ -9,7 +9,7 @@ from core.cache import Cache
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
-from game.character.cognitive_modules.conversation import Conversation, Participant
+from game.character.cognitive_modules.conversation import Conversation, Participant, ConversationStatus
 from core.db.json_db_manager import JsonDBManager
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
@@ -89,6 +89,7 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     llm = LLMProvider(api_key)
     cache = Cache(db, llm)
     game_time = datetime.now()
+    utterance = ''
     
     conv = db.get_record_by_id('conversations', conv_id)
     conversation = Conversation(db, llm, cache, conv_id)
@@ -96,11 +97,13 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     conversation.set_messages(conv['messages'])
     conversation.set_relationships(conv['relationships'])
     if isNpc:
-        conversation.talk_npc(game_time)
+        utterance = conversation.talk_npc(game_time)
     else :
-        conversation.talk_player(player_message)
-        
+        utterance = conversation.talk_player(player_message)
+
     conversation.update_conversation()
+    print('Conversation Status:' + str(conversation.status))
+    return utterance
     
     
 def test_action():
@@ -129,10 +132,6 @@ def test_action():
     npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
 
     
-
-    
-   
-   
     
     # new conversation
     # conversation = Conversation(db, llm, cache)
@@ -140,55 +139,54 @@ def test_action():
     # conversation.insert_conversation(participants)
     # conversation.set_start_date(game_time)
     # conversation.set_participants(participants)
-    # conversation.talk_npc()
+    # conversation.talk_npc(game_time)
     # conversation.update_conversation()
 
     # existing conversation continue(player)
-    # conv_id = 220429115740840017
+    # conv_id = 709835299195158552
     # participants = [{'character':npc, 'is_talking': False}, {'character':player, 'is_talking': True}]
-    # test_cont_conv(conv_id, participants, False, "bla bla bla user")
+    # test_cont_conv(conv_id, participants, False, "No there is no solution for this. I DO NOT WANT TO PARTICIPATE ON THIS. This is my final answer. Please leave me alone.")
     
     
     # existing conversation continue(npc)
-    # conv_id = 220429115740840017
+    # conv_id = 709835299195158552
     # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
     # test_cont_conv(conv_id, participants, True, '')
     
 
     # existing conversation end
-    # foreach npc participant #conversation.summarize_conversation()
-    conv_id = 220429115740840017
-    conv = db.get_record_by_id('conversations', conv_id)
-    conversation = Conversation(db, llm, cache, conv_id)
-    conversation.set_participants(participants)
-    conversation.set_messages(conv['messages'])
-    conversation.set_relationships(conv['relationships'])
-    participants: List[Participant] = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    for participant in participants:
-        if participant['character'].is_npc:
-            target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
-            summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
-            score = participant['character'].memory.calculate_conversation_poig_score(summary)
-            summary_embed = llm.get_embed(summary)
+    # conv_id = 709835299195158552
+    # conv = db.get_record_by_id('conversations', conv_id)
+    # conversation = Conversation(db, llm, cache, conv_id)
+    # conversation.set_participants(participants)
+    # conversation.set_messages(conv['messages'])
+    # conversation.set_relationships(conv['relationships'])
+    # participants: List[Participant] = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+    # for participant in participants:
+    #     if participant['character'].is_npc:
+    #         target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
+    #         summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
+    #         score = participant['character'].memory.calculate_conversation_poig_score(summary)
+    #         summary_embed = llm.get_embed(summary)
            
-            props = {
-                'date' : game_time,
-                'subject' : participant['character'].name,
-                'predicate' : 'chat with',
-                'object' : target_person.name,
-                'summary' : summary,
-                'keywords' : [participant['character'].name, target_person.name],
-                'poignancy' : score,
-                'embedding_pair' :  (summary, summary_embed),
-                'filling': [{'conversation_id': conv_id}]
-            }
+    #         props = {
+    #             'date' : game_time,
+    #             'subject' : participant['character'].name,
+    #             'predicate' : 'chat with',
+    #             'object' : target_person.name,
+    #             'summary' : summary,
+    #             'keywords' : [participant['character'].name, target_person.name],
+    #             'poignancy' : score,
+    #             'embedding_pair' :  (summary, summary_embed),
+    #             'filling': [{'conversation_id': conv_id}]
+    #         }
 
-            chat_node = participant['character'].memory.add_coversation_memory(props)
+    #         chat_node = participant['character'].memory.add_coversation_memory(props)
 
-            props['filling'] = [{'node_id': chat_node.node_id}]
-            props['description'] = summary
+    #         props['filling'] = [{'node_id': chat_node.node_id}]
+    #         props['description'] = summary
             
-            participant['character'].memory.add_event_memory(props)
+    #         participant['character'].memory.add_event_memory(props)
 
 
 

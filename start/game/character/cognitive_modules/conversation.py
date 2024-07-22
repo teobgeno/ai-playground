@@ -1,13 +1,16 @@
 import hashlib
 import random
 import string
+from datetime import datetime
 import time
 import json
+from enum import Enum
 from typing import TypedDict
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
-from game.character.character import *
+from game.character.character import Character
+from typing import List
 
 
 class Message(TypedDict):
@@ -22,6 +25,10 @@ class Participant(TypedDict):
 class Relationship(TypedDict):
     character_id: int
     descr: str
+    
+class ConversationStatus(Enum):
+    RUNNING = 1
+    COMPLETED = 2
 
 class Conversation:
     def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache, id: int = 0):
@@ -29,7 +36,9 @@ class Conversation:
         self._db = db
         self._llm  = llm
         self._cache = cache
+        self._status = ConversationStatus.RUNNING
         self._start_date = None
+        self._end_date = None
         self._participants: List[Participant] = []
         self._init_person: Character = None
         self._target_person: Character = None
@@ -39,6 +48,10 @@ class Conversation:
     @property
     def id(self):
         return self._id
+    
+    @property
+    def status(self):
+        return self._status
     
     @property
     def participants(self):
@@ -53,7 +66,7 @@ class Conversation:
 
     def set_participants(self, participants: List[Participant]):
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
-        self._target_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
+        self._target_person: Character = [element for element in participants if element['is_talking'] == False][0]['character']
         self._participants = participants
         
     def set_messages(self, messages: List[Message]):
@@ -117,6 +130,7 @@ class Conversation:
     def talk_npc(self, current_date: datetime):
         utterance ='...'
         retrieved_relation_str = ''
+        conversation_end = False
         
         # if person curently talking has previous memories with the other participatn retrieve
         retrieved_person = self.get_memories_with_participant([self._target_person.name])
@@ -131,19 +145,23 @@ class Conversation:
         try:
             json_dict = json.loads(resp)
             utterance = json_dict['utterance']
+            conversation_end: bool = bool(json_dict['Did the conversation end?'])
+            if conversation_end: 
+                  self._status = ConversationStatus.COMPLETED
+
         except json.JSONDecodeError:
             print('parse error')
             print(resp)
             return None
         
         self.add_message(utterance)
-            
+           
         return utterance
    
     
     def talk_player(self, utterance: str):
         self.add_message(utterance)
-        pass
+        return utterance
 
     def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
         prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
