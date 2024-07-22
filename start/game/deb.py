@@ -171,8 +171,7 @@ def test_action():
             score = participant['character'].memory.calculate_conversation_poig_score(summary)
             summary_embed = llm.get_embed(summary)
            
-            participant['character'].memory.add_coversation_memory(
-            {
+            props = {
                 'date' : game_time,
                 'subject' : participant['character'].name,
                 'predicate' : 'chat with',
@@ -183,7 +182,13 @@ def test_action():
                 'embedding_pair' :  (summary, summary_embed),
                 'filling': [{'conversation_id': conv_id}]
             }
-            )
+
+            chat_node = participant['character'].memory.add_coversation_memory(props)
+
+            props['filling'] = [{'node_id': chat_node.node_id}]
+            props['description'] = summary
+            
+            participant['character'].memory.add_event_memory(props)
 
 
 
