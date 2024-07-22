@@ -169,6 +169,10 @@ def test_action():
             target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
             summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
             score = participant['character'].memory.calculate_conversation_poig_score(summary)
+            subject = participant['character'].name
+            predicate = 'chat with'
+            object = target_person.name
+          
 
 
 

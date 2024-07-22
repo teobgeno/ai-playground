@@ -271,3 +271,23 @@ class CharacterMemory:
             print(error)
 
         return score
+
+
+
+# "node_545": {
+#     "node_count": 545,
+#     "type_count": 2,
+#     "type": "chat",
+#     "depth": 0,
+#     "created": "2023-02-13 15:19:20",
+#     "expiration": null,
+#     "subject": "Isabella Rodriguez",
+#     "predicate": "chat with",
+#     "object": "Maria Lopez",
+#     "description": "conversing about preparations for the Valentine's Day party at Hobbs Cafe including decorations and snacks, with Isabella Rodriguez and Maria Lopez",
+#     "embedding_key": "conversing about preparations for the Valentine's Day party at Hobbs Cafe including decorations and snacks, with Isabella Rodriguez and Maria Lopez",
+#     "poignancy": 6,
+#     "keywords": [
+#       "Isabella Rodriguez",
+#       "Maria Lopez"
+#     ],
