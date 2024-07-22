@@ -134,11 +134,11 @@ def test_action():
     
     
     # new conversation
-    # conversation = Conversation(db, llm, cache)
     # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    # conversation.insert_conversation(participants)
+    # conversation = Conversation(db, llm, cache)
     # conversation.set_start_date(game_time)
     # conversation.set_participants(participants)
+    # conversation.insert_conversation()
     # conversation.talk_npc(game_time)
     # conversation.update_conversation()
 
@@ -155,38 +155,41 @@ def test_action():
     
 
     # existing conversation end
-    # conv_id = 709835299195158552
-    # conv = db.get_record_by_id('conversations', conv_id)
+    conv_id = 709835299195158552
+    conv_data = db.get_record_by_id('conversations', conv_id)
+    participants: List[Participant] = [{'character':npc, 'is_talking': False}, {'character':player, 'is_talking': False}]
     # conversation = Conversation(db, llm, cache, conv_id)
     # conversation.set_participants(participants)
     # conversation.set_messages(conv['messages'])
     # conversation.set_relationships(conv['relationships'])
-    # participants: List[Participant] = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
-    # for participant in participants:
-    #     if participant['character'].is_npc:
-    #         target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
-    #         summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
-    #         score = participant['character'].memory.calculate_conversation_poig_score(summary)
-    #         summary_embed = llm.get_embed(summary)
+    
+    # '\nHere is a brief description of Isabella Rodriguez\nName: Isabella Rodriguez\nAge: 34\nInnate traits: friendly, outgoing, hospitable\nLearned traits: Isabella Rodriguez is a cafe owner of Hobbs Cafe who loves to make people feel welcome. She is always looking for ways to make the cafe a place where people can come to relax and enjoy themselves.\nCurrently: Isabella Rodriguez is planning on having a Valentine\'s Day party at Hobbs Cafe with her customers on February 14th, 2023 at 5pm. She is gathering party material, and is telling everyone to join the party at Hobbs Cafe on February 14th, 2023, from 5pm to 7pm.\nLifestyle: Isabella Rodriguez goes to bed around 11pm, awakes up around 6am.\nDaily plan requirement: Isabella Rodriguez opens Hobbs Cafe at 8am everyday, and works at the counter until 8pm, at which point she closes the cafe.\nCurrent Date: Thursday August 15\n\n\nOn the scale of 1 to 10, where 1 is purely mundane (e.g., routine morning greetings) and 10 is extremely poignant (e.g., a conversation about breaking up, a fight), rate the likely poignancy of the following conversation for Isabella Rodriguez.\n\nConversation: \nFrom my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning.\n\nAnswer on a scale of 1 to 9. Respond with number only, e.g. "5"`\n  
+
+    for participant in participants:
+        if participant['character'].is_npc:
+            target_person = [element for element in participants if element['character'].id != participant['character'].id][0]['character']
+            summary = participant['character'].memory.create_conversation_summary(target_person.name, conv_data['messages'], participants)
+            score = participant['character'].memory.calculate_conversation_poig_score(summary)
+            summary_embed = llm.get_embed(summary)
            
-    #         props = {
-    #             'date' : game_time,
-    #             'subject' : participant['character'].name,
-    #             'predicate' : 'chat with',
-    #             'object' : target_person.name,
-    #             'summary' : summary,
-    #             'keywords' : [participant['character'].name, target_person.name],
-    #             'poignancy' : score,
-    #             'embedding_pair' :  (summary, summary_embed),
-    #             'filling': [{'conversation_id': conv_id}]
-    #         }
+            props = {
+                'date' : game_time,
+                'subject' : participant['character'].name,
+                'predicate' : 'chat with',
+                'object' : target_person.name,
+                'summary' : summary,
+                'keywords' : [participant['character'].name, target_person.name],
+                'poignancy' : score,
+                'embedding_pair' :  (summary, summary_embed),
+                'filling': [{'conversation_id': conv_id}]
+            }
 
-    #         chat_node = participant['character'].memory.add_coversation_memory(props)
+            chat_node = participant['character'].memory.add_coversation_memory(props)
 
-    #         props['filling'] = [{'node_id': chat_node.node_id}]
-    #         props['description'] = summary
+            props['filling'] = [{'node_id': chat_node.node_id}]
+            props['description'] = summary
             
-    #         participant['character'].memory.add_event_memory(props)
+            participant['character'].memory.add_event_memory(props)
 
 
 

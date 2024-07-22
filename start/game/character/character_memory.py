@@ -7,7 +7,7 @@ from core.prompt_generator import generate_conversation_poig_score, get_conversa
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
-
+from typing import List
 
 class CharacterMemory:
 
@@ -249,8 +249,8 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str, conversation) -> str:
-        prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conversation.messages, 'participants': conversation.participants})
+    def create_conversation_summary(self, target_person_name: str, messages: List[str], participants) -> str:
+        prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages, 'participants': participants})
         messages=[{'role': 'user', 'content': prompt}]
         summarize = ''
         try:

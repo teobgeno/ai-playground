@@ -63,6 +63,9 @@ class Conversation:
     
     def set_start_date(self, date: datetime):
         self._start_date = date
+        
+    def set_end_date(self, date: datetime):
+        self._end_date = date
 
     def set_participants(self, participants: List[Participant]):
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
@@ -148,6 +151,7 @@ class Conversation:
             conversation_end: bool = bool(json_dict['Did the conversation end?'])
             if conversation_end: 
                   self._status = ConversationStatus.COMPLETED
+                  self._end_date = current_date
 
         except json.JSONDecodeError:
             print('parse error')
@@ -219,8 +223,18 @@ Output format: Output a json of the following format:
         return "\n".join(query_fragments)
     
 
-    def insert_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record('conversations', {'participants': [e['character'].id for e in participants], "messages":self._messages, "relationships":self._relationships, 'type': 'conversation'})
+    def insert_conversation(self):
+        self._id = self._db.add_record('conversations', {'status': self.status.value, 
+                                                         'start_date': self._start_date.strftime('%Y-%m-%d %H:%M:%S'), 
+                                                         'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '',  
+                                                         'participants': [e['character'].id for e in self._participants], 
+                                                         'messages':self._messages, 
+                                                         'relationships':self._relationships, 
+                                                         'type': 'conversation'}
+                                       )
 
     def update_conversation(self):
-        self._db.update_record_by_id('conversations', self._id, {'messages': self._messages, 'relationships': self._relationships})
+        self._db.update_record_by_id('conversations', self._id, {'status': self.status.value, 
+                                                                 'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '', 
+                                                                 'messages': self._messages, 
+                                                                 'relationships': self._relationships})
