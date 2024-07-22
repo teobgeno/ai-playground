@@ -6,10 +6,14 @@ Conversation:
             tpl += [e['character'].name for e in props['participants'] if e['character'].id == props['messages'][i]['character_id']][0] + ' :' + props['messages'][i]['message'] + '\n'
 
         tpl += """
-You are {props[init_person_name]}, and you just finished a conversation with {props[target_person_name]}. I would
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. I would
 like you to summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
 "I," and add if you liked or disliked this interaction.
+Conversation:
          """
+        # for message in self._messages:
+        #         tpl += [e['character'].name for e in self._participants if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+
         print(tpl.format(props=props))
         return tpl.format(props=props)
     
