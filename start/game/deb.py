@@ -9,7 +9,7 @@ from core.cache import Cache
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
-from game.character.cognitive_modules.conversation import Conversation
+from game.character.cognitive_modules.conversation import Conversation, Participant
 from core.db.json_db_manager import JsonDBManager
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
@@ -157,6 +157,11 @@ def test_action():
 
     # existing conversation end
     # foreach npc participant #conversation.summarize_conversation()
+    participants: List[Participant] = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
+    for participant in participants:
+        if participant['character'].is_npc:
+            participant['character'].memory.calculate_conversation_poig_score()
+
 
 
 

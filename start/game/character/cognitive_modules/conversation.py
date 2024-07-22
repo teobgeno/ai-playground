@@ -58,7 +58,7 @@ class Conversation:
         self._messages.append({'character_id': self._init_person.id, 'message': message, 'added_at': time.time()})
         
     def add_relatioship(self, relationship: str):
-        self._relationships.append({"character_id": self._init_person.id, "descr": relationship})
+        self._relationships.append({'character_id': self._init_person.id, 'descr': relationship})
         
     def get_cached_relatioship(self):
         relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
@@ -93,8 +93,8 @@ class Conversation:
         
         if relationship == '' :
             prompt = self.get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
-            messages=[{"role": "user", "content": prompt}]
-            relationship = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+            messages=[{'role': 'user', 'content': prompt}]
+            relationship = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
             self.add_relatioship(relationship)
         else:
             print('cached relationship')
@@ -140,14 +140,14 @@ class Conversation:
 
     def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
         prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
-        messages=[{"role": "user", "content": prompt}]
-        utternace = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        messages=[{'role': 'user', 'content': prompt}]
+        utternace = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return utternace
     
     def summarize_conversation(self):
         prompt = self.get_summary_prompt({'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
-        messages=[{"role": "user", "content": prompt}]
-        summarize = self._llm.completition({"max_tokens": 300, "temperature": 0.5, "top_p": 1, "stream": False, "frequency_penalty": 0, "presence_penalty": 0, "stop": None}, messages)
+        messages=[{'role': 'user', 'content': prompt}]
+        summarize = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return summarize
 
     def get_summary_prompt(self, props):
@@ -216,7 +216,7 @@ Output format: Output a json of the following format:
     
 
     def insert_conversation(self, participants: List[Participant]):
-        self._id = self._db.add_record('conversations', {"participants": [e['character'].id for e in participants], "messages":self._messages, "relationships":self._relationships, "type":"conversation"})
+        self._id = self._db.add_record('conversations', {'participants': [e['character'].id for e in participants], "messages":self._messages, "relationships":self._relationships, 'type': 'conversation'})
 
     def update_conversation(self):
-        self._db.update_record_by_id('conversations', self._id, {"messages": self._messages, "relationships":self._relationships})
+        self._db.update_record_by_id('conversations', self._id, {'messages': self._messages, 'relationships': self._relationships})

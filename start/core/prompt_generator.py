@@ -2,8 +2,8 @@ def get_conversation_summary_prompt(props):
         tpl = """
 Conversation: 
         """
-        for i in props["messages"]:
-            tpl += [e['character'].name for e in props["participants"] if e['character'].id == props["messages"][i]['character_id']][0] + ' :' + props["messages"][i]['message'] + '\n'
+        for i in props['messages']:
+            tpl += [e['character'].name for e in props['participants'] if e['character'].id == props['messages'][i]['character_id']][0] + ' :' + props['messages'][i]['message'] + '\n'
 
         tpl += """
 You are {props[init_person_name]}, and you just finished a conversation with {props[target_person_name]}. I would
