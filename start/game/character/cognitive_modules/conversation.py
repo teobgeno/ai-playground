@@ -129,7 +129,6 @@ class Conversation:
         resp = self.generate_conversation_message(retrieved_relation_str, current_date)
         
         try:
-            # Attempt to parse the JSON data
             json_dict = json.loads(resp)
             utterance = json_dict['utterance']
         except json.JSONDecodeError:
