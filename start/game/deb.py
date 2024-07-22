@@ -169,19 +169,21 @@ def test_action():
             target_person = [element for element in conversation.participants if element['character'].id != participant['character'].id][0]['character']
             summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation)
             score = participant['character'].memory.calculate_conversation_poig_score(summary)
-            subject = participant['character'].name
-            predicate = 'chat with'
-            object = target_person.name
             summary_embed = llm.get_embed(summary)
-            chat_embedding_pair = (summary, summary_embed)
-
-            #  chat_node = persona.a_mem.add_chat(persona.scratch.curr_time, None,
-            #           curr_event[0], curr_event[1], curr_event[2], 
-            #           persona.scratch.act_description, keywords, 
-            #           chat_poignancy, chat_embedding_pair, 
-            #           persona.scratch.chat)
-          
-
+           
+            participant['character'].memory.add_coversation_memory(
+            {
+                'date' : game_time,
+                'subject' : participant['character'].name,
+                'predicate' : 'chat with',
+                'object' : target_person.name,
+                'summary' : summary,
+                'keywords' : [participant['character'].name, target_person.name],
+                'poignancy' : score,
+                'embedding_pair' :  (summary, summary_embed),
+                'filling': [{'conversation_id': conv_id}]
+            }
+            )
 
 
 

@@ -272,8 +272,10 @@ class CharacterMemory:
 
         return score
     
-    def add_coversation_memory(self, target_person_name: str, conversation: Conversation) -> str:
-        pass
+
+    def add_coversation_memory(self, props):
+        self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+       
 
 
 
