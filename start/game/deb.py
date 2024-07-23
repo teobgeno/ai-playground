@@ -168,9 +168,13 @@ def test_action():
     for participant in participants:
         if participant['character'].is_npc:
             target_person = [element for element in participants if element['character'].id != participant['character'].id][0]['character']
-            summary = participant['character'].memory.create_conversation_summary(target_person.name, conv_data['messages'], participants)
-            score = participant['character'].memory.calculate_conversation_poig_score(summary)
-            summary_embed = llm.get_embed(summary)
+            # summary = participant['character'].memory.create_conversation_summary(target_person.name, conv_data['messages'], participants)
+            # score = participant['character'].memory.calculate_conversation_poig_score(summary)
+            # summary_embed = llm.get_embed(summary)
+
+            summary = 'From my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning'
+            score = 8
+            summary_embed = '123456'
            
             props = {
                 'date' : game_time,
