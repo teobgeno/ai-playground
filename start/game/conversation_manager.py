@@ -4,14 +4,18 @@ from game.llm import LLMProvider
 from core.cache import Cache
 
 class ConversationManager:
-    def __init__(self, parser:configparser, db:JsonDBManager, llm: LLMProvider, cache: Cache):
+    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params):
         self._parcer = parser
         self._db = db
         self._llm  = llm
         self._cache = cache
+        #params
+        #conversation_id : int or null if new
+        #participants : [character_id, character_id]
+        #character_id_talk: character_id
             
 
-    def get_characters():
+    def create_participants():
         pass
     def start_conversation():
         # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]
