@@ -187,6 +187,9 @@ def test_action():
             
             participant['character'].memory.add_event_memory(props)
 
+            participant['character'].memory.save_associative()
+            participant['character'].memory.save_scratch()
+
 
 
     # db.get_record_by_id

@@ -23,14 +23,20 @@ class CharacterMemory:
             self.setScratch()
 
 
-    def setSpatial(self, data):
+    def setSpatial(self):
         self.spatial = MemoryTree(self._base_path + '/spatial_memory.json')
 
-    def setAssociative(self, data):
+    def setAssociative(self):
         self.associative = AssociativeMemory(self._base_path + '/associative_memory')
 
-    def setScratch(self, data):
+    def setScratch(self):
         self.scratch = Scratch(self._base_path + '/scratch.json')
+
+    def save_associative(self):
+        self.associative.save(self._base_path + '/associative_memory')
+
+    def save_scratch(self):
+        self.scratch.save(self._base_path + '/scratch.json')
 
     def cos_sim(self, a, b):
         """
@@ -284,12 +290,14 @@ class CharacterMemory:
 
     def add_event_memory(self, props):
        self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
-
-    def save_associative(self):
-        self.associative.save()
+       self.update_reflect_trigger(props['poignancy'])
 
 
+    def update_reflect_trigger(self, event_poignancy: int):
+        self.scratch.importance_trigger_curr -= event_poignancy
+        self.scratch.importance_ele_n += 1
 
+    
 # "node_545": {
 #     "node_count": 545,
 #     "type_count": 2,
