@@ -274,10 +274,10 @@ class CharacterMemory:
     
 
     def add_coversation_memory(self, props):
-        self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+        return self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
     def add_event_memory(self, props):
-       self.associative(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+       self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
 
 
