@@ -2,6 +2,7 @@ import configparser
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
+from typing import List
 
 class ConversationManager:
     def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params):
@@ -15,7 +16,9 @@ class ConversationManager:
         #character_id_talk: character_id
             
 
-    def create_participants():
+    def create_participants(self, character_ids: List[int]):
+        for character_id in character_ids:
+            conv = self._db.get_record_by_id('characters', character_id)
         pass
     def start_conversation():
         # participants = [{'character':npc, 'is_talking': True}, {'character':player, 'is_talking': False}]

@@ -6,11 +6,11 @@ import time
 import json
 from enum import Enum
 from typing import TypedDict
+from typing import List
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
 from game.character.character import Character
-from typing import List
 
 
 class Message(TypedDict):
