@@ -11,20 +11,26 @@ from typing import List
 
 class CharacterMemory:
 
-    def __init__(self, llm: LLMProvider):
+    def __init__(self, llm: LLMProvider, base_path: str):
         self.spatial = None
         self.associative = None
         self.scratch = None
         self._llm = llm
+        self._base_path = base_path
+        if base_path !='':
+            self.setSpatial()
+            self.setAssociative()
+            self.setScratch()
+
 
     def setSpatial(self, data):
-        self.spatial = MemoryTree(data)
+        self.spatial = MemoryTree(self._base_path + '/spatial_memory.json')
 
     def setAssociative(self, data):
-        self.associative = AssociativeMemory(data)
+        self.associative = AssociativeMemory(self._base_path + '/associative_memory')
 
     def setScratch(self, data):
-        self.scratch = Scratch(data)
+        self.scratch = Scratch(self._base_path + '/scratch.json')
 
     def cos_sim(self, a, b):
         """
@@ -278,6 +284,9 @@ class CharacterMemory:
 
     def add_event_memory(self, props):
        self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+
+    def save_associative(self):
+        self.associative.save()
 
 
 

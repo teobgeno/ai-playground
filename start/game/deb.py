@@ -117,18 +117,10 @@ def test_action():
     # game_time = datetime(2024, 7, 22, 11, 56)
     game_time = datetime.now()
 
-
-    player_memory = CharacterMemory(llm)
+    player_memory = CharacterMemory(llm, '')
     player = Character.create(2, False, 'Maria Lopez', player_memory)
 
-    npm_memory = CharacterMemory(llm)
-    npm_memory.setSpatial(
-        'data/test/Isabella Rodriguez/bootstrap_memory/spatial_memory.json')
-    npm_memory.setAssociative(
-        'data/test/Isabella Rodriguez/bootstrap_memory/associative_memory')
-    npm_memory.setScratch(
-        'data/test/Isabella Rodriguez/bootstrap_memory/scratch.json')
-
+    npm_memory = CharacterMemory(llm, 'data/test/Isabella Rodriguez/memory')
     npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
 
     

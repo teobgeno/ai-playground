@@ -102,12 +102,3 @@ class MemoryTree:
             x = ", ".join(
                 list(self.tree[curr_world][curr_sector][curr_arena.lower()]))
         return x
-
-
-if __name__ == '__main__':
-    x = f"../../../../environment/frontend_server/storage/the_ville_base_LinFamily/personas/Eddy Lin/bootstrap_memory/spatial_memory.json"
-    x = MemoryTree(x)
-    x.print_tree()
-
-    print(x.get_str_accessible_sector_arenas(
-        "dolores double studio:double studio"))
