@@ -798,3 +798,7 @@ persona.a_mem.add_thought(created, expiration, s, p, o, thought, keywords, thoug
 focal_points = [f"{target_persona.scratch.name}"]
 retrieved = new_retrieve(init_persona, focal_points, 50)
 relationship = generate_summarize_agent_relationship(init_persona, target_persona, retrieved)
+
+
+
+  this.httpFactory.request(this.urls.getPropertyInsuredObjectTypes, { method: 'GET' }).execute()
