@@ -13,13 +13,6 @@ class Character:
         self._is_npc = is_npc
         self._name = name
         self._memory = memory
-        # self._state = "idle"
-        # self.spatial_memory = None
-        # self.associative_memory = None
-        # self.scratch_memory = None
-        # age
-        # skills List of skill(class)
-        # traits List of trait(class)
 
     @classmethod
     def create(cls, id: int, is_npc:bool, name: str, memory: CharacterMemory):
@@ -40,17 +33,3 @@ class Character:
     @property
     def memory(self):
         return self._memory
-
-    # def setSpatialMemory(self, data):
-    #     self.spatial_memory = MemoryTree(data)
-
-    # def setAssociativeMemory(self, data):
-    #     self.associative_memory = AssociativeMemory(data)
-
-    # def setScratchMemory(self, data):
-    #     self.scratch_memory = Scratch(data)
-
-    # def setBlankMemory(self):
-    #     self.spatial_memory = MemoryTree('')
-    #     self.spatial_memory = AssociativeMemory('')
-    #     self.spatial_memory = Scratch('')

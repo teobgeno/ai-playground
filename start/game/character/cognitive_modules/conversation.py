@@ -130,7 +130,7 @@ class Conversation:
         return retrieved
 
 
-    def talk_npc(self, current_date: datetime):
+    def talk_npc(self, current_date: datetime)-> str:
         utterance ='...'
         retrieved_relation_str = ''
         conversation_end = False
@@ -156,15 +156,21 @@ class Conversation:
         except json.JSONDecodeError:
             print('parse error')
             print(resp)
-            return None
+            # return '...'
         
         self.add_message(utterance)
            
         return utterance
    
     
-    def talk_player(self, utterance: str):
-        self.add_message(utterance)
+    def talk_player(self, current_date: datetime, utterance: str, end_conversation: bool):
+        if utterance != '':
+            self.add_message(utterance)
+            
+        if end_conversation:
+            self._status = ConversationStatus.COMPLETED
+            self._end_date = current_date
+            
         return utterance
 
     def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
