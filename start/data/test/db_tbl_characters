@@ -1,0 +1,16 @@
+{
+   "data": [
+        {
+            "name": "Isabella Rodriguez",
+            "memory_path":"data/test/Isabella Rodriguez/memory",
+            "is_npc": 1,
+            "id": 1
+        },
+        {
+            "name": "Maria Lopez",
+            "memory_path":"",
+            "is_npc": 0,
+            "id": 2
+        }
+   ]
+}
