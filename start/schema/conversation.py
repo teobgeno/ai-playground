@@ -25,7 +25,6 @@ class ParticipantDef(TypedDict):
     character: Character
     is_talking: bool
     
-    
 class RelationshipDef(TypedDict):
     character_id: int
     descr: str
@@ -48,10 +47,3 @@ class ConversationApiPropsDef(TypedDict):
     message: str
     end_conversation: bool
     game_time: datetime
-
-
-#conversation_id : int > 0 or 0 if new
-        #character_ids : [character_id, character_id]
-        #character_id_talk: character_id
-        #message: str only by player fill from chat else empty
-        #end_conversation: 0 or 1 (set by player if close chat)

@@ -1,4 +1,7 @@
 import configparser
+from core.db.json_db_manager import JsonDBManager
+from game.llm import LLMProvider
+from core.cache import Cache
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,13 +13,18 @@ from api.router import test_handler
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # db = MySqlDBManager('root', '123456', '127.0.0.1')
+    parser = configparser.ConfigParser()
+    parser.read("config.ini")
     db = JsonDBManager()
-    # parser = configparser.ConfigParser()
-    # parser.read("config.ini")
-
+    llm = LLMProvider( parser.get("OPENAI", "key"))
+    cache = Cache(db, llm)
+    
     yield {
+        "parser": parser,
         "db": db,
+        "llm": llm,
+        "cache": cache,
+        
     }
 
     # await db.close()
