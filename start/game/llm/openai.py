@@ -17,7 +17,7 @@ class OpenAIAPI:
 
     def completition(self, params, messages):
         try:
-            completion = openai.ChatCompletion.create(
+            completion = openai.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages= messages,
                 max_tokens=params['max_tokens'],
@@ -31,8 +31,8 @@ class OpenAIAPI:
             #print(completion)
             return completion["choices"][0]["message"]["content"]
         except Exception as error:
-            print("ChatGPT ERROR", error)
-            return "ChatGPT ERROR"
+            print("ChatGPT ERROR: ", error)
+            return ""
 
     def embed(self, query: str) -> List[float]:
         return (
