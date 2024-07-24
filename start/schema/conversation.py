@@ -41,7 +41,7 @@ class ConversationDef(TypedDict):
     type: str
 
 
-class ConversationApiPropsDef(TypedDict):
+class ConversationApiRequestDef(TypedDict):
     character_ids: List[int]
     character_id_talk: int
     message: str

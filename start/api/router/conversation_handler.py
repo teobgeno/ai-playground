@@ -6,24 +6,20 @@ from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
 from game.conversation_manager import ConversationManager
+from schema.conversation import *
+
+router = APIRouter(
+    prefix='/conversation'
+)
 
 
-router = APIRouter()
-
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
-
-
-@router.post("/conversation_talk/")
+@router.post("/talk")
 async def conversation_talk(
-    params: Item, 
+    params: ConversationApiRequestDef, 
     parser: configparser = Depends(get_parser), 
     db: JsonDBManager = Depends(get_db),
     llm: LLMProvider = Depends(get_llm),
     cache: Cache = Depends(get_cache)
     ):
-    conversation_manager = ConversationManager(parser, db, llm, params)
+    conversation_manager = ConversationManager(parser, db, llm, cache, params)
     return conversation_manager.process_conversation()

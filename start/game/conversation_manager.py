@@ -9,13 +9,13 @@ from pydantic import ConfigDict, TypeAdapter, ValidationError
 from game.character.character_memory import CharacterMemory
 
 class ConversationManager:
-    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiPropsDef):
+    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiRequestDef):
         self._parcer = parser
         self._db = db
         self._llm  = llm
         self._cache = cache
         self._participants: List[ParticipantDef] = []
-        self._params = ConversationApiPropsDef(params)
+        self._params = ConversationApiRequestDef(params)
         self.create_participants()
 
     def create_participants(self)->None:
