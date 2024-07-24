@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from api.context import *
-from pydantic import BaseModel
 import configparser
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
-from game.conversation_manager import ConversationManager
 from schema.conversation import *
+from game.conversation_manager import ConversationManager
+
 
 router = APIRouter(
     prefix='/conversation'
