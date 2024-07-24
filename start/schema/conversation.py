@@ -47,8 +47,6 @@ class ConversationApiRequestDef(TypedDict):
     character_id_talk: int
     message: str
     end_conversation: bool
-    game_time: datetime
-
 
 class ConversationApiOut(TypedDict):
     conversation_id: int

@@ -1,11 +1,11 @@
 import configparser
+from datetime import datetime
+from typing import List
+from schema.conversation import *
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
-from typing import List
-from schema.conversation import *
 from game.character.cognitive_modules.conversation import Conversation
-from pydantic import ConfigDict, TypeAdapter, ValidationError
 from game.character.character_memory import CharacterMemory
 
 class ConversationManager:
@@ -16,6 +16,7 @@ class ConversationManager:
         self._cache = cache
         self._participants: List[ParticipantDef] = []
         self._params = ConversationApiRequestDef(params)
+        self._params['game_time'] = datetime.now()
         self.create_participants()
 
     def create_participants(self)->None:
