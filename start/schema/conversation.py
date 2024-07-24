@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 from typing_extensions import TypedDict
+from datetime import datetime
 from game.character.character import Character
 # from game.character.character_memory import CharacterMemory
 
@@ -46,6 +47,7 @@ class ConversationApiPropsDef(TypedDict):
     character_id_talk: int
     message: str
     end_conversation: bool
+    game_time: datetime
 
 
 #conversation_id : int > 0 or 0 if new

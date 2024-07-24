@@ -18,8 +18,7 @@ class ConversationManager:
         self._params = ConversationApiPropsDef(params)
         self.create_participants()
 
-            
-    def create_participants(self):
+    def create_participants(self)->None:
         for character_id in self._params['character_ids']:
             char_data = CharacterDef(self._db.get_record_by_id('characters', character_id))
             
@@ -43,7 +42,7 @@ class ConversationManager:
         utternace = self.talk(conversation)
         conversation.update_conversation()
         if conversation.status == ConversationStatus.COMPLETED:
-            self.end_conversation()
+            self.end_conversation(conversation)
 
         return utternace
 
@@ -64,5 +63,36 @@ class ConversationManager:
             
         return conversation
         
-    def end_conversation():
-        pass
+    def end_conversation(self, conversation: Conversation):
+        for participant in self._participants:
+            if participant['character'].is_npc:
+                target_person = [element for element in self._participants if element['character'].id != participant['character'].id][0]['character']
+                # summary = participant['character'].memory.create_conversation_summary(target_person.name, conv_data['messages'], participants)
+                # score = participant['character'].memory.calculate_conversation_poig_score(summary)
+                # summary_embed = llm.get_embed(summary)
+
+                summary = 'From my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning'
+                score = 8
+                summary_embed = '123456'
+            
+                props = {
+                    'date' : self._params['game_time'],
+                    'subject' : participant['character'].name,
+                    'predicate' : 'chat with',
+                    'object' : target_person.name,
+                    'summary' : summary,
+                    'keywords' : [participant['character'].name, target_person.name],
+                    'poignancy' : score,
+                    'embedding_pair' :  (summary, summary_embed),
+                    'filling': [{'conversation_id': conversation.id}]
+                }
+
+                chat_node = participant['character'].memory.add_coversation_memory(props)
+
+                props['filling'] = [{'node_id': chat_node.node_id}]
+                props['description'] = summary
+                
+                participant['character'].memory.add_event_memory(props)
+
+                participant['character'].memory.save_associative()
+                participant['character'].memory.save_scratch()
