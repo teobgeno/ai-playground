@@ -69,7 +69,7 @@ class Conversation:
     def get_cached_relationship(self):
         relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
         if relations:
-            return RelationshipDef(relations[0])
+            return relations[0]
         return {}
 
     def get_unique_memories_text(self, retrieved: dict):
