@@ -9,7 +9,7 @@ from core.cache import Cache
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
 from game.character.cognitive_modules.retrieve import RetrieveAction
-from game.character.cognitive_modules.conversation import Conversation, Participant, ConversationStatus
+from game.character.cognitive_modules.conversation import Conversation
 from core.db.json_db_manager import JsonDBManager
 from game.task import *
 from game.llm import LLMProvider, DecideLocationPrompt, DecideItemPrompt, DecideResourcePrompt
@@ -115,14 +115,15 @@ def test_action():
     db = JsonDBManager()
     llm = LLMProvider(api_key)
     cache = Cache(db, llm)
-    # game_time = datetime(2024, 7, 22, 11, 56)
     game_time = datetime.now()
+    # game_time = datetime(2024, 7, 22, 11, 56)
+  
 
-    player_memory = CharacterMemory(llm, '')
-    player = Character.create(2, False, 'Maria Lopez', player_memory)
+    # player_memory = CharacterMemory(llm, '')
+    # player = Character.create(2, False, 'Maria Lopez', player_memory)
 
-    npm_memory = CharacterMemory(llm, 'data/test/Isabella Rodriguez/memory')
-    npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
+    # npm_memory = CharacterMemory(llm, 'data/test/Isabella Rodriguez/memory')
+    # npc = Character.create(1, True, 'Isabella Rodriguez', npm_memory)
 
     
     
@@ -156,9 +157,16 @@ def test_action():
     # conversation.set_messages(conv['messages'])
     # conversation.set_relationships(conv['relationships'])
     
-    conv_manager = ConversationManager(parser, db, llm, cache, {'character_ids': [1,2], 'conversation_id': 709835299195158552})
+    conv_manager = ConversationManager(parser, db, llm, cache, {
+        'conversation_id': 709835299195158552,
+        'character_ids': [1,2],
+        'character_id_talk': 1,
+        'message': '',
+        'end_conversation': False,
+        'game_time': game_time 
+        })
     conv_manager.load_conversation()
-    
+
     # '\nHere is a brief description of Isabella Rodriguez\nName: Isabella Rodriguez\nAge: 34\nInnate traits: friendly, outgoing, hospitable\nLearned traits: Isabella Rodriguez is a cafe owner of Hobbs Cafe who loves to make people feel welcome. She is always looking for ways to make the cafe a place where people can come to relax and enjoy themselves.\nCurrently: Isabella Rodriguez is planning on having a Valentine\'s Day party at Hobbs Cafe with her customers on February 14th, 2023 at 5pm. She is gathering party material, and is telling everyone to join the party at Hobbs Cafe on February 14th, 2023, from 5pm to 7pm.\nLifestyle: Isabella Rodriguez goes to bed around 11pm, awakes up around 6am.\nDaily plan requirement: Isabella Rodriguez opens Hobbs Cafe at 8am everyday, and works at the counter until 8pm, at which point she closes the cafe.\nCurrent Date: Thursday August 15\n\n\nOn the scale of 1 to 10, where 1 is purely mundane (e.g., routine morning greetings) and 10 is extremely poignant (e.g., a conversation about breaking up, a fight), rate the likely poignancy of the following conversation for Isabella Rodriguez.\n\nConversation: \nFrom my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning.\n\nAnswer on a scale of 1 to 9. Respond with number only, e.g. "5"`\n  
 
     # for participant in participants:
