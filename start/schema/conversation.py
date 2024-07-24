@@ -38,3 +38,17 @@ class ConversationDef(TypedDict):
     messages: List[MessageDef]
     relationships: List[RelationshipDef]
     type: str
+
+
+class ConversationApiPropsDef(TypedDict):
+    character_ids: List[int]
+    character_id_talk: int
+    message: str
+    end_conversation: bool
+
+
+#conversation_id : int > 0 or 0 if new
+        #character_ids : [character_id, character_id]
+        #character_id_talk: character_id
+        #message: str only by player fill from chat else empty
+        #end_conversation: 0 or 1 (set by player if close chat)

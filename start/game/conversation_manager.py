@@ -9,22 +9,16 @@ from pydantic import ConfigDict, TypeAdapter, ValidationError
 # from game.character.character import Character
 
 class ConversationManager:
-    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params):
+    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiPropsDef):
         self._parcer = parser
         self._db = db
         self._llm  = llm
         self._cache = cache
         self._participants: List[ParticipantDef] = []
-        self._params = params
-        #self.create_participants()
-        #params
-        #conversation_id : int > 0 or 0 if new
-        #character_ids : [character_id, character_id]
-        #character_id_talk: character_id
-        #message: str only by player fill from chat else empty
-        #end_conversation: 0 or 1 (set by player if close chat)
-            
+        self._params = ConversationApiPropsDef(params)
+        self.create_participants()
 
+            
     def create_participants(self):
         for character_id in self._params['character_ids']:
             char = CharacterDef(self._db.get_record_by_id('characters', character_id))
@@ -46,6 +40,9 @@ class ConversationManager:
         conversation = self.load_conversation()
         utternace = self.talk(conversation)
         conversation.update_conversation()
+        if conversation.status == ConversationStatus.COMPLETED:
+            self.end_conversation()
+            
         return utternace
 
 

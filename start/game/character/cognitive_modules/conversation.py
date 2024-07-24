@@ -10,25 +10,7 @@ from typing import List
 from core.db.json_db_manager import JsonDBManager
 from game.llm import LLMProvider
 from core.cache import Cache
-from game.character.character import Character
-
-
-class Message(TypedDict):
-    character_id: int
-    message: str
-    added_at: float
-
-class Participant(TypedDict):
-    character: Character
-    is_talking: bool
-    
-class Relationship(TypedDict):
-    character_id: int
-    descr: str
-    
-class ConversationStatus(Enum):
-    RUNNING = 1
-    COMPLETED = 2
+from schema.conversation import *
 
 class Conversation:
     def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache, id: int = 0):
@@ -37,13 +19,13 @@ class Conversation:
         self._llm  = llm
         self._cache = cache
         self._status = ConversationStatus.RUNNING
-        self._start_date = None
-        self._end_date = None
-        self._participants: List[Participant] = []
+        self._start_date: datetime = None
+        self._end_date: datetime = None
+        self._participants: List[ParticipantDef] = []
         self._init_person: Character = None
         self._target_person: Character = None
-        self._messages: List[Message] = []
-        self._relationships: List[Relationship] = []
+        self._messages: List[MessageDef] = []
+        self._relationships: List[RelationshipDef] = []
         
     @property
     def id(self):
@@ -61,34 +43,34 @@ class Conversation:
     def messages(self):
         return self._messages
     
-    def set_start_date(self, date: datetime):
+    def set_start_date(self, date: datetime)->None:
         self._start_date = date
         
-    def set_end_date(self, date: datetime):
+    def set_end_date(self, date: datetime)->None:
         self._end_date = date
 
-    def set_participants(self, participants: List[Participant]):
+    def set_participants(self, participants: List[ParticipantDef])->None:
         self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
         self._target_person: Character = [element for element in participants if element['is_talking'] == False][0]['character']
         self._participants = participants
         
-    def set_messages(self, messages: List[Message]):
+    def set_messages(self, messages: List[MessageDef])->None:
         self._messages = messages
         
-    def set_relationships(self, relationships: List[Relationship]):
+    def set_relationships(self, relationships: List[RelationshipDef])->None:
         self._relationships = relationships
         
-    def add_message(self, message: str):
+    def add_message(self, message: str)->None:
         self._messages.append({'character_id': self._init_person.id, 'message': message, 'added_at': time.time()})
         
-    def add_relatioship(self, relationship: str):
-        self._relationships.append({'character_id': self._init_person.id, 'descr': relationship})
+    def add_relatioship(self, relationship: str)->None:
+        self._relationships.append(RelationshipDef({'character_id': self._init_person.id, 'descr': relationship}))
         
     def get_cached_relationship(self):
         relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
         if relations:
-            return relations[0]
-        return ''
+            return RelationshipDef(relations[0])
+        return {}
 
     def get_unique_memories_text(self, retrieved: dict):
         all_embedding_keys = set()
