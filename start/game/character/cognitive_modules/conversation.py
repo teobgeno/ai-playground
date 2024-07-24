@@ -134,14 +134,12 @@ class Conversation:
             if conversation_end: 
                   self._status = ConversationStatus.COMPLETED
                   self._end_date = current_date
+                  self.add_message(utterance)
 
         except json.JSONDecodeError:
             print('parse error')
             print(resp)
-            # return '...'
-        
-        self.add_message(utterance)
-           
+
         return utterance
    
     
