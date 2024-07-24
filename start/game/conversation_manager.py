@@ -6,7 +6,7 @@ from typing import List
 from schema.conversation import *
 from game.character.cognitive_modules.conversation import Conversation
 from pydantic import ConfigDict, TypeAdapter, ValidationError
-# from game.character.character import Character
+from game.character.character_memory import CharacterMemory
 
 class ConversationManager:
     def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiPropsDef):
@@ -21,10 +21,12 @@ class ConversationManager:
             
     def create_participants(self):
         for character_id in self._params['character_ids']:
-            char = CharacterDef(self._db.get_record_by_id('characters', character_id))
+            char_data = CharacterDef(self._db.get_record_by_id('characters', character_id))
             
-            #Character
-            self._participants.append(ParticipantDef({'character':char, 'is_talking': True if self._params['character_id_talk'] == character_id else False}))
+            character_memory = CharacterMemory(self._llm, char_data['memory_path'])
+            character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
+
+            self._participants.append(ParticipantDef({'character':character, 'is_talking': True if self._params['character_id_talk'] == character_id else False}))
             
     def talk(self, conversation: Conversation)->str:
         utterance = ''
@@ -42,7 +44,7 @@ class ConversationManager:
         conversation.update_conversation()
         if conversation.status == ConversationStatus.COMPLETED:
             self.end_conversation()
-            
+
         return utternace
 
 
@@ -62,7 +64,5 @@ class ConversationManager:
             
         return conversation
         
-    
-
     def end_conversation():
         pass

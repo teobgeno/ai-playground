@@ -17,6 +17,7 @@ class MessageDef(TypedDict):
 class CharacterDef(TypedDict):
     id: int
     name: str
+    memory_path: str
     is_npc: bool
 
 class ParticipantDef(TypedDict):
