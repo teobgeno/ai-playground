@@ -90,7 +90,10 @@ export class ChatManager {
         if(conversation) {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
             const character = conversation.participants[conversation.currentParticipantTalkIndex];
-            !character?.isNpc?(character as Hero)?.startTalk():(character as Npc)?.startTalk();
+            if(character?.isNpc) {
+                this.generateNpcResponse(character?.id);
+            }
+            //!character?.isNpc?(character as Hero)?.startTalk():
         }
     }
 
