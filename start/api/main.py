@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from core.db.json_db_manager import JsonDBManager
 from game.deb import test_whatever
-from api.router import test_handler
+from api.router import conversation_handler
 
 
 @asynccontextmanager
@@ -45,7 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(test_handler.router)
+app.include_router(conversation_handler.router)
 
 
 def init():
