@@ -37,14 +37,14 @@ class ConversationManager:
         
         return utterance
     
-    def process_conversation(self)->str:
+    def process_conversation(self)->ConversationApiOut:
         conversation = self.load_conversation()
         utternace = self.talk(conversation)
         conversation.update_conversation()
         if conversation.status == ConversationStatus.COMPLETED:
             self.end_conversation(conversation)
 
-        return utternace
+        return {'conversation_id': conversation.id, 'message_reply' : utternace, 'end_conversation': True if conversation.status == ConversationStatus.COMPLETED else False}
 
 
     def load_conversation(self)->Conversation:
@@ -64,16 +64,18 @@ class ConversationManager:
         return conversation
         
     def end_conversation(self, conversation: Conversation):
+        return
         for participant in self._participants:
             if participant['character'].is_npc:
                 target_person = [element for element in self._participants if element['character'].id != participant['character'].id][0]['character']
-                # summary = participant['character'].memory.create_conversation_summary(target_person.name, conv_data['messages'], participants)
-                # score = participant['character'].memory.calculate_conversation_poig_score(summary)
-                # summary_embed = llm.get_embed(summary)
+                
+                summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation.messages, conversation.participants)
+                score = participant['character'].memory.calculate_conversation_poig_score(summary)
+                summary_embed = self._llm.get_embed(summary)
 
-                summary = 'From my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning'
-                score = 8
-                summary_embed = '123456'
+                # summary = 'From my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning'
+                # score = 8
+                # summary_embed = '123456'
             
                 props = {
                     'date' : self._params['game_time'],

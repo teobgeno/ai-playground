@@ -3,7 +3,7 @@ from typing import List
 from typing_extensions import TypedDict
 from datetime import datetime
 from game.character.character import Character
-# from game.character.character_memory import CharacterMemory
+from pydantic import ConfigDict, TypeAdapter, ValidationError, BaseModel
 
 class ConversationStatus(Enum):
     RUNNING = 1
@@ -48,3 +48,9 @@ class ConversationApiRequestDef(TypedDict):
     message: str
     end_conversation: bool
     game_time: datetime
+
+
+class ConversationApiOut(TypedDict):
+    conversation_id: int
+    message_reply: str
+    end_conversation: bool

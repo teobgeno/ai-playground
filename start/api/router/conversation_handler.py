@@ -6,7 +6,7 @@ from game.llm import LLMProvider
 from core.cache import Cache
 from schema.conversation import *
 from game.conversation_manager import ConversationManager
-from pydantic import ConfigDict, TypeAdapter, ValidationError
+from pydantic import ConfigDict, TypeAdapter, ValidationError, BaseModel
 
 router = APIRouter(
     prefix='/conversation'
@@ -19,8 +19,9 @@ async def conversation_talk(
     parser: configparser = Depends(get_parser), 
     db: JsonDBManager = Depends(get_db),
     llm: LLMProvider = Depends(get_llm),
-    cache: Cache = Depends(get_cache)
-    ):
+    cache: Cache = Depends(get_cache),
+   
+    )->ConversationApiOut:
 
     conversation_manager = ConversationManager(parser, db, llm, cache, params)
     return conversation_manager.process_conversation()
