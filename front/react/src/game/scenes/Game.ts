@@ -1,27 +1,29 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine, GridEngineConfig } from "grid-engine";
+
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
+
+import { CursorManager } from "../cursors/CursorManager";
+import { ChatManager } from "../ChatManager";
+import { MapManager } from "../MapManager";
+
+import { InventoryItem } from "../items/InventoryItem"
+import { Storable } from "../items/types";
+import { GenericItem } from "../items/GenericItem";
 import { Hoe } from "../items/Hoe";
 import { PickAxe } from "../items/PickAxe";
 import { WaterCan } from "../items/WaterCan";
 import { Seed } from "../farm/Seed";
-import { CursorManager } from "../cursors/CursorManager";
-import { ChatManager } from "../ChatManager";
-import { Storable } from "../items/types";
-
-import { MapManager } from "../MapManager";
-
-import { InventoryItem } from "../items/InventoryItem"
-import { GenericItem } from "../items/GenericItem";
 import { Rock } from "../items/Rock";
 import { Tree } from "../items/Tree";
 import { Lake } from "../items/Lake";
+import { FarmLand } from "../farm/FarmLand";
 
 import { HarvestTask } from "../actions/HarvestTask";
-import { FarmLand } from "../farm/FarmLand";
+
 import { CursorType } from "../cursors/types";
 import { MapObject, ObjectId, SceneProps } from "../core/types";
 
@@ -282,8 +284,7 @@ export class Game extends Scene {
             this,
             "npc",
             this.gridEngine,
-            "npc0",
-            this.chatManager
+            "npc0"
         );
         this.physics.add.existing(npc);
         this.add.existing(npc);
@@ -372,7 +373,7 @@ export class Game extends Scene {
 
     setActiveItem(item: Storable) {
         this.cursorManager.setActiveItemCursor(item);
-        const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
+        //const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
         
         //disable interactions to game objects when cursor exists 
         // for (const land of this.mapManager.getPlotLandEntities()) {
@@ -386,11 +387,11 @@ export class Game extends Scene {
             }
         })
 
-        for (const [, character] of this.charactersMap) {
-            if(character.getId() !== 'hero') {
-                (character as Npc).toggleInteraction(enableObjInteractions);
-            }
-        }
+        // for (const [, character] of this.charactersMap) {
+        //     if(character.getId() !== 'hero') {
+        //         (character as Npc).toggleInteraction(enableObjInteractions);
+        //     }
+        // }
     }
 
     getHotbarItems() {
@@ -405,14 +406,21 @@ export class Game extends Scene {
         }
     }
 
-    addPlayerTask(task: string, params : MapObject) {
+    addPlayerTask(task: string, params : any) {
         console.log('add harvest task')
-        const h = new HarvestTask(
-            this.mapManager,
-            this.gridEngine,
-            this.hero,
-            params as FarmLand,
-        );
-        this.hero.addTask(h);
+        if(task === 'harvest') {
+            const h = new HarvestTask(
+                this.mapManager,
+                this.gridEngine,
+                this.hero,
+                params as FarmLand,
+            );
+            this.hero.addTask(h);
+        }
+
+        if(task === 'conversation') {
+            console.log(params)
+        }
+      
     }
 }

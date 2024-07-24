@@ -6,6 +6,7 @@ import { CharacterInventory } from "./CharacterInventory";
 export class Humanoid extends Physics.Arcade.Sprite {
     public id: string;
     //private stamina: number;
+    public  scene: Phaser.Scene;
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
     protected characterInventory: CharacterInventory;

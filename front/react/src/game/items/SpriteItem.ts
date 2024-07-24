@@ -11,18 +11,25 @@ export class SpriteItem {
         textureData: TextureData,
         coordsData: CoordsData,
         padPosX: number,
-        padPosY: number
+        padPosY: number,
+        hasExisting: boolean = false
     ) {
         this.scene = scene;
         this.textureData = textureData;
         this.coordsData = coordsData;
+        if(!hasExisting) {
+            this.sprite = this.scene.add.sprite(
+                this.coordsData.pixelX + padPosX,
+                this.coordsData.pixelY + padPosY,
+                this.textureData.texture,
+                this.textureData.frame
+            );
+        }
+        
+    }
 
-        this.sprite = this.scene.add.sprite(
-            this.coordsData.pixelX + padPosX,
-            this.coordsData.pixelY + padPosY,
-            this.textureData.texture,
-            this.textureData.frame
-        );
+    public addExisting(sprite: Phaser.GameObjects.Sprite) {
+        this.sprite = sprite
     }
 
     public getSprite() {
