@@ -80,15 +80,15 @@ export class Npc extends Humanoid implements MapObjectInteractable {
     //         : this.pauseInteraction();
     // }
 
-    public pauseInteraction() {
-        if (this.input && this.input.enabled) {
-            this.disableInteractive();
-        }
-    }
+    // public pauseInteraction() {
+    //     if (this.input && this.input.enabled) {
+    //         this.disableInteractive();
+    //     }
+    // }
 
-    public resumeInteraction() {
-        if (this.input && !this.input.enabled) {
-            this.setInteractive();
-        }
-    }
+    // public resumeInteraction() {
+    //     if (this.input && !this.input.enabled) {
+    //         this.setInteractive();
+    //     }
+    // }
 }
