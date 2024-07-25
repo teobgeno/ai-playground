@@ -217,7 +217,7 @@ export class Game extends Scene {
     }
 
     private initHero() {
-        this.hero = new Hero(this, "hero", this.gridEngine, "hero");
+        this.hero = new Hero(this, "hero", this.gridEngine, 2, "hero");
       
         const hoe = new Hoe(
             new InventoryItem()
@@ -276,7 +276,7 @@ export class Game extends Scene {
         this.hero.setCollideWorldBounds(true);
         this.hero.init();
         
-        this.charactersMap.set("hero", this.hero);
+        this.charactersMap.set(this.hero.getIdTag(), this.hero);
     }
 
     private initNpcs() {
@@ -284,12 +284,13 @@ export class Game extends Scene {
             this,
             "npc",
             this.gridEngine,
+            1,
             "npc0"
         );
         this.physics.add.existing(npc);
         this.add.existing(npc);
         npc.init();
-        this.charactersMap.set("npc0", npc);
+        this.charactersMap.set(npc.getIdTag(), npc);
     }
 
     private initGridEngine() {
@@ -298,7 +299,7 @@ export class Game extends Scene {
             cacheTileCollisions: false,
             characters: [
                 {
-                    id: hero?.getId() || "",
+                    id: hero?.getIdTag() || "",
                     sprite: hero,
                     startPosition: { x: 15, y: 10 },
                     speed:4
@@ -311,7 +312,7 @@ export class Game extends Scene {
         const npc0 = this.charactersMap.get("npc0");
         if (npc0) {
             gridEngineConfig.characters.push({
-                id: npc0.getId(),
+                id: npc0.getIdTag(),
                 sprite: npc0,
                 walkingAnimationMapping: 1,
                 startPosition: { x: 12, y: 5 },
@@ -373,25 +374,18 @@ export class Game extends Scene {
 
     setActiveItem(item: Storable) {
         this.cursorManager.setActiveItemCursor(item);
-        //const enableObjInteractions = this.cursorManager.hasActiveCursor() ? false : true;
         
-        //disable interactions to game objects when cursor exists 
-        // for (const land of this.mapManager.getPlotLandEntities()) {
-        //     land.toggleInteraction(enableObjInteractions);
-        // }
-
         this.mapManager.getPlotLandCoords().forEach((item)=>{
-            //item.toggleInteraction(enableObjInteractions);
             if (typeof item?.getInteractive !== "undefined") { 
                 item?.getInteractive().setExternalActiveCursor(this.cursorManager.getCurrentCursor());
             }
         })
 
-        // for (const [, character] of this.charactersMap) {
-        //     if(character.getId() !== 'hero') {
-        //         (character as Npc).toggleInteraction(enableObjInteractions);
-        //     }
-        // }
+        for (const [, character] of this.charactersMap) {
+            if (typeof (character as Npc)?.getInteractive !== "undefined") { 
+                (character as Npc)?.getInteractive().setExternalActiveCursor(this.cursorManager.getCurrentCursor());
+            }
+        }
     }
 
     getHotbarItems() {
