@@ -21,7 +21,7 @@ async def conversation_create(
     llm: LLMProvider = Depends(get_llm),
     cache: Cache = Depends(get_cache),
    
-)->ConversationApiCreateResponsetDef:
+)->ConversationApiCreateResponseDef:
     conversation_manager = ConversationManager(parser, db, llm, cache, params)
     return conversation_manager.create_conversation()
 

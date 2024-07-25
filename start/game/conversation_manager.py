@@ -38,7 +38,7 @@ class ConversationManager:
         
         return utterance
     
-    def create_conversation(self)->ConversationApiCreateResponsetDef:
+    def create_conversation(self)->ConversationApiCreateResponseDef:
         conversation = Conversation(self._db, self._llm, self._cache, 0)
         conversation.set_participants(self._participants)
         conversation.set_start_date(self._params['game_time'])

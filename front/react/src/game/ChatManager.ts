@@ -10,15 +10,15 @@ type Message = {
 };
 
 type conversation = {
-    id: bigint;
+    id: string;
     participants: Array<Humanoid>;
     currentParticipantTalkIndex:number
     messages: Array<Message>;
 };
 export class ChatManager {
     private charactersMap:  Map<string, Humanoid>;
-    private conversations: Map<bigint, conversation> = new Map();
-    private participantsToConv: Map<string, bigint> = new Map();
+    private conversations: Map<string, conversation> = new Map();
+    private participantsToConv: Map<string, string> = new Map();
 
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
@@ -48,7 +48,7 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
-            const convId = BigInt(resp.conversation_id);
+            const convId = resp.conversation_id;
             for (const participant of participants) {
                 participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
             }   
@@ -105,21 +105,21 @@ export class ChatManager {
         
     }
 
-    public addParticipant(character: Humanoid, convId: bigint) {
+    public addParticipant(character: Humanoid, convId: string) {
         const conversation = this.conversations.get(convId);
         conversation?.participants.push(character);
         this.participantsToConv.set(character.getIdTag(),convId);
         //character.setConvId(convId);
     }
 
-    public addPlayerParticipant(convId: bigint) {
+    public addPlayerParticipant(convId: string) {
         const player = this.charactersMap.get('hero');
         if(player) {
             this.addParticipant(player, convId);
         }
     }
 
-    public startConversation(convId: bigint) {
+    public startConversation(convId: string) {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
@@ -130,7 +130,7 @@ export class ChatManager {
         this.setConversationSide(convId);
     }
 
-    public setConversationSide(convId: bigint) {
+    public setConversationSide(convId: string) {
         const conversation = this.conversations.get(convId);
         if(conversation) {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
