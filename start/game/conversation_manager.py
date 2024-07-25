@@ -42,7 +42,8 @@ class ConversationManager:
         conversation = Conversation(self._db, self._llm, self._cache, 0)
         conversation.set_participants(self._participants)
         conversation.set_start_date(self._params['game_time'])
-        return conversation.insert_conversation()
+        conversation_id = conversation.insert_conversation()
+        return { 'conversation_id': conversation_id}
 
     def process_conversation(self)->ConversationApiTalkResponseDef:
         conversation = self.load_conversation()
