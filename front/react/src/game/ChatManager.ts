@@ -49,20 +49,18 @@ export class ChatManager {
             })
             .execute();
 
-            const convId  = Number(resp);
-
             for (const participant of participants) {
-                participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
+                participant.isNpc ? this.addParticipant(participant, resp.conversation_id): this.addPlayerParticipant(resp.conversation_id);
             }   
 
         // const convGuid = self.crypto.randomUUID();
-        this.conversations.set(convId, {
-            id: convId,
+        this.conversations.set(resp.conversation_id, {
+            id: resp.conversation_id,
             participants: [],
             currentParticipantTalkIndex: -1,
             messages: [],
         });
-        return convId;
+        return resp.conversation_id;
     }
 
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {

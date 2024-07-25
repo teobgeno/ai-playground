@@ -53,6 +53,19 @@
          ],
          "type": "conversation",
          "id": 709835299195158552
+      },
+      {
+         "status": 1,
+         "start_date": "2024-07-25 15:46:21",
+         "end_date": "",
+         "participants": [
+            1,
+            2
+         ],
+         "messages": [],
+         "relationships": [],
+         "type": "conversation",
+         "id": 151490917221567595
       }
    ]
 }
