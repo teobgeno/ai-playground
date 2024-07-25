@@ -29,9 +29,9 @@ export default class StateMachine
 		return this.previousState.name
 	}
 
-	constructor(context?: object, id?: string)
+	constructor(context?: object, idTag?: string)
 	{
-		this.id = id ?? this.id
+		this.id = idTag ?? this.id
 		this.context = context
 	}
 

@@ -12,15 +12,16 @@ export class Hero extends Humanoid {
         scene: Phaser.Scene,
         texture: string,
         gridEngine: GridEngine,
-        id: string
+        id: number,
+        idTag: string
     ) {
-        super(scene, texture, id, id);
+        super(scene, texture, id, idTag);
         this.gridEngine = gridEngine;
         this.characterController = new CharacterController(
             this.scene,
             this.gridEngine,
             this.stateMachine,
-            this.id
+            this.idTag
         );
        
         EventBus.on("on-character-controller-esc-key", () => {

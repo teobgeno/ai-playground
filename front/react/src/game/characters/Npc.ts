@@ -15,9 +15,10 @@ export class Npc extends Humanoid implements MapObjectInteractable {
         scene: Phaser.Scene,
         texture: string,
         gridEngine: GridEngine,
-        id: string,
+        id: number,
+        idTag: string
     ) {
-        super(scene, texture, id, id);
+        super(scene, texture, id, idTag);
         this.gridEngine = gridEngine;
 
         this.sprites.push(
