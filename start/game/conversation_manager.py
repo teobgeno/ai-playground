@@ -26,7 +26,7 @@ class ConversationManager:
             character_memory = CharacterMemory(self._llm, char_data['memory_path'])
             character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
 
-            self._participants.append(ParticipantDef({'character':character, 'is_talking': True if self._params['character_id_talk'] == character_id else False}))
+            self._participants.append(ParticipantDef({'character':character, 'is_talking': False}))
             
     def talk(self, conversation: Conversation)->str:
         utterance = ''
@@ -58,6 +58,11 @@ class ConversationManager:
         
         conv = ConversationDef(self._db.get_record_by_id('conversations', self._params['conversation_id']))
         conversation = Conversation(self._db, self._llm, self._cache, self._params['conversation_id'])
+        
+        for participant in self._participants:
+            if participant['character'].id == self._params['character_id_talk']:
+                participant['is_talking'] = True
+
         conversation.set_participants(self._participants)
         conversation.set_messages(conv['messages'])
         conversation.set_relationships(conv['relationships'])

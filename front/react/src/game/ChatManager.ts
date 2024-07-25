@@ -35,7 +35,7 @@ export class ChatManager {
         //httpProvider.request()
         const req = { character_ids: [1, 2]};
         const data = await httpProvider
-            .request(import.meta.env.VITE_APP_URL + '/conversation/create', {
+            .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json, text/plain, */*',
