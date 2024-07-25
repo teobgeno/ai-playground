@@ -150,7 +150,7 @@ export class ChatManager {
     }
 
     public generateNpcResponse(characterId: string) {
-        this.getMessage()
+        //this.getMessage()
         const fake = [
             'Hi there, I\'m Jesse and you?',
             'Nice to meet you',

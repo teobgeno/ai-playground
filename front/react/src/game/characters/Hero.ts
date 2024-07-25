@@ -14,7 +14,7 @@ export class Hero extends Humanoid {
         gridEngine: GridEngine,
         id: string
     ) {
-        super(scene, texture, id);
+        super(scene, texture, id, id);
         this.gridEngine = gridEngine;
         this.characterController = new CharacterController(
             this.scene,

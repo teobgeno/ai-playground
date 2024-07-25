@@ -5,6 +5,7 @@ import { CharacterInventory } from "./CharacterInventory";
 
 export class Humanoid extends Physics.Arcade.Sprite {
     public id: string;
+    public idTag: string;
     //private stamina: number;
     public  scene: Phaser.Scene;
     protected tasks: Array<Task> = [];
@@ -14,10 +15,11 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public currentTask: Task | undefined;
     public isNpc: boolean;
 
-    constructor(scene: Phaser.Scene, texture: string, id: string) {
+    constructor(scene: Phaser.Scene, texture: string, id: string, idTag: string) {
         super(scene, 0, 0, texture);
         this.scene = scene;
         this.id = id;
+        this.idTag = idTag;
         this.isNpc = this.id === "hero" ? false : true;
         this.stateMachine = new StateMachine(this, this.id);
         this.characterInventory = new CharacterInventory();
