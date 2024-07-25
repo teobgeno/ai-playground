@@ -15,7 +15,7 @@ class ConversationManager:
         self._llm  = llm
         self._cache = cache
         self._participants: List[ParticipantDef] = []
-        self._params = ConversationApiRequestDef(params)
+        self._params = ConversationApiTalkRequestDef(params)
         self._params['game_time'] = datetime.now()
         self.create_participants()
 
@@ -38,7 +38,13 @@ class ConversationManager:
         
         return utterance
     
-    def process_conversation(self)->ConversationApiOut:
+    def create_conversation(self):
+        conversation = Conversation(self._db, self._llm, self._cache, 0)
+        conversation.set_participants(self._participants)
+        conversation.set_start_date(self._params['game_time'])
+        return conversation.insert_conversation()
+
+    def process_conversation(self)->ConversationApiTalkResponseDef:
         conversation = self.load_conversation()
         utternace = self.talk(conversation)
         conversation.update_conversation()
@@ -50,18 +56,15 @@ class ConversationManager:
 
     def load_conversation(self)->Conversation:
         
+        conv = ConversationDef(self._db.get_record_by_id('conversations', self._params['conversation_id']))
         conversation = Conversation(self._db, self._llm, self._cache, self._params['conversation_id'])
         conversation.set_participants(self._participants)
-        if self._params['conversation_id']:
-            conv = ConversationDef(self._db.get_record_by_id('conversations', self._params['conversation_id']))
-            # ta = TypeAdapter(ConversationDef)
-            # ta.validate_python(conv)
-            conversation.set_messages(conv['messages'])
-            conversation.set_relationships(conv['relationships'])
-        else:
-            conversation.set_start_date(self._params['game_time'])
-            conversation.insert_conversation()
-            
+        conversation.set_messages(conv['messages'])
+        conversation.set_relationships(conv['relationships'])
+
+        # ta = TypeAdapter(ConversationDef)
+        # ta.validate_python(conv)
+  
         return conversation
         
     def end_conversation(self, conversation: Conversation):

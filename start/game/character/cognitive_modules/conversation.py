@@ -218,6 +218,7 @@ Output format: Output a json of the following format:
                                                          'relationships':self._relationships, 
                                                          'type': 'conversation'}
                                        )
+        return self._id
 
     def update_conversation(self):
         self._db.update_record_by_id('conversations', self._id, {'status': self.status.value, 

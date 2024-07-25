@@ -41,14 +41,14 @@ class ConversationDef(TypedDict):
     type: str
 
 
-class ConversationApiRequestDef(TypedDict):
+class ConversationApiTalkRequestDef(TypedDict):
     conversation_id: int
     character_ids: List[int]
     character_id_talk: int
     message: str
     end_conversation: bool
 
-class ConversationApiOut(TypedDict):
+class ConversationApiTalkResponseDef(TypedDict):
     conversation_id: int
     message_reply: str
     end_conversation: bool
