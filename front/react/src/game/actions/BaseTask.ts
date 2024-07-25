@@ -30,7 +30,7 @@ export abstract class BaseTask {
     protected shouldMoveCharacter(x: number, y: number) {
         this.pointer = 2;
         const characterPos = this.gridEngine.getPosition(
-            this.character.getId()
+            this.character.getIdTag()
         );
         if (characterPos.x === x && characterPos.y === y) {
             return false;
@@ -42,7 +42,7 @@ export abstract class BaseTask {
         this.character.setCharState("walk");
         this.destinationMoveX = x;
         this.destinationMoveY = y;
-        this.gridEngine.moveTo(this.character.getId(), {
+        this.gridEngine.moveTo(this.character.getIdTag(), {
             x: x,
             y: y,
         });

@@ -41,7 +41,7 @@ export class HarvestTask extends BaseTask implements Task{
         console.log("cancel task");
         this.status = TaskStatus.Rollback;
 
-        this.gridEngine.stopMovement(this.character.getId());
+        this.gridEngine.stopMovement(this.character.getIdTag());
         this.status = TaskStatus.Completed;
     };
 

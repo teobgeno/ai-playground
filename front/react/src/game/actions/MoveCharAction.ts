@@ -24,7 +24,7 @@ export default class MoveCharAction {
             y: this.posY,
         },'CharLayer'))
         this.character.setCharState('walk')
-        this.gridEngine.moveTo(this.character.getId(), {
+        this.gridEngine.moveTo(this.character.getIdTag(), {
             x: this.posX,
             y: this.posY,
         });
