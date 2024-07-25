@@ -34,7 +34,7 @@ export class Hero extends Humanoid {
 
     public init() {
         this.createMovementAnimations();
-        this.createHumanoidAnimations(this.id);
+        this.createHumanoidAnimations(this.getIdTag());
         this.getBody().setSize(32, 64);
     }
 
@@ -63,11 +63,11 @@ export class Hero extends Humanoid {
     }
 
     private createMovementAnimations() {
-        this.createAnimation("right", this.id, 143, 147, 15, true, true);
-        this.createAnimation("down-right", this.id, 143, 147, 15, true, true);
-        this.createAnimation("up", this.id, 104, 112, 15, true, true);
-        this.createAnimation("down", this.id, 130, 138, 15, true, true);
-        this.createAnimation("left", this.id, 117, 121, 15, true, true);
+        this.createAnimation("right", this.getIdTag(), 143, 147, 15, true, true);
+        this.createAnimation("down-right", this.getIdTag(), 143, 147, 15, true, true);
+        this.createAnimation("up", this.getIdTag(), 104, 112, 15, true, true);
+        this.createAnimation("down", this.getIdTag(), 130, 138, 15, true, true);
+        this.createAnimation("left", this.getIdTag(), 117, 121, 15, true, true);
     }
 
     private createHumanoidAnimations(key: string) {
@@ -214,13 +214,6 @@ export class Hero extends Humanoid {
         }
         return -1;
     }
-
-    public startTalk() {
-        console.log("ok talk hero");
-        //EventBus.emit("on-player-talk-start", {});
-    }
-
-    public sendMessage() {}
 
     // public getBody(): Physics.Arcade.Body {
     //     return this.body as Physics.Arcade.Body;
