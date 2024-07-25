@@ -31,8 +31,25 @@ export class ChatManager {
          });
     }
 
-    public initConversation() {
+    public async initConversation() {
         //httpProvider.request()
+        const req = { character_ids: [1, 2]};
+        const data = await httpProvider
+            .request(import.meta.env.VITE_APP_URL + '/conversation/create', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+                    Expires: '-1',
+                    Pragma: 'no-cache',
+                },
+                body: JSON.stringify(req),
+            })
+            .execute();
+        console.log('Create Conversation')
+        console.log(data)
+
         const convGuid = self.crypto.randomUUID();
         this.conversations.set(convGuid, {
             id: convGuid,
