@@ -1,5 +1,6 @@
 import { EventBus } from "./EventBus";
 import { Humanoid } from "./characters/Humanoid";
+import { httpProvider } from "./core/httpProvider";
 import {Hero} from "./characters/Hero";
 import {Npc} from "./characters/Npc";
 
@@ -31,6 +32,7 @@ export class ChatManager {
     }
 
     public initConversation() {
+        //httpProvider.request()
         const convGuid = self.crypto.randomUUID();
         this.conversations.set(convGuid, {
             id: convGuid,
