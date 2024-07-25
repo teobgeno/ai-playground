@@ -50,9 +50,11 @@ class Conversation:
         self._end_date = date
 
     def set_participants(self, participants: List[ParticipantDef])->None:
-        self._init_person: Character = [element for element in participants if element['is_talking'] == True][0]['character']
-        self._target_person: Character = [element for element in participants if element['is_talking'] == False][0]['character']
         self._participants = participants
+
+    def set_participant_roles(self)->None:
+        self._init_person: Character = [element for element in self._participants if element['is_talking'] == True][0]['character']
+        self._target_person: Character = [element for element in self._participants if element['is_talking'] == False][0]['character']
         
     def set_messages(self, messages: List[MessageDef])->None:
         self._messages = messages

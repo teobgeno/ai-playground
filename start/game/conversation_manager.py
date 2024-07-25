@@ -64,6 +64,7 @@ class ConversationManager:
                 participant['is_talking'] = True
 
         conversation.set_participants(self._participants)
+        conversation.set_participant_roles()
         conversation.set_messages(conv['messages'])
         conversation.set_relationships(conv['relationships'])
 

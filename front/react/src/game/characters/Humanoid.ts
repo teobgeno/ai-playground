@@ -10,7 +10,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
     protected characterInventory: CharacterInventory;
-    protected convGuid: string;
+    protected convId: number;
     public currentTask: Task | undefined;
     public isNpc: boolean;
 
@@ -50,12 +50,12 @@ export class Humanoid extends Physics.Arcade.Sprite {
         return this.id;
     }
 
-    public getConvGuid() {
-        return this.convGuid;
+    public getConvId() {
+        return this.convId;
     }
 
-    public setConvGuid(convGuid: string) {
-        this.convGuid = convGuid;
+    public setConvId(convId: number) {
+        this.convId = convId;
     }
 
     public getStamina() {}

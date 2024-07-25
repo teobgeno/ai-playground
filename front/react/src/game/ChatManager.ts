@@ -10,15 +10,15 @@ type Message = {
 };
 
 type conversation = {
-    id: string;
+    id: number;
     participants: Array<Humanoid>;
     currentParticipantTalkIndex:number
     messages: Array<Message>;
 };
 export class ChatManager {
     private charactersMap:  Map<string, Humanoid>;
-    private conversations: Map<string, conversation> = new Map();
-    private participantsToConv: Map<string, string> = new Map();
+    private conversations: Map<number, conversation> = new Map();
+    private participantsToConv: Map<string, number> = new Map();
 
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
@@ -32,9 +32,8 @@ export class ChatManager {
     }
 
     public async initConversation() {
-        //httpProvider.request()
         const req = { character_ids: [1, 2]};
-        const data = await httpProvider
+        const convId: number = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
                 method: 'POST',
                 headers: {
@@ -47,23 +46,39 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
-        console.log('Create Conversation')
-        console.log(data)
 
-        const convGuid = self.crypto.randomUUID();
-        this.conversations.set(convGuid, {
-            id: convGuid,
+        // const convGuid = self.crypto.randomUUID();
+        this.conversations.set(convId, {
+            id: convId,
             participants: [],
             currentParticipantTalkIndex: -1,
             messages: [],
         });
-        return convGuid;
+        return convId;
+    }
+
+    public async getMessage(characterId: string, message = '') {
+        const convId = this.participantsToConv.get(characterId);
+        const req = { conversation_id: convId, character_ids: [1, 2], character_id_talk: 2, message: message, end_conversation: false};
+        const resp = await httpProvider
+            .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+                    Expires: '-1',
+                    Pragma: 'no-cache',
+                },
+                body: JSON.stringify(req),
+            })
+            .execute();
     }
 
     public addMessage(characterId: string, message: string) {
-        const guid = this.participantsToConv.get(characterId);
-        if(guid) {
-            const conversation = this.conversations.get(guid);
+        const convId = this.participantsToConv.get(characterId);
+        if(convId) {
+            const conversation = this.conversations.get(convId);
             const character = this.charactersMap.get(characterId);
             EventBus.emit("on-chat-add-message", {
                 isPlayer: character?.isNpc,
@@ -75,37 +90,37 @@ export class ChatManager {
                 characterId: characterId,
                 message: message,
             });
-            this.setConversationSide(guid)
+            this.setConversationSide(convId)
         }
         
     }
 
-    public addParticipant(character: Humanoid, guid: string) {
-        const conversation = this.conversations.get(guid);
+    public addParticipant(character: Humanoid, convId: number) {
+        const conversation = this.conversations.get(convId);
         conversation?.participants.push(character);
-        this.participantsToConv.set(character.getId(), guid);
-        character.setConvGuid(guid);
+        this.participantsToConv.set(character.getId(), convId);
+        character.setConvId(convId);
     }
 
-    public addPlayerParticipant(guid: string) {
+    public addPlayerParticipant(convId: number) {
         const player = this.charactersMap.get('hero');
         if(player) {
-            this.addParticipant(player, guid);
+            this.addParticipant(player, convId);
         }
     }
 
-    public startConversation(guid: string) {
+    public startConversation(convId: number) {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
             player.setCharState('talk')
-            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), guid: guid});
+            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), convId: convId});
         }
-        this.setConversationSide(guid);
+        this.setConversationSide(convId);
     }
 
-    public setConversationSide(guid: string) {
-        const conversation = this.conversations.get(guid);
+    public setConversationSide(convId: number) {
+        const conversation = this.conversations.get(convId);
         if(conversation) {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
             const character = conversation.participants[conversation.currentParticipantTalkIndex];
@@ -117,17 +132,17 @@ export class ChatManager {
     }
 
     public closeConversation(characterId: string) {
-        const guid = this.participantsToConv.get(characterId);
+        const convId = this.participantsToConv.get(characterId);
         let hasPlayerInConv = false;
-        if(guid) {
-            const conversation = this.conversations.get(guid);
+        if(convId) {
+            const conversation = this.conversations.get(convId);
             //TODO::log dialogue to db, character that closed the conversation
             for(const participant of ( conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getId())
                 participant.setCharState('idle');
                 if(!participant.isNpc) {hasPlayerInConv = true;}
             }
-            this.conversations.delete(guid);
+            this.conversations.delete(convId);
             if(hasPlayerInConv) {
                 EventBus.emit("on-chat-end-conversation", {});
             }
@@ -135,6 +150,7 @@ export class ChatManager {
     }
 
     public generateNpcResponse(characterId: string) {
+        this.getMessage()
         const fake = [
             'Hi there, I\'m Jesse and you?',
             'Nice to meet you',
