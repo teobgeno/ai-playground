@@ -9,7 +9,7 @@ from game.character.cognitive_modules.conversation import Conversation
 from game.character.character_memory import CharacterMemory
 
 class ConversationManager:
-    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiRequestDef):
+    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef):
         self._parcer = parser
         self._db = db
         self._llm  = llm

@@ -13,6 +13,18 @@ router = APIRouter(
 )
 
 
+@router.post("/create")
+async def conversation_create(
+    params: ConversationApiCreateRequestDef, 
+    parser: configparser = Depends(get_parser), 
+    db: JsonDBManager = Depends(get_db),
+    llm: LLMProvider = Depends(get_llm),
+    cache: Cache = Depends(get_cache),
+   
+)->int:
+    conversation_manager = ConversationManager(parser, db, llm, cache, params)
+    return conversation_manager.create_conversation()
+
 @router.post("/talk")
 async def conversation_talk(
     params: ConversationApiTalkRequestDef, 
@@ -26,17 +38,7 @@ async def conversation_talk(
     conversation_manager = ConversationManager(parser, db, llm, cache, params)
     return conversation_manager.process_conversation()
 
-@router.post("/create")
-async def conversation_create(
-    params: ConversationApiTalkRequestDef, 
-    parser: configparser = Depends(get_parser), 
-    db: JsonDBManager = Depends(get_db),
-    llm: LLMProvider = Depends(get_llm),
-    cache: Cache = Depends(get_cache),
-   
-)->int:
-    conversation_manager = ConversationManager(parser, db, llm, cache, params)
-    return conversation_manager.create_conversation()
+
 
     # try:
     #     ta = TypeAdapter(ConversationApiRequestDef)
