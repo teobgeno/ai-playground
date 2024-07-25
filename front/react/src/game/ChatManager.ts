@@ -33,6 +33,9 @@ export class ChatManager {
 
     public async initConversation() {
         const req = { character_ids: [1, 2]};
+
+        //let result = this.participants.map(a => a.foo);
+        
         const convId: number = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
                 method: 'POST',
