@@ -24,7 +24,8 @@ export class ChatManager {
         this.charactersMap = charactersMap;
 
         EventBus.on("on-chat-character-player-message", (data: Message) => {
-           this.addMessage(data.characterId, data.message)
+            this.getMessage(data.characterId, '');
+            //this.addMessage(data.characterId, data.message)
         });
         EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
             this.closeConversation(data.characterId)
@@ -78,6 +79,7 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
+            this.addMessage(characterIdTag, message)
     }
 
     public addMessage(characterIdTag: string, message: string) {
@@ -156,26 +158,26 @@ export class ChatManager {
     }
 
     public generateNpcResponse(characterIdTag: string) {
-        //this.getMessage()
-        const fake = [
-            'Hi there, I\'m Jesse and you?',
-            'Nice to meet you',
-            'How are you?',
-            'Not too bad, thanks',
-            'What do you do?',
-            'That\'s awesome',
-            'Codepen is a nice place to stay',
-            'I think you\'re a nice person',
-            'Why do you think that?',
-            'Can you explain?',
-            'Anyway I\'ve gotta go now',
-            'It was a pleasure chat with you',
-            'Time to make a new codepen',
-            'Bye',
-            ':)'
-        ]
-        setTimeout(() => {
-            this.addMessage(characterIdTag,fake[Math.floor(Math.random()*fake.length)]);
-        }, 1000);
+        this.getMessage(characterIdTag, '');
+        // const fake = [
+        //     'Hi there, I\'m Jesse and you?',
+        //     'Nice to meet you',
+        //     'How are you?',
+        //     'Not too bad, thanks',
+        //     'What do you do?',
+        //     'That\'s awesome',
+        //     'Codepen is a nice place to stay',
+        //     'I think you\'re a nice person',
+        //     'Why do you think that?',
+        //     'Can you explain?',
+        //     'Anyway I\'ve gotta go now',
+        //     'It was a pleasure chat with you',
+        //     'Time to make a new codepen',
+        //     'Bye',
+        //     ':)'
+        // ]
+        // setTimeout(() => {
+        //     this.addMessage(characterIdTag,fake[Math.floor(Math.random()*fake.length)]);
+        // }, 1000);
     }
 }
