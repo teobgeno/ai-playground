@@ -63,9 +63,11 @@ export class ChatManager {
         return convId;
     }
 
-    public async getMessage(characterIdTag: string, message = '') {
+    public async getMessage(characterIdTag: string, message = '', endConversation = false) {
         const convId = this.participantsToConv.get(characterIdTag);
-        const req = { conversation_id: convId, character_ids: [1, 2], character_id_talk: 2, message: message, end_conversation: false};
+        const character = this.charactersMap.get(characterIdTag)
+        const req = { conversation_id: convId, character_ids: [1, 2], character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
+        
         const resp = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
                 method: 'POST',
@@ -79,7 +81,8 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
-            this.addMessage(characterIdTag, message)
+
+            this.addMessage(characterIdTag, resp.message_reply)
     }
 
     public addMessage(characterIdTag: string, message: string) {
