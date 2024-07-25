@@ -31,11 +31,9 @@ export class ChatManager {
          });
     }
 
-    public async initConversation() {
-        const req = { character_ids: [1, 2]};
+    public async initConversation(participants: Array<Humanoid>) {
+        const req = { character_ids: participants.map(x => x.getId())};
 
-        //let result = this.participants.map(a => a.foo);
-        
         const convId: number = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
                 method: 'POST',
@@ -49,6 +47,10 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
+
+            for (const participant of participants) {
+                participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
+            }   
 
         // const convGuid = self.crypto.randomUUID();
         this.conversations.set(convId, {

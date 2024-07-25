@@ -415,9 +415,7 @@ export class Game extends Scene {
         if(task === 'conversation') {
             console.log(params)
             //TODO::check if npc can/want to talk to player
-            const convId = await this.chatManager.initConversation();
-            this.chatManager.addPlayerParticipant(convId);
-            this.chatManager.addParticipant(params, convId);
+            const convId = await this.chatManager.initConversation([params, this.hero]);
             this.chatManager.startConversation(convId);
         }
       
