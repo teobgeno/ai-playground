@@ -72,7 +72,7 @@ class Conversation:
         relations = [e['descr'] for e in self._relationships if e['character_id'] == self._init_person.id]
         if relations:
             return relations[0]
-        return {}
+        return ''
 
     def get_unique_memories_text(self, retrieved: dict):
         all_embedding_keys = set()
@@ -133,10 +133,12 @@ class Conversation:
             json_dict = json.loads(resp)
             utterance = json_dict['utterance']
             conversation_end: bool = bool(json_dict['Did the conversation end?'])
+            
             if conversation_end: 
                   self._status = ConversationStatus.COMPLETED
                   self._end_date = current_date
-                  self.add_message(utterance)
+                  
+            self.add_message(utterance)
 
         except json.JSONDecodeError:
             print('parse error')
@@ -198,6 +200,7 @@ You are {props[init_person_name]}, and you're currently in a conversation with {
         tpl +="""
 ---
 Task: Given the above, what should you say to {props[target_person_name]} next in the conversation? And did you end the conversation?
+DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot.
 Output format: Output a json of the following format: 
 {{
 "utterance": "{props[init_person_name]}'s utterance>",

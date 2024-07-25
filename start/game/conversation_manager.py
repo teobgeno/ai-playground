@@ -59,7 +59,7 @@ class ConversationManager:
         
         conv = ConversationDef(self._db.get_record_by_id('conversations', self._params['conversation_id']))
         conversation = Conversation(self._db, self._llm, self._cache, self._params['conversation_id'])
-        
+        conversation.set_start_date(conv['start_date'])
         for participant in self._participants:
             if participant['character'].id == self._params['character_id_talk']:
                 participant['is_talking'] = True

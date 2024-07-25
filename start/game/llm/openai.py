@@ -17,7 +17,7 @@ class OpenAIAPI:
 
     def completition(self, params, messages):
         try:
-            completion = openai.chat.completions.create(
+            completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages= messages,
                 max_tokens=params['max_tokens'],

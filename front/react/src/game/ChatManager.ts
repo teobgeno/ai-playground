@@ -48,18 +48,22 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
-            const convId = resp.conversation_id;
-            for (const participant of participants) {
-                participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
-            }   
-           
+
+
+        const convId = resp.conversation_id;
         // const convGuid = self.crypto.randomUUID();
+
         this.conversations.set(convId, {
             id: convId,
             participants: [],
             currentParticipantTalkIndex: -1,
             messages: [],
         });
+
+        for (const participant of participants) {
+            participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
+        }   
+
         return convId;
     }
 
@@ -126,8 +130,9 @@ export class ChatManager {
             player.setCharState('talk')
             EventBus.emit("on-chat-start-conversation", {});
             //EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), convId: convId});
+        } else {
+            this.setConversationSide(convId);
         }
-        this.setConversationSide(convId);
     }
 
     public setConversationSide(convId: string) {
