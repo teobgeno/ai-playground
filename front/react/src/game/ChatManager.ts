@@ -57,8 +57,8 @@ export class ChatManager {
         return convId;
     }
 
-    public async getMessage(characterId: string, message = '') {
-        const convId = this.participantsToConv.get(characterId);
+    public async getMessage(characterIdTag: string, message = '') {
+        const convId = this.participantsToConv.get(characterIdTag);
         const req = { conversation_id: convId, character_ids: [1, 2], character_id_talk: 2, message: message, end_conversation: false};
         const resp = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
@@ -75,11 +75,11 @@ export class ChatManager {
             .execute();
     }
 
-    public addMessage(characterId: string, message: string) {
-        const convId = this.participantsToConv.get(characterId);
+    public addMessage(characterIdTag: string, message: string) {
+        const convId = this.participantsToConv.get(characterIdTag);
         if(convId) {
             const conversation = this.conversations.get(convId);
-            const character = this.charactersMap.get(characterId);
+            const character = this.charactersMap.get(characterIdTag);
             EventBus.emit("on-chat-add-message", {
                 isPlayer: character?.isNpc,
                 characterName: "skordopoutsoglou",
@@ -87,7 +87,7 @@ export class ChatManager {
             });
     
             conversation?.messages.push({
-                characterId: characterId,
+                characterId: characterIdTag,
                 message: message,
             });
             this.setConversationSide(convId)
@@ -98,7 +98,7 @@ export class ChatManager {
     public addParticipant(character: Humanoid, convId: number) {
         const conversation = this.conversations.get(convId);
         conversation?.participants.push(character);
-        this.participantsToConv.set(character.getId(), convId);
+        this.participantsToConv.set(character.getIdTag(), convId);
         character.setConvId(convId);
     }
 
@@ -114,7 +114,8 @@ export class ChatManager {
         const player = this.charactersMap.get('hero');
         if(player) {
             player.setCharState('talk')
-            EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), convId: convId});
+            EventBus.emit("on-chat-start-conversation", {});
+            //EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), convId: convId});
         }
         this.setConversationSide(convId);
     }
@@ -125,20 +126,20 @@ export class ChatManager {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
             const character = conversation.participants[conversation.currentParticipantTalkIndex];
             if(character?.isNpc) {
-                this.generateNpcResponse(character?.id);
+                this.generateNpcResponse(character?.getIdTag());
             }
             //!character?.isNpc?(character as Hero)?.startTalk():
         }
     }
 
-    public closeConversation(characterId: string) {
-        const convId = this.participantsToConv.get(characterId);
+    public closeConversation(characterIdTag: string) {
+        const convId = this.participantsToConv.get(characterIdTag);
         let hasPlayerInConv = false;
         if(convId) {
             const conversation = this.conversations.get(convId);
             //TODO::log dialogue to db, character that closed the conversation
             for(const participant of ( conversation?.participants || [])){
-                this.participantsToConv.delete(participant.getId())
+                this.participantsToConv.delete(participant.getIdTag())
                 participant.setCharState('idle');
                 if(!participant.isNpc) {hasPlayerInConv = true;}
             }
@@ -149,7 +150,7 @@ export class ChatManager {
         }
     }
 
-    public generateNpcResponse(characterId: string) {
+    public generateNpcResponse(characterIdTag: string) {
         //this.getMessage()
         const fake = [
             'Hi there, I\'m Jesse and you?',
@@ -169,7 +170,7 @@ export class ChatManager {
             ':)'
         ]
         setTimeout(() => {
-            this.addMessage(characterId,fake[Math.floor(Math.random()*fake.length)]);
+            this.addMessage(characterIdTag,fake[Math.floor(Math.random()*fake.length)]);
         }, 1000);
     }
 }
