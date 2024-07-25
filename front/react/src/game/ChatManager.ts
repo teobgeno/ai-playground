@@ -10,15 +10,15 @@ type Message = {
 };
 
 type conversation = {
-    id: number;
+    id: bigint;
     participants: Array<Humanoid>;
     currentParticipantTalkIndex:number
     messages: Array<Message>;
 };
 export class ChatManager {
     private charactersMap:  Map<string, Humanoid>;
-    private conversations: Map<number, conversation> = new Map();
-    private participantsToConv: Map<string, number> = new Map();
+    private conversations: Map<bigint, conversation> = new Map();
+    private participantsToConv: Map<string, bigint> = new Map();
 
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
@@ -48,19 +48,19 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
-
+            const convId = BigInt(resp.conversation_id);
             for (const participant of participants) {
-                participant.isNpc ? this.addParticipant(participant, resp.conversation_id): this.addPlayerParticipant(resp.conversation_id);
+                participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
             }   
-
+           
         // const convGuid = self.crypto.randomUUID();
-        this.conversations.set(resp.conversation_id, {
-            id: resp.conversation_id,
+        this.conversations.set(convId, {
+            id: convId,
             participants: [],
             currentParticipantTalkIndex: -1,
             messages: [],
         });
-        return resp.conversation_id;
+        return convId;
     }
 
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {
@@ -105,21 +105,21 @@ export class ChatManager {
         
     }
 
-    public addParticipant(character: Humanoid, convId: number) {
+    public addParticipant(character: Humanoid, convId: bigint) {
         const conversation = this.conversations.get(convId);
         conversation?.participants.push(character);
-        this.participantsToConv.set(character.getIdTag(), convId);
-        character.setConvId(convId);
+        this.participantsToConv.set(character.getIdTag(),convId);
+        //character.setConvId(convId);
     }
 
-    public addPlayerParticipant(convId: number) {
+    public addPlayerParticipant(convId: bigint) {
         const player = this.charactersMap.get('hero');
         if(player) {
             this.addParticipant(player, convId);
         }
     }
 
-    public startConversation(convId: number) {
+    public startConversation(convId: bigint) {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
@@ -130,7 +130,7 @@ export class ChatManager {
         this.setConversationSide(convId);
     }
 
-    public setConversationSide(convId: number) {
+    public setConversationSide(convId: bigint) {
         const conversation = this.conversations.get(convId);
         if(conversation) {
             conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;

@@ -57,4 +57,4 @@ class ConversationApiCreateRequestDef(TypedDict):
     character_ids: List[int]
 
 class ConversationApiCreateResponsetDef(TypedDict):
-    conversation_id: int
+    conversation_id: str
