@@ -26,7 +26,9 @@ class HttpProvider {
             execute: async () => {
                 const response = await fetch(url, { ...opts, signal });
                 this.clearSuccesRequest(signature);
+                
                 const data = await response.json();
+                //const data = await response.text();
 
                 if (this.hasResponseDataErrors(data)) {
                     return Promise.reject(data.Error);

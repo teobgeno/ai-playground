@@ -24,7 +24,7 @@ export class ChatManager {
         this.charactersMap = charactersMap;
 
         EventBus.on("on-chat-character-player-message", (data: Message) => {
-            this.getMessage(data.characterId, '');
+            this.getMessage(data.characterId, data.message);
             //this.addMessage(data.characterId, data.message)
         });
         EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
@@ -35,7 +35,7 @@ export class ChatManager {
     public async initConversation(participants: Array<Humanoid>) {
         const req = { character_ids: participants.map(x => x.getId())};
 
-        const convId: number = await httpProvider
+        const resp = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
                 method: 'POST',
                 headers: {
@@ -48,6 +48,8 @@ export class ChatManager {
                 body: JSON.stringify(req),
             })
             .execute();
+
+            const convId  = Number(resp);
 
             for (const participant of participants) {
                 participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
