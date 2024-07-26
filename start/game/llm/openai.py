@@ -17,7 +17,7 @@ class OpenAIAPI:
 
     def completition(self, params, messages):
         try:
-            completion = openai.ChatCompletion.create(
+            completion = openai.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages= messages,
                 max_tokens=params['max_tokens'],
@@ -29,17 +29,17 @@ class OpenAIAPI:
                 stop=params['stop']
             )
             #print(completion)
-            return completion["choices"][0]["message"]["content"]
+            return completion.choices[0].message.content
         except Exception as error:
             print("ChatGPT ERROR: ", error)
             return ""
 
     def embed(self, query: str) -> List[float]:
         return (
-            openai.Embedding.create(  # type: ignore
+            openai.embeddings.create(  # type: ignore
                 input=query, model="text-embedding-ada-002"
             )
-        )["data"][0]["embedding"]
+        ).data[0].embedding
 
     # prompt = 'GPT-3 Prompt:\n"""\n' + prompt + '\n"""\n'
     # prompt += f"Output the response to the prompt above in json. {special_instruction}\n"
