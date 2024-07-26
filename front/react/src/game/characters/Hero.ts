@@ -13,9 +13,10 @@ export class Hero extends Humanoid {
         texture: string,
         gridEngine: GridEngine,
         id: number,
-        idTag: string
+        idTag: string,
+        charName: string
     ) {
-        super(scene, texture, id, idTag);
+        super(scene, texture, id, idTag, charName);
         this.gridEngine = gridEngine;
         this.characterController = new CharacterController(
             this.scene,

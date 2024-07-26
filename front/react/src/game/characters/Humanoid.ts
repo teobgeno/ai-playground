@@ -6,7 +6,7 @@ import { CharacterInventory } from "./CharacterInventory";
 export class Humanoid extends Physics.Arcade.Sprite {
     public id: number;
     public idTag: string;
-    //private stamina: number;
+    protected charName: string;
     public  scene: Phaser.Scene;
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
@@ -15,11 +15,12 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public currentTask: Task | undefined;
     public isNpc: boolean;
 
-    constructor(scene: Phaser.Scene, texture: string, id: number, idTag: string) {
+    constructor(scene: Phaser.Scene, texture: string, id: number, idTag: string, charName: string) {
         super(scene, 0, 0, texture);
         this.scene = scene;
         this.id = id;
         this.idTag = idTag;
+        this.charName = charName;
         this.isNpc = this.idTag === "hero" ? false : true;
         this.stateMachine = new StateMachine(this, this.idTag);
         this.characterInventory = new CharacterInventory();
@@ -55,15 +56,9 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public getIdTag() {
         return this.idTag;
     }
-
-    public getConvId() {
-        return this.convId;
+    public getName() {
+        return this.charName;
     }
-
-    public setConvId(convId: number) {
-        this.convId = convId;
-    }
-
     public getStamina() {}
 
     public setStamina() {}

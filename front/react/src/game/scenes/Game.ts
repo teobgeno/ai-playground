@@ -217,7 +217,7 @@ export class Game extends Scene {
     }
 
     private initHero() {
-        this.hero = new Hero(this, "hero", this.gridEngine, 2, "hero");
+        this.hero = new Hero(this, "hero", this.gridEngine, 2, "hero",  "Maria Lopez");
       
         const hoe = new Hoe(
             new InventoryItem()
@@ -285,7 +285,8 @@ export class Game extends Scene {
             "npc",
             this.gridEngine,
             1,
-            "npc0"
+            "npc0",
+            "Isabella"
         );
         this.physics.add.existing(npc);
         this.add.existing(npc);
