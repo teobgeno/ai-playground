@@ -1,8 +1,6 @@
 import { EventBus } from "./EventBus";
 import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
-import {Hero} from "./characters/Hero";
-import {Npc} from "./characters/Npc";
 
 type Message = {
     characterId: string;
