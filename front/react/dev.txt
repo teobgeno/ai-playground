@@ -64,10 +64,11 @@ public setResource(resource: GenericItem) {
 item.getDestruct().addResource(resource)
 
 - diagonal movement ( https://annoraaq.github.io/grid-engine/examples/8-dir-crowd/ )
-- when player plot land (animation) lock player movement. Set state machine
+- when player plot land (animation) lock player movement with wasd. Set state machine
 
-- prompt helpers will return llm messages with user role and system role.
+- prompt helpers to return llm messages with user role and system role.
 - check eastern world prompts.
+- add TaskManager.ts and proxy all tasks to Npc and player characters.
 
 -------- done -----
 - when pick crop farmLandMap set hasCrop false
