@@ -94,7 +94,7 @@ export class ChatManager {
             const character = this.charactersMap.get(characterIdTag);
             EventBus.emit("on-chat-add-message", {
                 isPlayer: character?.isNpc,
-                characterName: "skordopoutsoglou",
+                characterName: character?.getName(),
                 content: message,
             });
     
