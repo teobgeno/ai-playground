@@ -1,6 +1,7 @@
 import { EventBus } from "./EventBus";
 import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
+import { CharacterState } from "./characters/types";
 
 type Message = {
     characterId: string;
@@ -49,7 +50,6 @@ export class ChatManager {
 
 
         const convId = resp.conversation_id;
-        // const convGuid = self.crypto.randomUUID();
 
         this.conversations.set(convId, {
             id: convId,
@@ -59,6 +59,7 @@ export class ChatManager {
         });
 
         for (const participant of participants) {
+            participant.setCharState(CharacterState.TALK);
             participant.isNpc ? this.addParticipant(participant, convId): this.addPlayerParticipant(convId);
         }   
 
@@ -111,7 +112,6 @@ export class ChatManager {
         const conversation = this.conversations.get(convId);
         conversation?.participants.push(character);
         this.participantsToConv.set(character.getIdTag(),convId);
-        //character.setConvId(convId);
     }
 
     public addPlayerParticipant(convId: string) {
@@ -125,9 +125,7 @@ export class ChatManager {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
-            player.setCharState('talk')
             EventBus.emit("on-chat-start-conversation", {});
-            //EventBus.emit("on-chat-start-conversation", {characterId: player.getId(), convId: convId});
         } else {
             this.setConversationSide(convId);
         }
@@ -141,7 +139,6 @@ export class ChatManager {
             if(character?.isNpc) {
                 this.generateNpcResponse(character?.getIdTag());
             }
-            //!character?.isNpc?(character as Hero)?.startTalk():
         }
     }
 
@@ -153,7 +150,7 @@ export class ChatManager {
             //TODO::log dialogue to db, character that closed the conversation
             for(const participant of ( conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getIdTag())
-                participant.setCharState('idle');
+                participant.setCharState(CharacterState.IDLE);
                 if(!participant.isNpc) {hasPlayerInConv = true;}
             }
             this.conversations.delete(convId);

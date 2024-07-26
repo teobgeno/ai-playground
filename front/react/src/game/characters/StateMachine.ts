@@ -35,6 +35,11 @@ export default class StateMachine
 		this.context = context
 	}
 
+	getCurrentStateName()
+	{
+		return this.currentState?.name;
+	}
+
 	isCurrentState(name: string)
 	{
 		if (!this.currentState)

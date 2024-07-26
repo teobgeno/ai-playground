@@ -6,6 +6,7 @@ import { SpriteItem } from "../items/SpriteItem";
 import {
     MapObjectInteractable,
 } from "../core/types";
+import { CharacterState } from "./types";
 export class Npc extends Humanoid implements MapObjectInteractable {
     private gridEngine: GridEngine;
     private interactive: InteractiveItem;
@@ -38,6 +39,12 @@ export class Npc extends Humanoid implements MapObjectInteractable {
             )
         );
         this.sprites[0].addExisting(this);
+
+        this.stateMachine
+            .addState(CharacterState.IDLE, {})
+            .addState(CharacterState.WALK, {})
+            .addState(CharacterState.TALK, {})
+            .setState(CharacterState.IDLE);
     }
 
     public init() {
@@ -62,35 +69,7 @@ export class Npc extends Humanoid implements MapObjectInteractable {
        (this.scene as Game).addPlayerTask("conversation", this);
     }
 
-    public initConversationWithPlayer() {
-        //TODO::check if npc can/want to talk to player
-        // const convGuid = this.chatManager.initConversation();
-        // this.chatManager.addPlayerParticipant(convGuid);
-        // this.chatManager.addParticipant(this, convGuid);
-        // this.chatManager.startConversation(convGuid);
+    update(dt: number) {
+        this.stateMachine.update(dt);
     }
-
-
-    // public startTalk() {
-    //     console.log('ok talk npc')
-    //     this.chatManager.generateNpcResponse(this.getId());
-    // }
-
-    // public toggleInteraction(doInteract: boolean) {
-    //     doInteract
-    //         ? this.resumeInteraction()
-    //         : this.pauseInteraction();
-    // }
-
-    // public pauseInteraction() {
-    //     if (this.input && this.input.enabled) {
-    //         this.disableInteractive();
-    //     }
-    // }
-
-    // public resumeInteraction() {
-    //     if (this.input && !this.input.enabled) {
-    //         this.setInteractive();
-    //     }
-    // }
 }

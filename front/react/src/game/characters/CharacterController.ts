@@ -2,6 +2,8 @@ import { Input } from "phaser";
 import { EventBus } from "../EventBus";
 import { Direction, GridEngine } from "grid-engine";
 import StateMachine from "./StateMachine";
+import { CharacterState } from "./types";
+
 
 export class CharacterController {
     private scene: Phaser.Scene;
@@ -59,7 +61,10 @@ export class CharacterController {
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keyI)) {
-            EventBus.emit("on-character-controller-i-key", {});
+            console.log(this.stateMachine.getCurrentStateName())
+            if(this.stateMachine.getCurrentStateName() === CharacterState.IDLE) {
+                EventBus.emit("on-character-controller-i-key", {});
+            }
         }
     }
 

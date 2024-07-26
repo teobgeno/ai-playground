@@ -365,7 +365,10 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number): void {
-        this.hero.update(delta);
+        
+        for (const [, character] of this.charactersMap) {
+            character.update(delta);
+        }
         for (const item of this.mapManager.getMapObjects()) {
             if (typeof item?.update !== "undefined") { 
                 item.update(time);
