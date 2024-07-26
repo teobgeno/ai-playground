@@ -18,6 +18,7 @@ export type Message = {
 function App() {
     const [inventoryHotbarItems, setInventoryHotbarItems] = useState<Array<Storable | null>>([]);
     const [inventoryRestItems, setInventoryRestItems] = useState<Array<Storable | null>>([]);
+    const [playerStamina, setPlayerStamina] = useState(100);
 
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -48,12 +49,17 @@ function App() {
             }
         });
 
+        EventBus.on("on-player-stamina-change", (stamina: number) => {
+            setPlayerStamina(stamina);
+        });
+
         return () => {
             EventBus.removeListener("on-character-inventory-update");
             EventBus.removeListener("on-character-controller-i-key");
             EventBus.removeListener("on-chat-start-conversation");
             EventBus.removeListener("on-chat-add-message");
             EventBus.removeListener("on-chat-end-conversation");
+            EventBus.removeListener("on-player-stamina-change");
         };
     }, []);
 
@@ -66,7 +72,7 @@ function App() {
             <div style={{ position: "relative" }}>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
-                <StaminaBar stamina={25} />
+                <StaminaBar stamina={playerStamina} />
             </div>
             <ChatWidget />
             <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems}/>

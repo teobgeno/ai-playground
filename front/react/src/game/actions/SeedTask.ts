@@ -6,6 +6,7 @@ import { FarmLand } from "../farm/FarmLand";
 import { Seed } from "../farm/Seed";
 
 import { TaskStatus, Task } from "./types";
+import { CharacterState } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 
 export class SeedTask extends BaseTask implements Task {
@@ -45,6 +46,7 @@ export class SeedTask extends BaseTask implements Task {
         this.gridEngine.stopMovement(this.character.getIdTag());
         this.landEntity.rollbackCrop();
         this.character.getInventory().addItem(this.seed);
+        this.character.setCharState(CharacterState.IDLE);
 
         this.status = TaskStatus.Completed;
     };

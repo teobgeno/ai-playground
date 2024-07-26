@@ -1,6 +1,7 @@
 import { GridEngine } from "grid-engine";
 import { Humanoid } from "../characters/Humanoid";
 import { TaskStatus } from "./types";
+import { CharacterState } from "../characters/types";
 
 export abstract class BaseTask {
     protected gridEngine: GridEngine;
@@ -9,6 +10,10 @@ export abstract class BaseTask {
     protected pointer: number = 0;
     protected destinationMoveX: number = 0;
     protected destinationMoveY: number = 0;
+    protected initTimestamp: number = 0;
+    protected lastTimestamp: number = 0;
+    protected IntervalProcess: ReturnType<typeof setInterval>;
+    protected staminaCost: number = 0;
 
     constructor(gridEngine: GridEngine, character: Humanoid) {
         this.character = character;
@@ -23,7 +28,7 @@ export abstract class BaseTask {
     public setStatus(status: TaskStatus) {
         this.status = status;
     }
-
+    
     public getMoveDestinationPoint() {
         return { x: this.destinationMoveX, y: this.destinationMoveY };
     }
@@ -39,7 +44,7 @@ export abstract class BaseTask {
     }
 
     protected moveCharacter(x: number, y: number) {
-        this.character.setCharState("walk");
+        this.character.setCharState(CharacterState.AUTOWALK);
         this.destinationMoveX = x;
         this.destinationMoveY = y;
         this.gridEngine.moveTo(this.character.getIdTag(), {

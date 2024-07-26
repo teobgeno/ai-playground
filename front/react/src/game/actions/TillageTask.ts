@@ -6,6 +6,7 @@ import { FarmLand } from "../farm/FarmLand";
 import { Hoe } from "../items/Hoe";
 
 import { TaskStatus, Task } from "./types";
+import { CharacterState } from "../characters/types";
 import { Humanoid } from "../characters/Humanoid";
 
 export class TillageTask extends BaseTask implements Task {
@@ -24,7 +25,7 @@ export class TillageTask extends BaseTask implements Task {
         this.mapManager = mapManager;
         this.hoe = hoe;
         this.landEntity = landEntity;
-        console.log("task weed");
+        this.staminaCost = 5;
     }
 
     public start() {
@@ -38,6 +39,7 @@ export class TillageTask extends BaseTask implements Task {
 
     public cancel = () => {
         console.log("cancel task");
+        //clearInterval(this.IntervalProcess);
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getIdTag());
@@ -49,8 +51,7 @@ export class TillageTask extends BaseTask implements Task {
             null
         );
 
-        // this.mapManager.updatePlotLandCoords(this.landEntity.sprite.getX() + "-" + this.landEntity.sprite.getY(), { isWeeded: false, hasCrop: false });
-        // this.mapManager.deletePlotLandEntityByCoords(this.landEntity.sprite.getPixelX(), this.landEntity.sprite.getPixelY());
+        this.character.setCharState(CharacterState.IDLE);
 
         this.status = TaskStatus.Completed;
     };
@@ -77,17 +78,32 @@ export class TillageTask extends BaseTask implements Task {
     };
 
     private tillGround() {
-        console.log("weeding");
         this.character.anims.play("attack_right", true);
-        //this.character.setCharState('weed')
+        this.character.setCharState(CharacterState.TILL);
         setTimeout(() => {
             this.character.anims.restart();
             this.character.anims.stop();
+            this.character.decreaseStamina(this.staminaCost);
+            this.character.setCharState(CharacterState.IDLE);
+           
             if (this.status === TaskStatus.Running) {
-                //this.mapManager.updatePlotLandCoords(this.landEntity.getX() + "-" + this.landEntity.getY(), { isWeeded: true, hasCrop: false });
                 this.status = TaskStatus.Completed;
                 this.landEntity.init();
             }
         }, this.hoe.weedSpeed);
     }
 }
+
+/*
+public initTimestamp: number = 0;
+public lastTimestamp: number = 0;
+public IntervalProcess;
+
+ this.lastTimestamp = Utils.getTimeStamp();
+ this.initTimestamp =  this.lastTimestamp;
+
+ ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.hoe.weedSpeed
+    complete
+  else
+    this.lastTimestamp = Utils.getTimeStamp();
+*/

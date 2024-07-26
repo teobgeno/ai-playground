@@ -424,4 +424,8 @@ export class Game extends Scene {
         }
       
     }
+
+    async emitEvent(event: string, params : any) {
+        EventBus.emit(event, params);
+    }
 }

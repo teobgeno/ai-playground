@@ -47,7 +47,7 @@ export function StaminaBar(props: StaminaBarProps) {
             });
         }
 
-        function updateHealth(change) {
+        function updateHealth(change: number) {
             health += change;
             health = health > maxHp ? maxHp : health;
             health = health < 0 ? 0 : health;
@@ -57,7 +57,7 @@ export function StaminaBar(props: StaminaBarProps) {
 
         //init
         updateHealth(0);
-    }, []);
+    }, [props.stamina]);
 
     return (
         <>

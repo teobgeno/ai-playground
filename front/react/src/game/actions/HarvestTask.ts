@@ -5,6 +5,7 @@ import { GridEngine } from "grid-engine";
 import { FarmLand } from "../farm/FarmLand";
 
 import {TaskStatus, Task} from "./types";
+import { CharacterState } from "../characters/types";
 import {Humanoid} from "../characters/Humanoid";
 import { GenericItem } from "../items/GenericItem";
 
@@ -42,6 +43,8 @@ export class HarvestTask extends BaseTask implements Task{
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getIdTag());
+        this.character.setCharState(CharacterState.IDLE);
+        
         this.status = TaskStatus.Completed;
     };
 

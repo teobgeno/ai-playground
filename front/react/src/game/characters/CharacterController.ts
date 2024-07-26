@@ -37,17 +37,19 @@ export class CharacterController {
         }
 
         this.stateMachine
-            .addState("idle", {
+            .addState(CharacterState.IDLE, {
                 onEnter: this.idleOnEnter,
                 onUpdate: this.idleOnUpdate,
             })
-            .addState("walk", {
+            .addState(CharacterState.WALK, {
                 onEnter: this.walkOnEnter,
                 onUpdate: this.walkOnUpdate,
                 onExit: this.walkOnExit,
             })
-            .addState("talk", {})
-            .setState("idle");
+            .addState(CharacterState.AUTOWALK, {})
+            .addState(CharacterState.TALK, {})
+            .addState(CharacterState.TILL, {})
+            .setState(CharacterState.IDLE);
     }
 
     update(dt: number) {

@@ -1,4 +1,5 @@
 import Phaser, { Physics } from "phaser";
+import { Game } from "../scenes/Game";
 import { Task } from "../actions/types";
 import StateMachine from "./StateMachine";
 import { CharacterInventory } from "./CharacterInventory";
@@ -12,6 +13,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected stateMachine: StateMachine;
     protected characterInventory: CharacterInventory;
     protected convId: number;
+    protected stamina:number = 100;
     public currentTask: Task | undefined;
     public isNpc: boolean;
 
@@ -59,9 +61,23 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public getName() {
         return this.charName;
     }
-    public getStamina() {}
+    public getStamina() {
+        return this.stamina;
+    }
 
-    public setStamina() {}
+    public increaseStamina(staminaAmount: number) {
+        this.stamina = this.stamina + staminaAmount;
+        if(!this.isNpc) {
+            (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
+        }
+    }
+
+    public decreaseStamina(staminaAmount: number) {
+        this.stamina = this.stamina - staminaAmount;
+        if(!this.isNpc) {
+            (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
+        }
+    }
 
     public setCharState(state: string) {
         this.stateMachine.setState(state);

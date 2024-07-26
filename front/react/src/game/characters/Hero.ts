@@ -1,3 +1,4 @@
+import { Game } from "../scenes/Game";
 import { GridEngine } from "grid-engine";
 import { CharacterController } from "./CharacterController";
 import { TaskStatus } from "../actions/types";

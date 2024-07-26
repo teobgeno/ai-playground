@@ -7,5 +7,7 @@ export enum InventoryAction {
 export enum CharacterState {
     IDLE = "idle",
     WALK = "walk",
+    AUTOWALK = "autowalk",
     TALK = "talk",
+    TILL = "till",
   }
