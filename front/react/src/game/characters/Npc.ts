@@ -3,11 +3,9 @@ import { GridEngine } from "grid-engine";
 import { Humanoid } from "./Humanoid";
 import { InteractiveItem } from "../items/InteractiveItem";
 import { SpriteItem } from "../items/SpriteItem";
-import {
-    MapObjectInteractable,
-} from "../core/types";
-import { CharacterState } from "./types";
-export class Npc extends Humanoid implements MapObjectInteractable {
+import { MapObjectInteractable } from "../core/types";
+import { CharacterState, Character } from "./types";
+export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private gridEngine: GridEngine;
     private interactive: InteractiveItem;
     public sprites: Array<SpriteItem> = [];

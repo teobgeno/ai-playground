@@ -7,7 +7,7 @@ import { Seed } from "../farm/Seed";
 import { SeedTask } from "../actions/SeedTask";
 
 import { Storable } from "../items/types";
-import { Humanoid } from "../characters/Humanoid";
+import { Character } from "../characters/types";
 import { Cursor } from "./types";
 import { ObjectId } from "../core/types";
 import { FarmLand } from "../farm/FarmLand";
@@ -20,7 +20,7 @@ export class CropCursor implements Cursor {
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private gridEngine: GridEngine;
-    private character: Humanoid;
+    private character: Character;
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
     private seed: Seed;
@@ -30,7 +30,7 @@ export class CropCursor implements Cursor {
         map: Tilemaps.Tilemap,
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         marker: Phaser.GameObjects.Rectangle
 
     ) {

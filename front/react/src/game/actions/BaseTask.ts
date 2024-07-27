@@ -1,11 +1,10 @@
 import { GridEngine } from "grid-engine";
-import { Humanoid } from "../characters/Humanoid";
 import { TaskStatus } from "./types";
-import { CharacterState } from "../characters/types";
+import { CharacterState, Character } from "../characters/types";
 
 export abstract class BaseTask {
     protected gridEngine: GridEngine;
-    protected character: Humanoid;
+    protected character: Character;
     protected status: TaskStatus;
     protected pointer: number = 0;
     protected destinationMoveX: number = 0;
@@ -15,7 +14,7 @@ export abstract class BaseTask {
     protected IntervalProcess: ReturnType<typeof setInterval>;
     protected staminaCost: number = 0;
 
-    constructor(gridEngine: GridEngine, character: Humanoid) {
+    constructor(gridEngine: GridEngine, character: Character) {
         this.character = character;
         this.gridEngine = gridEngine;
         this.status = TaskStatus.Initialized;

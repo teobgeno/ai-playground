@@ -69,7 +69,8 @@ item.getDestruct().addResource(resource)
 - prompt helpers to return llm messages with user role and system role.
 - check eastern world prompts.
 - add TaskManager.ts and proxy all tasks to Npc and player characters.
-
+- all game events emit from scene game. Check chatManager.ts
+- on stamina decrease calculate char speed this.gridEngine.setSpeed(this.getIdTag(), 1);
 -------- done -----
 - when pick crop farmLandMap set hasCrop false
 - task abstract class

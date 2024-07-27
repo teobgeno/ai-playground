@@ -5,8 +5,7 @@ import { GridEngine } from "grid-engine";
 import { FarmLand } from "../farm/FarmLand";
 
 import {TaskStatus, Task} from "./types";
-import { CharacterState } from "../characters/types";
-import {Humanoid} from "../characters/Humanoid";
+import { CharacterState, Character } from "../characters/types";
 import { GenericItem } from "../items/GenericItem";
 
 export class HarvestTask extends BaseTask implements Task{
@@ -17,7 +16,7 @@ export class HarvestTask extends BaseTask implements Task{
     constructor(
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         landEntity: FarmLand,
     ) {
         super(gridEngine, character);

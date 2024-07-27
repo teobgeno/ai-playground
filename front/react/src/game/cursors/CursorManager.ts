@@ -10,7 +10,7 @@ import { ExternalInteractionCursor } from "./ExternalInteractionCursor";
 
 import { Cursor, CursorType } from "./types";
 import { Storable } from "../items/types";
-import { Humanoid } from "../characters/Humanoid";
+import { Character } from "../characters/types";
 
 export class CursorManager {
     private map: Tilemaps.Tilemap;
@@ -29,7 +29,7 @@ export class CursorManager {
         map: Tilemaps.Tilemap,
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         marker: Phaser.GameObjects.Rectangle
     ) {
         this.map = map;

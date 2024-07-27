@@ -1,10 +1,12 @@
 import { GridEngine } from "grid-engine";
+import { Game } from "../scenes/Game";
 import { CharacterController } from "./CharacterController";
 import { TaskStatus } from "../actions/types";
+import { Character } from "./types";
 import { Humanoid } from "./Humanoid";
 import { EventBus } from "../EventBus";
 
-export class Hero extends Humanoid {
+export class Hero extends Humanoid implements Character{
     private gridEngine: GridEngine;
     private characterController: CharacterController;
     
@@ -44,6 +46,18 @@ export class Hero extends Humanoid {
         this.updateTasksQueue();
         //https://www.html5gamedevs.com/topic/40592-how-do-i-call-a-callback-function-when-two-objects-stop-overlapping/
         //console.log(this.getBody().embedded)
+    }
+
+    public increaseStamina(staminaAmount: number) {
+        super.increaseStamina(staminaAmount);
+        (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
+        
+    }
+
+    public decreaseStamina(staminaAmount: number) {
+        super.decreaseStamina(staminaAmount);
+        //this.gridEngine.setSpeed(this.getIdTag(), 1);
+        (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
     }
 
     private updateTasksQueue() {

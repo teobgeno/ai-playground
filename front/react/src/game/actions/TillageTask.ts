@@ -1,13 +1,13 @@
 import { BaseTask } from "./BaseTask";
 import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
+import { Utils } from "../core/Utils";
 
 import { FarmLand } from "../farm/FarmLand";
 import { Hoe } from "../items/Hoe";
 
 import { TaskStatus, Task } from "./types";
-import { CharacterState } from "../characters/types";
-import { Humanoid } from "../characters/Humanoid";
+import { CharacterState, Character } from "../characters/types";
 
 export class TillageTask extends BaseTask implements Task {
     private mapManager: MapManager;
@@ -17,7 +17,7 @@ export class TillageTask extends BaseTask implements Task {
     constructor(
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         landEntity: FarmLand,
         hoe: Hoe
     ) {
@@ -25,7 +25,6 @@ export class TillageTask extends BaseTask implements Task {
         this.mapManager = mapManager;
         this.hoe = hoe;
         this.landEntity = landEntity;
-        this.staminaCost = 5;
     }
 
     public start() {
@@ -39,7 +38,7 @@ export class TillageTask extends BaseTask implements Task {
 
     public cancel = () => {
         console.log("cancel task");
-        //clearInterval(this.IntervalProcess);
+        clearInterval(this.IntervalProcess);
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getIdTag());
@@ -51,7 +50,7 @@ export class TillageTask extends BaseTask implements Task {
             null
         );
 
-        this.character.setCharState(CharacterState.IDLE);
+        this.updateCharacter();
 
         this.status = TaskStatus.Completed;
     };
@@ -78,19 +77,39 @@ export class TillageTask extends BaseTask implements Task {
     };
 
     private tillGround() {
+        this.lastTimestamp = Utils.getTimeStamp();
+        this.initTimestamp =  this.lastTimestamp;
+        this.IntervalProcess = setInterval(this.tillGroundProc, 1000)
+
         this.character.anims.play("attack_right", true);
         this.character.setCharState(CharacterState.TILL);
-        setTimeout(() => {
-            this.character.anims.restart();
-            this.character.anims.stop();
-            this.character.decreaseStamina(this.staminaCost);
-            this.character.setCharState(CharacterState.IDLE);
-           
-            if (this.status === TaskStatus.Running) {
-                this.status = TaskStatus.Completed;
-                this.landEntity.init();
-            }
-        }, this.hoe.weedSpeed);
+    }
+
+    private tillGroundProc = () => {
+        if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.hoe.weedSpeed) {
+            this.staminaCost = this.staminaCost + 5;
+            clearInterval(this.IntervalProcess);
+            this.complete();
+        } else {
+            this.staminaCost = this.staminaCost + 5;
+        }
+    }
+
+    private complete() {
+
+       this.updateCharacter();
+
+        if (this.status === TaskStatus.Running) {
+            this.status = TaskStatus.Completed;
+            this.landEntity.init();
+        }
+    }
+
+    private updateCharacter() {
+        this.character.anims.restart();
+        this.character.anims.stop();
+        this.character.decreaseStamina(this.staminaCost);
+        this.character.setCharState(CharacterState.IDLE);
     }
 }
 

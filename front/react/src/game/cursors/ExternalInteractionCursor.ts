@@ -3,7 +3,7 @@ import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
 import { Storable } from "../items/types";
-import { Humanoid } from "../characters/Humanoid";
+import { Character } from "../characters/types";
 import { Cursor } from "./types";
 
 export class ExternalInteractionCursor implements Cursor {
@@ -11,7 +11,7 @@ export class ExternalInteractionCursor implements Cursor {
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private gridEngine: GridEngine;
-    private character: Humanoid;
+    private character: Character;
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
     private item: Storable;
@@ -22,7 +22,7 @@ export class ExternalInteractionCursor implements Cursor {
         map: Tilemaps.Tilemap,
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         marker: Phaser.GameObjects.Rectangle
     ) {
         this.scene = scene;

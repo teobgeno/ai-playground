@@ -9,7 +9,7 @@ import { GenericItem } from "../items/GenericItem";
 import { InventoryItem } from "../items/InventoryItem";
 
 // import { InventoryItem } from "../characters/types";
-import { Humanoid } from "../characters/Humanoid";
+import { Character } from "../characters/types";
 import { Cursor } from "./types";
 import { ObjectId } from "../core/types";
 
@@ -18,7 +18,7 @@ export class FenceCursor implements Cursor {
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private gridEngine: GridEngine;
-    private character: Humanoid;
+    private character: Character;
     private markers: { [key: string]: Phaser.GameObjects.Sprite } = {};
     private activeMarker: Phaser.GameObjects.Sprite;
     private activeMarkerKey: string;
@@ -30,7 +30,7 @@ export class FenceCursor implements Cursor {
         map: Tilemaps.Tilemap,
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid
+        character: Character
     ) {
         this.scene = scene;
         this.map = map;

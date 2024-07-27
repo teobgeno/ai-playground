@@ -6,8 +6,7 @@ import { FarmLand } from "../farm/FarmLand";
 import { Seed } from "../farm/Seed";
 
 import { TaskStatus, Task } from "./types";
-import { CharacterState } from "../characters/types";
-import { Humanoid } from "../characters/Humanoid";
+import { CharacterState, Character } from "../characters/types";
 
 export class SeedTask extends BaseTask implements Task {
     private mapManager: MapManager;
@@ -17,7 +16,7 @@ export class SeedTask extends BaseTask implements Task {
     constructor(
         mapManager: MapManager,
         gridEngine: GridEngine,
-        character: Humanoid,
+        character: Character,
         landEntity: FarmLand,
         seed: Seed
     ) {
