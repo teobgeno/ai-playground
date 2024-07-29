@@ -22,6 +22,41 @@ export const Inventory = (props: InventoryProps) => {
 
     }, [isVisible]);
 
+    useEffect(() => {
+        const items = document.querySelectorAll(".item__container");
+        const itemContainers = document.querySelectorAll(".items__container");
+
+        items.forEach((item) => {
+            item.addEventListener("dragstart", dragStart);
+        });
+
+        itemContainers.forEach((square) => {
+            square.addEventListener("dragover", dragOver);
+            square.addEventListener("drop", dragDrop);
+        });
+
+        let beingDragged :  HTMLElement | null;
+
+        function dragStart(e:Event) {
+            beingDragged = e.target as HTMLElement
+            const img = new Image();
+            img.src =
+                "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
+            (e as DragEvent).dataTransfer?.setDragImage(img, 0, 0);
+        }
+
+        function dragDrop(e) {
+            if (e.target.tagName === "IMG") {
+                return;
+            }
+            e.target.append(beingDragged);
+        }
+
+        function dragOver(e: Event) {
+            e.preventDefault();
+        }
+    }, [props]);
+
     const toggleVisibility = () => {
         setIsVisible(isVisible ? false : true);
     };
@@ -410,7 +445,7 @@ export const Inventory = (props: InventoryProps) => {
                                 } else {
                                     return (
                                         <div className="items__container" key={i}>
-                                            <div className="item__container" />
+                                            <div className="item__container"/>
                                         </div>
                                     )
                                 }
