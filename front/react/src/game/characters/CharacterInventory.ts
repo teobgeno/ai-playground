@@ -6,7 +6,7 @@ import { ObjectId } from "../core/types";
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
     private inventorySize = 24;
-    private hotbarSize = 6;
+    private hotbarSize = 5;
     constructor() {}
 
     public addItem(item: Storable) {

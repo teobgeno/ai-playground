@@ -46,17 +46,16 @@ export const Inventory = (props: InventoryProps) => {
             (e as DragEvent).dataTransfer?.setDragImage(img, 0, 0);
         }
 
-        function dragDrop(e) {
+        function dragDrop(e:Event) {
             if (e.target.tagName === "IMG") {
                 return;
             }
-            console.log(beingDragged?.dataset.id)
-            console.log(e.target?.dataset.key)
-            console.log(e.target?.dataset.section)
-            e.target.append(beingDragged);
+            // console.log(beingDragged?.dataset.id)
+            // console.log(e.target?.dataset.key)
+            // console.log(e.target?.dataset.section)
+            //e.target.append(beingDragged);
+            //e.target.removeChild(e.target.secondChild)
             props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key), e.target?.dataset.section);
-        
-           
         }
 
         function dragOver(e: Event) {
