@@ -67,7 +67,6 @@ export class CharacterInventory {
         this.items[inventoryKey] = this.items[itemIndex];
         this.items[itemIndex] = null;
         EventBus.emit("on-character-inventory-update", {});
-        console.log(this.items)
     }
 
     private getItem(itemObjectId: ObjectId) {
@@ -83,6 +82,8 @@ export class CharacterInventory {
         for (let i = 0; i < this.hotbarSize; i++) {
             ret.push(this.items[i]);
         }
+        console.log('hotbar');
+        console.log(ret)
         return ret;
     }
 
@@ -91,6 +92,8 @@ export class CharacterInventory {
         for (let i =  this.hotbarSize; i < this.inventorySize; i++) {
             ret.push(this.items[i]);
         }
+        console.log('rest');
+        console.log(ret)
         return ret;
     }
 

@@ -400,7 +400,7 @@ export const Inventory = (props: InventoryProps) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-section='restOfItems'>
+                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i}>
                                             <div
                                                 className="item__container"
                                                 draggable="true"
@@ -464,7 +464,7 @@ export const Inventory = (props: InventoryProps) => {
                                     )
                                 } else {
                                     return (
-                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-section='restOfItems'>
+                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i}>
                                             <div className="item__container"/>
                                         </div>
                                     )
