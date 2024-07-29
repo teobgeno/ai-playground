@@ -49,12 +49,24 @@ export const Inventory = (props: InventoryProps) => {
             if (e.target.tagName === "IMG") {
                 return;
             }
+            console.log(beingDragged?.dataset.id)
             e.target.append(beingDragged);
         }
 
         function dragOver(e: Event) {
             e.preventDefault();
         }
+
+        
+        return () => {
+            items.forEach((item) => {
+                item.removeEventListener("dragstart", dragStart);
+            });
+            itemContainers.forEach((square) => {
+                square.removeEventListener("dragover", dragOver);
+                square.removeEventListener("drop", dragDrop);
+            });
+        };
     }, [props]);
 
     const toggleVisibility = () => {
@@ -385,6 +397,7 @@ export const Inventory = (props: InventoryProps) => {
                                             <div
                                                 className="item__container"
                                                 draggable="true"
+                                                data-id={item.id}
                                             >
                                                 <img
                                                     className="item__img"

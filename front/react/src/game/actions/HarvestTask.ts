@@ -68,6 +68,7 @@ export class HarvestTask extends BaseTask implements Task{
         setTimeout(() => {
             this.character.anims.restart();
             this.character.anims.stop();
+            this.character.setCharState(CharacterState.IDLE);
             if (this.status === TaskStatus.Running) {
                 const crop = this.landEntity.executeHarvestCrop()
                 if(crop) {
