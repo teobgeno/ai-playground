@@ -56,13 +56,7 @@ export class CharacterInventory {
         }
     }
 
-    public arrangeItem(itemId: number, inventoryKey: number, inventorySection: string) {
-        // let key = inventoryKey;
-
-        // if(inventorySection === 'restOfItems') {
-        //     key = key + this.hotbarSize;
-        // }
-
+    public arrangeItem(itemId: number, inventoryKey: number) {
         const itemIndex = this.items.findIndex((x) => x?.id === itemId);
         this.items[inventoryKey] = this.items[itemIndex];
         this.items[itemIndex] = null;

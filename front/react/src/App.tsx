@@ -40,11 +40,11 @@ function App() {
         }
     };
 
-    const arrangeInventoryItem = (itemId: number, inventoryKey:number, inventorySection: string) => {
+    const arrangeInventoryItem = (itemId: number, inventoryKey:number) => {
         if (phaserRef.current) {
             const scene = phaserRef.current.scene as Game;
             if (scene) {
-                scene.arrangeInventoryItem(itemId, inventoryKey, inventorySection);
+                scene.arrangeInventoryItem(itemId, inventoryKey);
             }
         }
     };

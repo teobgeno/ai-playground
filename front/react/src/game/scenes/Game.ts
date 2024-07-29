@@ -404,8 +404,8 @@ export class Game extends Scene {
         }
     }
 
-    arrangeInventoryItem(itemId: number, inventoryKey:number, inventorySection: string) {
-        this.hero.getInventory().arrangeItem(itemId, inventoryKey, inventorySection)
+    arrangeInventoryItem(itemId: number, inventoryKey:number) {
+        this.hero.getInventory().arrangeItem(itemId, inventoryKey)
     }
 
     async addPlayerTask(task: string, params : any) {

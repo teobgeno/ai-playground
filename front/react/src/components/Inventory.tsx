@@ -6,7 +6,7 @@ import "./Inventory.css";
 export type InventoryProps = {
     hotbarItems: Array<Storable | null>;
     restItems: Array<Storable | null>;
-    arrangeInventoryItem: (itemId: number, inventoryKey:number, inventorySection: string) => void;
+    arrangeInventoryItem: (itemId: number, inventoryKey:number) => void;
 };
 
 export const Inventory = (props: InventoryProps) => {
@@ -55,7 +55,7 @@ export const Inventory = (props: InventoryProps) => {
             // console.log(e.target?.dataset.section)
             //e.target.append(beingDragged);
             //e.target.removeChild(e.target.secondChild)
-            props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key), e.target?.dataset.section);
+            props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key));
         }
 
         function dragOver(e: Event) {
