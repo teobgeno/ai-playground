@@ -40,6 +40,15 @@ function App() {
         }
     };
 
+    const arrangeInventoryItem = (itemId: number, inventoryKey:number, inventorySection: string) => {
+        if (phaserRef.current) {
+            const scene = phaserRef.current.scene as Game;
+            if (scene) {
+                scene.arrangeInventoryItem(itemId, inventoryKey, inventorySection);
+            }
+        }
+    };
+
     useEffect(() => {
         EventBus.on("on-character-inventory-update", () => {
             const scene = phaserRef?.current?.scene as Game;
@@ -75,7 +84,7 @@ function App() {
                 <StaminaBar stamina={playerStamina} />
             </div>
             <ChatWidget />
-            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems}/>
+            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} arrangeInventoryItem={arrangeInventoryItem}/>
         </div>
     );
 }

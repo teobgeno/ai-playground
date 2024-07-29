@@ -6,6 +6,7 @@ import "./Inventory.css";
 export type InventoryProps = {
     hotbarItems: Array<Storable | null>;
     restItems: Array<Storable | null>;
+    arrangeInventoryItem: (itemId: number, inventoryKey:number, inventorySection: string) => void;
 };
 
 export const Inventory = (props: InventoryProps) => {
@@ -50,7 +51,12 @@ export const Inventory = (props: InventoryProps) => {
                 return;
             }
             console.log(beingDragged?.dataset.id)
+            console.log(e.target?.dataset.key)
+            console.log(e.target?.dataset.section)
             e.target.append(beingDragged);
+            props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key), e.target?.dataset.section);
+        
+           
         }
 
         function dragOver(e: Event) {
@@ -393,7 +399,7 @@ export const Inventory = (props: InventoryProps) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container" key={i}>
+                                            <div className="items__container" key={i} data-key={i} data-section='restOfItems'>
                                             <div
                                                 className="item__container"
                                                 draggable="true"
@@ -457,7 +463,7 @@ export const Inventory = (props: InventoryProps) => {
                                     )
                                 } else {
                                     return (
-                                        <div className="items__container" key={i}>
+                                        <div className="items__container" key={i} data-key={i} data-section='restOfItems'>
                                             <div className="item__container"/>
                                         </div>
                                     )

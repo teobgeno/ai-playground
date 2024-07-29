@@ -404,6 +404,10 @@ export class Game extends Scene {
         }
     }
 
+    arrangeInventoryItem(itemId: number, inventoryKey:number, inventorySection: string) {
+        this.hero.getInventory().arrangeItem(itemId, inventoryKey, inventorySection)
+    }
+
     async addPlayerTask(task: string, params : any) {
         console.log('add harvest task')
         if(task === 'harvest') {

@@ -56,6 +56,20 @@ export class CharacterInventory {
         }
     }
 
+    public arrangeItem(itemId: number, inventoryKey: number, inventorySection: string) {
+        let key = inventoryKey;
+
+        if(inventorySection === 'restOfItems') {
+            key = key + this.hotbarSize;
+        }
+
+        const itemIndex = this.items.findIndex((x) => x?.id === itemId);
+        this.items[key] = this.items[itemIndex];
+        this.items[itemIndex] = null;
+        EventBus.emit("on-character-inventory-update", {});
+        console.log(this.items)
+    }
+
     private getItem(itemObjectId: ObjectId) {
         return this.items.find((x) => x?.objectId === itemObjectId);
     }
