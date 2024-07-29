@@ -80,9 +80,12 @@ export class Hero extends Humanoid implements Character{
     private createMovementAnimations() {
         this.createAnimation("right", this.getIdTag(), 143, 147, 15, true, true);
         this.createAnimation("down-right", this.getIdTag(), 143, 147, 15, true, true);
+        this.createAnimation("up-right", this.getIdTag(), 143, 147, 15, true, true);
         this.createAnimation("up", this.getIdTag(), 104, 112, 15, true, true);
         this.createAnimation("down", this.getIdTag(), 130, 138, 15, true, true);
         this.createAnimation("left", this.getIdTag(), 117, 121, 15, true, true);
+        this.createAnimation("down-left", this.getIdTag(), 117, 121, 15, true, true);
+        this.createAnimation("up-left", this.getIdTag(), 117, 121, 15, true, true);
     }
 
     private createHumanoidAnimations(key: string) {
@@ -219,11 +222,14 @@ export class Hero extends Humanoid implements Character{
         switch (direction) {
             case "up":
                 return 104;
+            case "up-right":
             case "down-right":
             case "right":
                 return 143;
             case "down":
                 return 130;
+            case "up-left":
+            case "down-left":
             case "left":
                 return 117;
         }

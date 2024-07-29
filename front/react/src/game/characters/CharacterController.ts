@@ -89,6 +89,15 @@ export class CharacterController {
         if(this.keyS?.isDown && this.keyD?.isDown) {
             this.gridEngine.move(this.idTag, Direction.DOWN_RIGHT);
         }
+        else if(this.keyS?.isDown && this.keyA?.isDown) {
+            this.gridEngine.move(this.idTag, Direction.DOWN_LEFT);
+        }
+        else if(this.keyW?.isDown && this.keyD?.isDown) {
+            this.gridEngine.move(this.idTag, Direction.UP_RIGHT);
+        }
+        else if(this.keyW?.isDown && this.keyA?.isDown) {
+            this.gridEngine.move(this.idTag, Direction.UP_LEFT);
+        }
         else if (this.keyW?.isDown) {
             this.gridEngine.move(this.idTag, Direction.UP);
         } else if (this.keyA?.isDown) {
