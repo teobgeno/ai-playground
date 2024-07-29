@@ -46,7 +46,7 @@ export const Inventory = (props: InventoryProps) => {
             (e as DragEvent).dataTransfer?.setDragImage(img, 0, 0);
         }
 
-        function dragDrop(e:Event) {
+        function dragDrop(e) {
             if (e.target.tagName === "IMG") {
                 return;
             }
