@@ -6,7 +6,7 @@ import { ObjectId } from "../core/types";
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
     private inventorySize = 24;
-    private hotbarSize = 5;
+    private hotbarSize = 6;
     constructor() {}
 
     public addItem(item: Storable) {
@@ -57,14 +57,14 @@ export class CharacterInventory {
     }
 
     public arrangeItem(itemId: number, inventoryKey: number, inventorySection: string) {
-        let key = inventoryKey;
+        // let key = inventoryKey;
 
-        if(inventorySection === 'restOfItems') {
-            key = key + this.hotbarSize;
-        }
+        // if(inventorySection === 'restOfItems') {
+        //     key = key + this.hotbarSize;
+        // }
 
         const itemIndex = this.items.findIndex((x) => x?.id === itemId);
-        this.items[key] = this.items[itemIndex];
+        this.items[inventoryKey] = this.items[itemIndex];
         this.items[itemIndex] = null;
         EventBus.emit("on-character-inventory-update", {});
         console.log(this.items)
