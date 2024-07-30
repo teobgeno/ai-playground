@@ -5,6 +5,7 @@ import { ObjectId } from "../core/types";
 
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
+    private craftItems: Array<Storable | null> = [];
     private inventorySize = 24;
     private hotbarSize = 5;
     constructor() {}
@@ -66,7 +67,7 @@ export class CharacterInventory {
     private getItem(itemObjectId: ObjectId) {
         return this.items.find((x) => x?.objectId === itemObjectId);
     }
-
+  
     public getAllItems() {
         return this.items;
     }
