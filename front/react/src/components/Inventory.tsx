@@ -55,6 +55,10 @@ export const Inventory = (props: InventoryProps) => {
             // console.log(e.target?.dataset.section)
             //e.target.append(beingDragged);
             //e.target.removeChild(e.target.secondChild)
+            console.log('source')
+            console.log(beingDragged?.dataset)
+            console.log('target')
+            console.log(e.target?.dataset)
             props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key));
         }
 
@@ -154,7 +158,7 @@ export const Inventory = (props: InventoryProps) => {
                         {props.hotbarItems.map((item, i) => {
                             if (item) {
                                 return (
-                                    <div className="items__container" key={i} data-key={i}>
+                                    <div className="items__container" key={i} data-key={i} data-subsection='hotbar'>
                                         <span className="items__number items__number--first">
                                             {i + 1}
                                         </span>
@@ -162,6 +166,7 @@ export const Inventory = (props: InventoryProps) => {
                                             className="item__container"
                                             draggable="true"
                                             data-id={item.id}
+                                            data-subsection = 'hotbar'
                                         >
                                             <img
                                                 className="item__img"
@@ -185,7 +190,7 @@ export const Inventory = (props: InventoryProps) => {
                                 )
                             } else {
                                 return (
-                                <div className="items__container" key={i} data-key={i}>
+                                <div className="items__container" key={i} data-key={i} data-subsection='hotbar'>
                                     <span className="items__number"></span>
                                     <div className="item__container" />
                                 </div>
@@ -399,11 +404,12 @@ export const Inventory = (props: InventoryProps) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i}>
+                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-subsection='restItems'>
                                             <div
                                                 className="item__container"
                                                 draggable="true"
                                                 data-id={item.id}
+                                                data-subsection = 'restItems'
                                             >
                                                 <img
                                                     className="item__img"
@@ -463,7 +469,7 @@ export const Inventory = (props: InventoryProps) => {
                                     )
                                 } else {
                                     return (
-                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i}>
+                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-subsection ='restItems'>
                                             <div className="item__container"/>
                                         </div>
                                     )
@@ -1254,43 +1260,15 @@ export const Inventory = (props: InventoryProps) => {
                         </div>
                         <div className="info__farm__container">
                             {/* Crafting */}
-
+                            
                             <div className="crafting-grid">
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-
-                                
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-                                
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-                                
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-                                
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
-                                
-                                <div className="items__container">
-                                    <div className="item__container" />
-                                </div>
+                                {[...Array(9)].map((e, i) => {
+                                    return (
+                                        <div className="items__container" key={i} data-key={i} data-subsection ='craftIngridients'>
+                                        <div className="item__container" />
+                                        </div>
+                                    )
+                                })}
                             </div>
                         
                             {/* <h2 className="farm__name">Title Farm</h2>
