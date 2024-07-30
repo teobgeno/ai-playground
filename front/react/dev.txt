@@ -63,7 +63,7 @@ public setResource(resource: GenericItem) {
 
 item.getDestruct().addResource(resource)
 
-- diagonal movement ( https://annoraaq.github.io/grid-engine/examples/8-dir-crowd/ )
+
 - when player plot land (animation) lock player movement with wasd. Set state machine
 
 - prompt helpers to return llm messages with user role and system role.
@@ -77,3 +77,4 @@ item.getDestruct().addResource(resource)
 - when seed plant add first frame with opacity like land
 - seed task remove item from inventory
 - replace weeding with Tillage
+- diagonal movement ( https://annoraaq.github.io/grid-engine/examples/8-dir-crowd/ )

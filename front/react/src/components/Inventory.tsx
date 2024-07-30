@@ -3,10 +3,21 @@ import { EventBus } from "../game/EventBus";
 import { Storable } from "../game/items/types";
 import "./Inventory.css";
 
+export type MoveStorableProps = {
+    sourceSection : string;
+    sourceSubSection : string
+    sourceId : number
+    targetSection : string;
+    targetSubSection : string
+    targetKey : number
+}
+
 export type InventoryProps = {
     hotbarItems: Array<Storable | null>;
     restItems: Array<Storable | null>;
+    craftIngridientsItems: Array<Storable | null>;
     arrangeInventoryItem: (itemId: number, inventoryKey:number) => void;
+    moveStorableItem: (props: MoveStorableProps) => void;
 };
 
 export const Inventory = (props: InventoryProps) => {
@@ -55,11 +66,20 @@ export const Inventory = (props: InventoryProps) => {
             // console.log(e.target?.dataset.section)
             //e.target.append(beingDragged);
             //e.target.removeChild(e.target.secondChild)
-            console.log('source')
-            console.log(beingDragged?.dataset)
-            console.log('target')
-            console.log(e.target?.dataset)
-            props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key));
+            // console.log('source')
+            // console.log(beingDragged?.dataset)
+            // console.log('target')
+            // console.log(e.target?.dataset)
+            //props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key));
+
+            props.moveStorableItem({
+                sourceSection : beingDragged?.dataset.section || '',
+                sourceSubSection : beingDragged?.dataset.subsection || '',
+                sourceId : Number(beingDragged?.dataset.id) || 0,
+                targetSection : e.target?.dataset.section  || '',
+                targetSubSection : e.target?.dataset.subsection || '',
+                targetKey : Number(e.target?.dataset.key) || 0
+            })
         }
 
         function dragOver(e: Event) {
@@ -158,7 +178,7 @@ export const Inventory = (props: InventoryProps) => {
                         {props.hotbarItems.map((item, i) => {
                             if (item) {
                                 return (
-                                    <div className="items__container" key={i} data-key={i} data-subsection='hotbar'>
+                                    <div className="items__container" key={i} data-key={i} data-section ='inventory' data-subsection='items'>
                                         <span className="items__number items__number--first">
                                             {i + 1}
                                         </span>
@@ -166,7 +186,8 @@ export const Inventory = (props: InventoryProps) => {
                                             className="item__container"
                                             draggable="true"
                                             data-id={item.id}
-                                            data-subsection = 'hotbar'
+                                            data-section ='inventory'
+                                            data-subsection = 'items'
                                         >
                                             <img
                                                 className="item__img"
@@ -190,7 +211,7 @@ export const Inventory = (props: InventoryProps) => {
                                 )
                             } else {
                                 return (
-                                <div className="items__container" key={i} data-key={i} data-subsection='hotbar'>
+                                <div className="items__container" key={i} data-key={i} data-section ='inventory' data-subsection='items'>
                                     <span className="items__number"></span>
                                     <div className="item__container" />
                                 </div>
@@ -404,12 +425,13 @@ export const Inventory = (props: InventoryProps) => {
                                 if (item) {
                                     return (
                                             
-                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-subsection='restItems'>
+                                            <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-section ='inventory' data-subsection='items'>
                                             <div
                                                 className="item__container"
                                                 draggable="true"
                                                 data-id={item.id}
-                                                data-subsection = 'restItems'
+                                                data-section ='inventory'
+                                                data-subsection = 'items'
                                             >
                                                 <img
                                                     className="item__img"
@@ -469,7 +491,7 @@ export const Inventory = (props: InventoryProps) => {
                                     )
                                 } else {
                                     return (
-                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-subsection ='restItems'>
+                                        <div className="items__container" key={props.hotbarItems.length + i} data-key={props.hotbarItems.length + i} data-section ='inventory' data-subsection ='items'>
                                             <div className="item__container"/>
                                         </div>
                                     )
@@ -477,7 +499,7 @@ export const Inventory = (props: InventoryProps) => {
                             })}
 
 
-                            <div className="items__container">
+                            {/* <div className="items__container">
                                 <div
                                     className="item__container"
                                     draggable="true"
@@ -1105,7 +1127,7 @@ export const Inventory = (props: InventoryProps) => {
                             </div>
                             <div className="items__container">
                                 <div className="item__container" />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="menu__content__info">
@@ -1262,12 +1284,48 @@ export const Inventory = (props: InventoryProps) => {
                             {/* Crafting */}
                             
                             <div className="crafting-grid">
-                                {[...Array(9)].map((e, i) => {
-                                    return (
-                                        <div className="items__container" key={i} data-key={i} data-subsection ='craftIngridients'>
-                                        <div className="item__container" />
+                                {props.craftIngridientsItems.map((item, i) => {
+
+                                    if (item) {
+                                        return (
+                                            <div className="items__container" key={i} data-key={i} data-section ='inventory' data-subsection='craftIngridients'>
+                                                <div
+                                                    className="item__container"
+                                                    draggable="true"
+                                                    data-id={item.id}
+                                                    data-section ='inventory'
+                                                    data-subsection = 'craftIngridients'
+                                                >
+                                                    <img
+                                                        className="item__img"
+                                                        src={item.getInventory().icon}
+                                                        alt="infinity_blade"
+                                                        draggable="false"
+                                                    />
+                                                    <div
+                                                        className="item__tooltip"
+                                                        draggable="false"
+                                                    >
+                                                        <div className="item__tooltip__title">
+                                                            <h2>Infinity Blade</h2>
+                                                        </div>
+                                                        <div className="item__tooltip__info">
+                                                            The true form of the Galaxy Sword
+                                                        </div>
+                                                    </div>
+                                                </div>
                                         </div>
-                                    )
+                                        )
+                                    } else {
+                                        return (
+                                        <div className="items__container" key={i} data-key={i} data-section ='inventory' data-subsection='craftIngridients'>
+                                            <span className="items__number"></span>
+                                            <div className="item__container" />
+                                        </div>
+                                                
+                                        )
+                                    }
+
                                 })}
                             </div>
                         

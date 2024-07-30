@@ -27,6 +27,8 @@ import { HarvestTask } from "../actions/HarvestTask";
 import { CursorType } from "../cursors/types";
 import { MapObject, ObjectId, SceneProps } from "../core/types";
 
+import { MoveStorableProps } from "../../components/Inventory";
+
 
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -392,16 +394,32 @@ export class Game extends Scene {
         }
     }
 
-    getHotbarItems() {
-        return this.hero.getInventory().getHotbarItems();
+    // getHotbarItems() {
+    //     return this.hero.getInventory().getHotbarItems();
+    // }
+
+    // getInventoryItems(hotbar: boolean) {
+    //     if(hotbar) {
+    //         return this.hero.getInventory().getHotbarItems();
+    //     } else {
+    //         return this.hero.getInventory().getRestItems()
+    //     }
+    // }
+
+    getPlayerInventoryItems(section: string) {
+        switch(section) {
+            case 'hotbar':
+                return this.hero.getInventory().getHotbarItems();
+            case 'rest':
+                return this.hero.getInventory().getRestItems();
+            case 'craftIngridients':
+                return this.hero.getInventory().getCraftIngridients();
+        }
+        return [];
     }
 
-    getInventoryItems(hotbar: boolean) {
-        if(hotbar) {
-            return this.hero.getInventory().getHotbarItems();
-        } else {
-            return this.hero.getInventory().getRestItems()
-        }
+    moveInventoryItem(props: MoveStorableProps) {
+        this.hero.getInventory().moveItemInternal(props.sourceSubSection, props.targetSubSection, props.sourceId, props.targetKey)
     }
 
     arrangeInventoryItem(itemId: number, inventoryKey:number) {

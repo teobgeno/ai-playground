@@ -5,7 +5,7 @@ import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
-import { Inventory } from "./components/Inventory";
+import { Inventory, MoveStorableProps } from "./components/Inventory";
 import { StaminaBar } from "./components/StaminaBar";
 import "./App.css";
 
@@ -18,6 +18,7 @@ export type Message = {
 function App() {
     const [inventoryHotbarItems, setInventoryHotbarItems] = useState<Array<Storable | null>>([]);
     const [inventoryRestItems, setInventoryRestItems] = useState<Array<Storable | null>>([]);
+    const [craftIngridientsItems, setCraftIngridientsItems] = useState<Array<Storable | null>>([]);
     const [playerStamina, setPlayerStamina] = useState(100);
 
     //  References to the PhaserGame component (game and scene are exposed)
@@ -25,8 +26,9 @@ function App() {
 
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Phaser.Scene) => {
-        setInventoryHotbarItems((scene as Game).getInventoryItems(true));
-        setInventoryRestItems((scene as Game).getInventoryItems(false));
+        setInventoryHotbarItems((scene as Game).getPlayerInventoryItems('hotbar'));
+        setInventoryRestItems((scene as Game).getPlayerInventoryItems('rest'));
+        setCraftIngridientsItems((scene as Game).getPlayerInventoryItems('craftIngridients'));
     };
 
  
@@ -49,12 +51,22 @@ function App() {
         }
     };
 
+    const moveStorableItem = (props: MoveStorableProps) => {
+        if (phaserRef.current) {
+            const scene = phaserRef.current.scene as Game;
+            if (scene) {
+                scene.moveInventoryItem(props);
+            }
+        }
+    };
+
     useEffect(() => {
         EventBus.on("on-character-inventory-update", () => {
             const scene = phaserRef?.current?.scene as Game;
             if(scene) {
-                setInventoryHotbarItems((scene as Game).getInventoryItems(true));
-                setInventoryRestItems((scene as Game).getInventoryItems(false));
+                setInventoryHotbarItems((scene as Game).getPlayerInventoryItems('hotbar'));
+                setInventoryRestItems((scene as Game).getPlayerInventoryItems('rest'));
+                setCraftIngridientsItems((scene as Game).getPlayerInventoryItems('craftIngridients'));
             }
         });
 
@@ -84,7 +96,7 @@ function App() {
                 <StaminaBar stamina={playerStamina} />
             </div>
             <ChatWidget />
-            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} arrangeInventoryItem={arrangeInventoryItem}/>
+            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} craftIngridientsItems={craftIngridientsItems} arrangeInventoryItem={arrangeInventoryItem} moveStorableItem={moveStorableItem}/>
         </div>
     );
 }

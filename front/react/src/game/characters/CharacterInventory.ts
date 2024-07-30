@@ -5,7 +5,7 @@ import { ObjectId } from "../core/types";
 
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
-    private craftIngridients: Array<Storable | null> = [];
+    private craftIngridients: Array<Storable | null> = Array(9);
     private inventorySize = 24;
     private hotbarSize = 5;
     constructor() {}
@@ -71,6 +71,13 @@ export class CharacterInventory {
         EventBus.emit("on-character-inventory-update", {});
     }
 
+    public moveItemInternal(sourceSubSection: 'items' | 'craftIngridients', targetSubSection: 'items' | 'craftIngridients', sourceItemId: number, targetKey: number) {
+        const itemIndex = this[sourceSubSection].findIndex((x) => x?.id === sourceItemId);
+        this[targetSubSection][targetKey] = this[sourceSubSection][itemIndex];
+        this[sourceSubSection][itemIndex] = null;
+        EventBus.emit("on-character-inventory-update", {});
+    }
+
     private getItem(itemObjectId: ObjectId) {
         return this.items.find((x) => x?.objectId === itemObjectId);
     }
@@ -98,7 +105,7 @@ export class CharacterInventory {
     public getCraftIngridients() {
         const ret: Array<Storable | null> = [];
         for (let i =  0; i < this.craftIngridients.length; i++) {
-            ret.push(this.items[i]);
+            ret.push(this.craftIngridients[i]);
         }
         return ret;
     }
