@@ -1279,6 +1279,18 @@ export const Inventory = (props: InventoryProps) => {
                                 <div className="items__container">
                                     <div className="item__container" />
                                 </div>
+
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                                
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                                
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
                             </div>
                         
                             {/* <h2 className="farm__name">Title Farm</h2>
