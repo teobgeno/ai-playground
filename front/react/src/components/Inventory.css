@@ -515,7 +515,7 @@
   .menu__content__inventory .inventory--hotbar,
   .menu__content__inventory .inventory--rows {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     row-gap: 0.3125rem;
   }
   .menu__content__inventory .inventory--hotbar {
@@ -617,4 +617,13 @@
   }
   .menu__content__info .info__farm__container .pets__info img {
     height: 50px;
+  }
+
+  .crafting-grid{
+    display: grid;
+	grid-template-rows: repeat(3, minmax(70px, 1fr));
+	grid-template-columns: repeat(3, minmax(70px, 1fr));
+	gap: 0;
+	width: 100%;
+	height: 100%;
   }

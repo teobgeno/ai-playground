@@ -426,7 +426,6 @@ export class Game extends Scene {
             const convId = await this.chatManager.initConversation([params, this.hero]);
             this.chatManager.startConversation(convId);
         }
-      
     }
 
     async emitEvent(event: string, params : any) {

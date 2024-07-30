@@ -1103,6 +1103,10 @@ export const Inventory = (props: InventoryProps) => {
                         </div>
                     </div>
                     <div className="menu__content__info">
+
+
+
+                        
                         <div className="player__info__container">
                             <div className="player__container">
                                 <div>
@@ -1249,7 +1253,35 @@ export const Inventory = (props: InventoryProps) => {
                             <h2 className="player__name">Farmer</h2>
                         </div>
                         <div className="info__farm__container">
-                            <h2 className="farm__name">Title Farm</h2>
+                            {/* Crafting */}
+
+                            <div className="crafting-grid">
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+
+                                
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                                
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                                
+                                <div className="items__container">
+                                    <div className="item__container" />
+                                </div>
+                            </div>
+                        
+                            {/* <h2 className="farm__name">Title Farm</h2>
                             <p className="farm__funds">
                                 Current Funds: 6,233,124g
                             </p>
@@ -1273,8 +1305,13 @@ export const Inventory = (props: InventoryProps) => {
                                     />
                                     <h2>Horse</h2>
                                 </div>
-                            </div>
+                            </div> */}
+
+
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
