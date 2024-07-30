@@ -5,7 +5,7 @@ import { ObjectId } from "../core/types";
 
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
-    private craftItems: Array<Storable | null> = [];
+    private craftIngridients: Array<Storable | null> = [];
     private inventorySize = 24;
     private hotbarSize = 5;
     constructor() {}
@@ -64,6 +64,13 @@ export class CharacterInventory {
         EventBus.emit("on-character-inventory-update", {});
     }
 
+    public addCraftItem(itemId: number, inventoryKey: number) {
+        const itemIndex = this.items.findIndex((x) => x?.id === itemId);
+        this.craftIngridients[inventoryKey] = this.items[itemIndex];
+        this.items[itemIndex] = null;
+        EventBus.emit("on-character-inventory-update", {});
+    }
+
     private getItem(itemObjectId: ObjectId) {
         return this.items.find((x) => x?.objectId === itemObjectId);
     }
@@ -77,8 +84,6 @@ export class CharacterInventory {
         for (let i = 0; i < this.hotbarSize; i++) {
             ret.push(this.items[i]);
         }
-        console.log('hotbar');
-        console.log(ret)
         return ret;
     }
 
@@ -87,8 +92,14 @@ export class CharacterInventory {
         for (let i =  this.hotbarSize; i < this.inventorySize; i++) {
             ret.push(this.items[i]);
         }
-        console.log('rest');
-        console.log(ret)
+        return ret;
+    }
+
+    public getCraftIngridients() {
+        const ret: Array<Storable | null> = [];
+        for (let i =  0; i < this.craftIngridients.length; i++) {
+            ret.push(this.items[i]);
+        }
         return ret;
     }
 
