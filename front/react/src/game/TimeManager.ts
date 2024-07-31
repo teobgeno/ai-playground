@@ -1,26 +1,34 @@
 export class TimeManager {
     private gameStartTime: number; 
     private scaleFactor: number;
-    private startTimeDifference: number;
+    private initDate: number;
+    private gameCurrentTimestamp: number
+
     constructor() {
         this.gameStartTime = Date.now();
-        this.scaleFactor = 20;
-        const desiredStartTime = new Date('2024-07-31T10:00:00');
-       
-        this.startTimeDifference = desiredStartTime.getTime();
-        console.log(this.startTimeDifference)
+        this.scaleFactor = 1000;
+        const initDate = new Date(Date.UTC(2024, 6, 31, 10, 30, 0));
+        this.initDate = initDate.getTime();
+
     }
     public update() {
-      
+    
         const currentTime = Date.now();
         const elapsedTimeRealTime = currentTime - this.gameStartTime;
-        const elapsedTimeGameTime = (elapsedTimeRealTime + this.startTimeDifference) * this.scaleFactor;
+        this.gameCurrentTimestamp = this.initDate + (elapsedTimeRealTime * this.scaleFactor);
       
-        const hours = Math.floor(elapsedTimeGameTime / 3600000) % 24;
-        const minutes = Math.floor((elapsedTimeGameTime % 3600000) / 60000) % 60;
-        const seconds = Math.floor((elapsedTimeGameTime % 60000) / 1000) % 60;
-      
+        const hour = Math.floor(this.gameCurrentTimestamp / 3600000) % 24;
+        const minute = Math.floor((this.gameCurrentTimestamp % 3600000) / 60000) % 60;
+        const second = Math.floor((this.gameCurrentTimestamp % 60000) / 1000) % 60;
+        
+        // console.log(new Date(elapsedTimeGameTime).getUTCDate())
+        // console.log(new Date(elapsedTimeGameTime).getUTCMonth())
+        // get hours new Date(elapsedTimeGameTime).getUTCHours()
         // Display in HH:MM:SS format
-        //console.log(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+        //console.log(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`);
+    }
+
+    public getCurrentTimestamp() {
+        return this.gameCurrentTimestamp;
     }
 }

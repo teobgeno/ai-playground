@@ -1,4 +1,6 @@
+import { TimeManager } from "../TimeManager";
 export class DayNight extends Phaser.GameObjects.Rectangle {
+
     readonly night: Phaser.Display.Color = new Phaser.Display.Color(0, 80, 200);
     readonly morning: Phaser.Display.Color = new Phaser.Display.Color(150, 100, 100);
     readonly noon: Phaser.Display.Color = new Phaser.Display.Color(255, 255, 255);
@@ -7,11 +9,16 @@ export class DayNight extends Phaser.GameObjects.Rectangle {
     readonly cutoff1: number = 0.5;
     readonly cutoff2: number = 0.65;
     readonly cutoff3: number = 0.85;
+
+    private timeManager:TimeManager
+
   
-    constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
+    constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, timeManager: TimeManager) {
       super(scene, x, y, width, height, 0xffffff, 0.4);
+      this.timeManager = timeManager;
       scene.add.existing(this);
       this.setBlendMode(Phaser.BlendModes.MULTIPLY);
+      
     }
   
     update(x: number, y: number) {
