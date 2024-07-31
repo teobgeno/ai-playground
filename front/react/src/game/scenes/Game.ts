@@ -27,7 +27,7 @@ import { HarvestTask } from "../actions/HarvestTask";
 import { CursorType } from "../cursors/types";
 import { MapObject, ObjectId, SceneProps } from "../core/types";
 
-import { MoveStorableProps } from "../../components/Inventory";
+import { MoveStorableProps } from "../../components/types";
 
 
 export class Game extends Scene {
@@ -394,18 +394,6 @@ export class Game extends Scene {
         }
     }
 
-    // getHotbarItems() {
-    //     return this.hero.getInventory().getHotbarItems();
-    // }
-
-    // getInventoryItems(hotbar: boolean) {
-    //     if(hotbar) {
-    //         return this.hero.getInventory().getHotbarItems();
-    //     } else {
-    //         return this.hero.getInventory().getRestItems()
-    //     }
-    // }
-
     getPlayerInventoryItems(section: string) {
         switch(section) {
             case 'hotbar':
@@ -420,10 +408,6 @@ export class Game extends Scene {
 
     moveInventoryItem(props: MoveStorableProps) {
         this.hero.getInventory().moveItemInternal(props.sourceSubSection, props.targetSubSection, props.sourceId, props.targetKey)
-    }
-
-    arrangeInventoryItem(itemId: number, inventoryKey:number) {
-        this.hero.getInventory().arrangeItem(itemId, inventoryKey)
     }
 
     async addPlayerTask(task: string, params : any) {

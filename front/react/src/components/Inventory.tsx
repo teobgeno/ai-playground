@@ -1,22 +1,15 @@
 import { useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus";
 import { Storable } from "../game/items/types";
+import { MoveStorableProps, StorageSections, StorageSubSections } from "./types";
 import "./Inventory.css";
 
-export type MoveStorableProps = {
-    sourceSection : string;
-    sourceSubSection : string
-    sourceId : number
-    targetSection : string;
-    targetSubSection : string
-    targetKey : number
-}
+
 
 export type InventoryProps = {
     hotbarItems: Array<Storable | null>;
     restItems: Array<Storable | null>;
     craftIngridientsItems: Array<Storable | null>;
-    arrangeInventoryItem: (itemId: number, inventoryKey:number) => void;
     moveStorableItem: (props: MoveStorableProps) => void;
 };
 
@@ -50,10 +43,11 @@ export const Inventory = (props: InventoryProps) => {
         let beingDragged :  HTMLElement | null;
 
         function dragStart(e:Event) {
+            console.log(e)
             beingDragged = e.target as HTMLElement
             const img = new Image();
             img.src =
-                "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
+            beingDragged.getElementsByTagName('img')[0].src;
             (e as DragEvent).dataTransfer?.setDragImage(img, 0, 0);
         }
 
@@ -71,13 +65,13 @@ export const Inventory = (props: InventoryProps) => {
             // console.log('target')
             // console.log(e.target?.dataset)
             //props.arrangeInventoryItem(Number(beingDragged?.dataset.id), Number(e.target?.dataset.key));
-
+            
             props.moveStorableItem({
-                sourceSection : beingDragged?.dataset.section || '',
-                sourceSubSection : beingDragged?.dataset.subsection || '',
+                sourceSection : (beingDragged?.dataset.section as StorageSections) || '',
+                sourceSubSection : (beingDragged?.dataset.subsection as StorageSubSections) || '',
                 sourceId : Number(beingDragged?.dataset.id) || 0,
-                targetSection : e.target?.dataset.section  || '',
-                targetSubSection : e.target?.dataset.subsection || '',
+                targetSection : (e.target?.dataset.section as StorageSections)  || '',
+                targetSubSection : (e.target?.dataset.subsection as StorageSubSections) || '',
                 targetKey : Number(e.target?.dataset.key) || 0
             })
         }

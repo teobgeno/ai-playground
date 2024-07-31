@@ -5,8 +5,9 @@ import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
 import { Hotbar } from "./components/Hotbar";
-import { Inventory, MoveStorableProps } from "./components/Inventory";
+import { Inventory } from "./components/Inventory";
 import { StaminaBar } from "./components/StaminaBar";
+import { MoveStorableProps } from "./components/types";
 import "./App.css";
 
 export type Message = {
@@ -38,15 +39,6 @@ function App() {
             const scene = phaserRef.current.scene as Game;
             if (scene) {
                 scene.setActiveItem(item);
-            }
-        }
-    };
-
-    const arrangeInventoryItem = (itemId: number, inventoryKey:number) => {
-        if (phaserRef.current) {
-            const scene = phaserRef.current.scene as Game;
-            if (scene) {
-                scene.arrangeInventoryItem(itemId, inventoryKey);
             }
         }
     };
@@ -96,7 +88,7 @@ function App() {
                 <StaminaBar stamina={playerStamina} />
             </div>
             <ChatWidget />
-            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} craftIngridientsItems={craftIngridientsItems} arrangeInventoryItem={arrangeInventoryItem} moveStorableItem={moveStorableItem}/>
+            <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} craftIngridientsItems={craftIngridientsItems} moveStorableItem={moveStorableItem}/>
         </div>
     );
 }

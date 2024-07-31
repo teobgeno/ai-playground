@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { InventoryAction } from "./types";
 import { Storable } from "../items/types";
 import { ObjectId } from "../core/types";
+import { StorageSubSections } from "../../components/types";
 
 export class CharacterInventory {
     private items: Array<Storable | null> = [];
@@ -57,21 +58,7 @@ export class CharacterInventory {
         }
     }
 
-    public arrangeItem(itemId: number, inventoryKey: number) {
-        const itemIndex = this.items.findIndex((x) => x?.id === itemId);
-        this.items[inventoryKey] = this.items[itemIndex];
-        this.items[itemIndex] = null;
-        EventBus.emit("on-character-inventory-update", {});
-    }
-
-    public addCraftItem(itemId: number, inventoryKey: number) {
-        const itemIndex = this.items.findIndex((x) => x?.id === itemId);
-        this.craftIngridients[inventoryKey] = this.items[itemIndex];
-        this.items[itemIndex] = null;
-        EventBus.emit("on-character-inventory-update", {});
-    }
-
-    public moveItemInternal(sourceSubSection: 'items' | 'craftIngridients', targetSubSection: 'items' | 'craftIngridients', sourceItemId: number, targetKey: number) {
+    public moveItemInternal(sourceSubSection: StorageSubSections, targetSubSection: StorageSubSections, sourceItemId: number, targetKey: number) {
         const itemIndex = this[sourceSubSection].findIndex((x) => x?.id === sourceItemId);
         this[targetSubSection][targetKey] = this[sourceSubSection][itemIndex];
         this[sourceSubSection][itemIndex] = null;
