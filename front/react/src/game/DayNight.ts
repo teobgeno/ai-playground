@@ -23,35 +23,36 @@ export class DayNight extends Phaser.GameObjects.Rectangle {
     }
   
     update(x: number, y: number) {
-      this.timeManager.getCurrentStartOfDay()
-  
+      
+      
+      const diffMins = Math.round((((this.timeManager.getCurrentTimestamp() - this.timeManager.getCurrentStartOfDay()) % 86400000) % 3600000) / 60000);
     //   const gameTime = moment(this.scene.game.registry.get('gameTime')).utc();
     //   const dayStart = gameTime.clone().startOf('day');
-    //   let diff = gameTime.diff(dayStart, 'minutes') / 1440;
-  
+      let diff = diffMins / 1440;
+      console.log(diffMins)
     //   const beginning = diff;
   
-      //let start, end;
-    //   if (diff < this.cutoff1) {
-    //     start = this.night;
-    //     end = this.morning;
-    //     diff = (diff / this.cutoff1);
-    //   } else if (diff < this.cutoff2) {
-    //     start = this.morning;
-    //     end = this.noon;
-    //     diff = (diff - this.cutoff1) / (this.cutoff2 - this.cutoff1);
-    //   } else if (diff < this.cutoff3) {
-    //     start = this.noon;
-    //     end = this.sunset;
-    //     diff = (diff - this.cutoff2) / (this.cutoff3 - this.cutoff2);
-    //   } else {
-    //     start = this.sunset;
-    //     end = this.night;
-    //     diff = (diff - this.cutoff3) / (1 - this.cutoff3);
-    //   }
-      const start = this.sunset;
-      const end = this.night;
-      const diff = (18 - this.cutoff2) / (this.cutoff3 - this.cutoff2)
+      let start, end;
+      if (diff < this.cutoff1) {
+        start = this.night;
+        end = this.morning;
+        diff = (diff / this.cutoff1);
+      } else if (diff < this.cutoff2) {
+        start = this.morning;
+        end = this.noon;
+        diff = (diff - this.cutoff1) / (this.cutoff2 - this.cutoff1);
+      } else if (diff < this.cutoff3) {
+        start = this.noon;
+        end = this.sunset;
+        diff = (diff - this.cutoff2) / (this.cutoff3 - this.cutoff2);
+      } else {
+        start = this.sunset;
+        end = this.night;
+        diff = (diff - this.cutoff3) / (1 - this.cutoff3);
+      }
+      // const start = this.sunset;
+      // const end = this.night;
+      // const diff = (18 - this.cutoff2) / (this.cutoff3 - this.cutoff2)
       const color = Phaser.Display.Color.Interpolate.ColorWithColor(start, end, 1, diff);
       this.fillColor = Phaser.Display.Color.GetColor(color.r, color.g, color.b);
       this.setPosition(x, y);

@@ -6,10 +6,8 @@ export class TimeManager {
 
     constructor() {
         this.gameStartTime = Date.now();
-        this.scaleFactor = 1000;
-        const initDate = new Date(Date.UTC(2024, 6, 31, 10, 30, 0));
-        this.initDate = initDate.getTime();
-
+        this.scaleFactor = 100;
+        this.initDate = Date.UTC(2024, 6, 31, 10, 30, 0);
     }
     public update() {
     
@@ -34,8 +32,6 @@ export class TimeManager {
 
     public getCurrentStartOfDay() {
         const currentDate = new Date(this.gameCurrentTimestamp);
-        const t = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0))
-        console.log(t.getTime())
-        return new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0))
+        return Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0)
     }
 }
