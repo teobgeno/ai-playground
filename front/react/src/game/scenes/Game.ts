@@ -10,6 +10,7 @@ import { TimeManager } from "../TimeManager";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
 import { MapManager } from "../MapManager";
+import { DayNight } from "../DayNight";
 
 import { InventoryItem } from "../items/InventoryItem"
 import { Storable } from "../items/types";
@@ -50,6 +51,7 @@ export class Game extends Scene {
     private mapManager: MapManager;
     private timeManager: TimeManager;
     private collideObjects:Map<string, boolean>;
+    private dayNight: DayNight;
     constructor() {
         super("Game");
     }
@@ -114,7 +116,9 @@ export class Game extends Scene {
         }
 
         this.timeManager = new TimeManager()
-       
+
+        this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
+
         EventBus.emit("current-scene-ready", this);
     }
 
@@ -382,6 +386,7 @@ export class Game extends Scene {
             }
         }
         this.timeManager.update();
+        this.dayNight.update(0, 0);
     }
 
     setActiveItem(item: Storable) {

@@ -31,4 +31,11 @@ export class TimeManager {
     public getCurrentTimestamp() {
         return this.gameCurrentTimestamp;
     }
+
+    public getCurrentStartOfDay() {
+        const currentDate = new Date(this.gameCurrentTimestamp);
+        const t = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0))
+        console.log(t.getTime())
+        return new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0))
+    }
 }

@@ -12,16 +12,19 @@ export class DayNight extends Phaser.GameObjects.Rectangle {
 
     private timeManager:TimeManager
 
-  
     constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, timeManager: TimeManager) {
       super(scene, x, y, width, height, 0xffffff, 0.4);
       this.timeManager = timeManager;
       scene.add.existing(this);
+      this.setAlpha(1);
+      this.setDepth(4);
       this.setBlendMode(Phaser.BlendModes.MULTIPLY);
       
     }
   
     update(x: number, y: number) {
+      this.timeManager.getCurrentStartOfDay()
+  
     //   const gameTime = moment(this.scene.game.registry.get('gameTime')).utc();
     //   const dayStart = gameTime.clone().startOf('day');
     //   let diff = gameTime.diff(dayStart, 'minutes') / 1440;
