@@ -1,4 +1,4 @@
-import { TimeManager } from "../TimeManager";
+import { TimeManager } from "./TimeManager";
 export class DayNight extends Phaser.GameObjects.Rectangle {
 
     readonly night: Phaser.Display.Color = new Phaser.Display.Color(0, 80, 200);
