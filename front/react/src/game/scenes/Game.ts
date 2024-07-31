@@ -6,6 +6,7 @@ import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 
+import { TimeManager } from "../TimeManager";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager } from "../ChatManager";
 import { MapManager } from "../MapManager";
@@ -47,6 +48,7 @@ export class Game extends Scene {
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
     private mapManager: MapManager;
+    private timeManager: TimeManager;
     private collideObjects:Map<string, boolean>;
     constructor() {
         super("Game");
@@ -110,6 +112,8 @@ export class Game extends Scene {
         if(props.map == undefined || props.map ==='farm') {
             this.test();
         }
+
+        this.timeManager = new TimeManager()
        
         EventBus.emit("current-scene-ready", this);
     }
@@ -371,11 +375,13 @@ export class Game extends Scene {
         for (const [, character] of this.charactersMap) {
             character.update(delta);
         }
+
         for (const item of this.mapManager.getMapObjects()) {
             if (typeof item?.update !== "undefined") { 
                 item.update(time);
             }
         }
+        this.timeManager.update();
     }
 
     setActiveItem(item: Storable) {
