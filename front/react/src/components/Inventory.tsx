@@ -51,8 +51,8 @@ export const Inventory = (props: InventoryProps) => {
             (e as DragEvent).dataTransfer?.setDragImage(img, 0, 0);
         }
 
-        function dragDrop(e) {
-            if (e.target.tagName === "IMG") {
+        function dragDrop(e:Event) {
+            if ((e.target as HTMLElement).tagName === "IMG") {
                 return;
             }
             // console.log(beingDragged?.dataset.id)
@@ -70,9 +70,9 @@ export const Inventory = (props: InventoryProps) => {
                 sourceSection : (beingDragged?.dataset.section as StorageSections) || '',
                 sourceSubSection : (beingDragged?.dataset.subsection as StorageSubSections) || '',
                 sourceId : Number(beingDragged?.dataset.id) || 0,
-                targetSection : (e.target?.dataset.section as StorageSections)  || '',
-                targetSubSection : (e.target?.dataset.subsection as StorageSubSections) || '',
-                targetKey : Number(e.target?.dataset.key) || 0
+                targetSection : ((e.target as HTMLElement)?.dataset.section as StorageSections)  || '',
+                targetSubSection : ((e.target as HTMLElement)?.dataset.subsection as StorageSubSections) || '',
+                targetKey : Number((e.target as HTMLElement)?.dataset.key) || 0
             })
         }
 
