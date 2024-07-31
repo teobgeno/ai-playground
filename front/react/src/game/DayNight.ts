@@ -23,29 +23,40 @@ export class DayNight extends Phaser.GameObjects.Rectangle {
     }
   
     update(x: number, y: number) {
-      
-      
-      const diffMins = Math.round((((this.timeManager.getCurrentTimestamp() - this.timeManager.getCurrentStartOfDay()) % 86400000) % 3600000) / 60000);
+      // const dateS = new Date(this.timeManager.getCurrentStartOfDay());
+      const dateC = new Date(this.timeManager.getCurrentTimestamp());
+      // console.log(dateS.getUTCFullYear() + ' - ' + dateS.getMonth() + ' - ' + dateS.getDate() + ' - ' + dateS.getUTCHours() + ' - ' + dateS.getMinutes())
+      console.log(dateC.getUTCFullYear() + ' - ' + dateC.getMonth() + ' - ' + dateC.getDate() + ' - ' + dateC.getUTCHours())
+      // const diffMins = Math.round((((this.timeManager.getCurrentTimestamp() - this.timeManager.getCurrentStartOfDay()) % 86400000) % 3600000) / 60000);
     //   const gameTime = moment(this.scene.game.registry.get('gameTime')).utc();
     //   const dayStart = gameTime.clone().startOf('day');
-      let diff = diffMins / 1440;
-      console.log(diffMins)
+
+    let diffc =(this.timeManager.getCurrentTimestamp() - this.timeManager.getCurrentStartOfDay()) / 1000;
+    diffc /= 60;
+    diffc = Math. abs(Math. round(diffc))
+
+      let diff = diffc / 1440;
+      //console.log(diff)
     //   const beginning = diff;
   
       let start, end;
       if (diff < this.cutoff1) {
+        console.log('morning')
         start = this.night;
         end = this.morning;
         diff = (diff / this.cutoff1);
       } else if (diff < this.cutoff2) {
+        console.log('noon')
         start = this.morning;
         end = this.noon;
         diff = (diff - this.cutoff1) / (this.cutoff2 - this.cutoff1);
       } else if (diff < this.cutoff3) {
+        console.log('afternoon')
         start = this.noon;
         end = this.sunset;
         diff = (diff - this.cutoff2) / (this.cutoff3 - this.cutoff2);
       } else {
+        console.log('night')
         start = this.sunset;
         end = this.night;
         diff = (diff - this.cutoff3) / (1 - this.cutoff3);

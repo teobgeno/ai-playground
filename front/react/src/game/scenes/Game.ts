@@ -117,7 +117,7 @@ export class Game extends Scene {
 
         this.timeManager = new TimeManager()
 
-        this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
+        //this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
 
         EventBus.emit("current-scene-ready", this);
     }
@@ -386,7 +386,7 @@ export class Game extends Scene {
             }
         }
         this.timeManager.update();
-        this.dayNight.update(0, 0);
+        //this.dayNight.update(0, 0);
     }
 
     setActiveItem(item: Storable) {
