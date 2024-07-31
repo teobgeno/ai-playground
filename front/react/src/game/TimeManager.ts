@@ -5,12 +5,13 @@ export class TimeManager {
     constructor() {
         this.gameStartTime = Date.now();
         this.scaleFactor = 20;
-        const desiredStartTime = new Date('2024-07-31T09:00:00');
-        this.startTimeDifference = this.gameStartTime - desiredStartTime.getTime();
-        this.startTimeDifference = 0;
+        const desiredStartTime = new Date('2024-07-31T10:00:00');
+       
+        this.startTimeDifference = desiredStartTime.getTime();
+        console.log(this.startTimeDifference)
     }
     public update() {
-        return;
+      
         const currentTime = Date.now();
         const elapsedTimeRealTime = currentTime - this.gameStartTime;
         const elapsedTimeGameTime = (elapsedTimeRealTime + this.startTimeDifference) * this.scaleFactor;
