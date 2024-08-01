@@ -78,3 +78,24 @@ item.getDestruct().addResource(resource)
 - seed task remove item from inventory
 - replace weeding with Tillage
 - diagonal movement ( https://annoraaq.github.io/grid-engine/examples/8-dir-crowd/ )
+
+
+
+
+function matchRecipies(
+
+    ingridients[object_id]=amount
+               [object_id]=amount
+) {
+    recipes[
+        {
+            id
+            ingridients[object_id]=amount_nedded
+                       [object_id]=amount_nedded
+            
+            item_result = ()=>{call_to_func at create item, return storable}
+        }
+
+    ]
+}
+

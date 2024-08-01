@@ -13,7 +13,7 @@ export class DayNight extends Phaser.GameObjects.Rectangle {
     private timeManager:TimeManager
 
     constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, timeManager: TimeManager) {
-      super(scene, x, y, width, height, 0xffffff, 0.4);
+      super(scene, x, y, width, height, 0xffffff, 1);
       this.timeManager = timeManager;
       scene.add.existing(this);
       this.setAlpha(1);

@@ -6,7 +6,7 @@ export class TimeManager {
 
     constructor() {
         this.gameStartTime = Date.now();
-        this.scaleFactor = 10000;
+        this.scaleFactor = 1000;
         this.initDate = Date.UTC(2024, 6, 31, 20, 30, 0);
     }
     public update() {
