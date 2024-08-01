@@ -90,12 +90,14 @@ function matchRecipies(
     recipes[
         {
             id
-            ingridients[object_id]=amount_nedded
-                       [object_id]=amount_nedded
+            ingridients[object_id]=amount_required
+                       [object_id]=amount_required
             
             item_result = ()=>{call_to_func at create item, return storable}
         }
 
     ]
+
+    return [recipes]
 }
 
