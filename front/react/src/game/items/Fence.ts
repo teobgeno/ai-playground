@@ -43,6 +43,9 @@ export class Fence extends BaseItem implements MapObject {
         ));
         this.sprites[0].setDepth(2);
         this.destruct = new DestructItem();
+        this.destruct.setDestructionResult((resources) => {
+            return this.destructItem(resources);
+        });
         this.isDoor = true;
 
         this.addSriteListeners();
@@ -121,19 +124,30 @@ export class Fence extends BaseItem implements MapObject {
         this.toggleCollisions(false);
         this.removeMapObject();
         this.sprites[0].destroy();
-    }
-
-    public getDestruct() {
-        return this.destruct.getResources((resources) => {
-            for (const resource of resources) {
-                const rand =  Math.floor(Math.random() * (6 - 1) + 1);
-                resource.getInventory().setAmount(rand);
-            }
-            return resources;
-        });
-    }
-
+    } 
+    
     public getSprite() {
         return this.sprites[0];
     }
+
+    public getDestruct() {
+        return this.destruct;
+        // return this.destruct.getResources((resources) => {
+        //     for (const resource of resources) {
+        //         const rand =  Math.floor(Math.random() * (6 - 1) + 1);
+        //         resource.getInventory().setAmount(rand);
+        //     }
+        //     return resources;
+        // });
+    }
+
+    public destructItem(resources: Array<GenericItem>) {
+        for (const resource of resources) {
+            const rand = Math.floor(Math.random() * (6 - 1) + 1);
+            resource.getInventory().setAmount(rand);
+        }
+        return resources;
+    }
+
+   
 }
