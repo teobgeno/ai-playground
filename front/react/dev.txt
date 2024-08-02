@@ -34,8 +34,9 @@ https://github.com/phaserjs/examples/blob/master/public/src/physics/matterjs/bul
 -----  sprite interiors -------
 https://gif-superretroworld.itch.io/interior-pack ( Super_Retro_World_Interior_pack_week42 )
 
------  chatgpt alternatives -------
+-----  chatgpt alternatives or self host-------
 https://github.com/joonspk-research/generative_agents/issues/115
+https://medium.com/@haribaskar.dhanabalan/airllm-unleashed-2e32dae74c3d
 
 - deselect toolbar with different button
 - nearby tile map utils
