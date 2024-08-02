@@ -7,11 +7,6 @@ import { Seed } from "../farm/Seed";
 
 export class ItemFactory {
 
-
-    constructor() {
-  
-    }
-
     public static createFencePart(amount: number) {
         const fencePart = new GenericItem(ObjectId.Fence, 'Fence', 
             new InventoryItem().setIsStackable(true)
