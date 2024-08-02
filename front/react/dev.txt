@@ -38,12 +38,19 @@ https://gif-superretroworld.itch.io/interior-pack ( Super_Retro_World_Interior_p
 https://github.com/joonspk-research/generative_agents/issues/115
 https://medium.com/@haribaskar.dhanabalan/airllm-unleashed-2e32dae74c3d
 
+
+-----  map chunks and size -------
+https://www.dynetisgames.com/2018/02/24/manage-big-maps-phaser-3/
+https://steamcommunity.com/sharedfiles/filedetails/?id=911484377
+https://stardew.info/planner/#
+https://www.reddit.com/r/StardewValley/comments/n4vb35/i_made_a_stardew_valley_map/#lightbox
+https://steamuserimages-a.akamaihd.net/ugc/547557414802664989/2437A282C43F60554DE44956A3463424C8426947/?imw=1024&imh=829&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true
+
 - deselect toolbar with different button
 - nearby tile map utils
 - seed cursor corn - tomato cursor must be on
 - water can task
 - chat task
-- set growth for crop based on time from clock and not from phaser
 - tasks remove timeout and set interval. On each interval check for cancel status
 - land do not set interactive when crop ready and there is a selected cursor. 
 - at cursors remove  
@@ -65,7 +72,7 @@ public setResource(resource: GenericItem) {
 item.getDestruct().addResource(resource)
 
 
-- when player plot land (animation) lock player movement with wasd. Set state machine
+
 
 - prompt helpers to return llm messages with user role and system role.
 - check eastern world prompts.
@@ -73,6 +80,8 @@ item.getDestruct().addResource(resource)
 - all game events emit from scene game. Check chatManager.ts
 - on stamina decrease calculate char speed this.gridEngine.setSpeed(this.getIdTag(), 1);
 -------- done -----
+- when player plot land (animation) lock player movement with wasd. Set state machine
+- set growth for crop based on time from clock and not from phaser
 - when pick crop farmLandMap set hasCrop false
 - task abstract class
 - when seed plant add first frame with opacity like land
