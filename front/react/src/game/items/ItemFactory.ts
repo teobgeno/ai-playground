@@ -1,5 +1,4 @@
 import { InventoryItem } from "../items/InventoryItem"
-import { Storable } from "./types";
 import { GenericItem } from "../items/GenericItem";
 import { CursorType } from "../cursors/types";
 import { ObjectId } from "../core/types";
@@ -25,7 +24,7 @@ export class ItemFactory {
     }
 
     public static createCornSeed(amount: number) {
-        
+
         const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
         const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
             new InventoryItem()
