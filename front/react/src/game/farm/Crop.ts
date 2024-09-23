@@ -111,6 +111,43 @@ export class Crop implements MapObject{
         }
         
     }
+
+    public updateGrowNew(time: number, elements: LandElements) {
+        if(elements.water > 0) {
+            if (this.lastTimestamp) {
+                if (
+                    ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
+                    this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
+                ) {
+                    this.lastTimestamp = Utils.getTimeStamp();
+                    let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
+                    if(growthFrame > this.seed.maxGrowthStageFrame) {
+                        growthFrame = this.seed.maxGrowthStageFrame
+                    }
+                    this.seed.currentGrowthStageFrame = growthFrame;
+                    this.updateTile();
+                }
+            } else {
+                this.lastTimestamp = Utils.getTimeStamp();
+                this.initTimestamp =  this.lastTimestamp;
+            }
+        } else {
+            this.lastTimestamp = Utils.getTimeStamp();
+            this.initTimestamp =  this.lastTimestamp;
+        }
+        
+    }
+    
+    private consumeWater(elements: LandElements) {
+        // const weatherPatterns = {
+        //     sunny: new Weather('Sunny', { growthMultiplier: 1.1, waterConsumption: 1.2 }),
+        //     rainy: new Weather('Rainy', { growthMultiplier: 1.2, waterConsumption: 0.8 }),
+        //     stormy: new Weather('Stormy', { growthMultiplier: 0.9, waterConsumption: 1.0 }),
+        //     drought: new Weather('Drought', { growthMultiplier: 0.5, waterConsumption: 2.0 })
+        // };
+    }
+
+
     updateTile() {
         const frame = this.getCurrentGrowthStage();
         this.sprites[0].getSprite().setFrame(frame);

@@ -9,7 +9,11 @@ import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
     public inventory: InventoryItem;
     public crop: GenericItem;
-    public growthStageDuration: number;
+    public baseGrowthRate: number;                  // base value for gowth stage.
+    public growthStageInterval: number;             // growthStageInterval intervals to check for growth
+    public growthStageDuration: number;             //TODO:: delete
+    public currentGrowthStagePercentage: number;    // when 100% go to next level
+    public baseWaterConsumption: number;
     public currentGrowthStageFrame: number;
     public startGrowthStageFrame: number;
     public maxGrowthStageFrame: number;
@@ -36,6 +40,11 @@ export class Seed extends BaseItem implements Storable{
 
     public getInventory() {
         return this.inventory;
+    }
+
+    public setGrowthStageInterval(growthStageInterval: number) {
+        this.growthStageInterval = growthStageInterval;
+        return this;
     }
 
     public setGrowthStageDuration(growthStageDuration: number) {
