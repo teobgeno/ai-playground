@@ -4,9 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from game.deb import test_whatever
 from game.deb import test_action
+from game.deb import test_weather_api
 
-main.init()
-# test_action()
+# main.init()
+test_weather_api()
 
 # def generate_terrain(width, height, scale):
 #     terrain = np.zeros((width, height))
