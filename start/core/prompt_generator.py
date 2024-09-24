@@ -81,12 +81,17 @@ Output format: Output a json of the following format:
 
 
 def generate_focal_points(props):
-    tpl = """
-{props[statements]}
+        tpl = ""
+
+        for statement in props["statements"]:
+                tpl += statement + '\n'
+    
+        tpl += """
 Given only the information above, what are {props[quantity]} most salient high-level questions we can answer about the subjects grounded in the statements?
-1)
+Return in JSON format, where the key is a list of input statements that contributed to your insights and value is your insight. Make the response parseable by python json.loads function. DO NOT escape characters or include "\n" or white space in response.
+'Example: [{insight: "...", statementIds: [1,2]}, {insight: "...", statementIds: [1]}, ...]'
         """
-    return [{'role': 'user', 'content': tpl.format(props=props)}]
+        return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
 

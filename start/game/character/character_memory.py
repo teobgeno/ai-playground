@@ -3,7 +3,7 @@ from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
 # from game.character.cognitive_modules.conversation import Conversation
-from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt
+from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -334,9 +334,10 @@ class CharacterMemory:
         for node in nodes[-1*self.scratch.importance_ele_n:]: 
             statements += node.embedding_key + "\n"
 
-        return ""
+        messages = generate_focal_points({'quantity': n, 'statements': nodes[-1*self.scratch.importance_ele_n:]})
+        print("ok")
+        #insights = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
 
-        #return run_gpt_prompt_focal_pt(persona, statements, n)[0]
 
     
 # "node_545": {
