@@ -8,6 +8,7 @@ from enum import Enum
 from typing import TypedDict
 from typing import List
 from core.db.json_db_manager import JsonDBManager
+from core.prompt_generator import get_relation_prompt,get_utterance_prompt
 from game.llm import LLMProvider
 from core.cache import Cache
 from schema.conversation import *
@@ -100,8 +101,8 @@ class Conversation:
     def get_relationship_memories_with_participant(self, retrieved_memories_str: str, relationship: str = ''):
         
         if relationship == '' :
-            prompt = self.get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
-            messages=[{'role': 'user', 'content': prompt}]
+            messages = get_relation_prompt({'statements': retrieved_memories_str, 'init_person_name': self._init_person.name, 'target_person_name': self._target_person.name})
+            # messages=[{'role': 'user', 'content': prompt}]
             relationship = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
             self.add_relatioship(relationship)
         else:
@@ -158,60 +159,10 @@ class Conversation:
         return utterance
 
     def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
-        prompt = self.get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
-        messages=[{'role': 'user', 'content': prompt}]
+        messages = get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
+        #messages=[{'role': 'user', 'content': prompt}]
         utternace = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return utternace
-    
-    def get_relation_prompt(self, props):
-        tpl = """
-[Statements]
-{props[statements]}\n
-What do you think about {props[target_person_name]}?
-        """
-        #  \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
-        print(tpl.format(props=props))
-        return tpl.format(props=props)
-    
-    def get_utterance_prompt(self, props):
-        query_fragments: List[str] = []
-        tpl = """
-Context for the task:\n
-PART 1.\n
-Here is a brief description of {props[init_person_name]}
-{props[init_person_iis]}
-Here is the memory that is in {props[init_person_name]}'s head:
-{props[init_person_retrieved_memories]}
-PART 2.\n
-Current Location: {props[target_person_name]} Farm\n
-Current Context:
-You are {props[init_person_name]}, and you're currently in a conversation with {props[target_person_name]}.The conversation started at {props[start_date]}. It's now {props[current_date]}.\n
-"""
-        
-        if  len(props["messages"]):
-            tpl +="""
-            Below is the current conversation history between you and {props[target_person_name]}.\n
-            """
-            for message in self._messages:
-                tpl += [e['character'].name for e in self._participants if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
-        else:
-            tpl +="""The conversation has not started yet -- start it!.\n"""
-
-        tpl +="""
----
-Task: Given the above, what should you say to {props[target_person_name]} next in the conversation? And did you end the conversation?
-DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot.
-Output format: Output a json of the following format: 
-{{
-"utterance": "{props[init_person_name]}'s utterance>",
-"Did the conversation end?": "<json Boolean>"
-}}
-"""
-
-        query_fragments.append(tpl.format(props=props))
-
-        print(tpl.format(props=props))
-        return "\n".join(query_fragments)
     
 
     def insert_conversation(self):
