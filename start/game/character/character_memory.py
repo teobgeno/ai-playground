@@ -58,7 +58,6 @@ class CharacterMemory:
         """
         return dot(a, b)/(norm(a)*norm(b))
 
-
     def normalize_dict_floats(self, d, target_min, target_max):
         """
         This function normalizes the float values of a given dictionary 'd' between 
@@ -291,6 +290,53 @@ class CharacterMemory:
     def update_reflect_trigger(self, event_poignancy: int):
         self.scratch.importance_trigger_curr -= event_poignancy
         self.scratch.importance_ele_n += 1
+
+    def reflect(self):
+        if self.reflection_trigger():
+            pass
+
+    def reflection_trigger(self): 
+        """
+        Given the current persona, determine whether the persona should run a 
+        reflection. 
+        
+        Our current implementation checks for whether the sum of the new importance
+        measure has reached the set (hyper-parameter) threshold.
+
+        INPUT: 
+            persona: Current Persona object
+        Output: 
+            True if we are running a new reflection. 
+            False otherwise. 
+        """
+        print (self.scratch.name, "persona.scratch.importance_trigger_curr::", self.scratch.importance_trigger_curr)
+        print (self.scratch.importance_trigger_max)
+
+        if (self.scratch.importance_trigger_curr <= 0 and 
+            [] != self.a_mem.seq_event + self.a_mem.seq_thought): 
+            return True 
+        return False
+    
+    def process_reflect(self):
+        focal_points = self.generate_focal_points(3)
+        retrieved = self.new_retrieve(focal_points)
+
+    def generate_focal_points(self, n=3): 
+       
+        nodes = [[i.last_accessed, i]
+                    for i in self.a_mem.seq_event + self.a_mem.seq_thought
+                    if "idle" not in i.embedding_key]
+
+        nodes = sorted(nodes, key=lambda x: x[0])
+        nodes = [i for created, i in nodes]
+
+        statements = ""
+        for node in nodes[-1*self.scratch.importance_ele_n:]: 
+            statements += node.embedding_key + "\n"
+
+        return ""
+
+        #return run_gpt_prompt_focal_pt(persona, statements, n)[0]
 
     
 # "node_545": {
