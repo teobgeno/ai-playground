@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 from game.deb import test_whatever
 from game.deb import test_action
 from game.deb import test_weather_api
+from game.deb import test_char_reflection
 
 # main.init()
-test_weather_api()
+test_char_reflection()
 
 # def generate_terrain(width, height, scale):
 #     terrain = np.zeros((width, height))

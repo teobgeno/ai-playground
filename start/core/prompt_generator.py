@@ -24,7 +24,9 @@ Conversation:
 {props[conversation_summary]}\n
 Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
         """
+        
     return tpl.format(props=props)
+
 
 
 def get_relation_prompt(self, props):
@@ -57,8 +59,8 @@ You are roleplaying {props[init_person_name]}, and you're currently in a convers
             tpl +="""
             Below is the current conversation history between you and {props[target_person_name]}.\n
             """
-            for message in self._messages:
-                tpl += [e['character'].name for e in self._participants if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+            for message in props["messages"]:
+                tpl += [e['character'].name for e in props["participants"] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
         else:
             tpl +="""The conversation has not started yet -- start it!.\n"""
 
@@ -76,6 +78,15 @@ Output format: Output a json of the following format:
         query_fragments.append(tpl.format(props=props))
         print(tpl.format(props=props))
         return [{'role': 'user', 'content': "\n".join(query_fragments)}]
+
+
+def generate_focal_points(props):
+    tpl = """
+{props[statements]}
+Given only the information above, what are {props[quantity]} most salient high-level questions we can answer about the subjects grounded in the statements?
+1)
+        """
+    return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
 

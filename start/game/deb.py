@@ -4,7 +4,6 @@ import spacy
 from datetime import datetime
 from pprint import pprint
 import configparser
-from core.db.json_db_manager import JsonDBManager
 from core.cache import Cache
 from game.character.character import *
 from game.character.character_memory import CharacterMemory
@@ -18,6 +17,7 @@ from game.map import GameObjects
 from game.map import Sections
 from game.conversation_manager import ConversationManager
 import openmeteo_requests
+from schema.conversation import *
 
 # @@ vars @@
 time_scale = 20
@@ -106,6 +106,17 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     conversation.update_conversation()
     print('Conversation Status:' + str(conversation.status))
     return utterance
+
+def test_char_reflection():
+    parser = configparser.ConfigParser()
+    parser.read("config.ini")
+    api_key = parser.get("OPENAI", "key")
+    db = JsonDBManager()
+    llm = LLMProvider(api_key)
+    char_data = CharacterDef(db.get_record_by_id('characters', 1))
+    character_memory = CharacterMemory(llm, char_data['memory_path'])
+    character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
+    character.memory.reflect()
     
 def test_weather_api():
     # https://open-meteo.com/en/docs#latitude=37.9267&longitude=22.8595&hourly=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m&timezone=auto&forecast_days=1

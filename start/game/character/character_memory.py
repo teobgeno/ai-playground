@@ -293,7 +293,7 @@ class CharacterMemory:
 
     def reflect(self):
         if self.reflection_trigger():
-            pass
+            self.process_reflect()
 
     def reflection_trigger(self): 
         """
@@ -313,18 +313,18 @@ class CharacterMemory:
         print (self.scratch.importance_trigger_max)
 
         if (self.scratch.importance_trigger_curr <= 0 and 
-            [] != self.a_mem.seq_event + self.a_mem.seq_thought): 
+            [] != self.associative.seq_event + self.associative.seq_thought): 
             return True 
-        return False
+        return True
     
     def process_reflect(self):
         focal_points = self.generate_focal_points(3)
-        retrieved = self.new_retrieve(focal_points)
+        #retrieved = self.new_retrieve(focal_points)
 
     def generate_focal_points(self, n=3): 
        
         nodes = [[i.last_accessed, i]
-                    for i in self.a_mem.seq_event + self.a_mem.seq_thought
+                    for i in self.associative.seq_event + self.associative.seq_thought
                     if "idle" not in i.embedding_key]
 
         nodes = sorted(nodes, key=lambda x: x[0])

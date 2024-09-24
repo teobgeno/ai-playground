@@ -159,7 +159,7 @@ class Conversation:
         return utterance
 
     def generate_conversation_message(self, retrieved_memories: str, current_date: datetime):
-        messages = get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'init_person_retrieved_memories': retrieved_memories})
+        messages = get_utterance_prompt({'target_person_name': self._target_person.name, 'init_person_name': self._init_person.name, 'init_person_iis': self._init_person.memory.scratch.get_str_iss(), 'start_date': self._start_date, 'current_date': current_date, 'messages': self._messages, 'participants': self._participants, 'init_person_retrieved_memories': retrieved_memories})
         #messages=[{'role': 'user', 'content': prompt}]
         utternace = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return utternace
