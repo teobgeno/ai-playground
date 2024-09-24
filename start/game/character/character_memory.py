@@ -95,7 +95,6 @@ class CharacterMemory:
                         target_min) / range_val + target_min)
         return d
 
-
     def top_highest_x_values(self, d, x):
         """
         This function takes a dictionary 'd' and an integer 'x' as input, and 
@@ -120,7 +119,6 @@ class CharacterMemory:
                             reverse=True)[:x])
         return top_v
 
-
     def extract_recency(self, nodes):
         """
         Gets the current Persona object and a list of nodes that are in a 
@@ -142,7 +140,6 @@ class CharacterMemory:
             recency_out[node.node_id] = recency_vals[count]
 
         return recency_out
-
 
     def extract_importance(self, nodes):
         """
@@ -284,14 +281,12 @@ class CharacterMemory:
 
         return score
     
-
     def add_coversation_memory(self, props):
         return self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
     def add_event_memory(self, props):
        self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
        self.update_reflect_trigger(props['poignancy'])
-
 
     def update_reflect_trigger(self, event_poignancy: int):
         self.scratch.importance_trigger_curr -= event_poignancy
