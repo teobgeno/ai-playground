@@ -50,7 +50,7 @@ Here is the memory that is in {props[init_person_name]}'s head:
 PART 2.\n
 Current Location: {props[target_person_name]} Farm\n
 Current Context:
-You are {props[init_person_name]}, and you're currently in a conversation with {props[target_person_name]}.The conversation started at {props[start_date]}. It's now {props[current_date]}.\n
+You are roleplaying {props[init_person_name]}, and you're currently in a conversation with {props[target_person_name]}.The conversation started at {props[start_date]}. It's now {props[current_date]}.\n
 """
         
         if  len(props["messages"]):
@@ -76,3 +76,15 @@ Output format: Output a json of the following format:
         query_fragments.append(tpl.format(props=props))
         print(tpl.format(props=props))
         return [{'role': 'user', 'content': "\n".join(query_fragments)}]
+
+
+
+'''
+        ---- Prompts To Check ----
+        Keep responses concise.
+        Do not offer information that is irrelevant to the current conversation.
+        NEVER mention you are an AI language model. You MUST stay in character and respond ONLY as {props[init_person_name]}
+        Be sure to include some detail or question about a previous conversation in your greeting.
+        You've decided to leave the question and would like to politely tell them you're leaving the conversation
+        How would you like to tell them that you're leaving? Your response should be brief and within 200 characters.
+'''

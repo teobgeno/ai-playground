@@ -46,6 +46,12 @@ https://stardew.info/planner/#
 https://www.reddit.com/r/StardewValley/comments/n4vb35/i_made_a_stardew_valley_map/#lightbox
 https://steamuserimages-a.akamaihd.net/ugc/547557414802664989/2437A282C43F60554DE44956A3463424C8426947/?imw=1024&imh=829&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true
 
+-----  game ai python -------
+https://github.com/a16z-infra/ai-town
+https://github.com/mluogh/eastworld/
+
+*** tasks ***
+
 - deselect toolbar with different button
 - nearby tile map utils
 - seed cursor corn - tomato cursor must be on
@@ -91,6 +97,12 @@ item.getDestruct().addResource(resource)
 
 
 
+*** etc ***
+
+----
+check get_guardrail_query, generate_functions_from_actions https://github.com/mluogh/eastworld/blob/main/game/prompt_helpers.py
+check https://github.com/a16z-infra/ai-town/blob/main/convex/agent/conversation.ts for  messages: [role: 'system'....] messages: [role: 'user'....] groups
+-----
 
 function matchRecipies(
 
