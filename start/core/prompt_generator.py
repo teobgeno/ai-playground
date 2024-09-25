@@ -3,8 +3,7 @@ from typing import List
 def get_conversation_summary_prompt(props):
  
         tpl = """
-You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. I would
-like you to summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
 "I," and add if you liked or disliked this interaction.
 Conversation:
          """
@@ -108,8 +107,32 @@ Example: [{{insight: "...", statementIds: [1,2]}}], {{insight: "...", statementI
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
+def generate_planning_thought_on_conversation_prompt(props):
+ 
+        tpl = """
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} needs to remember for future planning, from {props[init_person_name]}'s perspective, in a full sentence.Use first-person pronouns like "I".
+Conversation:
+         """
+        for message in props['messages']:
+                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
 
-'''
+        print(tpl.format(props=props))
+        return tpl.format(props=props)
+
+def generate_memo_on_convo_prompt(props):
+ 
+        tpl = """
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} might have found interesting , from {props[init_person_name]}'s perspective, in a full sentence.Use first-person pronouns like "I".
+Conversation:
+         """
+        for message in props['messages']:
+                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+
+        print(tpl.format(props=props))
+        return tpl.format(props=props)
+
+
+''' 
         ---- Prompts To Check ----
         Keep responses concise.
         Do not offer information that is irrelevant to the current conversation.
