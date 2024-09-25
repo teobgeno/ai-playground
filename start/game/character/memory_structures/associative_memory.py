@@ -12,7 +12,7 @@ import sys
 
 import json
 import datetime
-
+from typing import List
 from core.global_methods import *
 
 
@@ -22,25 +22,25 @@ class ConceptNode:
                  created, expiration,
                  s, p, o,
                  description, embedding_key, poignancy, keywords, filling):
-        self.node_id = node_id
-        self.node_count = node_count
-        self.type_count = type_count
-        self.type = node_type  # thought / event / chat
-        self.depth = depth
+        self.node_id: str = node_id
+        self.node_count: int = node_count
+        self.type_count: int = type_count
+        self.type: str = node_type  # thought / event / chat
+        self.depth: int = depth
 
-        self.created = created
-        self.expiration = expiration
-        self.last_accessed = self.created
+        self.created: datetime = created
+        self.expiration: datetime = expiration
+        self.last_accessed: datetime = self.created
 
-        self.subject = s
-        self.predicate = p
-        self.object = o
+        self.subject: str = s
+        self.predicate: str = p
+        self.object: str = o
 
-        self.description = description
-        self.embedding_key = embedding_key
-        self.poignancy = poignancy
-        self.keywords = keywords
-        self.filling = filling
+        self.description: str = description
+        self.embedding_key: str = embedding_key
+        self.poignancy: int = poignancy
+        self.keywords: List[str] = keywords
+        self.filling: List[str] = filling
 
     def spo_summary(self):
         return (self.subject, self.predicate, self.object)
@@ -50,9 +50,9 @@ class AssociativeMemory:
     def __init__(self, f_saved):
         self.id_to_node = dict()
 
-        self.seq_event = []
-        self.seq_thought = []
-        self.seq_chat = []
+        self.seq_event: List[ConceptNode] = []
+        self.seq_thought: List[ConceptNode] = []
+        self.seq_chat: List[ConceptNode] = []
 
         self.kw_to_event = dict()
         self.kw_to_thought = dict()

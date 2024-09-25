@@ -8,6 +8,7 @@ from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
 from typing import List
+from schema.memory import *
 
 class CharacterMemory:
 
@@ -182,7 +183,7 @@ class CharacterMemory:
 
         return relevance_out
     
-    def new_retrieve(self, focal_points: List[str], n_count=30): 
+    def new_retrieve(self, focal_points: List[FocalPointDef], n_count=30): 
         """
         Given the current persona and focal points (focal points are events or 
         thoughts for which we are retrieving), we retrieve a set of nodes for each
@@ -207,6 +208,7 @@ class CharacterMemory:
             # Getting all nodes from the agent's memory (both thoughts and events) and
             # sorting them by the datetime of creation.
             # You could also imagine getting the raw conversation, but for now. 
+        
             nodes = [[i.last_accessed, i]
                     for i in self.associative.seq_event + self.associative.seq_thought
                     if "idle" not in i.embedding_key]
@@ -309,9 +311,6 @@ class CharacterMemory:
             True if we are running a new reflection. 
             False otherwise. 
         """
-        print (self.scratch.name, "persona.scratch.importance_trigger_curr::", self.scratch.importance_trigger_curr)
-        print (self.scratch.importance_trigger_max)
-
         if (self.scratch.importance_trigger_curr <= 0 and 
             [] != self.associative.seq_event + self.associative.seq_thought): 
             return True 
@@ -319,9 +318,9 @@ class CharacterMemory:
     
     def process_reflect(self):
         focal_points_res = self.generate_focal_points(3)
-        focal_points_list = focal_points_res.strip('][').replace('"', '').split(', ')
+        focal_points_list: List[str] = focal_points_res.strip('][').replace('"', '').split(', ')
 
-        focal_points = []
+        focal_points: List[FocalPointDef] = []
         for focal_point in focal_points_list:
             embed = self._llm.get_embed(focal_point)
             focal_points.append({'text':focal_point, 'embed':embed})
