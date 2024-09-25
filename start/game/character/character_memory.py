@@ -3,7 +3,7 @@ from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
 # from game.character.cognitive_modules.conversation import Conversation
-from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points
+from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points, generate_insights_and_evidence
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -199,7 +199,7 @@ class CharacterMemory:
 
         Example input:
             persona = <persona> object 
-            focal_points = ["How are you?", "Jane is swimming in the pond"]
+            focal_points = [{'text':Jane is swimming in the pond, 'embed':[-0.03697006031870842, -0.010967422276735306, 0.0015322132967412472,....]}]
         """
         # <retrieved> is the main dictionary that we are returning
         retrieved = dict() 
@@ -328,7 +328,25 @@ class CharacterMemory:
         # focal_points=[{'text':relationship, 'embed':embed}]
         retrieved = self.new_retrieve(focal_points)
 
-        print("ok")
+        print("-----------------")
+        for focal_pt, nodes in retrieved.items(): 
+
+            thoughts = generate_insights_and_evidence(nodes, 5)
+
+            # for thought, evidence in thoughts.items(): 
+            #     created = self.scratch.curr_time
+            #     expiration = self.scratch.curr_time + datetime.timedelta(days=30)
+            #     s, p, o = generate_action_event_triple(thought, persona)
+            #     keywords = set([s, p, o])
+            #     thought_poignancy = generate_poig_score(persona, "thought", thought)
+            #     thought_embedding_pair = (thought, get_embedding(thought))
+
+            #     self.associative.add_thought(created, expiration, s, p, o, 
+            #                                 thought, keywords, thought_poignancy, 
+            #                                 thought_embedding_pair, evidence)
+
+
+       
 
     def generate_focal_points(self, n=3): 
        
@@ -339,11 +357,15 @@ class CharacterMemory:
         nodes = sorted(nodes, key=lambda x: x[0])
         nodes = [i for created, i in nodes]
 
-        statements = ""
-        for node in nodes[-1*self.scratch.importance_ele_n:]: 
-            statements += node.embedding_key + "\n"
+        messages = generate_focal_points({'quantity': n, 'nodes': nodes[-1*self.scratch.importance_ele_n:]})
+        focal_points = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        return focal_points
+    
 
-        messages = generate_focal_points({'quantity': n, 'statements': nodes[-1*self.scratch.importance_ele_n:]})
+    def generate_insights_and_evidence(self, nodes, n=5): 
+
+        messages = generate_insights_and_evidence({'quantity': n, 'nodes': nodes})
+
         insights = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return insights
 
