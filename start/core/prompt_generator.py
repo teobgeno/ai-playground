@@ -97,7 +97,7 @@ def generate_insights_and_evidence_prompt(props):
         tpl = ""
 
         for node in props["nodes"]:
-                tpl += node.node_id + ': ' + node.embedding_key + '\n'
+                tpl += node.node_id.replace('node_', '') + ': ' + node.embedding_key + '\n'
     
         tpl += """
 What {props[quantity]} high-level insights can you infer from the above statements?

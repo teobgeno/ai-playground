@@ -316,6 +316,18 @@ class CharacterMemory:
             return True 
         return True
     
+    def reset_reflection_counter(self): 
+        """
+        We reset the counters used for the reflection trigger. 
+
+        INPUT: 
+            persona: Current Persona object
+        Output: 
+            None
+        """
+        self.scratch.importance_trigger_curr = self.scratch.importance_trigger_max
+        self.scratch.importance_ele_n = 0
+    
     def process_reflect(self):
         focal_points_res = self.generate_focal_points(3)
         focal_points_list: List[str] = focal_points_res.strip('][').replace('"', '').split(', ')
