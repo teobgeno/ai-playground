@@ -3,7 +3,7 @@ from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
 # from game.character.cognitive_modules.conversation import Conversation
-from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points, generate_insights_and_evidence
+from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points_prompt, generate_insights_and_evidence_prompt
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -330,8 +330,8 @@ class CharacterMemory:
         print("-----------------")
         for focal_pt, nodes in retrieved.items(): 
 
-            thoughts = generate_insights_and_evidence(nodes, 5)
-
+            thoughts = self.generate_insights_and_evidence(nodes, 5)
+            print('ok')
             # for thought, evidence in thoughts.items(): 
             #     created = self.scratch.curr_time
             #     expiration = self.scratch.curr_time + datetime.timedelta(days=30)
@@ -356,14 +356,14 @@ class CharacterMemory:
         nodes = sorted(nodes, key=lambda x: x[0])
         nodes = [i for created, i in nodes]
 
-        messages = generate_focal_points({'quantity': n, 'nodes': nodes[-1*self.scratch.importance_ele_n:]})
+        messages = generate_focal_points_prompt({'quantity': n, 'nodes': nodes[-1*self.scratch.importance_ele_n:]})
         focal_points = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return focal_points
     
 
     def generate_insights_and_evidence(self, nodes, n=5): 
 
-        messages = generate_insights_and_evidence({'quantity': n, 'nodes': nodes})
+        messages = generate_insights_and_evidence_prompt({'quantity': n, 'nodes': nodes})
 
         insights = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return insights

@@ -80,7 +80,7 @@ Output format: Output a json of the following format:
         return [{'role': 'user', 'content': "\n".join(query_fragments)}]
 
 
-def generate_focal_points(props):
+def generate_focal_points_prompt(props):
         tpl = ""
 
         for node in props["nodes"]:
@@ -93,7 +93,7 @@ Example: ["What should Jane do for lunch", "Does Jane like strawberry", "Who is 
         #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
-def generate_insights_and_evidence(props):
+def generate_insights_and_evidence_prompt(props):
         tpl = ""
 
         for node in props["nodes"]:
