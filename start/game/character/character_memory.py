@@ -182,7 +182,7 @@ class CharacterMemory:
 
         return relevance_out
     
-    def new_retrieve(self, focal_points, n_count=30): 
+    def new_retrieve(self, focal_points: List[str], n_count=30): 
         """
         Given the current persona and focal points (focal points are events or 
         thoughts for which we are retrieving), we retrieve a set of nodes for each
@@ -318,8 +318,17 @@ class CharacterMemory:
         return True
     
     def process_reflect(self):
-        focal_points = self.generate_focal_points(3)
-        #retrieved = self.new_retrieve(focal_points)
+        focal_points_res = self.generate_focal_points(3)
+        focal_points_list = focal_points_res.strip('][').replace('"', '').split(', ')
+
+        focal_points = []
+        for focal_point in focal_points_list:
+            embed = self._llm.get_embed(focal_point)
+            focal_points.append({'text':focal_point, 'embed':embed})
+        # focal_points=[{'text':relationship, 'embed':embed}]
+        retrieved = self.new_retrieve(focal_points)
+
+        print("ok")
 
     def generate_focal_points(self, n=3): 
        
@@ -335,8 +344,8 @@ class CharacterMemory:
             statements += node.embedding_key + "\n"
 
         messages = generate_focal_points({'quantity': n, 'statements': nodes[-1*self.scratch.importance_ele_n:]})
-        print("ok")
-        #insights = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        insights = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        return insights
 
 
     

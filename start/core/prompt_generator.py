@@ -85,9 +85,22 @@ def generate_focal_points(props):
 
         for statement in props["statements"]:
                 tpl += statement.node_id + ': ' + statement.embedding_key + '\n'
-    
         tpl += """
 Given only the information above, what are {props[quantity]} most salient high-level questions we can answer about the subjects grounded in the statements?
+Return a list of strings. DO NOT escape characters or include "\n" or white space in response.
+Example: ["What should Jane do for lunch", "Does Jane like strawberry", "Who is Jane"]
+        """
+        print(tpl.format(props=props))
+        return [{'role': 'user', 'content': tpl.format(props=props)}]
+
+def generate_insights_and_evidence(props):
+        tpl = ""
+
+        for statement in props["statements"]:
+                tpl += statement.node_id + ': ' + statement.embedding_key + '\n'
+    
+        tpl += """
+What {props[quantity]} high-level insights can you infer from the above statements?
 Return in JSON format, where the key is a list of input statements that contributed to your insights and value is your insight. Make the response parseable by python json.loads function. DO NOT escape characters or include "\n" or white space in response.
 Example: [{{insight: "...", statementIds: [1,2]}}], {{insight: "...", statementIds: [1]}}, ...]
         """
