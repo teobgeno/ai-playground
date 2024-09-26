@@ -14,9 +14,9 @@ from schema.memory import *
 class CharacterMemory:
 
     def __init__(self, llm: LLMProvider, base_path: str):
-        self.spatial
-        self.associative
-        self.scratch
+        # self.spatial
+        # self.associative
+        # self.scratch
         self._llm = llm
         self._base_path = base_path
         if base_path !='':
@@ -281,7 +281,7 @@ class CharacterMemory:
 
     def add_event_memory(self, props):
        self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
-       self.update_reflect_trigger(props['poignancy'])
+       # self.update_reflect_trigger(props['poignancy'])
 
     def update_reflect_trigger(self, event_poignancy: int):
         self.scratch.importance_trigger_curr -= event_poignancy

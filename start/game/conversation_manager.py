@@ -96,7 +96,7 @@ class ConversationManager:
                 
                 messages_list: List[str] = []
                 for message in conversation.messages:
-                    messages_list.append([e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'])
+                    messages_list.append([e['character'].name for e in self._participants if e['character'].id == message['character_id']][0] + ' :' + message['message'])
 
 
                 summary = participant['character'].memory.create_conversation_summary(target_person.name, messages_list)
