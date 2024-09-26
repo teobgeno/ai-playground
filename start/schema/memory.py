@@ -12,5 +12,6 @@ class FocalPointDef(TypedDict):
 
 class SummaryPromptDef(TypedDict):
     init_person_name: str
+    init_person_iis: str
     target_person_name: str
     messages: List[str]

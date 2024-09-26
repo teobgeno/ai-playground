@@ -1,9 +1,11 @@
 from typing import List
 from schema.memory import SummaryPromptDef
-
+#arrogance, selfish, apathetic
 def conversation_summary_prompt(props: SummaryPromptDef):
  
         tpl = """
+ Here is a brief description of {props[init_person_name]}
+{props[init_person_iis]}\n
 You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Summarize the conversation from {props[init_person_name]}'s perspective.
 Conversation:
          """
@@ -28,6 +30,8 @@ Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
 def conversation_memory_prompt(props):
 
         tpl = """
+Here is a brief description of {props[init_person_name]}
+{props[init_person_iis]}\n
 You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Describe your feelings and emotions from this conversation, from {props[init_person_name]}'s perspective, in a full sentence.
 Conversation:
          """
@@ -42,6 +46,8 @@ Conversation:
 def conversation_planning_thought_prompt(props):
  
         tpl = """
+Here is a brief description of {props[init_person_name]}
+{props[init_person_iis]}\n
 You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} needs to remember for future planning, from {props[init_person_name]}'s perspective, in a full sentence.
 Conversation:
          """
