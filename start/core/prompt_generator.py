@@ -8,7 +8,7 @@ You are {props[init_person_name]}, and you just finished the following conversat
 Conversation:
          """
         for message in props['messages']:
-                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+                tpl += message + '\n'
 
         return [{'role': 'user', 'content': tpl.format(props=props)}]
     

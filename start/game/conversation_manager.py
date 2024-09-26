@@ -94,14 +94,16 @@ class ConversationManager:
             if participant['character'].is_npc:
                 target_person = [element for element in self._participants if element['character'].id != participant['character'].id][0]['character']
                 
-                summary = participant['character'].memory.create_conversation_summary(target_person.name, conversation.messages, conversation.participants)
+                messages_list: List[str] = []
+                for message in conversation.messages:
+                    messages_list.append([e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'])
+
+
+                summary = participant['character'].memory.create_conversation_summary(target_person.name, messages_list)
                 score = participant['character'].memory.calculate_conversation_poig_score(summary)
                 summary_embed = self._llm.get_embed(summary)
 
-                # summary = 'From my perspective, I was excited about the Valentine\'s Day party at Hobbs Cafe and wanted to discuss decorations with Maria. However, it seemed like Maria was upset because she felt like I left all the preparations to her. I apologized for the misunderstanding and tried to work things out, but Maria made it clear that she did not want to participate anymore. I respected her decision and will handle the preparations for the party on my own. Overall, I disliked this interaction because I had hoped to collaborate with Maria on the party planning'
-                # score = 8
-                # summary_embed = '123456'
-            
+        
                 props = {
                     'date' : datetime.now(),    # self._params['game_time']
                     'subject' : participant['character'].name,

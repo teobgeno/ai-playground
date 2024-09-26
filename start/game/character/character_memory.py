@@ -9,7 +9,7 @@ from game.character.memory_structures.associative_memory import AssociativeMemor
 from game.character.memory_structures.scratch import Scratch
 from typing import cast, List
 from schema.memory import *
-from schema.conversation import MessageDef, ParticipantDef
+# from schema.conversation import MessageDef, ParticipantDef
 
 class CharacterMemory:
 
@@ -260,8 +260,8 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str, messages: List[MessageDef], participants: List[ParticipantDef]) -> str:
-        messages = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages, 'participants': participants})
+    def create_conversation_summary(self, target_person_name: str, messages: List[str]) -> str:
+        messages = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
         summarize = ''
        
         summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
