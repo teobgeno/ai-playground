@@ -33,8 +33,8 @@ class RelationshipDef(TypedDict):
 class ConversationDef(TypedDict):
     id: int
     status: ConversationStatus
-    start_date: str
-    end_date: str
+    start_date: datetime
+    end_date: datetime
     participants: List[int]
     messages: List[MessageDef]
     relationships: List[RelationshipDef]
@@ -47,6 +47,7 @@ class ConversationApiTalkRequestDef(TypedDict):
     character_id_talk: int
     message: str
     end_conversation: bool
+    game_time: datetime
 
 class ConversationApiTalkResponseDef(TypedDict):
     conversation_id: int
@@ -55,6 +56,7 @@ class ConversationApiTalkResponseDef(TypedDict):
 
 class ConversationApiCreateRequestDef(TypedDict):
     character_ids: List[int]
+    game_time: datetime
 
 class ConversationApiCreateResponseDef(TypedDict):
     conversation_id: str

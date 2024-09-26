@@ -15,14 +15,14 @@ class ConversationManager:
         self._llm  = llm
         self._cache = cache
         self._participants: List[ParticipantDef] = []
-        self._params = ConversationApiTalkRequestDef(params)
+        self._params = params
         self._params['game_time'] = datetime.now()
         self.create_participants()
 
     def create_participants(self)->None:
         for character_id in self._params['character_ids']:
             char_data = CharacterDef(self._db.get_record_by_id('characters', character_id))
-            
+          
             character_memory = CharacterMemory(self._llm, char_data['memory_path'])
             character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
 

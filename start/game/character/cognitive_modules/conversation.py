@@ -12,6 +12,7 @@ from core.prompt_generator import get_relation_prompt,get_utterance_prompt
 from game.llm import LLMProvider
 from core.cache import Cache
 from schema.conversation import *
+from schema.memory import FocalPointDef
 
 class Conversation:
     def __init__(self, db:JsonDBManager, llm: LLMProvider, cache: Cache, id: int = 0):
@@ -20,11 +21,11 @@ class Conversation:
         self._llm  = llm
         self._cache = cache
         self._status = ConversationStatus.RUNNING
-        self._start_date: datetime = None
-        self._end_date: datetime = None
+        self._start_date: datetime
+        self._end_date: datetime
         self._participants: List[ParticipantDef] = []
-        self._init_person: Character = None
-        self._target_person: Character = None
+        self._init_person: Character
+        self._target_person: Character
         self._messages: List[MessageDef] = []
         self._relationships: List[RelationshipDef] = []
         
@@ -109,7 +110,8 @@ class Conversation:
             print('cached relationship')
  
         embed = self._cache.get_embed(relationship)
-        focal_points=[{'text':relationship, 'embed':embed}]
+        focal_point: FocalPointDef = {'text':relationship, 'embed':embed}
+        focal_points =[focal_point]
         retrieved = self._init_person.memory.new_retrieve(focal_points, 15)
         
         return retrieved
