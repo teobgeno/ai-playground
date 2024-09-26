@@ -3,7 +3,12 @@ from numpy.linalg import norm
 from game.llm import LLMProvider
 from core.cache import Cache
 # from game.character.cognitive_modules.conversation import Conversation
-from core.prompt_generator import generate_conversation_poig_score, get_conversation_summary_prompt, generate_focal_points_prompt, generate_insights_and_evidence_prompt
+from core.prompt_generator import conversation_summary_prompt
+from core.prompt_generator import conversation_poig_score_prompt
+from core.prompt_generator import conversation_memory_prompt
+from core.prompt_generator import conversation_planning_thought_prompt
+from core.prompt_generator import generate_focal_points_prompt
+from core.prompt_generator import generate_insights_and_evidence_prompt
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -261,20 +266,32 @@ class CharacterMemory:
         return retrieved
     
     def create_conversation_summary(self, target_person_name: str, messages: List[str]) -> str:
-        messages = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+        messages = conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
         summarize = ''
        
         summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
       
-
         return summarize
     
     def calculate_conversation_poig_score(self, conversation_summary: str) -> int:
-        messages = generate_conversation_poig_score({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
+        messages = conversation_poig_score_prompt({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
         
         score = cast(int, self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
     
         return score
+    
+    def create_conversation_memory(self, target_person_name: str, messages: List[str]) -> str:
+        messages = conversation_memory_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+        
+        memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        return memory
+    
+    def create_conversation_planning_thought(self, target_person_name: str, messages: List[str]) -> str:
+        messages = conversation_planning_thought_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+        
+        memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        return memory
+    
     
     def add_coversation_memory(self, props):
         return self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
@@ -350,9 +367,6 @@ class CharacterMemory:
             #                                 thought, keywords, thought_poignancy, 
             #                                 thought_embedding_pair, evidence)
 
-
-       
-
     def generate_focal_points(self, n=3): 
        
         nodes = [[i.last_accessed, i]
@@ -366,7 +380,6 @@ class CharacterMemory:
         focal_points = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return focal_points
     
-
     def generate_insights_and_evidence(self, nodes, n=5): 
 
         messages = generate_insights_and_evidence_prompt({'quantity': n, 'nodes': nodes})
