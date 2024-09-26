@@ -265,8 +265,9 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str, messages: List[str]) -> str:
-        messages = conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+    def create_conversation_summary(self, target_person_name: str, conv_messages: List[str]) -> str:
+        props: SummaryPromptDef = {'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conv_messages}
+        messages = conversation_summary_prompt(props)
         summarize = ''
        
         summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
@@ -280,14 +281,14 @@ class CharacterMemory:
     
         return score
     
-    def create_conversation_memory(self, target_person_name: str, messages: List[str]) -> str:
-        messages = conversation_memory_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+    def create_conversation_memory(self, target_person_name: str, conv_messages: List[str]) -> str:
+        messages = conversation_memory_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conv_messages})
         
         memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory
     
-    def create_conversation_planning_thought(self, target_person_name: str, messages: List[str]) -> str:
-        messages = conversation_planning_thought_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages})
+    def create_conversation_planning_thought(self, target_person_name: str, conv_messages: List[str]) -> str:
+        messages = conversation_planning_thought_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': conv_messages})
         
         memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory

@@ -9,3 +9,8 @@ class FocalPointDef(TypedDict):
     text: str
     embed: List[float]
 
+
+class SummaryPromptDef(TypedDict):
+    init_person_name: str
+    target_person_name: str
+    messages: List[str]

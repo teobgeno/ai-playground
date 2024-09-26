@@ -33,7 +33,7 @@ class Scratch:
 
         # THE CORE IDENTITY OF THE PERSONA
         # Base information about the persona.
-        self.name = None
+        self.name = ''
         self.first_name = None
         self.last_name = None
         self.age = None

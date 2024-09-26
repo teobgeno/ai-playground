@@ -1,6 +1,7 @@
 from typing import List
+from schema.memory import SummaryPromptDef
 
-def conversation_summary_prompt(props):
+def conversation_summary_prompt(props: SummaryPromptDef):
  
         tpl = """
 You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Summarize the conversation from {props[init_person_name]}'s perspective.
