@@ -108,10 +108,11 @@ class ConversationManager:
 
                 print('ok')
                 return
+            
+                participant['character'].scratch.importance_trigger_curr -= score
+                participant['character'].scratch.importance_ele_n += 1
+
                 summary_embed = self._llm.get_embed(summary)
-
-                
-
         
                 props = {
                     'date' : datetime.now(),    # self._params['game_time']
