@@ -7,9 +7,10 @@ from game.llm import LLMProvider
 from core.cache import Cache
 from game.character.cognitive_modules.conversation import Conversation
 from game.character.character_memory import CharacterMemory
+from typing import cast
 
 class ConversationManager:
-    def __init__(self, parser: configparser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef):
+    def __init__(self, parser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef):
         self._parcer = parser
         self._db = db
         self._llm  = llm
@@ -21,7 +22,7 @@ class ConversationManager:
 
     def create_participants(self)->None:
         for character_id in self._params['character_ids']:
-            char_data = CharacterDef(self._db.get_record_by_id('characters', character_id))
+            char_data = CharacterDef(cast(CharacterDef, self._db.get_record_by_id('characters', character_id)))
           
             character_memory = CharacterMemory(self._llm, char_data['memory_path'])
             character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
@@ -30,6 +31,7 @@ class ConversationManager:
             
     def talk(self, conversation: Conversation)->str:
         utterance = ''
+        self._params = cast(ConversationApiTalkRequestDef, self._params)
         talking_char: Character = [element for element in self._participants if element['is_talking'] == True][0]['character']
         if talking_char.is_npc:
             utterance = conversation.talk_npc(self._params['game_time'])
@@ -56,8 +58,8 @@ class ConversationManager:
 
 
     def load_conversation(self)->Conversation:
-        
-        conv = ConversationDef(self._db.get_record_by_id('conversations', self._params['conversation_id']))
+        self._params = cast(ConversationApiTalkRequestDef, self._params)
+        conv = ConversationDef(cast(ConversationDef, self._db.get_record_by_id('conversations', self._params['conversation_id'])))
         conversation = Conversation(self._db, self._llm, self._cache, self._params['conversation_id'])
         conversation.set_start_date(conv['start_date'])
         for participant in self._participants:
