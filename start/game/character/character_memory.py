@@ -7,8 +7,9 @@ from core.prompt_generator import generate_conversation_poig_score, get_conversa
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
-from typing import List
+from typing import cast, List
 from schema.memory import *
+from schema.conversation import MessageDef, ParticipantDef
 
 class CharacterMemory:
 
@@ -259,27 +260,20 @@ class CharacterMemory:
 
         return retrieved
     
-    def create_conversation_summary(self, target_person_name: str, messages: List[str], participants) -> str:
-        prompt = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages, 'participants': participants})
-        messages=[{'role': 'user', 'content': prompt}]
+    def create_conversation_summary(self, target_person_name: str, messages: List[MessageDef], participants: List[ParticipantDef]) -> str:
+        messages = get_conversation_summary_prompt({'init_person_name': self.scratch.name, 'target_person_name': target_person_name, 'messages': messages, 'participants': participants})
         summarize = ''
-        try:
-            summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
-        except Exception as error:
-            print(error)
+       
+        summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+      
 
         return summarize
     
     def calculate_conversation_poig_score(self, conversation_summary: str) -> int:
-        prompt = generate_conversation_poig_score({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
-        messages=[{'role': 'user', 'content': prompt}]
-       
-        score = 1
-        try:
-            score = self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
-        except Exception as error:
-            print(error)
-
+        messages = generate_conversation_poig_score({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
+        
+        score = cast(int, self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
+    
         return score
     
     def add_coversation_memory(self, props):

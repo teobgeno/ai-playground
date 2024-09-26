@@ -10,8 +10,7 @@ Conversation:
         for message in props['messages']:
                 tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
 
-        print(tpl.format(props=props))
-        return tpl.format(props=props)
+        return [{'role': 'user', 'content': tpl.format(props=props)}]
     
     
 def generate_conversation_poig_score(props):
@@ -23,10 +22,8 @@ Conversation:
 {props[conversation_summary]}\n
 Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
         """
+    return [{'role': 'user', 'content': tpl.format(props=props)}]
         
-    return tpl.format(props=props)
-
-
 
 def get_relation_prompt(self, props):
         tpl = """

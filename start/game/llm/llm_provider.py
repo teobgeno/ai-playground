@@ -11,7 +11,7 @@ class LLMProvider:
         self._api = OpenAIAPI(api_key)
 
     def request(self, llm_params, prompt):
-        return self._api.request(llm_params, prompt)
+        return self._api.request()
 
     def completition(self, llm_params, messages):
         return self._api.completition(llm_params, messages)
