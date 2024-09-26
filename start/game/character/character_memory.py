@@ -13,9 +13,9 @@ from schema.memory import *
 class CharacterMemory:
 
     def __init__(self, llm: LLMProvider, base_path: str):
-        self.spatial = None
-        self.associative = None
-        self.scratch = None
+        self.spatial
+        self.associative
+        self.scratch
         self._llm = llm
         self._base_path = base_path
         if base_path !='':

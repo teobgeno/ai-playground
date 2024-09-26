@@ -28,9 +28,9 @@ class ConceptNode:
         self.type: str = node_type  # thought / event / chat
         self.depth: int = depth
 
-        self.created: datetime = created
-        self.expiration: datetime = expiration
-        self.last_accessed: datetime = self.created
+        self.created = created
+        self.expiration = expiration
+        self.last_accessed = self.created
 
         self.subject: str = s
         self.predicate: str = p
@@ -107,7 +107,7 @@ class AssociativeMemory:
         if kw_strength_load["kw_strength_thought"]:
             self.kw_strength_thought = kw_strength_load["kw_strength_thought"]
 
-    def save(self, out_json):
+    def save(self, out_json)->None:
         r = dict()
         for count in range(len(self.id_to_node.keys()), 0, -1):
             node_id = f"node_{str(count)}"
