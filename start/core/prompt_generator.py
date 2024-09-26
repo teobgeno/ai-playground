@@ -3,10 +3,10 @@ from typing import List
 def get_conversation_summary_prompt(props):
  
         tpl = """
-You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Summarize the conversation from {props[init_person_name]}'s perspective, using first-person pronouns like
-"I," and add if you liked or disliked this interaction.
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Summarize the conversation from {props[init_person_name]}'s perspective.
 Conversation:
          """
+        #using first-person pronouns like"I," and add if you liked or disliked this interaction
         for message in props['messages']:
                 tpl += message + '\n'
 
@@ -23,6 +23,34 @@ Conversation:
 Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
         """
     return [{'role': 'user', 'content': tpl.format(props=props)}]
+
+
+def generate_planning_thought_on_conversation_prompt(props):
+ 
+        tpl = """
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} needs to remember for future planning, from {props[init_person_name]}'s perspective, in a full sentence.
+Conversation:
+         """
+        # Use first-person pronouns like "I"
+        for message in props['messages']:
+                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+
+        print(tpl.format(props=props))
+        return tpl.format(props=props)
+
+def generate_memo_on_convo_prompt(props):
+ 
+        tpl = """
+You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} might have found interesting, from {props[init_person_name]}'s perspective, in a full sentence.
+Conversation:
+         """
+        for message in props['messages']:
+                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+
+        # Use first-person pronouns like "I"
+        print(tpl.format(props=props))
+        return tpl.format(props=props)
+
         
 
 def get_relation_prompt(self, props):
@@ -103,30 +131,6 @@ Example: [{{insight: "...", statementIds: [1,2]}}], {{insight: "...", statementI
         print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
-
-def generate_planning_thought_on_conversation_prompt(props):
- 
-        tpl = """
-You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} needs to remember for future planning, from {props[init_person_name]}'s perspective, in a full sentence.Use first-person pronouns like "I".
-Conversation:
-         """
-        for message in props['messages']:
-                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
-
-        print(tpl.format(props=props))
-        return tpl.format(props=props)
-
-def generate_memo_on_convo_prompt(props):
- 
-        tpl = """
-You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} might have found interesting , from {props[init_person_name]}'s perspective, in a full sentence.Use first-person pronouns like "I".
-Conversation:
-         """
-        for message in props['messages']:
-                tpl += [e['character'].name for e in props['participants'] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
-
-        print(tpl.format(props=props))
-        return tpl.format(props=props)
 
 
 ''' 
