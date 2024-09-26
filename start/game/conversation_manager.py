@@ -10,24 +10,26 @@ from game.character.character_memory import CharacterMemory
 from typing import cast
 
 class ConversationManager:
-    def __init__(self, parser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef):
+    def __init__(self, parser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef | ConversationApiDestroyRequestDef):
         self._parcer = parser
         self._db = db
         self._llm  = llm
         self._cache = cache
         self._participants: List[ParticipantDef] = []
         self._params = params
-        self._params['game_time'] = datetime.now()
+        if 'game_time' in self._params:
+            self._params['game_time'] = datetime.now()
         self.create_participants()
 
     def create_participants(self)->None:
-        for character_id in self._params['character_ids']:
-            char_data = CharacterDef(cast(CharacterDef, self._db.get_record_by_id('characters', character_id)))
-          
-            character_memory = CharacterMemory(self._llm, char_data['memory_path'])
-            character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
+        if 'character_ids' in self._params:
+            for character_id in self._params['character_ids']:
+                char_data = CharacterDef(cast(CharacterDef, self._db.get_record_by_id('characters', character_id)))
+            
+                character_memory = CharacterMemory(self._llm, char_data['memory_path'])
+                character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
 
-            self._participants.append(ParticipantDef({'character':character, 'is_talking': False}))
+                self._participants.append(ParticipantDef({'character':character, 'is_talking': False}))
             
     def talk(self, conversation: Conversation)->str:
         utterance = ''
@@ -43,7 +45,8 @@ class ConversationManager:
     def create_conversation(self)->ConversationApiCreateResponseDef:
         conversation = Conversation(self._db, self._llm, self._cache, 0)
         conversation.set_participants(self._participants)
-        conversation.set_start_date(self._params['game_time'])
+        if 'game_time' in self._params:
+            conversation.set_start_date(self._params['game_time'])
         conversation_id = conversation.insert_conversation()
         return {'conversation_id': str(conversation_id)}
 
@@ -75,6 +78,10 @@ class ConversationManager:
         # ta.validate_python(conv)
   
         return conversation
+    
+    def destroy_conversation(self)->None:
+        conversation = self.load_conversation()
+        self.end_conversation(conversation)
         
     def end_conversation(self, conversation: Conversation):
         return

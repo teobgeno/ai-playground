@@ -16,7 +16,7 @@ router = APIRouter(
 @router.post("/create")
 async def conversation_create(
     params: ConversationApiCreateRequestDef, 
-    parser: configparser = Depends(get_parser), 
+    parser = Depends(get_parser), 
     db: JsonDBManager = Depends(get_db),
     llm: LLMProvider = Depends(get_llm),
     cache: Cache = Depends(get_cache),
@@ -28,7 +28,7 @@ async def conversation_create(
 @router.post("/talk")
 async def conversation_talk(
     params: ConversationApiTalkRequestDef, 
-    parser: configparser = Depends(get_parser), 
+    parser = Depends(get_parser), 
     db: JsonDBManager = Depends(get_db),
     llm: LLMProvider = Depends(get_llm),
     cache: Cache = Depends(get_cache),

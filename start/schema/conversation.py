@@ -40,6 +40,11 @@ class ConversationDef(TypedDict):
     relationships: List[RelationshipDef]
     type: str
 
+class ConversationApiCreateRequestDef(TypedDict):
+    character_ids: List[int]
+
+class ConversationApiCreateResponseDef(TypedDict):
+    conversation_id: str
 
 class ConversationApiTalkRequestDef(TypedDict):
     conversation_id: int
@@ -54,9 +59,5 @@ class ConversationApiTalkResponseDef(TypedDict):
     message_reply: str
     end_conversation: bool
 
-class ConversationApiCreateRequestDef(TypedDict):
-    character_ids: List[int]
-    game_time: datetime
-
-class ConversationApiCreateResponseDef(TypedDict):
-    conversation_id: str
+class ConversationApiDestroyRequestDef(TypedDict):
+     conversation_id: int

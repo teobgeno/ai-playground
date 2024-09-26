@@ -18,6 +18,8 @@ from game.map import Sections
 from game.conversation_manager import ConversationManager
 import openmeteo_requests
 from schema.conversation import *
+from typing import cast
+from typing import List
 
 # @@ vars @@
 time_scale = 20
@@ -93,7 +95,7 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     game_time = datetime.now()
     utterance = ''
     
-    conv = db.get_record_by_id('conversations', conv_id)
+    conv = cast(ConversationDef, db.get_record_by_id('conversations', conv_id))
     conversation = Conversation(db, llm, cache, conv_id)
     conversation.set_participants(participants)
     conversation.set_messages(conv['messages'])
@@ -113,10 +115,33 @@ def test_char_reflection():
     api_key = parser.get("OPENAI", "key")
     db = JsonDBManager()
     llm = LLMProvider(api_key)
-    char_data = CharacterDef(db.get_record_by_id('characters', 1))
-    character_memory = CharacterMemory(llm, char_data['memory_path'])
-    character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
-    character.memory.reflect()
+    cache = Cache(db, llm)
+    game_time = datetime.now()
+
+    # char_data_npc = CharacterDef(cast(CharacterDef, db.get_record_by_id('characters', 1)))
+    # character_memory_npc = CharacterMemory(llm, char_data_npc['memory_path'])
+    # character_npc = Character.create(char_data_npc['id'], bool(char_data_npc['is_npc']), char_data_npc['name'], character_memory_npc)
+
+    # char_data = CharacterDef(cast(CharacterDef, db.get_record_by_id('characters', 2)))
+    # character_memory = CharacterMemory(llm, char_data['memory_path'])
+    # character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
+    # participants: List[ParticipantDef] = []
+
+    # participants.append({'character': character, 'is_talking': False})
+    # participants.append({'character': character_npc, 'is_talking': False})
+   
+    # conv_id = 709835299195158552
+    # conv = cast(ConversationDef, db.get_record_by_id('conversations', conv_id))
+    # conversation = Conversation(db, llm, cache, conv_id)
+    # conversation.set_participants(participants)
+    # conversation.set_messages(conv['messages'])
+    # conversation.set_relationships(conv['relationships'])
+
+    conversation_manager = ConversationManager(parser, db, llm, cache, {'conversation_id': 709835299195158552})
+    conversation_manager.destroy_conversation()
+
+   
+    # character.memory.reflect()
     
 def test_weather_api():
     # https://open-meteo.com/en/docs#latitude=37.9267&longitude=22.8595&hourly=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m&timezone=auto&forecast_days=1
