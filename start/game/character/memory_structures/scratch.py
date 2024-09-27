@@ -248,7 +248,7 @@ class Scratch:
         scratch["att_bandwidth"] = self.att_bandwidth
         scratch["retention"] = self.retention
 
-        scratch["curr_time"] = self.curr_time.strftime("%B %d, %Y, %H:%M:%S")
+        # scratch["curr_time"] = self.curr_time.strftime("%B %d, %Y, %H:%M:%S")
         scratch["curr_tile"] = self.curr_tile
         scratch["daily_plan_req"] = self.daily_plan_req
 

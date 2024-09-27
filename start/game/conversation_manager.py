@@ -137,7 +137,7 @@ class ConversationManager:
                     'subject' : '',
                     'predicate' : '',
                     'object' : '',
-                    'description' : f"{target_person.name} {memo}",
+                    'description' : memo,
                     'keywords' : [],
                     'poignancy' : memo_score,
                     'embedding_pair' :  (memo, memo_embed),
