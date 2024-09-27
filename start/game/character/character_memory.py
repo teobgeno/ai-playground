@@ -294,9 +294,9 @@ class CharacterMemory:
         return memory
     
     def insert_to_memory(self, props):
-        if props.type == 'conversation':
+        if props['type'] == 'conversation':
              return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
-        elif props.type == 'thought':
+        elif props['type'] == 'thought':
             return self.associative.add_thought(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
         else:
             return self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
