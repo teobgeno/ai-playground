@@ -13,6 +13,7 @@ Conversation:
         for message in props['messages']:
                 tpl += message + '\n'
 
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
     
     
@@ -25,6 +26,7 @@ Conversation:
 {props[conversation_summary]}\n
 Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
         """
+    #print(tpl.format(props=props))
     return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 def conversation_memory_prompt(props):
@@ -38,6 +40,7 @@ Conversation:
         for message in props['messages']:
                 tpl += message + '\n'
                 
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
         # Use first-person pronouns like "I"
         # You are {props[init_person_name]}, and you just finished the following conversation with {props[target_person_name]}. Write down if there is anything from the conversation that {props[init_person_name]} might have found interesting, from {props[init_person_name]}'s perspective, in a full sentence.
@@ -55,6 +58,7 @@ Conversation:
         for message in props['messages']:
                 tpl += message + '\n'
 
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
         
@@ -66,7 +70,7 @@ def get_relation_prompt(self, props):
 What do you think about {props[target_person_name]}?
         """
         #  \nBased on the statements above, summarize {props[init_person_name]} and {props[target_person_name]}'s relationship. What do they feel or know about each other?
-        print(tpl.format(props=props))
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
@@ -106,7 +110,7 @@ Output format: Output a json of the following format:
 """
 
         query_fragments.append(tpl.format(props=props))
-        print(tpl.format(props=props))
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': "\n".join(query_fragments)}]
 
 
@@ -134,7 +138,7 @@ What {props[quantity]} high-level insights can you infer from the above statemen
 Return in JSON format, where the key is a list of input statements that contributed to your insights and value is your insight. Make the response parseable by python json.loads function. DO NOT escape characters or include "\n" or white space in response.
 Example: [{{insight: "...", statementIds: [1,2]}}], {{insight: "...", statementIds: [1]}}, ...]
         """
-        print(tpl.format(props=props))
+        #print(tpl.format(props=props))
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
