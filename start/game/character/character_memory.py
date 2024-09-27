@@ -9,6 +9,7 @@ from core.prompt_generator import conversation_memory_prompt
 from core.prompt_generator import conversation_planning_thought_prompt
 from core.prompt_generator import generate_focal_points_prompt
 from core.prompt_generator import generate_insights_and_evidence_prompt
+from core.prompt_generator import event_poig_score_prompt
 from game.character.memory_structures.spatial_memory import MemoryTree
 from game.character.memory_structures.associative_memory import AssociativeMemory
 from game.character.memory_structures.scratch import Scratch
@@ -277,7 +278,7 @@ class CharacterMemory:
     def calculate_conversation_poig_score(self, conversation_summary: str) -> int:
         messages = conversation_poig_score_prompt({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'conversation_summary': conversation_summary})
         
-        score = cast(int, self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
+        score = int(self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
     
         return score
     
@@ -292,6 +293,13 @@ class CharacterMemory:
         
         memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory
+    
+    def calculate_event_poig_score(self, event_description: str) -> int:
+        messages = event_poig_score_prompt({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'event_description': event_description})
+        
+        score = int(self._llm.completition({'max_tokens': 1, 'temperature': 0, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
+    
+        return score
     
     def insert_to_memory(self, props):
         if props['type'] == 'conversation':

@@ -142,6 +142,18 @@ Example: [{{insight: "...", statementIds: [1,2]}}], {{insight: "...", statementI
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
+def event_poig_score_prompt(props):
+    tpl = """
+Here is a brief description of {props[init_person_name]}
+{props[init_person_iis]}\n
+On the scale of 1 to 10, where 1 is purely mundane (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following event for {props[init_person_name]}.\n
+Event: 
+{props[event_description]}\n
+Answer on a scale of 1 to 9. Respond with number only, e.g. "5"`
+        """
+    #print(tpl.format(props=props))
+    return [{'role': 'user', 'content': tpl.format(props=props)}]
+
 
 ''' 
         ---- Prompts To Check ----

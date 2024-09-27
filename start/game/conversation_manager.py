@@ -99,15 +99,15 @@ class ConversationManager:
 
 
                 summary = participant['character'].memory.create_conversation_summary(target_person.name, messages_list)
-                summary_score = cast(int, participant['character'].memory.calculate_conversation_poig_score(summary))
+                summary_score = participant['character'].memory.calculate_conversation_poig_score(summary)
                 summary_embed = self._llm.get_embed(summary)
 
                 memo = participant['character'].memory.create_conversation_memory(target_person.name, messages_list)
-                memo_score = cast(int, participant['character'].memory.calculate_conversation_poig_score(memo))
+                memo_score = participant['character'].memory.calculate_event_poig_score(memo)
                 memo_embed = self._llm.get_embed(memo)
 
                 plan = participant['character'].memory.create_conversation_planning_thought(target_person.name, messages_list)
-                plan_score = cast(int, participant['character'].memory.calculate_conversation_poig_score(plan))
+                plan_score = participant['character'].memory.calculate_event_poig_score(plan)
                 plan_embed = self._llm.get_embed(plan)
 
                 props_summary = {
