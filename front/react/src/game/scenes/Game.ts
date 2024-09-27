@@ -294,9 +294,9 @@ export class Game extends Scene {
             this,
             "npc",
             this.gridEngine,
-            1,
+            3,
             "npc0",
-            "Isabella"
+            "Tzeni"
         );
         this.physics.add.existing(npc);
         this.add.existing(npc);

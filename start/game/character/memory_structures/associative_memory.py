@@ -102,11 +102,11 @@ class AssociativeMemory:
                 self.add_thought(created, expiration, s, p, o,
                                  description, keywords, poignancy, embedding_pair, filling)
 
-        kw_strength_load = json.load(open(f_saved + "/kw_strength.json"))
-        if kw_strength_load["kw_strength_event"]:
-            self.kw_strength_event = kw_strength_load["kw_strength_event"]
-        if kw_strength_load["kw_strength_thought"]:
-            self.kw_strength_thought = kw_strength_load["kw_strength_thought"]
+        # kw_strength_load = json.load(open(f_saved + "/kw_strength.json"))
+        # if kw_strength_load["kw_strength_event"]:
+        #     self.kw_strength_event = kw_strength_load["kw_strength_event"]
+        # if kw_strength_load["kw_strength_thought"]:
+        #     self.kw_strength_thought = kw_strength_load["kw_strength_thought"]
 
     def save(self, out_json)->None:
         r = dict()
@@ -142,8 +142,8 @@ class AssociativeMemory:
         r = dict()
         r["kw_strength_event"] = self.kw_strength_event
         r["kw_strength_thought"] = self.kw_strength_thought
-        with open(out_json+"/kw_strength.json", "w") as outfile:
-            json.dump(r, outfile)
+        # with open(out_json+"/kw_strength.json", "w") as outfile:
+        #     json.dump(r, outfile)
 
         with open(out_json+"/embeddings.json", "w") as outfile:
             json.dump(self.embeddings, outfile)

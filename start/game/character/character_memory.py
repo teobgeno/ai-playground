@@ -212,6 +212,8 @@ class CharacterMemory:
         # <retrieved> is the main dictionary that we are returning
         retrieved = dict() 
         for focal_pt in focal_points: 
+
+          
             # Getting all nodes from the agent's memory (both thoughts and events) and
             # sorting them by the datetime of creation.
             # You could also imagine getting the raw conversation, but for now. 
@@ -219,50 +221,52 @@ class CharacterMemory:
             nodes = [[i.last_accessed, i]
                     for i in self.associative.seq_event + self.associative.seq_thought
                     if "idle" not in i.embedding_key]
-            nodes = sorted(nodes, key=lambda x: x[0])
-            nodes = [i for created, i in nodes]
-
-            # Calculating the component dictionaries and normalizing them.
-            recency_out = self.extract_recency(nodes)
-            recency_out = self.normalize_dict_floats(recency_out, 0, 1)
-            importance_out = self.extract_importance(nodes)
-            importance_out = self.normalize_dict_floats(importance_out, 0, 1)  
-            relevance_out = self.extract_relevance(nodes, focal_pt)
-            relevance_out = self.normalize_dict_floats(relevance_out, 0, 1)
-
-            # Computing the final scores that combines the component values. 
-            # Note to self: test out different weights. [1, 1, 1] tends to work
-            # decently, but in the future, these weights should likely be learned, 
-            # perhaps through an RL-like process.
-            # gw = [1, 1, 1]
-            # gw = [1, 2, 1]
             
-            gw = [0.5, 3, 2]
-            master_out = dict()
-            for key in recency_out.keys(): 
-                master_out[key] = (self.scratch.recency_w*recency_out[key]*gw[0] 
-                                + self.scratch.relevance_w*relevance_out[key]*gw[1] 
-                                + self.scratch.importance_w*importance_out[key]*gw[2])
+            if nodes:
+                nodes = sorted(nodes, key=lambda x: x[0])
+                nodes = [i for created, i in nodes]
 
-            # master_out = self.top_highest_x_values(master_out, len(master_out.keys()))
-            # for key, val in master_out.items(): 
-            #     print (self.associative.id_to_node[key].embedding_key, val)
-            #     print (self.scratch.recency_w*recency_out[key]*1, 
-            #             self.scratch.relevance_w*relevance_out[key]*1, 
-            #             self.scratch.importance_w*importance_out[key]*1)
+                # Calculating the component dictionaries and normalizing them.
+                recency_out = self.extract_recency(nodes)
+                recency_out = self.normalize_dict_floats(recency_out, 0, 1)
+                importance_out = self.extract_importance(nodes)
+                importance_out = self.normalize_dict_floats(importance_out, 0, 1)  
+                relevance_out = self.extract_relevance(nodes, focal_pt)
+                relevance_out = self.normalize_dict_floats(relevance_out, 0, 1)
+
+                # Computing the final scores that combines the component values. 
+                # Note to self: test out different weights. [1, 1, 1] tends to work
+                # decently, but in the future, these weights should likely be learned, 
+                # perhaps through an RL-like process.
+                # gw = [1, 1, 1]
+                # gw = [1, 2, 1]
                 
+                gw = [0.5, 3, 2]
+                master_out = dict()
+                for key in recency_out.keys(): 
+                    master_out[key] = (self.scratch.recency_w*recency_out[key]*gw[0] 
+                                    + self.scratch.relevance_w*relevance_out[key]*gw[1] 
+                                    + self.scratch.importance_w*importance_out[key]*gw[2])
 
-            # Extracting the highest x values.
-            # <master_out> has the key of node.id and value of float. Once we get the 
-            # highest x values, we want to translate the node.id into nodes and return
-            # the list of nodes.
-            master_out = self.top_highest_x_values(master_out, n_count)
-            master_nodes = [self.associative.id_to_node[key] for key in list(master_out.keys())]
+                # master_out = self.top_highest_x_values(master_out, len(master_out.keys()))
+                # for key, val in master_out.items(): 
+                #     print (self.associative.id_to_node[key].embedding_key, val)
+                #     print (self.scratch.recency_w*recency_out[key]*1, 
+                #             self.scratch.relevance_w*relevance_out[key]*1, 
+                #             self.scratch.importance_w*importance_out[key]*1)
+                    
 
-            for n in master_nodes: 
-                n.last_accessed = self.scratch.curr_time
-            
-            retrieved[focal_pt['text']] = master_nodes
+                # Extracting the highest x values.
+                # <master_out> has the key of node.id and value of float. Once we get the 
+                # highest x values, we want to translate the node.id into nodes and return
+                # the list of nodes.
+                master_out = self.top_highest_x_values(master_out, n_count)
+                master_nodes = [self.associative.id_to_node[key] for key in list(master_out.keys())]
+
+                for n in master_nodes: 
+                    n.last_accessed = self.scratch.curr_time
+                
+                retrieved[focal_pt['text']] = master_nodes
 
         return retrieved
     

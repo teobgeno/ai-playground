@@ -33,9 +33,9 @@ class ConversationManager:
         self._params = cast(ConversationApiTalkRequestDef, self._params)
         talking_char: Character = [element for element in self._participants if element['is_talking'] == True][0]['character']
         if talking_char.is_npc:
-            utterance = conversation.talk_npc(self._params['game_time'])
+            utterance = conversation.talk_npc(datetime.now())
         else:
-            utterance = conversation.talk_player(self._params['game_time'], self._params['message'], bool(self._params['end_conversation']))
+            utterance = conversation.talk_player(datetime.now(), self._params['message'], bool(self._params['end_conversation']))
         
         return utterance
     
@@ -46,8 +46,9 @@ class ConversationManager:
 
         conversation.set_participants(self._participants)
         
-        if 'game_time' in self._params:
-            conversation.set_start_date(self._params['game_time'])
+        conversation.set_start_date(datetime.now())
+        # if 'game_time' in self._params:
+        #     conversation.set_start_date(datetime.now())
 
         conversation_id = conversation.insert_conversation()
         return {'conversation_id': str(conversation_id)}

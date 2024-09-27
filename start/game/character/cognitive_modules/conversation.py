@@ -170,7 +170,7 @@ class Conversation:
     def insert_conversation(self):
         self._id = self._db.add_record('conversations', {'status': self.status.value, 
                                                          'start_date': self._start_date.strftime('%Y-%m-%d %H:%M:%S'), 
-                                                         'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '',  
+                                                         'end_date': '',  
                                                          'participants': [e['character'].id for e in self._participants], 
                                                          'messages':self._messages, 
                                                          'relationships':self._relationships, 
@@ -180,6 +180,6 @@ class Conversation:
 
     def update_conversation(self):
         self._db.update_record_by_id('conversations', self._id, {'status': self.status.value, 
-                                                                 'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '', 
+                                                                 #'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '', 
                                                                  'messages': self._messages, 
                                                                  'relationships': self._relationships})
