@@ -297,16 +297,15 @@ class CharacterMemory:
         if props.type == 'conversation':
              return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
         elif props.type == 'thought':
-            print("You're yet to be born")
-        elif props.type == 'event':
-            self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+            return self.associative.add_thought(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+        else:
+            return self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
        
-    def add_conversation_memory(self, props):
-        return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+    # def add_conversation_memory(self, props):
+    #     return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
-    def add_event_memory(self, props):
-       self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
-       # self.update_reflect_trigger(props['poignancy'])
+    # def add_event_memory(self, props):
+    #    self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
     def update_reflect_trigger(self, event_poignancy: int):
         self.scratch.importance_trigger_curr -= event_poignancy

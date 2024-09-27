@@ -1,5 +1,5 @@
 import configparser
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 from schema.conversation import *
 from core.db.json_db_manager import JsonDBManager
@@ -8,7 +8,6 @@ from core.cache import Cache
 from game.character.cognitive_modules.conversation import Conversation
 from game.character.character_memory import CharacterMemory
 from typing import cast, List
-
 class ConversationManager:
     def __init__(self, parser, db: JsonDBManager, llm: LLMProvider, cache: Cache, params: ConversationApiTalkRequestDef | ConversationApiCreateRequestDef | ConversationApiDestroyRequestDef):
         self._parcer = parser
@@ -111,30 +110,55 @@ class ConversationManager:
                 plan_score = participant['character'].memory.calculate_conversation_poig_score(plan)
                 plan_embed = self._llm.get_embed(plan)
 
-                print('ok')
-                return
-            
-                props = {
+                props_summary = {
                     'type':'conversation',
                     'created' : datetime.now(),    # self._params['game_time']
-                    'expires' : datetime.now()+ datetime.timedelta(days=30),
+                    'expires' : datetime.now()+ timedelta(days=30),
                     'subject' : participant['character'].name,
                     'predicate' : 'chat with',
                     'object' : target_person.name,
                     'description' : summary,
                     'keywords' : [participant['character'].name, target_person.name],
-                    'poignancy' : score,
+                    'poignancy' : summary_score,
                     'embedding_pair' :  (summary, summary_embed),
                     'filling': [{'conversation_id': conversation.id}]
                 }
-                chat_node = participant['character'].memory.insert_to_memory(props)
+                chat_node = participant['character'].memory.insert_to_memory(props_summary)
 
-                props['type'] = 'event'
-                props['filling'] = [{'node_id': chat_node.node_id}]
-                participant['character'].memory.insert_to_memory(props)
+                props_summary['type'] = 'event'
+                props_summary['filling'] = [{'node_num_id': chat_node.node_num_id}]
+                participant['character'].memory.insert_to_memory(props_summary)
 
-                participant['character'].scratch.importance_trigger_curr -= score
-                participant['character'].scratch.importance_ele_n += 1
+                props_memo = {
+                    'type':'thought',
+                    'created' : datetime.now(),    # self._params['game_time']
+                    'expires' : datetime.now()+ timedelta(days=30),
+                    'subject' : '',
+                    'predicate' : '',
+                    'object' : '',
+                    'description' : f"{target_person.name} {memo}",
+                    'keywords' : [],
+                    'poignancy' : memo_score,
+                    'embedding_pair' :  (memo, memo_embed),
+                    'filling': [{'node_num_id': chat_node.node_num_id, 'conversation_id': conversation.id}]
+                }
+                participant['character'].memory.insert_to_memory(props_memo)
 
+                props_plan = {
+                    'type':'thought',
+                    'created' : datetime.now(),    # self._params['game_time']
+                    'expires' : datetime.now()+ timedelta(days=30),
+                    'subject' : '',
+                    'predicate' : '',
+                    'object' : '',
+                    'description' : f"For {participant['character'].name}'s planning: {plan}",
+                    'keywords' : [],
+                    'poignancy' : plan_score,
+                    'embedding_pair' :  (plan, plan_embed),
+                    'filling': [{'node_num_id': chat_node.node_num_id, 'conversation_id': conversation.id}]
+                }
+                participant['character'].memory.insert_to_memory(props_plan)
+          
+                participant['character'].memory.update_reflect_trigger(summary_score)
                 participant['character'].memory.save_associative()
                 participant['character'].memory.save_scratch()
