@@ -23,6 +23,7 @@ class ConceptNode:
                  s, p, o,
                  description, embedding_key, poignancy, keywords, filling):
         self.node_id: str = node_id
+        self.node_num_id: int = node_id.replace('node_', '')
         self.node_count: int = node_count
         self.type_count: int = type_count
         self.type: str = node_type  # thought / event / chat

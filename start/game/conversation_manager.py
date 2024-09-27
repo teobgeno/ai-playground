@@ -114,29 +114,27 @@ class ConversationManager:
                 print('ok')
                 return
             
-                participant['character'].scratch.importance_trigger_curr -= score
-                participant['character'].scratch.importance_ele_n += 1
-
-                
-        
                 props = {
-                    'date' : datetime.now(),    # self._params['game_time']
+                    'type':'conversation',
+                    'created' : datetime.now(),    # self._params['game_time']
+                    'expires' : datetime.now()+ datetime.timedelta(days=30),
                     'subject' : participant['character'].name,
                     'predicate' : 'chat with',
                     'object' : target_person.name,
-                    'summary' : summary,
+                    'description' : summary,
                     'keywords' : [participant['character'].name, target_person.name],
                     'poignancy' : score,
                     'embedding_pair' :  (summary, summary_embed),
                     'filling': [{'conversation_id': conversation.id}]
                 }
+                chat_node = participant['character'].memory.insert_to_memory(props)
 
-                chat_node = participant['character'].memory.add_coversation_memory(props)
-
+                props['type'] = 'event'
                 props['filling'] = [{'node_id': chat_node.node_id}]
-                props['description'] = summary
-                
-                participant['character'].memory.add_event_memory(props)
+                participant['character'].memory.insert_to_memory(props)
+
+                participant['character'].scratch.importance_trigger_curr -= score
+                participant['character'].scratch.importance_ele_n += 1
 
                 participant['character'].memory.save_associative()
                 participant['character'].memory.save_scratch()

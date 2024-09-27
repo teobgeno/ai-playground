@@ -63,7 +63,7 @@ Conversation:
 
         
 
-def get_relation_prompt(self, props):
+def get_relation_prompt(props):
         tpl = """
 [Statements]
 {props[statements]}\n
@@ -74,7 +74,7 @@ What do you think about {props[target_person_name]}?
         return [{'role': 'user', 'content': tpl.format(props=props)}]
 
 
-def get_utterance_prompt(self, props):
+def get_utterance_prompt(props):
         query_fragments: List[str] = []
         tpl = """
 Context for the task:\n

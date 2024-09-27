@@ -293,12 +293,19 @@ class CharacterMemory:
         memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory
     
-    
-    def add_coversation_memory(self, props):
-        return self.associative.add_chat(props['date'], None, props['subject'], props['predicate'], props['object'],  props['summary'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+    def insert_to_memory(self, props):
+        if props.type == 'conversation':
+             return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+        elif props.type == 'thought':
+            print("You're yet to be born")
+        elif props.type == 'event':
+            self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+       
+    def add_conversation_memory(self, props):
+        return self.associative.add_chat(props['created'], props['expires'], props['subject'], props['predicate'], props['object'],  props['description'], props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
 
     def add_event_memory(self, props):
-       self.associative.add_event(props['date'], None, props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
+       self.associative.add_event(props['created'], props['expires'], props['subject'], props['predicate'], props['object'], props['description'],  props['keywords'], props['poignancy'], props['embedding_pair'], props['filling'])
        # self.update_reflect_trigger(props['poignancy'])
 
     def update_reflect_trigger(self, event_poignancy: int):
