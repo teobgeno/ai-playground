@@ -271,7 +271,7 @@ class CharacterMemory:
         messages = conversation_summary_prompt(props)
         summarize = ''
        
-        summarize = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        summarize = self._llm.completition({'max_tokens': 200, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
       
         return summarize
     
@@ -285,13 +285,13 @@ class CharacterMemory:
     def create_conversation_memory(self, target_person_name: str, conv_messages: List[str]) -> str:
         messages = conversation_memory_prompt({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'target_person_name': target_person_name, 'messages': conv_messages})
         
-        memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        memory = self._llm.completition({'max_tokens': 200, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory
     
     def create_conversation_planning_thought(self, target_person_name: str, conv_messages: List[str]) -> str:
         messages = conversation_planning_thought_prompt({'init_person_name': self.scratch.name, 'init_person_iis': self.scratch.get_str_iss(), 'target_person_name': target_person_name, 'messages': conv_messages})
         
-        memory = self._llm.completition({'max_tokens': 500, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        memory = self._llm.completition({'max_tokens': 200, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
         return memory
     
     def calculate_event_poig_score(self, event_description: str) -> int:
