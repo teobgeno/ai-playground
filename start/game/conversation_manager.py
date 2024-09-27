@@ -100,11 +100,16 @@ class ConversationManager:
 
 
                 summary = participant['character'].memory.create_conversation_summary(target_person.name, messages_list)
-                score = participant['character'].memory.calculate_conversation_poig_score(summary)
+                summary_score = participant['character'].memory.calculate_conversation_poig_score(summary)
+                summary_embed = self._llm.get_embed(summary)
+
                 memo = participant['character'].memory.create_conversation_memory(target_person.name, messages_list)
-                score_memo = participant['character'].memory.calculate_conversation_poig_score(memo)
+                memo_score = participant['character'].memory.calculate_conversation_poig_score(memo)
+                memo_embed = self._llm.get_embed(memo)
+
                 plan = participant['character'].memory.create_conversation_planning_thought(target_person.name, messages_list)
-                score_plan = participant['character'].memory.calculate_conversation_poig_score(plan)
+                plan_score = participant['character'].memory.calculate_conversation_poig_score(plan)
+                plan_embed = self._llm.get_embed(plan)
 
                 print('ok')
                 return
@@ -112,7 +117,7 @@ class ConversationManager:
                 participant['character'].scratch.importance_trigger_curr -= score
                 participant['character'].scratch.importance_ele_n += 1
 
-                summary_embed = self._llm.get_embed(summary)
+                
         
                 props = {
                     'date' : datetime.now(),    # self._params['game_time']
