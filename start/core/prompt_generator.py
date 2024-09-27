@@ -101,7 +101,9 @@ You are roleplaying {props[init_person_name]}, and you're currently in a convers
         tpl +="""
 ---
 Task: Given the above, what should you say to {props[target_person_name]} next in the conversation? And did you end the conversation?
-DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot. Give weight to your character traits.
+DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot. 
+Give weight to your character traits.
+The words you choose should be balanced with your familiarity with {props[target_person_name]}.
 Output format: Output a json of the following format: 
 {{
 "utterance": "{props[init_person_name]}'s utterance>",
