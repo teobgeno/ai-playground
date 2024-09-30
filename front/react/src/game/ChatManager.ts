@@ -157,7 +157,7 @@ export class ChatManager {
             }
         }
     }
-
+    
     public closeConversation(characterIdTag: string) {
         const convId = this.participantsToConv.get(characterIdTag);
         let hasPlayerInConv = false;
