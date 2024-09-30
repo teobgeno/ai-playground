@@ -66,7 +66,7 @@ export class Game extends Scene {
         this.collideObjects = new Map();
         this.initMap(props);
         this.initHero();
-        this.chatManager = new ChatManager(this.charactersMap);
+        this.chatManager = new ChatManager(this.charactersMap, this);
         this.initNpcs();
         this.initEventBusMessages();
         this.initGridEngine();
@@ -380,7 +380,7 @@ export class Game extends Scene {
         EventBus.on("on-chat-character-player-message", (data: Message) => {
             this.chatManager.onChatCharacterPlayerMessage(data)
         });
-        
+
         EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
             this.chatManager.onChatCharacterPlayerCloseConversation(data)
         });
@@ -453,7 +453,7 @@ export class Game extends Scene {
         }
     }
 
-    async emitEvent(event: string, params : any) {
+    async emitEvent<T extends object>(event: string, params : T) {
         EventBus.emit(event, params);
     }
 }

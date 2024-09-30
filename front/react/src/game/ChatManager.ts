@@ -1,4 +1,5 @@
 import { EventBus } from "./EventBus";
+import { Game } from "./scenes/Game";
 import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
 import { CharacterState } from "./characters/types";
@@ -21,11 +22,13 @@ type conversation = {
     messages: Array<Message>;
 };
 export class ChatManager {
+    private scene: Phaser.Scene;
     private charactersMap:  Map<string, Humanoid>;
     private conversations: Map<string, conversation> = new Map();
     private participantsToConv: Map<string, string> = new Map();
 
-    constructor(charactersMap:  Map<string, Humanoid>) {
+    constructor(scene: Phaser.Scene, charactersMap:  Map<string, Humanoid>) {
+        this.scene = scene;
         this.charactersMap = charactersMap;
 
         // EventBus.on("on-chat-character-player-message", (data: Message) => {
@@ -168,6 +171,7 @@ export class ChatManager {
             }
             this.conversations.delete(convId);
             if(hasPlayerInConv) {
+                (this.scene as Game).emitEvent("on-chat-end-conversation", {})
                 EventBus.emit("on-chat-end-conversation", {});
             }
         }
