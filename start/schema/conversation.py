@@ -48,7 +48,6 @@ class ConversationApiCreateResponseDef(TypedDict):
 
 class ConversationApiTalkRequestDef(TypedDict):
     conversation_id: int
-    character_ids: List[int]
     character_id_talk: int
     message: str
     end_conversation: bool

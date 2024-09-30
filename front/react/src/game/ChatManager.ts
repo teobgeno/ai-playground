@@ -69,7 +69,7 @@ export class ChatManager {
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {
         const convId = this.participantsToConv.get(characterIdTag);
         const character = this.charactersMap.get(characterIdTag)
-        const req = { conversation_id: convId, character_ids: [1, 2], character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
+        const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
         
         const resp = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
