@@ -3,7 +3,7 @@ import { EventBus } from "../game/EventBus";
 import "./Chat.css";
 
 export type ChatBoxMessage = {
-    isPlayer: boolean;
+    isNpc: boolean;
     characterName: string;
     content: string;
 };
@@ -12,21 +12,28 @@ export const ChatWidget = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [messages, setMessages] = useState<ChatBoxMessage[]>([]);
     const [playerMessage, setPlayerMessage] = useState("");
+    const [canSendMessage, setCanSendMessage] = useState(true);
+    
 
     useEffect(() => {
         EventBus.on("on-chat-start-conversation", () => {
             setIsVisible(true);
+            //setCanSendMessage(true);
         });
 
         EventBus.on("on-chat-add-message", (message: ChatBoxMessage) => {
             setMessages((messages) => [
                 ...messages,
                 {
-                    isPlayer: message.isPlayer,
+                    isNpc: message.isNpc,
                     characterName: message.characterName,
                     content: message.content,
                 },
             ]);
+
+            if(message.isNpc) {
+                setCanSendMessage(true);
+            }
 
             setTimeout(() => {
                 const messagesCont = document.getElementById('messages')!;
@@ -36,20 +43,26 @@ export const ChatWidget = () => {
         });
 
         EventBus.on("on-chat-end-conversation", () => {
+            //setIsVisible(false);
+            console.log('npc finish the conversation')
+            setCanSendMessage(false);
+        });
+
+        EventBus.on("on-chat-close", () => {
             setIsVisible(false);
         });
 
     }, []);
 
-   
-
     const handleSendMessage = () => {
-        console.log({ message: playerMessage});
-        EventBus.emit("on-chat-character-player-message", {
-            characterId: "hero",
-            message: playerMessage,
-        });
-        setPlayerMessage('');
+        if(canSendMessage && playerMessage) {
+            EventBus.emit("on-chat-character-player-message", {
+                characterId: "hero",
+                message: playerMessage,
+            });
+            setPlayerMessage('');
+            setCanSendMessage(false);
+        }
     };
 
     const handleTextareaKeyPress= (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -105,7 +118,7 @@ export const ChatWidget = () => {
 
                         {messages.map((message, index) => (
                             <span key={index}>
-                                {message.isPlayer ? (
+                                {message.isNpc ? (
                                     <div className="message new">
                                         <figure className="avatar">
                                             <img src="https://www.avatarsinpixels.com/Public/images/previews/minipix2.png" />
@@ -143,6 +156,7 @@ export const ChatWidget = () => {
                             type="submit"
                             className="message-submit"
                             onClick={handleSendMessage}
+                            disabled={!canSendMessage}
                         >
                             Add
                         </button>

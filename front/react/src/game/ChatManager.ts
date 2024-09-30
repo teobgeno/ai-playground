@@ -78,45 +78,50 @@ export class ChatManager {
     }
 
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {
-        const convId = this.participantsToConv.get(characterIdTag);
-        const character = this.charactersMap.get(characterIdTag)
-        const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
+        // const convId = this.participantsToConv.get(characterIdTag);
+        // const character = this.charactersMap.get(characterIdTag)
+        // const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
         
-        const resp: ApiTalkResponse = await httpProvider
-            .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-                    Expires: '-1',
-                    Pragma: 'no-cache',
-                },
-                body: JSON.stringify(req),
-            })
-            .execute();
+        // const resp: ApiTalkResponse = await httpProvider
+        //     .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
+        //         method: 'POST',
+        //         headers: {
+        //             Accept: 'application/json, text/plain, */*',
+        //             'Content-Type': 'application/json',
+        //             'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+        //             Expires: '-1',
+        //             Pragma: 'no-cache',
+        //         },
+        //         body: JSON.stringify(req),
+        //     })
+        //     .execute();
 
-            this.addMessage(characterIdTag, resp.message_reply)
+        //     this.addMessage(characterIdTag, resp)
+            this.addMessage(characterIdTag, {conversation_id:1, message_reply:message, end_conversation: false})
     }
 
-    public addMessage(characterIdTag: string, message: string) {
+    public addMessage(characterIdTag: string, data: ApiTalkResponse) {
         const convId = this.participantsToConv.get(characterIdTag);
         if(convId) {
             const conversation = this.conversations.get(convId);
             const character = this.charactersMap.get(characterIdTag);
             (this.scene as Game).emitEvent("on-chat-add-message", {
-                isPlayer: character?.isNpc,
+                isNpc: character?.isNpc,
                 characterName: character?.getName(),
-                content: message,
+                content: data.message_reply,
             })
             
             conversation?.messages.push({
                 characterId: characterIdTag,
-                message: message,
+                message: data.message_reply,
             });
-            this.setConversationSide(convId)
+
+            if(!data.end_conversation) {
+                this.setConversationSide(convId)
+            } else {
+                (this.scene as Game).emitEvent("on-chat-end-conversation", {})
+            }
         }
-        
     }
 
     public addParticipant(character: Humanoid, convId: string) {
@@ -166,32 +171,33 @@ export class ChatManager {
             }
             this.conversations.delete(convId);
             if(hasPlayerInConv) {
-                (this.scene as Game).emitEvent("on-chat-end-conversation", {})
+                (this.scene as Game).emitEvent("on-chat-close", {})
             }
         }
     }
 
     public generateNpcResponse(characterIdTag: string) {
-        this.getMessage(characterIdTag, '');
-        // const fake = [
-        //     'Hi there, I\'m Jesse and you?',
-        //     'Nice to meet you',
-        //     'How are you?',
-        //     'Not too bad, thanks',
-        //     'What do you do?',
-        //     'That\'s awesome',
-        //     'Codepen is a nice place to stay',
-        //     'I think you\'re a nice person',
-        //     'Why do you think that?',
-        //     'Can you explain?',
-        //     'Anyway I\'ve gotta go now',
-        //     'It was a pleasure chat with you',
-        //     'Time to make a new codepen',
-        //     'Bye',
-        //     ':)'
-        // ]
-        // setTimeout(() => {
-        //     this.addMessage(characterIdTag,fake[Math.floor(Math.random()*fake.length)]);
-        // }, 1000);
+        //this.getMessage(characterIdTag, '');
+        const fake = [
+            'Hi there, I\'m Jesse and you?',
+            'Nice to meet you',
+            'How are you?',
+            'Not too bad, thanks',
+            'What do you do?',
+            'That\'s awesome',
+            'Codepen is a nice place to stay',
+            'I think you\'re a nice person',
+            'Why do you think that?',
+            'Can you explain?',
+            'Anyway I\'ve gotta go now',
+            'It was a pleasure chat with you',
+            'Time to make a new codepen',
+            'Bye',
+            ':)'
+        ]
+        
+        setTimeout(() => {
+            this.addMessage(characterIdTag,{conversation_id:1, message_reply:fake[Math.floor(Math.random()*fake.length)], end_conversation: false});
+        }, 500);
     }
 }

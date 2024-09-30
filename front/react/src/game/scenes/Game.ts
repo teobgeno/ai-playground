@@ -66,7 +66,7 @@ export class Game extends Scene {
         this.collideObjects = new Map();
         this.initMap(props);
         this.initHero();
-        this.chatManager = new ChatManager(this.charactersMap, this);
+        this.chatManager = new ChatManager(this, this.charactersMap);
         this.initNpcs();
         this.initEventBusMessages();
         this.initGridEngine();

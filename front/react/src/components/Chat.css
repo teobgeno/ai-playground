@@ -306,6 +306,12 @@ Chat
 	background: #fff;
 	color: #333;
   }
+
+  .message-box .message-submit:disabled {
+	background: #fff;
+	opacity: 0.4;
+  }
+  
   
   /*--------------------
   Custom Srollbar
