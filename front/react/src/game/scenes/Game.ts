@@ -8,7 +8,7 @@ import { Humanoid } from "../characters/Humanoid";
 
 import { TimeManager } from "../TimeManager";
 import { CursorManager } from "../cursors/CursorManager";
-import { ChatManager } from "../ChatManager";
+import { ChatManager, Message } from "../ChatManager";
 import { MapManager } from "../MapManager";
 import { DayNight } from "../DayNight";
 
@@ -68,6 +68,7 @@ export class Game extends Scene {
         this.initHero();
         this.chatManager = new ChatManager(this.charactersMap);
         this.initNpcs();
+        this.initEventBusMessages();
         this.initGridEngine();
         this.initCamera(this.map);
 
@@ -372,6 +373,17 @@ export class Game extends Scene {
             map.heightInPixels
         );
         this.cameras.main.fadeIn();
+    }
+
+    private initEventBusMessages() {
+
+        EventBus.on("on-chat-character-player-message", (data: Message) => {
+            this.chatManager.onChatCharacterPlayerMessage(data)
+        });
+        
+        EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
+            this.chatManager.onChatCharacterPlayerCloseConversation(data)
+        });
     }
 
     update(time: number, delta: number): void {

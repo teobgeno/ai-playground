@@ -3,7 +3,7 @@ import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
 import { CharacterState } from "./characters/types";
 
-type Message = {
+export type Message = {
     characterId: string;
     message: string;
 };
@@ -22,13 +22,20 @@ export class ChatManager {
     constructor(charactersMap:  Map<string, Humanoid>) {
         this.charactersMap = charactersMap;
 
-        EventBus.on("on-chat-character-player-message", (data: Message) => {
-            this.getMessage(data.characterId, data.message);
-            //this.addMessage(data.characterId, data.message)
-        });
-        EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
-            this.closeConversation(data.characterId)
-         });
+        // EventBus.on("on-chat-character-player-message", (data: Message) => {
+        //     this.getMessage(data.characterId, data.message);
+        //     //this.addMessage(data.characterId, data.message)
+        // });
+        // EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
+        //     this.closeConversation(data.characterId)
+        //  });
+    }
+
+    public onChatCharacterPlayerMessage(data: Message) {
+        this.getMessage(data.characterId, data.message);
+    }
+    public onChatCharacterPlayerCloseConversation(data: Message) {
+        this.closeConversation(data.characterId)
     }
 
     public async initConversation(participants: Array<Humanoid>) {
