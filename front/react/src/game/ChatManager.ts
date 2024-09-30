@@ -1,4 +1,3 @@
-import { EventBus } from "./EventBus";
 import { Game } from "./scenes/Game";
 import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
@@ -30,14 +29,6 @@ export class ChatManager {
     constructor(scene: Phaser.Scene, charactersMap:  Map<string, Humanoid>) {
         this.scene = scene;
         this.charactersMap = charactersMap;
-
-        // EventBus.on("on-chat-character-player-message", (data: Message) => {
-        //     this.getMessage(data.characterId, data.message);
-        //     //this.addMessage(data.characterId, data.message)
-        // });
-        // EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
-        //     this.closeConversation(data.characterId)
-        //  });
     }
 
     public onChatCharacterPlayerMessage(data: Message) {
@@ -109,12 +100,12 @@ export class ChatManager {
         if(convId) {
             const conversation = this.conversations.get(convId);
             const character = this.charactersMap.get(characterIdTag);
-            EventBus.emit("on-chat-add-message", {
+            (this.scene as Game).emitEvent("on-chat-add-message", {
                 isPlayer: character?.isNpc,
                 characterName: character?.getName(),
                 content: message,
-            });
-    
+            })
+            
             conversation?.messages.push({
                 characterId: characterIdTag,
                 message: message,
@@ -141,7 +132,7 @@ export class ChatManager {
         //TODO::if in participants is hero emit event to open chatbox
         const player = this.charactersMap.get('hero');
         if(player) {
-            EventBus.emit("on-chat-start-conversation", {});
+            (this.scene as Game).emitEvent("on-chat-start-conversation", {})
         } else {
             this.setConversationSide(convId);
         }
@@ -172,7 +163,6 @@ export class ChatManager {
             this.conversations.delete(convId);
             if(hasPlayerInConv) {
                 (this.scene as Game).emitEvent("on-chat-end-conversation", {})
-                EventBus.emit("on-chat-end-conversation", {});
             }
         }
     }
