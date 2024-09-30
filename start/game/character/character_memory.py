@@ -390,7 +390,7 @@ class CharacterMemory:
         nodes = [i for created, i in nodes]
 
         messages = generate_focal_points_prompt({'quantity': n, 'nodes': nodes[-1*self.scratch.importance_ele_n:]})
-        focal_points = self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages)
+        focal_points = str(self._llm.completition({'max_tokens': 300, 'temperature': 0.5, 'top_p': 1, 'stream': False, 'frequency_penalty': 0, 'presence_penalty': 0, 'stop': None}, messages))
         return focal_points
     
     def generate_insights_and_evidence(self, nodes, n=5): 
