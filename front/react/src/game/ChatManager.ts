@@ -8,6 +8,12 @@ export type Message = {
     message: string;
 };
 
+type ApiTalkReply = {
+    conversation_id: number;
+    message_reply: string;
+    end_conversation: boolean;
+};
+
 type conversation = {
     id: string;
     participants: Array<Humanoid>;
@@ -78,7 +84,7 @@ export class ChatManager {
         const character = this.charactersMap.get(characterIdTag)
         const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
         
-        const resp = await httpProvider
+        const resp: ApiTalkReply = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
                 method: 'POST',
                 headers: {
