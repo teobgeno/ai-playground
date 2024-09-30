@@ -82,7 +82,15 @@ PART 1.\n
 Here is a brief description of {props[init_person_name]}
 {props[init_person_iis]}
 Here is the memory that is in {props[init_person_name]}'s head:
-{props[init_person_retrieved_memories]}
+"""
+        if  len(props["init_person_retrieved_memories"]) > 0:
+                tpl +="""
+                {props[init_person_retrieved_memories]}
+                """
+        else:
+                tpl +="""{props[target_person_name]} is a stranger. This is our first conversation."""
+        tpl +="""
+        
 PART 2.\n
 Current Location: {props[target_person_name]} Farm\n
 Current Context:
@@ -93,8 +101,8 @@ You are roleplaying {props[init_person_name]}, and you're currently in a convers
             tpl +="""
             Below is the current conversation history between you and {props[target_person_name]}.\n
             """
-            for message in props["messages"]:
-                tpl += [e['character'].name for e in props["participants"] if e['character'].id == message['character_id']][0] + ' :' + message['message'] + '\n'
+            for message in props['messages']:
+                tpl += message + '\n'
         else:
             tpl +="""The conversation has not started yet -- start it!.\n"""
 
@@ -103,7 +111,7 @@ You are roleplaying {props[init_person_name]}, and you're currently in a convers
 Task: Given the above, what should you say to {props[target_person_name]} next in the conversation? And did you end the conversation?
 DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot. 
 Give weight to your character traits.
-The words you choose should be balanced with your familiarity with {props[target_person_name]}.
+The words you select should align with your level of familiarity with  {props[target_person_name]}.
 Output format: Output a json of the following format: 
 {{
 "utterance": "{props[init_person_name]}'s utterance>",

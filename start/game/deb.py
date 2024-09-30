@@ -137,8 +137,13 @@ def test_char_reflection():
     # conversation.set_messages(conv['messages'])
     # conversation.set_relationships(conv['relationships'])
 
-    conversation_manager = ConversationManager(parser, db, llm, cache, {'conversation_id': 709835299195158552})
-    conversation_manager.destroy_conversation()
+    # conversation_manager = ConversationManager(parser, db, llm, cache, {'conversation_id': 709835299195158552})
+    # conversation_manager.destroy_conversation()
+
+    char_data_npc = CharacterDef(cast(CharacterDef, db.get_record_by_id('characters', 3)))
+    character_memory_npc = CharacterMemory(llm, char_data_npc['memory_path'])
+    character_npc = Character.create(char_data_npc['id'], bool(char_data_npc['is_npc']), char_data_npc['name'], character_memory_npc)
+    character_npc.memory.save_scratch()
 
    
     # character.memory.reflect()
