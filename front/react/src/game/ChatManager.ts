@@ -8,7 +8,11 @@ export type Message = {
     message: string;
 };
 
-type ApiTalkReply = {
+type ApiCreateResponse = {
+    conversation_id: string;
+};
+
+type ApiTalkResponse = {
     conversation_id: number;
     message_reply: string;
     end_conversation: boolean;
@@ -39,25 +43,25 @@ export class ChatManager {
     }
 
     public async initConversation(participants: Array<Humanoid>) {
-        const req = { character_ids: participants.map(x => x.getId())};
+        // const req = { character_ids: participants.map(x => x.getId())};
 
-        const resp = await httpProvider
-            .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-                    Expires: '-1',
-                    Pragma: 'no-cache',
-                },
-                body: JSON.stringify(req),
-            })
-            .execute();
+        // const resp: ApiCreateResponse = await httpProvider
+        //     .request(import.meta.env.VITE_APP_URL + 'conversation/create', {
+        //         method: 'POST',
+        //         headers: {
+        //             Accept: 'application/json, text/plain, */*',
+        //             'Content-Type': 'application/json',
+        //             'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+        //             Expires: '-1',
+        //             Pragma: 'no-cache',
+        //         },
+        //         body: JSON.stringify(req),
+        //     })
+        //     .execute();
 
 
-        const convId = resp.conversation_id;
-
+        // const convId = resp.conversation_id;
+        const convId = "1";
         this.conversations.set(convId, {
             id: convId,
             participants: [],
@@ -78,7 +82,7 @@ export class ChatManager {
         const character = this.charactersMap.get(characterIdTag)
         const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
         
-        const resp: ApiTalkReply = await httpProvider
+        const resp: ApiTalkResponse = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
                 method: 'POST',
                 headers: {

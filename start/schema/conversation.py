@@ -47,15 +47,15 @@ class ConversationApiCreateResponseDef(TypedDict):
     conversation_id: str
 
 class ConversationApiTalkRequestDef(TypedDict):
-    conversation_id: int
+    conversation_id: str
     character_id_talk: int
     message: str
     end_conversation: bool
 
 class ConversationApiTalkResponseDef(TypedDict):
-    conversation_id: int
+    conversation_id: str
     message_reply: str
     end_conversation: bool
 
 class ConversationApiDestroyRequestDef(TypedDict):
-     conversation_id: int
+     conversation_id: str

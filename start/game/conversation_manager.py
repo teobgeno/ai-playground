@@ -67,13 +67,13 @@ class ConversationManager:
         if conversation.status == ConversationStatus.COMPLETED:
             self.end_conversation(conversation)
 
-        return {'conversation_id': conversation.id, 'message_reply' : utternace, 'end_conversation': True if conversation.status == ConversationStatus.COMPLETED else False}
+        return {'conversation_id': str(conversation.id), 'message_reply' : utternace, 'end_conversation': True if conversation.status == ConversationStatus.COMPLETED else False}
 
 
     def load_conversation(self)->Conversation:
         if 'conversation_id' in self._params:
-            conv = ConversationDef(cast(ConversationDef, self._db.get_record_by_id('conversations', self._params['conversation_id'])))
-            conversation = Conversation(self._db, self._llm, self._cache, self._params['conversation_id'])
+            conv = ConversationDef(cast(ConversationDef, self._db.get_record_by_id('conversations', int(self._params['conversation_id']))))
+            conversation = Conversation(self._db, self._llm, self._cache, int(self._params['conversation_id']))
             conversation.set_start_date(conv['start_date'])
             self.create_participants(conv['participants'])
             conversation.set_participants(self._participants)
