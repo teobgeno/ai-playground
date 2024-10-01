@@ -9,14 +9,14 @@ import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
     public inventory: InventoryItem;
     public crop: GenericItem;
+    public health: number;                          // defines health of the growing plant and the quality of the inal crop. 
     public baseGrowthRate: number;                  // base value for growth stage.
-    public growthStageInterval: number;             // growthStageInterval intervals to check for growth
-    public growthStageDuration: number;             //TODO:: delete
     public currentGrowthStagePercentage: number;    // when 100% go to next level
-    public baseWaterConsumption: number;
-    public currentGrowthStageFrame: number;
-    public startGrowthStageFrame: number;
-    public maxGrowthStageFrame: number;
+    public growthStageInterval: number;             // growthStageInterval intervals to check for growth time to ms
+    public baseWaterConsumption: number;            // water consumption per growthStageInterval
+    public currentGrowthStageFrame: number;         // current sprite frame
+    public startGrowthStageFrame: number;           // start sprite frame
+    public maxGrowthStageFrame: number;             // end sprite frame
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
         super(Utils.generateId(), objectId, title);
@@ -31,7 +31,10 @@ export class Seed extends BaseItem implements Storable{
             orig.title,
             InventoryItem.clone(orig.getInventory())
         )
-        .setGrowthStageDuration(orig.growthStageDuration)
+        .setBaseGrowthRate(orig.baseGrowthRate)
+        .setCurrentGrowthStagePercentage(orig.currentGrowthStagePercentage)
+        .setGrowthStageInterval(orig.growthStageInterval)
+        .setBaseWaterConsumption(orig.baseWaterConsumption)
         .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
         .setStartGrowthStageFrame(orig.startGrowthStageFrame)
         .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
@@ -42,13 +45,23 @@ export class Seed extends BaseItem implements Storable{
         return this.inventory;
     }
 
+    public setBaseGrowthRate(baseGrowthRate: number) {
+        this.baseGrowthRate = baseGrowthRate;
+        return this;
+    }
+
+    public setCurrentGrowthStagePercentage(currentGrowthStagePercentage: number) {
+        this.currentGrowthStagePercentage = currentGrowthStagePercentage;
+        return this;
+    }
+
     public setGrowthStageInterval(growthStageInterval: number) {
         this.growthStageInterval = growthStageInterval;
         return this;
     }
 
-    public setGrowthStageDuration(growthStageDuration: number) {
-        this.growthStageDuration = growthStageDuration;
+    public setBaseWaterConsumption(baseWaterConsumption: number) {
+        this.baseWaterConsumption = baseWaterConsumption;
         return this;
     }
 

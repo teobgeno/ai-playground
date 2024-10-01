@@ -27,7 +27,6 @@ export class ItemFactory {
             .setAmount(amount).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
-        .setGrowthStageDuration(1000)
         .setCurrentGrowthStageFrame(30)
         .setStartGrowthStageFrame(30)
         .setMaxGrowthStageFrame(34)

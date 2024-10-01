@@ -261,12 +261,15 @@ export class Game extends Scene {
             .setAmount(4).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
-        .setGrowthStageDuration(1000)
+        .setBaseGrowthRate(1)
+        .setCurrentGrowthStagePercentage(0)
+        .setGrowthStageInterval(1000)
+        .setBaseWaterConsumption(1)
         .setCurrentGrowthStageFrame(30)
         .setStartGrowthStageFrame(30)
         .setMaxGrowthStageFrame(34)
         .setCrop(seedCrop);
-       
+
 
         const fencePart = new GenericItem(ObjectId.Fence, 'Fence', 
             new InventoryItem().setIsStackable(true)
