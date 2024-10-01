@@ -1,5 +1,5 @@
 export class ServiceLocator {
-    private static instances: Map<string, any> = new Map();
+    private static instances: Map<string, unknown> = new Map();
   
     static register<T>(key: string, instance: T): void {
       this.instances.set(key, instance);
