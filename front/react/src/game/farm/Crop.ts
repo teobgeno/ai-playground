@@ -113,38 +113,66 @@ export class Crop implements MapObject{
     }
 
     public updateGrowNew(time: number, elements: LandElements) {
-        if(elements.water > 0) {
-            if (this.lastTimestamp) {
-                if (
-                    ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
-                    this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
-                ) {
-                    this.lastTimestamp = Utils.getTimeStamp();
-                    let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
-                    if(growthFrame > this.seed.maxGrowthStageFrame) {
-                        growthFrame = this.seed.maxGrowthStageFrame
-                    }
-                    this.seed.currentGrowthStageFrame = growthFrame;
-                    this.updateTile();
-                }
-            } else {
+       
+        if (this.lastTimestamp) {
+            if (
+                ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
+                this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
+            ) {
                 this.lastTimestamp = Utils.getTimeStamp();
-                this.initTimestamp =  this.lastTimestamp;
+                let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
+                if(growthFrame > this.seed.maxGrowthStageFrame) {
+                    growthFrame = this.seed.maxGrowthStageFrame
+                }
+                this.seed.currentGrowthStageFrame = growthFrame;
+                this.updateTile();
             }
         } else {
             this.lastTimestamp = Utils.getTimeStamp();
             this.initTimestamp =  this.lastTimestamp;
         }
+       
         
     }
-    
-    private consumeWater(elements: LandElements) {
+    private calculateGrowth(elements: LandElements) {
+        const waterFactor = this.getWaterConsumptionFactor(elements.water);
+        this.seed.currentGrowthStagePercentage += this.seed.baseGrowthRate*waterFactor;
+    }
+    private consumeWater(water: number) {
+        // const waterConsumption = this.calculateWaterConsumption();
+        // elements.water = elements.water - waterConsumption;
+
+        // return elements;
         // const weatherPatterns = {
         //     sunny: new Weather('Sunny', { growthMultiplier: 1.1, waterConsumption: 1.2 }),
         //     rainy: new Weather('Rainy', { growthMultiplier: 1.2, waterConsumption: 0.8 }),
         //     stormy: new Weather('Stormy', { growthMultiplier: 0.9, waterConsumption: 1.0 }),
         //     drought: new Weather('Drought', { growthMultiplier: 0.5, waterConsumption: 2.0 })
         // };
+    }
+
+    private getWaterConsumptionFactor(waterAvailable: number) {
+        let waterFactor = 1;
+        const currentWaterConsumption = this.calculateWaterConsumption();
+        if(waterAvailable > 0 && currentWaterConsumption > waterAvailable) {
+            waterFactor = waterAvailable/currentWaterConsumption;
+        }
+
+        if(waterAvailable === 0) {
+            waterFactor = 0;
+        }
+
+        return waterFactor;
+        // const weatherPatterns = {
+        //     sunny: new Weather('Sunny', { growthMultiplier: 1.1, waterConsumption: 1.2 }),
+        //     rainy: new Weather('Rainy', { growthMultiplier: 1.2, waterConsumption: 0.8 }),
+        //     stormy: new Weather('Stormy', { growthMultiplier: 0.9, waterConsumption: 1.0 }),
+        //     drought: new Weather('Drought', { growthMultiplier: 0.5, waterConsumption: 2.0 })
+        // };
+    }
+
+    private calculateWaterConsumption() {
+        return this.seed.baseWaterConsumption;
     }
 
 

@@ -9,7 +9,7 @@ import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
     public inventory: InventoryItem;
     public crop: GenericItem;
-    public baseGrowthRate: number;                  // base value for gowth stage.
+    public baseGrowthRate: number;                  // base value for growth stage.
     public growthStageInterval: number;             // growthStageInterval intervals to check for growth
     public growthStageDuration: number;             //TODO:: delete
     public currentGrowthStagePercentage: number;    // when 100% go to next level
