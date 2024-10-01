@@ -248,7 +248,19 @@ Chat
 	-webkit-animation-delay: 0.3s;
 			animation-delay: 0.3s;
   }
-  
+  .messages .notification-end-conversation {
+	padding: .75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+	color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+	position: relative;
+	clear: both;
+	float: left;
+	width: 91%;
+	margin: 10px 5px 0 5px;
+  }
   /*--------------------
   Message Box
   --------------------*/

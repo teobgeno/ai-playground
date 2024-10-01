@@ -448,8 +448,16 @@ export class Game extends Scene {
         if(task === 'conversation') {
             console.log(params)
             //TODO::check if npc can/want to talk to player
-            const convId = await this.chatManager.initConversation([params, this.hero]);
-            this.chatManager.startConversation(convId);
+            try {
+                const convId = await this.chatManager.initConversation([params, this.hero]);
+                this.chatManager.startConversation(convId);
+              } catch (error) {
+                console.error(error);
+                // Expected output: ReferenceError: nonExistentFunction is not defined
+                // (Note: the exact output may be browser-dependent)
+              }
+
+           
         }
     }
 

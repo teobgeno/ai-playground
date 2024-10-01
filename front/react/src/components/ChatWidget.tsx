@@ -13,12 +13,14 @@ export const ChatWidget = () => {
     const [messages, setMessages] = useState<ChatBoxMessage[]>([]);
     const [playerMessage, setPlayerMessage] = useState("");
     const [canSendMessage, setCanSendMessage] = useState(true);
+    const [canWriteMessage, setCanWriteMessage] = useState(true);
     
 
     useEffect(() => {
         EventBus.on("on-chat-start-conversation", () => {
             setIsVisible(true);
-            //setCanSendMessage(true);
+            setCanWriteMessage(true);
+            setCanSendMessage(true);
         });
 
         EventBus.on("on-chat-add-message", (message: ChatBoxMessage) => {
@@ -46,6 +48,7 @@ export const ChatWidget = () => {
             //setIsVisible(false);
             console.log('npc finish the conversation')
             setCanSendMessage(false);
+            setCanWriteMessage(false);
         });
 
         EventBus.on("on-chat-close", () => {
@@ -142,6 +145,12 @@ export const ChatWidget = () => {
                                 )}
                             </span>
                         ))}
+
+                        {!canWriteMessage && (
+                            <span className="notification-end-conversation">Converastion finished by npc.</span>
+                        )}
+
+                        
                     </div>
                     <div className="message-box">
                         <textarea
@@ -151,6 +160,7 @@ export const ChatWidget = () => {
                             onChange={(e) => setPlayerMessage(e.target.value)}
                             value={playerMessage}
                             onKeyDown={(e) => handleTextareaKeyPress(e)}
+                            disabled={!canWriteMessage}
                         />
                         <button
                             type="submit"

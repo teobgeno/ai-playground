@@ -23,6 +23,7 @@ type conversation = {
     participants: Array<Humanoid>;
     currentParticipantTalkIndex:number
     messages: Array<Message>;
+    hasFinished:boolean;
 };
 export class ChatManager {
     private scene: Phaser.Scene;
@@ -39,7 +40,11 @@ export class ChatManager {
         this.getMessage(data.characterId, data.message);
     }
     public onChatCharacterPlayerCloseConversation(data: Message) {
-        this.closeConversation(data.characterId)
+        const convId = this.participantsToConv.get(data.characterId);
+        if(convId) {
+            this.finishConversation(convId);
+        }
+        this.exitConversation();
     }
 
     public async initConversation(participants: Array<Humanoid>) {
@@ -67,6 +72,7 @@ export class ChatManager {
             participants: [],
             currentParticipantTalkIndex: -1,
             messages: [],
+            hasFinished: false
         });
 
         for (const participant of participants) {
@@ -75,6 +81,45 @@ export class ChatManager {
         }   
 
         return convId;
+    }
+
+    public addParticipant(character: Humanoid, convId: string) {
+        const conversation = this.conversations.get(convId)!;
+        conversation.participants.push(character);
+        this.participantsToConv.set(character.getIdTag(),convId);
+    }
+
+    public addPlayerParticipant(convId: string) {
+        const player = this.charactersMap.get('hero');
+        if(player) {
+            this.addParticipant(player, convId);
+        }
+    }
+
+    public startConversation(convId: string) {
+        //TODO::if in participants is hero emit event to open chatbox
+        let hasPlayer = false;
+        const conversation = this.conversations.get(convId)!;
+        for (const participant of conversation.participants) {
+            if(!participant.isNpc){
+                hasPlayer = true;
+            }
+        }
+
+        if(hasPlayer) {
+            (this.scene as Game).emitEvent("on-chat-start-conversation", {})
+        } else {
+            this.setConversationSide(convId);
+        }
+    }
+
+    public setConversationSide(convId: string) {
+        const conversation = this.conversations.get(convId)!;
+        conversation.currentParticipantTalkIndex = typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
+        const character = conversation.participants[conversation.currentParticipantTalkIndex];
+        if(character.isNpc) {
+            this.generateNpcResponse(character?.getIdTag());
+        }
     }
 
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {
@@ -116,65 +161,34 @@ export class ChatManager {
                 message: data.message_reply,
             });
 
-            if(!data.end_conversation) {
-                this.setConversationSide(convId)
+            if(data.end_conversation) {
+                this.finishConversation(convId);
             } else {
-                (this.scene as Game).emitEvent("on-chat-end-conversation", {})
+                this.setConversationSide(convId)
+                
             }
         }
     }
 
-    public addParticipant(character: Humanoid, convId: string) {
-        const conversation = this.conversations.get(convId);
-        conversation?.participants.push(character);
-        this.participantsToConv.set(character.getIdTag(),convId);
-    }
-
-    public addPlayerParticipant(convId: string) {
-        const player = this.charactersMap.get('hero');
-        if(player) {
-            this.addParticipant(player, convId);
-        }
-    }
-
-    public startConversation(convId: string) {
-        //TODO::if in participants is hero emit event to open chatbox
-        const player = this.charactersMap.get('hero');
-        if(player) {
-            (this.scene as Game).emitEvent("on-chat-start-conversation", {})
-        } else {
-            this.setConversationSide(convId);
-        }
-    }
-
-    public setConversationSide(convId: string) {
-        const conversation = this.conversations.get(convId);
-        if(conversation) {
-            conversation.currentParticipantTalkIndex =typeof conversation.participants[conversation.currentParticipantTalkIndex + 1] === 'undefined' ? 0 : conversation.currentParticipantTalkIndex + 1;
-            const character = conversation.participants[conversation.currentParticipantTalkIndex];
-            if(character?.isNpc) {
-                this.generateNpcResponse(character?.getIdTag());
-            }
-        }
-    }
     
-    public closeConversation(characterIdTag: string) {
-        const convId = this.participantsToConv.get(characterIdTag);
-        let hasPlayerInConv = false;
-        if(convId) {
-            const conversation = this.conversations.get(convId);
-            //TODO::log dialogue to db, character that closed the conversation
+    public finishConversation(convId: string) {
+        const conversation = this.conversations.get(convId);
+        if(conversation && !conversation.hasFinished) {
+            conversation.hasFinished = true;
+
             for(const participant of ( conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getIdTag())
                 participant.setCharState(CharacterState.IDLE);
-                if(!participant.isNpc) {hasPlayerInConv = true;}
-            }
-            this.conversations.delete(convId);
-            if(hasPlayerInConv) {
-                (this.scene as Game).emitEvent("on-chat-close", {})
+                this.conversations.delete(convId);
             }
         }
+        (this.scene as Game).emitEvent("on-chat-end-conversation", {})
     }
+
+    public exitConversation() {
+        (this.scene as Game).emitEvent("on-chat-close", {})
+    }
+    
 
     public generateNpcResponse(characterIdTag: string) {
         //this.getMessage(characterIdTag, '');
@@ -197,7 +211,7 @@ export class ChatManager {
         ]
         
         setTimeout(() => {
-            this.addMessage(characterIdTag,{conversation_id:1, message_reply:fake[Math.floor(Math.random()*fake.length)], end_conversation: false});
+            this.addMessage(characterIdTag,{conversation_id:1, message_reply:fake[Math.floor(Math.random()*fake.length)], end_conversation: true});
         }, 500);
     }
 }
