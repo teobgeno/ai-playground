@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene, Tilemaps } from "phaser";
 import { GridEngine, GridEngineConfig } from "grid-engine";
+import { ServiceLocator } from "../core/serviceLocator";
 
 import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
@@ -117,6 +118,7 @@ export class Game extends Scene {
         }
 
         this.timeManager = new TimeManager()
+        ServiceLocator.register('timeManager', this.timeManager);
 
         //this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
 

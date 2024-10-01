@@ -1,4 +1,6 @@
 import { SpriteItem } from "../items/SpriteItem";
+import { ServiceLocator } from "../core/serviceLocator";
+import { TimeManager } from "../TimeManager";
 import { Seed } from "./Seed";
 import { Utils } from "../core/Utils";
 import { LandElements } from "./types";
@@ -172,6 +174,7 @@ export class Crop implements MapObject{
         //     stormy: new Weather('Stormy', { growthMultiplier: 0.9, waterConsumption: 1.0 }),
         //     drought: new Weather('Drought', { growthMultiplier: 0.5, waterConsumption: 2.0 })
         // };
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         return this.seed.baseWaterConsumption;
     }
 
