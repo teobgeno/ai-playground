@@ -38,6 +38,19 @@ async def conversation_talk(
     conversation_manager = ConversationManager(parser, db, llm, cache, params)
     return conversation_manager.process_conversation()
 
+@router.post("/destroy")
+async def conversation_destroy(
+    params: ConversationApiDestroyRequestDef, 
+    parser = Depends(get_parser), 
+    db: JsonDBManager = Depends(get_db),
+    llm: LLMProvider = Depends(get_llm),
+    cache: Cache = Depends(get_cache),
+   
+    )->bool:
+
+    conversation_manager = ConversationManager(parser, db, llm, cache, params)
+    return conversation_manager.destroy_conversation()
+
 
 
     # try:

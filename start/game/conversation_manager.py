@@ -85,9 +85,10 @@ class ConversationManager:
   
         return conversation
     
-    def destroy_conversation(self)->None:
+    def destroy_conversation(self)->bool:
         conversation = self.load_conversation()
         self.end_conversation(conversation)
+        return True
         
     def end_conversation(self, conversation: Conversation):
         for participant in self._participants:
