@@ -8,6 +8,7 @@ import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 
 import { TimeManager } from "../TimeManager";
+import { WeatherManager } from "../WeatherManager";
 import { CursorManager } from "../cursors/CursorManager";
 import { ChatManager, Message } from "../ChatManager";
 import { MapManager } from "../MapManager";
@@ -51,6 +52,7 @@ export class Game extends Scene {
     private chatManager: ChatManager;
     private mapManager: MapManager;
     private timeManager: TimeManager;
+    private weatherManager: WeatherManager;
     private collideObjects:Map<string, boolean>;
     private dayNight: DayNight;
     constructor() {
@@ -119,7 +121,10 @@ export class Game extends Scene {
 
         this.timeManager = new TimeManager()
         ServiceLocator.register('timeManager', this.timeManager);
-
+       
+        this.weatherManager = new WeatherManager(this);
+        ServiceLocator.register('weatherManager', this.weatherManager);
+        
         //this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
 
         EventBus.emit("current-scene-ready", this);
@@ -127,6 +132,7 @@ export class Game extends Scene {
 
     private test() {
         //landTiles
+       
 
         const stoneItem = new Rock(this, this.mapManager, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
         stoneItem.setResource(new GenericItem(ObjectId.Stone, "stone", new InventoryItem().setIcon('https://assets.codepen.io/7237686/stone.svg?format=auto')));
