@@ -78,6 +78,10 @@ export class Crop implements MapObject{
         return this.seed.currentGrowthStageFrame;
     }
 
+    public getCurrentGrowthStagePercentage() {
+        return this.seed.currentGrowthStagePercentage;
+    }
+
     public isFullGrown() {
         return this.seed.currentGrowthStageFrame === this.seed.maxGrowthStageFrame
             ? true
@@ -88,7 +92,7 @@ export class Crop implements MapObject{
         return this.seed.getCropFromHarvest();
     }
 
-    public updateGrow(time: number, elements: LandElements) {
+    public updateGrowOld(time: number, elements: LandElements) {
         if(elements.water > 0) {
             if (this.lastTimestamp) {
                 if (
@@ -114,7 +118,7 @@ export class Crop implements MapObject{
         
     }
 
-    public updateGrowNew(time: number, elements: LandElements) {
+    public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
             
             if (

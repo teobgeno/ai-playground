@@ -84,7 +84,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         const tooltipY =  this.sprites[0].getSprite().y - 20
         const textPadding = 10
         this.tooltipText = this.scene.add.text(textPadding, textPadding, '', { color: '#000' })
-        const background = this.scene.add.rectangle(0, 0, 70 + (textPadding * 2), this.tooltipText.displayHeight + (textPadding * 2), 0xffffff).setOrigin(0, 0);
+        const background = this.scene.add.rectangle(0, 0, 100 + (textPadding * 2), 50 + (textPadding * 2), 0xffffff).setOrigin(0, 0);
         this.setTooltipText();
         
         // // Put both text and background in a cointainer to easily position them
@@ -179,7 +179,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         return this.landState;
     }
 
-    private consumeWater() {
+    private evaporateWater() {
         if (this.lastTimestamp) {
             const diff = (Utils.getTimeStamp() - this.lastTimestamp);
             if((diff * 1000) >= 1000) {
@@ -239,7 +239,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
         if(this.elements.water) {
-            this.consumeWater();
+            this.evaporateWater();
         }
 
         if (this.landState === LandState.PLANTED) {
@@ -280,6 +280,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     }
 
     private setTooltipText() {
-        this.tooltipText.setText('💧: '+ this.elements.water);
+        const texts = [];
+        texts.push( '💧: ' + this.elements.water + '\n');
+        if(this.crop) {
+            texts.push( '🌱: '+ this.crop?.getCurrentGrowthStagePercentage());
+        }
+        this.tooltipText.setText(texts);
     }
 }
