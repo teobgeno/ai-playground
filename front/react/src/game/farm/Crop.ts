@@ -74,12 +74,16 @@ export class Crop implements MapObject{
     //     return this.sprite;
     // }
 
-    public getCurrentGrowthStage() {
-        return this.seed.currentGrowthStageFrame;
-    }
+    // public getCurrentGrowthStage() {
+    //     return this.seed.currentGrowthStageFrame;
+    // }
 
-    public getCurrentGrowthStagePercentage() {
-        return this.seed.currentGrowthStagePercentage;
+    // public getCurrentGrowthStagePercentage() {
+    //     return this.seed.currentGrowthStagePercentage;
+    // }
+
+    public getSeed() {
+        return this.seed;
     }
 
     public isFullGrown() {
@@ -132,7 +136,7 @@ export class Crop implements MapObject{
                 for(let i = 0; i < executionTimes; i++) {
                     this.seed.currentGrowthStagePercentage += this.calculateGrowth(elements);
                     elements.water = elements.water - this.getWaterConsumption();
-                    console.log('Current Growth: ' + this.seed.currentGrowthStagePercentage);
+                    //console.log('Current Growth: ' + this.seed.currentGrowthStagePercentage);
                     if(this.seed.currentGrowthStagePercentage >= 100) {
                         this.seed.currentGrowthStagePercentage = 0;
                         if(this.seed.currentGrowthStageFrame + 1 <= this.seed.maxGrowthStageFrame) {
@@ -152,7 +156,7 @@ export class Crop implements MapObject{
 
     private calculateGrowth(elements: LandElements) {
         const waterFactor = this.getWaterConsumptionFactor(elements.water);
-        console.log('Water Factor: ' + waterFactor);
+        //console.log('Water Factor: ' + waterFactor);
         return this.seed.baseGrowthRate*waterFactor
     }
 
@@ -184,7 +188,7 @@ export class Crop implements MapObject{
 
 
     updateTile() {
-        const frame = this.getCurrentGrowthStage();
+        const frame = this.seed.currentGrowthStageFrame;
         this.sprites[0].getSprite().setFrame(frame);
     }
 

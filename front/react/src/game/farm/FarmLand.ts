@@ -70,7 +70,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
 
         this.interactive.setInteractionOnHover(
-            () => {this.tooltip.setVisible(true);}
+            () => {
+                if(this.crop) {
+                    this.tooltip.setVisible(true);
+                }
+            }
         );
 
         this.interactive.setInteractionOnHoverOut(
@@ -84,7 +88,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         const tooltipY =  this.sprites[0].getSprite().y - 20
         const textPadding = 10
         this.tooltipText = this.scene.add.text(textPadding, textPadding, '', { color: '#000' })
-        const background = this.scene.add.rectangle(0, 0, 100 + (textPadding * 2), 50 + (textPadding * 2), 0xffffff).setOrigin(0, 0);
+        const background = this.scene.add.rectangle(0, 0, 100 + (textPadding * 2), 80 + (textPadding * 2), 0xffffff).setOrigin(0, 0);
         this.setTooltipText();
         
         // // Put both text and background in a cointainer to easily position them
@@ -281,10 +285,13 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     private setTooltipText() {
         const texts = [];
-        texts.push( '💧: ' + this.elements.water + '\n');
+       
         if(this.crop) {
-            texts.push( '🌱: '+ this.crop?.getCurrentGrowthStagePercentage());
+            texts.push( '💧: ' + this.elements.water + '\n');
+            texts.push( '✅: '+ this.crop?.getSeed().currentGrowthStagePercentage + '%\n');
+            texts.push( '🌱: ' + ((this.crop?.getSeed().currentGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) + '/'+ ((this.crop?.getSeed().maxGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) );
         }
+
         this.tooltipText.setText(texts);
     }
 }
