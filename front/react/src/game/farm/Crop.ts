@@ -135,7 +135,7 @@ export class Crop implements MapObject{
                
                 for(let i = 0; i < executionTimes; i++) {
                     this.seed.currentGrowthStagePercentage += this.calculateGrowth(elements);
-                    elements.water = elements.water - this.getWaterConsumption();
+                    elements.water = this.consumeWater(elements.water);
                     //console.log('Current Growth: ' + this.seed.currentGrowthStagePercentage);
                     if(this.seed.currentGrowthStagePercentage >= 100) {
                         this.seed.currentGrowthStagePercentage = 0;
@@ -184,6 +184,11 @@ export class Crop implements MapObject{
         // };
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         return this.seed.baseWaterConsumption;
+    }
+
+    private consumeWater(waterAvailable: number) {
+        const finalWater = waterAvailable - this.getWaterConsumption();
+        return finalWater >= 0 ? finalWater : 0;
     }
 
 

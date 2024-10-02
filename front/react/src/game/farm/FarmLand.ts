@@ -186,9 +186,13 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     private evaporateWater() {
         if (this.lastTimestamp) {
             const diff = (Utils.getTimeStamp() - this.lastTimestamp);
-            if((diff * 1000) >= 1000) {
-                this.elements.water = this.elements.water - diff >=0 ? this.elements.water - diff : 0;
-                
+            const checkEvery = 5000;
+            if((diff * 1000) >= checkEvery) {
+
+                const waterSubstract = Math.floor((diff * 1000)/checkEvery);
+                console.log('Wtr: ' + (diff * 1000)/checkEvery)
+                this.elements.water = this.elements.water - waterSubstract >=0 ? this.elements.water - waterSubstract : 0;
+
                 let tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
                 tintPerc = tintPerc <= 65 ? tintPerc : 65;
                 this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
@@ -197,10 +201,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             }
         } else {
             this.lastTimestamp = Utils.getTimeStamp();
-        }
-
-        this.setTooltipText();
-        
+        }  
     }
 
     public createCrop(seed: Seed) {
@@ -242,10 +243,15 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
-        if(this.elements.water) {
-            this.evaporateWater();
+        
+        if(this.crop) {
+            this.setTooltipText();
         }
 
+        if(this.elements.water > 0) {
+            this.evaporateWater();
+        }
+       
         if (this.landState === LandState.PLANTED) {
             this.crop?.updateGrow(time, this.elements);
             if (this.crop?.isFullGrown()) {
@@ -287,7 +293,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         const texts = [];
        
         if(this.crop) {
-            texts.push( '💧: ' + this.elements.water + '\n');
+            texts.push( '💧: ' + Math.floor(this.elements.water) + '\n');
             texts.push( '✅: '+ this.crop?.getSeed().currentGrowthStagePercentage + '%\n');
             texts.push( '🌱: ' + ((this.crop?.getSeed().currentGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) + '/'+ ((this.crop?.getSeed().maxGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) );
         }

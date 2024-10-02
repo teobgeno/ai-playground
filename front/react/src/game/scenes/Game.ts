@@ -272,7 +272,7 @@ export class Game extends Scene {
         .setBaseGrowthRate(1)
         .setCurrentGrowthStagePercentage(0)
         .setGrowthStageInterval(1000)
-        .setBaseWaterConsumption(1)
+        .setBaseWaterConsumption(0.1)
         .setCurrentGrowthStageFrame(30)
         .setStartGrowthStageFrame(30)
         .setMaxGrowthStageFrame(34)
