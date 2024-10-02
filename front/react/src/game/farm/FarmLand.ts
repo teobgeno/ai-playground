@@ -20,6 +20,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public sprites: Array<SpriteItem> = [];
     private interactive: InteractiveItem;
     private tooltip:Phaser.GameObjects.Container;
+    private tooltipText: Phaser.GameObjects.Text;
     private landState: number;
     private elements: LandElements = {
         water: 0,
@@ -79,20 +80,19 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         
         this.interactive.startInteraction();
 
-        const tooltip = { text: 'This is a nice village' }
         const tooltipX = this.sprites[0].getSprite().x +32
         const tooltipY =  this.sprites[0].getSprite().y - 20
-        const textPadding = 20
-        const text = this.scene.add.text(textPadding, textPadding, tooltip.text, { color: '#000' })
-        const background = this.scene.add.rectangle(0, 0, text.displayWidth + (textPadding * 2), text.displayHeight + (textPadding * 2), 0xffffff).setOrigin(0, 0)
+        const textPadding = 10
+        this.tooltipText = this.scene.add.text(textPadding, textPadding, '', { color: '#000' })
+        const background = this.scene.add.rectangle(0, 0, 70 + (textPadding * 2), this.tooltipText.displayHeight + (textPadding * 2), 0xffffff).setOrigin(0, 0);
+        this.setTooltipText();
         
         // // Put both text and background in a cointainer to easily position them
         this.tooltip = this.scene.add.container(tooltipX, tooltipY)
         this.tooltip.add(background)
-        this.tooltip.add(text)
+        this.tooltip.add(this.tooltipText)
         this.tooltip.setDepth(10)
         this.tooltip.setVisible(false);
-
 
         // this.sprite = scene.add.sprite(
         //     this.pixelX,
@@ -194,6 +194,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         } else {
             this.lastTimestamp = Utils.getTimeStamp();
         }
+
+        this.setTooltipText();
+        
     }
 
     public createCrop(seed: Seed) {
@@ -248,6 +251,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         }
         
     }
+
     updateTile() {
         let frame = 0;
         switch (this.landState) {
@@ -273,5 +277,9 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     public getInteractive() {
         return this.interactive;
+    }
+
+    private setTooltipText() {
+        this.tooltipText.setText('💧: '+ this.elements.water);
     }
 }
