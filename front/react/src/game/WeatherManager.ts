@@ -37,7 +37,7 @@ void main ()
 }
 `;
 class RainFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
-  constructor(game) {
+  constructor(game: Phaser.Game) {
       super({
           game,
           name: 'rainPostFX',
