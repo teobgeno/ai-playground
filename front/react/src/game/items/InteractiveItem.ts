@@ -13,6 +13,8 @@ export class InteractiveItem {
     private selfInteractionCursor: string = 'assets/cursors/axe.cur';
     private interactionfactors: (selectedObject: Storable | null) => boolean = ()=> {return true};
     private interactionResult: (selectedObject: Storable | null) => void;
+    private interactionHover: () => void = ()=> {};
+    private interactionHoverOut: () => void = ()=> {};
 
     public startInteraction() {
         this.addSpriteListeners();
@@ -36,6 +38,18 @@ export class InteractiveItem {
         func: (selectedObject: Storable | null) => void
     ) {
         this.interactionResult = func;
+    }
+
+    public setInteractionOnHover(
+        func: () => void
+    ) {
+        this.interactionHover = func;
+    }
+
+    public setInteractionOnHoverOut(
+        func: () => void
+    ) {
+        this.interactionHoverOut = func;
     }
 
     public setInteractiveObjectIds(interactiveObjectIds: Array<ObjectId>) {
@@ -78,7 +92,9 @@ export class InteractiveItem {
         }
         if (!this.activeCursor && this.hasSelfInteraction) {
             this.scene.input.setDefaultCursor('url(' + this.selfInteractionCursor + '), pointer');
+            this.interactionHover();
         }
+
     }
 
     private onPointerOut = () => {
@@ -88,6 +104,7 @@ export class InteractiveItem {
 
         if (!this.activeCursor && this.hasSelfInteraction) {
             this.scene.input.setDefaultCursor('default');
+            this.interactionHoverOut();
         }
     }
 

@@ -88,33 +88,33 @@ export class Crop implements MapObject{
         return this.seed.getCropFromHarvest();
     }
 
-    // public updateGrowOld(time: number, elements: LandElements) {
-    //     if(elements.water > 0) {
-    //         if (this.lastTimestamp) {
-    //             if (
-    //                 ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageDuration &&
-    //                 this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
-    //             ) {
-    //                 this.lastTimestamp = Utils.getTimeStamp();
-    //                 let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
-    //                 if(growthFrame > this.seed.maxGrowthStageFrame) {
-    //                     growthFrame = this.seed.maxGrowthStageFrame
-    //                 }
-    //                 this.seed.currentGrowthStageFrame = growthFrame;
-    //                 this.updateTile();
-    //             }
-    //         } else {
-    //             this.lastTimestamp = Utils.getTimeStamp();
-    //             this.initTimestamp =  this.lastTimestamp;
-    //         }
-    //     } else {
-    //         this.lastTimestamp = Utils.getTimeStamp();
-    //         this.initTimestamp =  this.lastTimestamp;
-    //     }
-        
-    // }
-
     public updateGrow(time: number, elements: LandElements) {
+        if(elements.water > 0) {
+            if (this.lastTimestamp) {
+                if (
+                    ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
+                    this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
+                ) {
+                    this.lastTimestamp = Utils.getTimeStamp();
+                    let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
+                    if(growthFrame > this.seed.maxGrowthStageFrame) {
+                        growthFrame = this.seed.maxGrowthStageFrame
+                    }
+                    this.seed.currentGrowthStageFrame = growthFrame;
+                    this.updateTile();
+                }
+            } else {
+                this.lastTimestamp = Utils.getTimeStamp();
+                this.initTimestamp =  this.lastTimestamp;
+            }
+        } else {
+            this.lastTimestamp = Utils.getTimeStamp();
+            this.initTimestamp =  this.lastTimestamp;
+        }
+        
+    }
+
+    public updateGrowNew(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
             
             if (

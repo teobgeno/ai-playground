@@ -19,6 +19,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
     private interactive: InteractiveItem;
+    private tooltip:Phaser.GameObjects.Container;
     private landState: number;
     private elements: LandElements = {
         water: 0,
@@ -53,6 +54,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.interactive = new InteractiveItem();
         this.interactive.setScene(scene);
         this.interactive.setSprites(this.sprites[0]);
+        this.interactive.setSelfInteraction(true);
         this.interactive.setInteractiveObjectIds([ObjectId.WaterCan, ObjectId.CornSeed]);
         this.interactive.setInteractionResult(
             (selectedObject: Storable | null) => {
@@ -64,7 +66,32 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                 return this.interactFactors(selectedObject);
             }
         );
+
+
+        this.interactive.setInteractionOnHover(
+            () => {this.tooltip.setVisible(true);}
+        );
+
+        this.interactive.setInteractionOnHoverOut(
+            () => {this.tooltip.setVisible(false);}
+        );
+
+        
         this.interactive.startInteraction();
+
+        const tooltip = { text: 'This is a nice village' }
+        const tooltipX = this.sprites[0].getSprite().x +32
+        const tooltipY =  this.sprites[0].getSprite().y - 20
+        const textPadding = 20
+        const text = this.scene.add.text(textPadding, textPadding, tooltip.text, { color: '#000' })
+        const background = this.scene.add.rectangle(0, 0, text.displayWidth + (textPadding * 2), text.displayHeight + (textPadding * 2), 0xffffff).setOrigin(0, 0)
+        
+        // // Put both text and background in a cointainer to easily position them
+        this.tooltip = this.scene.add.container(tooltipX, tooltipY)
+        this.tooltip.add(background)
+        this.tooltip.add(text)
+        this.tooltip.setDepth(10)
+        this.tooltip.setVisible(false);
 
 
         // this.sprite = scene.add.sprite(
@@ -112,7 +139,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
                 break;
             }
         }
-        if (!selectedObject) {
+        if (!selectedObject && this.landState === LandState.READY) {
             (this.scene as Game).addPlayerTask("harvest", this);
             console.log("harvest");
         }
@@ -197,7 +224,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     public destroyCrop() {
         //this.removeInteractive();
-        this.interactive.setSelfInteraction(false);
+        //this.interactive.setSelfInteraction(false);
         this.crop?.remove();
         this.crop = null;
         this.updateTile();
@@ -216,7 +243,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             this.crop?.updateGrow(time, this.elements);
             if (this.crop?.isFullGrown()) {
                 this.landState = LandState.READY;
-                this.interactive.setSelfInteraction(true);
+                //this.interactive.setSelfInteraction(true);
             }
         }
         
