@@ -9,6 +9,7 @@ export class TimeManager {
         this.scaleFactor = 96;
         this.initDate = Date.UTC(2024, 9, 3, 10, 30, 0);
     }
+    
     public update() {
     
         const currentTime = Date.now();
@@ -26,8 +27,8 @@ export class TimeManager {
         //console.log(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`);
     }
 
-    public testTimeStamp() {
-        return  Date.now();
+    public setTimeScale(factor: number) {
+        this.scaleFactor = factor;
     }
 
     public getCurrentTimestamp() {

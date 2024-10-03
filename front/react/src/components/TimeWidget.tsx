@@ -6,7 +6,7 @@ import "./TimeWidget.css";
 export function TimeWidget() {
 
     const [date, setDate] = useState(new Date());
-    const zeroPad = (num, places) => String(num).padStart(places, '0')
+    const zeroPad = (num:number, places: number) => String(num).padStart(places, '0')
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -19,7 +19,6 @@ export function TimeWidget() {
             
         }, 1000);
       
-
         //Clearing the interval
         return () => clearInterval(interval);
     });
