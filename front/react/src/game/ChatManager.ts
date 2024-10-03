@@ -101,7 +101,6 @@ export class ChatManager {
     }
 
     public startConversation(convId: string) {
-        //TODO::if in participants is hero emit event to open chatbox
         let hasPlayer = false;
         const conversation = this.conversations.get(convId)!;
         for (const participant of conversation.participants) {
@@ -127,9 +126,10 @@ export class ChatManager {
     }
 
     public async getMessage(characterIdTag: string, message = '', endConversation = false) {
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         const convId = this.participantsToConv.get(characterIdTag);
         const character = this.charactersMap.get(characterIdTag)
-        const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation};
+        const req = { conversation_id: convId, character_id_talk: character?.getId(), message: message, end_conversation: endConversation, game_time: timeManager?.getCurrentDateTimeToString()};
         
         const resp: ApiTalkResponse = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/talk', {
