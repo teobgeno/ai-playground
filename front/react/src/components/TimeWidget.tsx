@@ -17,7 +17,7 @@ export function TimeWidget() {
                 setDate(new Date(timeManager.getCurrentTimestamp()));
             }
             
-        }, 1000);
+        }, 100);
       
         //Clearing the interval
         return () => clearInterval(interval);
