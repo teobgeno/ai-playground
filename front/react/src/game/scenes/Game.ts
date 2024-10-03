@@ -408,8 +408,7 @@ export class Game extends Scene {
                 item.update(time);
             }
         }
-        this.timeManager.updateNew(Date.now());
-        //this.timeManager.update();
+        this.timeManager.update(Date.now());
         //this.dayNight.update(0, 0);
     }
 

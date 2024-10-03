@@ -12,7 +12,7 @@ export class TimeManager {
         this.initDate = Date.UTC(2024, 9, 3, 10, 30, 0);
     }
 
-    public updateNew(currentTime: number) {
+    public update(currentTime: number) {
         if(currentTime > this.lastTimestamp) {
             //console.log(currentTime - this.lastTimestamp)
             this.elapsedTime += currentTime - this.lastTimestamp;
@@ -22,22 +22,22 @@ export class TimeManager {
         this.lastTimestamp = currentTime;
     }
     
-    public update() {
+    // public updateOld() {
     
-        const currentTime = Date.now();
-        const elapsedTimeRealTime = currentTime - this.gameStartTime;
-        this.gameCurrentTimestamp = this.initDate + (elapsedTimeRealTime * this.scaleFactor);
+    //     const currentTime = Date.now();
+    //     const elapsedTimeRealTime = currentTime - this.gameStartTime;
+    //     this.gameCurrentTimestamp = this.initDate + (elapsedTimeRealTime * this.scaleFactor);
       
-        // const hour = Math.floor(this.gameCurrentTimestamp / 3600000) % 24;
-        // const minute = Math.floor((this.gameCurrentTimestamp % 3600000) / 60000) % 60;
-        // const second = Math.floor((this.gameCurrentTimestamp % 60000) / 1000) % 60;
+    //     // const hour = Math.floor(this.gameCurrentTimestamp / 3600000) % 24;
+    //     // const minute = Math.floor((this.gameCurrentTimestamp % 3600000) / 60000) % 60;
+    //     // const second = Math.floor((this.gameCurrentTimestamp % 60000) / 1000) % 60;
         
-        // console.log(new Date(elapsedTimeGameTime).getUTCDate())
-        // console.log(new Date(elapsedTimeGameTime).getUTCMonth())
-        // get hours new Date(elapsedTimeGameTime).getUTCHours()
-        // Display in HH:MM:SS format
-        //console.log(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`);
-    }
+    //     // console.log(new Date(elapsedTimeGameTime).getUTCDate())
+    //     // console.log(new Date(elapsedTimeGameTime).getUTCMonth())
+    //     // get hours new Date(elapsedTimeGameTime).getUTCHours()
+    //     // Display in HH:MM:SS format
+    //     //console.log(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`);
+    // }
 
     public setTimeScale(factor: number) {
         this.scaleFactor = factor;
