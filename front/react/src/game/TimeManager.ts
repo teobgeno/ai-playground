@@ -3,11 +3,23 @@ export class TimeManager {
     private scaleFactor: number;
     private initDate: number;
     private gameCurrentTimestamp: number
+    private elapsedTime: number;
+    private lastTimestamp: number
 
     constructor() {
         this.gameStartTime = Date.now();
         this.scaleFactor = 96;
         this.initDate = Date.UTC(2024, 9, 3, 10, 30, 0);
+    }
+
+    public updateNew(currentTime: number) {
+        if(!this.lastTimestamp || currentTime > this.lastTimestamp) {
+            //console.log(currentTime - this.lastTimestamp)
+            this.elapsedTime = currentTime - this.lastTimestamp;
+            this.gameCurrentTimestamp = this.initDate + (this.elapsedTime * this.scaleFactor);
+        }
+
+        this.lastTimestamp = currentTime;
     }
     
     public update() {
