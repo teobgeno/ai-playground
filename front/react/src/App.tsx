@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { Game } from "./game/scenes/Game";
 import { ChatWidget } from "./components/ChatWidget";
+import { TimeWidget } from "./components/TimeWidget";
 import { Hotbar } from "./components/Hotbar";
 import { Inventory } from "./components/Inventory";
 import { StaminaBar } from "./components/StaminaBar";
@@ -86,6 +87,7 @@ function App() {
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
                 <StaminaBar stamina={playerStamina} />
+                <TimeWidget />
             </div>
             <ChatWidget />
             <Inventory hotbarItems={inventoryHotbarItems} restItems={inventoryRestItems} craftIngridientsItems={craftIngridientsItems} moveStorableItem={moveStorableItem}/>

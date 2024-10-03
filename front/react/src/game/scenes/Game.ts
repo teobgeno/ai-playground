@@ -125,7 +125,7 @@ export class Game extends Scene {
         this.weatherManager = new WeatherManager(this);
         ServiceLocator.register('weatherManager', this.weatherManager);
         
-        //this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
+        this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
 
         EventBus.emit("current-scene-ready", this);
     }
