@@ -1,3 +1,4 @@
+import { Utils } from "./core/Utils";
 export class TimeManager {
     private gameStartTime: number; 
     private scaleFactor: number;
@@ -50,5 +51,10 @@ export class TimeManager {
     public getCurrentStartOfDay() {
         const currentDate = new Date(this.gameCurrentTimestamp);
         return Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0)
+    }
+
+    public getCurrentDateTimeToString() {
+        const currentDate = new Date(this.gameCurrentTimestamp);
+        return `${currentDate.getUTCFullYear()}-${Utils.shiftPad(currentDate.getUTCMonth(), 2)}-${Utils.shiftPad(currentDate.getUTCDate(), 2)} ${Utils.shiftPad(currentDate.getUTCHours(), 2)}:${Utils.shiftPad(currentDate.getUTCMinutes(), 2)}:${Utils.shiftPad(currentDate.getUTCSeconds(), 2)}`
     }
 }

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { ServiceLocator } from "../game/core/serviceLocator";
 import { TimeManager } from "../game/TimeManager";
+import { Utils } from "../game/core/Utils";
 import "./TimeWidget.css";
 
 export function TimeWidget() {
 
     const [date, setDate] = useState(new Date());
-    const zeroPad = (num:number, places: number) => String(num).padStart(places, '0')
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -26,8 +26,8 @@ export function TimeWidget() {
     return (
         <>
             <div>
-                {zeroPad(date.getDate(), 2) + '-' + zeroPad(date.getMonth(), 2) + '-' + date.getUTCFullYear()}<br/>
-                {zeroPad(date.getUTCHours(), 2) + ':' + zeroPad(date.getMinutes(), 2)}
+                {Utils.zeroPad(date.getDate(), 2) + '-' + Utils.zeroPad(date.getMonth(), 2) + '-' + date.getUTCFullYear()}<br/>
+                {Utils.zeroPad(date.getUTCHours(), 2) + ':' + Utils.zeroPad(date.getUTCMinutes(), 2)}
             </div>
         </>
     );

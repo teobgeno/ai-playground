@@ -1,7 +1,10 @@
 import { Game } from "./scenes/Game";
-import { Humanoid } from "./characters/Humanoid";
 import { httpProvider } from "./core/httpProvider";
+import { ServiceLocator } from "./core/serviceLocator";
+import { TimeManager } from "./TimeManager";
+import { Humanoid } from "./characters/Humanoid";
 import { CharacterState } from "./characters/types";
+
 
 export type Message = {
     characterId: string;
@@ -48,7 +51,8 @@ export class ChatManager {
     }
 
     public async initConversation(participants: Array<Humanoid>) {
-        const req = { character_ids: participants.map(x => x.getId())};
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
+        const req = { character_ids: participants.map(x => x.getId()), game_time: timeManager?.getCurrentDateTimeToString()};
 
         const resp: ApiCreateResponse = await httpProvider
             .request(import.meta.env.VITE_APP_URL + 'conversation/create', {

@@ -12,5 +12,8 @@ export class Utils {
     static getTimeStamp() {
         return  Math.round(new Date().getTime() / 1000);
     }
-     
+
+    static zeroPad (num:number, places: number) { 
+        return String(num).padStart(places, '0');
+    }
 }

@@ -109,6 +109,11 @@ def test_cont_conv(conv_id: int, participants, isNpc: bool, player_message: str)
     print('Conversation Status:' + str(conversation.status))
     return utterance
 
+def test_string_date():
+    datetime_str = '2024-06-27 13:55:26'
+    datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+    print(datetime_object)
+
 def test_char_reflection():
     parser = configparser.ConfigParser()
     parser.read("config.ini")
