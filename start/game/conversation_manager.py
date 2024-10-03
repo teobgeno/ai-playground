@@ -16,12 +16,12 @@ class ConversationManager:
         self._cache = cache
         self._participants: List[ParticipantDef] = []
         self._params = params
-        if 'game_time' in self._params:
-            self._params['game_time'] = datetime.now()
+        # if 'game_time' in self._params:
+        #     self._params['game_time'] = datetime.now() 
 
     def create_participants(self, character_ids: List[int])->None:
         for character_id in character_ids:
-            char_data = CharacterDef(cast(CharacterDef, self._db.get_record_by_id('characters', character_id)))
+            char_data = cast(CharacterDef, self._db.get_record_by_id('characters', character_id))
         
             character_memory = CharacterMemory(self._llm, char_data['memory_path'])
             character = Character.create(char_data['id'], bool(char_data['is_npc']), char_data['name'], character_memory)
@@ -46,9 +46,7 @@ class ConversationManager:
 
         conversation.set_participants(self._participants)
         
-        conversation.set_start_date(datetime.now())
-        # if 'game_time' in self._params:
-        #     conversation.set_start_date(datetime.now())
+        conversation.set_start_date(datetime.strptime(self._params['game_time'], '%Y-%m-%d %H:%M:%S'))
 
         conversation_id = conversation.insert_conversation()
         return {'conversation_id': str(conversation_id)}
@@ -72,7 +70,7 @@ class ConversationManager:
 
     def load_conversation(self)->Conversation:
         if 'conversation_id' in self._params:
-            conv = ConversationDef(cast(ConversationDef, self._db.get_record_by_id('conversations', int(self._params['conversation_id']))))
+            conv = cast(ConversationDef, self._db.get_record_by_id('conversations', int(self._params['conversation_id'])))
             conversation = Conversation(self._db, self._llm, self._cache, int(self._params['conversation_id']))
             conversation.set_start_date(conv['start_date'])
             self.create_participants(conv['participants'])
