@@ -83,7 +83,10 @@ class ConversationManager:
     
     def destroy_conversation(self)->bool:
         conversation = self.load_conversation()
-        self.end_conversation(conversation)
+        conversation.set_end_date(self._params['game_time'])
+        conversation.update_conversation()
+        if  len(conversation.messages):
+            self.end_conversation(conversation)
         return True
         
     def end_conversation(self, conversation: Conversation):

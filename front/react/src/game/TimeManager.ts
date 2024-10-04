@@ -39,7 +39,26 @@ export class TimeManager {
     //     //console.log(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`);
     // }
 
-    public setTimeScale(factor: number) {
+    public setTimeFlowReal() {
+        if(this.scaleFactor !== 1) {
+            this.setTimeScale(1);
+        }
+    }
+
+    public setTimeFlowGame() {
+        if(this.scaleFactor !== 96) {
+            this.setTimeScale(96);
+        }
+        this.setTimeScale(96);
+    }
+
+    public setTimeFlowPause() {
+        if(this.scaleFactor !== 0) {
+            this.setTimeScale(0);
+        }
+    }
+
+    private setTimeScale(factor: number) {
         this.initDate = this.gameCurrentTimestamp;
         this.elapsedTime = 0;
         this.scaleFactor = factor;

@@ -52,7 +52,7 @@ export class ChatManager {
 
     public async initConversation(participants: Array<Humanoid>) {
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
-        timeManager?.setTimeScale(1);
+        timeManager?.setTimeFlowReal();
         const req = { character_ids: participants.map(x => x.getId()), game_time: timeManager?.getCurrentDateTimeToString()};
 
         const resp: ApiCreateResponse = await httpProvider
@@ -176,10 +176,29 @@ export class ChatManager {
     }
 
     
-    public finishConversation(convId: string) {
+    public async finishConversation(convId: string, finishByPlayer = false) {
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         const conversation = this.conversations.get(convId);
         if(conversation && !conversation.hasFinished) {
             conversation.hasFinished = true;
+
+            if(finishByPlayer) {
+                const req = { conversation_id: convId, game_time: timeManager?.getCurrentDateTimeToString()};
+        
+                await httpProvider
+                    .request(import.meta.env.VITE_APP_URL + 'conversation/destroy', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+                            Expires: '-1',
+                            Pragma: 'no-cache',
+                        },
+                        body: JSON.stringify(req),
+                    })
+                    .execute();
+            }
 
             for(const participant of ( conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getIdTag())
@@ -189,14 +208,16 @@ export class ChatManager {
 
             (this.scene as Game).emitEvent("on-chat-end-conversation", {});
 
-            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
-            timeManager?.setTimeScale(96);
+            timeManager?.setTimeFlowGame();
         }
         
     }
 
     public exitConversation() {
         (this.scene as Game).emitEvent("on-chat-close", {})
+
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
+        timeManager?.setTimeFlowGame();
     }
     
 
