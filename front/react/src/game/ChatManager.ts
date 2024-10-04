@@ -186,8 +186,13 @@ export class ChatManager {
                 participant.setCharState(CharacterState.IDLE);
                 this.conversations.delete(convId);
             }
+
+            (this.scene as Game).emitEvent("on-chat-end-conversation", {});
+
+            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
+            timeManager?.setTimeScale(96);
         }
-        (this.scene as Game).emitEvent("on-chat-end-conversation", {})
+        
     }
 
     public exitConversation() {
