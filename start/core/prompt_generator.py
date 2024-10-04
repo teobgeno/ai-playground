@@ -114,7 +114,7 @@ NEVER mention you are an AI language model. You MUST stay in character and respo
 DO NOT greet them again. Do NOT use the word "Hey" too often. Talk like a human being and not like an assistant bot. 
 Talk to the other based on your character traits.
 What you say should align with your level of familiarity with {props[target_person_name]}. 
-If you end the conversation mention that in your reply.
+If you end the conversation say something to close the conversation.
 ---
 Task: Given the above, what should you say to {props[target_person_name]} next in the conversation? And did you end the conversation?
 Output format: Output a json of the following format: 
