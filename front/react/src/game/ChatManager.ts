@@ -45,7 +45,7 @@ export class ChatManager {
     public onChatCharacterPlayerCloseConversation(data: Message) {
         const convId = this.participantsToConv.get(data.characterId);
         if(convId) {
-            this.finishConversation(convId);
+            this.finishConversation(convId, true);
         }
         this.exitConversation();
     }
