@@ -4,7 +4,7 @@ export class TimeManager {
     private scaleFactor: number;
     private initDate: number;
     private gameCurrentTimestamp: number
-    private elapsedTime: number=0;
+    private elapsedTime: number = 0;
     private lastTimestamp: number =  Date.now();
 
     constructor() {
