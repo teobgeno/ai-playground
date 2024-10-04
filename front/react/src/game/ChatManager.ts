@@ -52,6 +52,7 @@ export class ChatManager {
 
     public async initConversation(participants: Array<Humanoid>) {
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
+        timeManager?.setTimeScale(1);
         const req = { character_ids: participants.map(x => x.getId()), game_time: timeManager?.getCurrentDateTimeToString()};
 
         const resp: ApiCreateResponse = await httpProvider

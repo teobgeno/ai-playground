@@ -262,7 +262,8 @@ class CharacterMemory:
                 # the list of nodes.
                 master_out = self.top_highest_x_values(master_out, n_count)
                 master_nodes = [self.associative.id_to_node[key] for key in list(master_out.keys())]
-
+                
+                # TODO:: set time to last_accessed
                 # for n in master_nodes: 
                 #     n.last_accessed = self.scratch.curr_time
                 
