@@ -37,7 +37,7 @@ class ConceptNode:
         self.predicate: str = p
         self.object: str = o
 
-        self.description: str = description
+        self.description: str = ''
         self.embedding_key: str = embedding_key
         self.poignancy: int = poignancy
         self.keywords: List[str] = keywords

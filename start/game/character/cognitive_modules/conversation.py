@@ -22,7 +22,7 @@ class Conversation:
         self._cache = cache
         self._status = ConversationStatus.RUNNING
         self._start_date: datetime
-        self._end_date: datetime
+        self._end_date: datetime | None = None
         self._participants: List[ParticipantDef] = []
         self._init_person: Character
         self._target_person: Character
@@ -185,6 +185,6 @@ class Conversation:
 
     def update_conversation(self):
         self._db.update_record_by_id('conversations', self._id, {'status': self.status.value, 
-                                                                 'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if isinstance(self._end_date, datetime) else '', 
+                                                                 'end_date': self._end_date.strftime('%Y-%m-%d %H:%M:%S') if self._end_date and isinstance(self._end_date, datetime) else '', 
                                                                  'messages': self._messages, 
                                                                  'relationships': self._relationships})

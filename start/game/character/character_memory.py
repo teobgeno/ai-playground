@@ -263,8 +263,8 @@ class CharacterMemory:
                 master_out = self.top_highest_x_values(master_out, n_count)
                 master_nodes = [self.associative.id_to_node[key] for key in list(master_out.keys())]
 
-                for n in master_nodes: 
-                    n.last_accessed = self.scratch.curr_time
+                # for n in master_nodes: 
+                #     n.last_accessed = self.scratch.curr_time
                 
                 retrieved[focal_pt['text']] = master_nodes
 
