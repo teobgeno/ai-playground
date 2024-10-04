@@ -27,7 +27,7 @@ export function TimeWidget() {
         <>
             <div>
                 {Utils.zeroPad(date.getUTCDate(), 2) + '-' + Utils.zeroPad(date.getUTCMonth() + 1, 2) + '-' + date.getUTCFullYear()}<br/>
-                {Utils.zeroPad(date.getUTCHours(), 2) + ':' + Utils.zeroPad(date.getUTCMinutes(), 2)}
+                {Utils.zeroPad(date.getUTCHours(), 2) + ':' + Utils.zeroPad(date.getUTCMinutes(), 2) + ':' + Utils.zeroPad(date.getUTCSeconds(), 2)}
             </div>
         </>
     );

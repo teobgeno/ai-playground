@@ -15,7 +15,6 @@ export class TimeManager {
 
     public update(currentTime: number) {
         if(currentTime > this.lastTimestamp) {
-            //console.log(currentTime - this.lastTimestamp)
             this.elapsedTime += currentTime - this.lastTimestamp;
             this.gameCurrentTimestamp = this.initDate + (this.elapsedTime * this.scaleFactor);
         }
@@ -41,6 +40,8 @@ export class TimeManager {
     // }
 
     public setTimeScale(factor: number) {
+        this.initDate = this.gameCurrentTimestamp;
+        this.elapsedTime = 0;
         this.scaleFactor = factor;
     }
 
