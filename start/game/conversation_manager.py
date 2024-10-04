@@ -16,9 +16,7 @@ class ConversationManager:
         self._cache = cache
         self._participants: List[ParticipantDef] = []
         self._params = params
-        # if 'game_time' in self._params:
-        #     self._params['game_time'] = datetime.now() 
-
+    
     def create_participants(self, character_ids: List[int])->None:
         for character_id in character_ids:
             char_data = cast(CharacterDef, self._db.get_record_by_id('characters', character_id))
@@ -33,9 +31,9 @@ class ConversationManager:
         self._params = cast(ConversationApiTalkRequestDef, self._params)
         talking_char: Character = [element for element in self._participants if element['is_talking'] == True][0]['character']
         if talking_char.is_npc:
-            utterance = conversation.talk_npc(datetime.now())
+            utterance = conversation.talk_npc(self._params['game_time'])
         else:
-            utterance = conversation.talk_player(datetime.now(), self._params['message'], bool(self._params['end_conversation']))
+            utterance = conversation.talk_player(self._params['game_time'], self._params['message'], bool(self._params['end_conversation']))
         
         return utterance
     
@@ -46,7 +44,7 @@ class ConversationManager:
 
         conversation.set_participants(self._participants)
         
-        conversation.set_start_date(datetime.strptime(self._params['game_time'], '%Y-%m-%d %H:%M:%S'))
+        conversation.set_start_date(self._params['game_time'])
 
         conversation_id = conversation.insert_conversation()
         return {'conversation_id': str(conversation_id)}
@@ -112,8 +110,8 @@ class ConversationManager:
 
                 props_summary = {
                     'type':'conversation',
-                    'created' : datetime.now(),    # self._params['game_time']
-                    'expires' : datetime.now()+ timedelta(days=30),
+                    'created' : self._params['game_time'],    # self._params['game_time']
+                    'expires' : self._params['game_time'] + timedelta(days=30),
                     'subject' : participant['character'].name,
                     'predicate' : 'chat with',
                     'object' : target_person.name,
@@ -131,8 +129,8 @@ class ConversationManager:
 
                 props_memo = {
                     'type':'thought',
-                    'created' : datetime.now(),    # self._params['game_time']
-                    'expires' : datetime.now()+ timedelta(days=30),
+                    'created' : self._params['game_time'],
+                    'expires' : self._params['game_time'] + timedelta(days=30),
                     'subject' : '',
                     'predicate' : '',
                     'object' : '',
@@ -146,8 +144,8 @@ class ConversationManager:
 
                 props_plan = {
                     'type':'thought',
-                    'created' : datetime.now(),    # self._params['game_time']
-                    'expires' : datetime.now()+ timedelta(days=30),
+                    'created' : self._params['game_time'],
+                    'expires' : self._params['game_time'] + timedelta(days=30),
                     'subject' : '',
                     'predicate' : '',
                     'object' : '',

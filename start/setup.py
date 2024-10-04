@@ -7,8 +7,8 @@ from game.deb import test_action
 from game.deb import test_weather_api
 from game.deb import test_string_date
 
-# main.init()
-test_string_date()
+main.init()
+# test_string_date()
 
 # def generate_terrain(width, height, scale):
 #     terrain = np.zeros((width, height))

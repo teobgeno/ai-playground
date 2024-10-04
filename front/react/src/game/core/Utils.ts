@@ -9,11 +9,13 @@ export class Utils {
         return i / Math.pow(10, o)
     }
 
+    static zeroPad (num:number, places: number) { 
+        return String(num).padStart(places, '0');
+    }
+
     static getTimeStamp() {
         return  Math.round(new Date().getTime() / 1000);
     }
 
-    static zeroPad (num:number, places: number) { 
-        return String(num).padStart(places, '0');
-    }
+   
 }

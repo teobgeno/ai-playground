@@ -55,6 +55,7 @@ export class TimeManager {
 
     public getCurrentDateTimeToString() {
         const currentDate = new Date(this.gameCurrentTimestamp);
-        return `${currentDate.getUTCFullYear()}-${Utils.shiftPad(currentDate.getUTCMonth(), 2)}-${Utils.shiftPad(currentDate.getUTCDate(), 2)} ${Utils.shiftPad(currentDate.getUTCHours(), 2)}:${Utils.shiftPad(currentDate.getUTCMinutes(), 2)}:${Utils.shiftPad(currentDate.getUTCSeconds(), 2)}`
+        return `${currentDate.getUTCFullYear()}-${Utils.zeroPad(currentDate.getUTCMonth(), 2)}-${Utils.zeroPad(currentDate.getUTCDate(), 2)} ${Utils.zeroPad(currentDate.getUTCHours(), 2)}:${Utils.zeroPad(currentDate.getUTCMinutes(), 2)}:${Utils.zeroPad(currentDate.getUTCSeconds(), 2)}`
+      
     }
 }

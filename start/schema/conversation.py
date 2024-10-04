@@ -42,7 +42,7 @@ class ConversationDef(TypedDict):
 
 class ConversationApiCreateRequestDef(TypedDict):
     character_ids: List[int]
-    game_time: str
+    game_time: datetime
 
 class ConversationApiCreateResponseDef(TypedDict):
     conversation_id: str
@@ -52,7 +52,7 @@ class ConversationApiTalkRequestDef(TypedDict):
     character_id_talk: int
     message: str
     end_conversation: bool
-    game_time: str
+    game_time: datetime
 
 class ConversationApiTalkResponseDef(TypedDict):
     conversation_id: str
@@ -61,4 +61,4 @@ class ConversationApiTalkResponseDef(TypedDict):
 
 class ConversationApiDestroyRequestDef(TypedDict):
     conversation_id: str
-    game_time: str
+    game_time: datetime
