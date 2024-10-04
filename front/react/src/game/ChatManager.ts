@@ -175,7 +175,6 @@ export class ChatManager {
         }
     }
 
-    
     public async finishConversation(convId: string, finishByPlayer = false) {
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         const conversation = this.conversations.get(convId);
@@ -200,7 +199,7 @@ export class ChatManager {
                     .execute();
             }
 
-            for(const participant of ( conversation?.participants || [])){
+            for(const participant of (conversation?.participants || [])){
                 this.participantsToConv.delete(participant.getIdTag())
                 participant.setCharState(CharacterState.IDLE);
                 this.conversations.delete(convId);
