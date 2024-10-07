@@ -295,7 +295,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         if(this.crop) {
             texts.push( '💧: ' + Math.floor(this.elements.water) + '\n');
             texts.push( '✅: '+ this.crop?.getSeed().currentGrowthStagePercentage + '%\n');
-            texts.push( '🌱: ' + ((this.crop?.getSeed().currentGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) + '/'+ ((this.crop?.getSeed().maxGrowthStageFrame - this.crop?.getSeed().startGrowthStageFrame) + 1) );
+            texts.push( '🌱: ' + (this.crop?.getSeed().currentFrame + 1) + '/'+ (this.crop?.getSeed().getCurrentFrames().length) );
         }
 
         this.tooltipText.setText(texts);

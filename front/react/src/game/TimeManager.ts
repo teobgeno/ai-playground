@@ -1,7 +1,7 @@
 import { Utils } from "./core/Utils";
 export class TimeManager {
     private gameStartTime: number; 
-    private scaleFactor: number;
+    public scaleFactor: number;
     private initDate: number;
     private gameCurrentTimestamp: number
     private elapsedTime: number = 0;

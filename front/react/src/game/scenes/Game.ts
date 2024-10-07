@@ -17,6 +17,7 @@ import { DayNight } from "../DayNight";
 import { InventoryItem } from "../items/InventoryItem"
 import { Storable } from "../items/types";
 import { GenericItem } from "../items/GenericItem";
+import { ItemFactory } from "../items/ItemFactory";
 import { Hoe } from "../items/Hoe";
 import { PickAxe } from "../items/PickAxe";
 import { WaterCan } from "../items/WaterCan";
@@ -262,21 +263,21 @@ export class Game extends Scene {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
-        const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
-            new InventoryItem()
-            .setIsStackable(true)
-            .setAmount(4).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
-            .setCursorType(CursorType.EXTERNAL_INTERACTION)
-        )
-        .setBaseGrowthRate(1)
-        .setCurrentGrowthStagePercentage(0)
-        .setGrowthStageInterval(1000)
-        .setBaseWaterConsumption(0.1)
-        .setCurrentGrowthStageFrame(30)
-        .setStartGrowthStageFrame(30)
-        .setMaxGrowthStageFrame(34)
-        .setCrop(seedCrop);
+        // const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
+        // const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
+        //     new InventoryItem()
+        //     .setIsStackable(true)
+        //     .setAmount(4).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
+        //     .setCursorType(CursorType.EXTERNAL_INTERACTION)
+        // )
+        // .setBaseGrowthRate(1)
+        // .setCurrentGrowthStagePercentage(0)
+        // .setGrowthStageInterval(1000)
+        // .setBaseWaterConsumption(0.1)
+        // .setCurrentGrowthStageFrame(30)
+        // .setStartGrowthStageFrame(30)
+        // .setMaxGrowthStageFrame(34)
+        // .setCrop(seedCrop);
 
 
         const fencePart = new GenericItem(ObjectId.Fence, 'Fence', 
@@ -289,7 +290,7 @@ export class Game extends Scene {
         this.hero.getInventory().addItem(hoe);
         this.hero.getInventory().addItem(pickAxe);
         this.hero.getInventory().addItem(waterCan);
-        this.hero.getInventory().addItem(cornSeed);
+        this.hero.getInventory().addItem(ItemFactory.createCornSeed(4)); 
         this.hero.getInventory().addItem(fencePart);
    
         

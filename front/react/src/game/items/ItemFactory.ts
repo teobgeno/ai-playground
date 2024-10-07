@@ -33,6 +33,7 @@ export class ItemFactory {
         .setGrowthStageIntervals([2, 3, 3, 3, 3])
         .setReGrowthStageIntervals([3])
         .setCurrentInterval(0)
+        .setBaseWaterConsumption(0.1)
         .setGrowthStageFrames([30, 31, 32, 33, 34])
         .setReGrowthStageFrames([33, 34])
         .setCurrentFrame(0)

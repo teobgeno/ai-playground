@@ -1,5 +1,6 @@
 import { SpriteItem } from "../items/SpriteItem";
 import { ServiceLocator } from "../core/serviceLocator";
+import { TimeManager } from "../TimeManager";
 import { Seed } from "./Seed";
 import { Utils } from "../core/Utils";
 import { LandElements } from "./types";
@@ -86,7 +87,7 @@ export class Crop implements MapObject{
     }
 
     public isFullGrown() {
-        return this.seed.currentGrowthStageFrame === this.seed.maxGrowthStageFrame
+        return this.seed.getCurrentFrames().length - 1 === this.seed.currentFrame
             ? true
             : false;
     }
@@ -124,14 +125,17 @@ export class Crop implements MapObject{
     public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
 
-            //this.seed.getCurrentIntervals();
+            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+            const currentDaysInterval = this.seed.getCurrentIntervals()[this.seed.currentInterval];
+            const currentSecInterval = ((86400 * currentDaysInterval)/timeManager.scaleFactor)/100;
             
-            if (
-                ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
-                this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
+            if 
+            (
+                (Utils.getTimeStamp() - this.lastTimestamp) >= currentSecInterval &&
+                this.seed.currentFrame < this.seed.getCurrentFrames().length - 1 
             ) {
                 
-                const executionTimes = (Utils.getTimeStamp() - this.lastTimestamp);
+                const executionTimes = Math.floor((Utils.getTimeStamp() - this.lastTimestamp)/currentSecInterval);
                 this.lastTimestamp = Utils.getTimeStamp();
                
                 for(let i = 0; i < executionTimes; i++) {
@@ -140,8 +144,9 @@ export class Crop implements MapObject{
                     //console.log('Current Growth: ' + this.seed.currentGrowthStagePercentage);
                     if(this.seed.currentGrowthStagePercentage >= 100) {
                         this.seed.currentGrowthStagePercentage = 0;
-                        if(this.seed.currentGrowthStageFrame + 1 <= this.seed.maxGrowthStageFrame) {
-                            this.seed.currentGrowthStageFrame = this.seed.currentGrowthStageFrame + 1;
+
+                        if(this.seed.currentFrame + 1 <= this.seed.getCurrentFrames().length - 1) {
+                            this.seed.currentFrame = this.seed.currentFrame + 1;
                             this.updateTile();
                         }
                     }

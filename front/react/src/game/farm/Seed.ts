@@ -14,13 +14,14 @@ export class Seed extends BaseItem implements Storable{
     public currentGrowthStagePercentage: number = 0;    // when 100% go to next level
     public growthStageIntervals: Array<number>;         // growthStageInterval intervals to add growth if any. Values in desired days.
     public reGrowthStageIntervals: Array<number> = [];  // reGrowthStageInterval intervals to add growth if any. Values in desired days.
-    public currentInterval: number;                     // current key of growthStageFrames or reGrowthStageFrames
-    public currentStageIntervals: Array<number>;   
+    public currentStageIntervals: Array<number>;        // growthStageInterval or reGrowthStageInterval based on isRegrowing
+    public currentInterval: number;                     // current key of growthStageFrames or reGrowthStageFrames based on isRegrowing
     public baseWaterConsumption: number;                // water consumption per growthStageInterval
     public growthStageFrames: Array<number>;            // grow frame sprite
     public reGrowthStageFrames: Array<number>;          // regrow frame sprite
-    public currentFrame: number;                        // current key of growthStageFrames or reGrowthStageFrames
-    public currentStageFrames: Array<number>;
+    public currentStageFrames: Array<number>;           // growthStageFrames or reGrowthStageFrames based on isRegrowing value
+    public currentFrame: number;                        // current key of growthStageFrames or reGrowthStageFrames based on isRegrowing
+    public isRegrowing: boolean = false; 
           
 
 
@@ -57,7 +58,6 @@ export class Seed extends BaseItem implements Storable{
         .setGrowthStageFrames(orig.growthStageFrames)
         .setReGrowthStageFrames(orig.reGrowthStageFrames)
         .setCurrentFrame(orig.currentFrame)
-      
         .setCrop(GenericItem.clone(orig.crop));
     }
 
@@ -112,12 +112,12 @@ export class Seed extends BaseItem implements Storable{
         return this;
     }
 
-    public getCurrentFrames(regrow: boolean) {
-        this.currentStageFrames = regrow ? this.reGrowthStageFrames : this.growthStageFrames
+    public getCurrentFrames() {
+        return this.currentStageFrames = this.isRegrowing ? this.reGrowthStageFrames : this.growthStageFrames
     }
 
-    public getCurrentIntervals(regrow: boolean) {
-        this.currentStageIntervals = regrow ? this.reGrowthStageFrames : this.growthStageIntervals
+    public getCurrentIntervals() {
+        return this.currentStageIntervals = this.isRegrowing ? this.reGrowthStageFrames : this.growthStageIntervals
     }
 
     public getInventory() {
