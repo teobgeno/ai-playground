@@ -198,7 +198,7 @@ export class Crop implements MapObject{
 
 
     updateTile() {
-        const frame = this.seed.currentGrowthStageFrame;
+        const frame = this.seed.getCurrentFrames()[this.seed.currentFrame];
         this.sprites[0].getSprite().setFrame(frame);
     }
 
