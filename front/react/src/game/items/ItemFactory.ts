@@ -20,6 +20,7 @@ export class ItemFactory {
 
     public static createCornSeed(amount: number) {
 
+
         const seedCrop = new GenericItem(ObjectId.Corn,'Corn', new InventoryItem().setIcon('https://assets.codepen.io/7237686/corn.svg?format=auto'));
         const cornSeed = new Seed(ObjectId.CornSeed, 'Corn Seeds', 
             new InventoryItem()
@@ -27,6 +28,11 @@ export class ItemFactory {
             .setAmount(amount).setIcon('https://assets.codepen.io/7237686/poppy_seeds.svg?format=auto')
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
+        .setBaseGrowthRate(1)
+        .setCurrentGrowthStagePercentage(0)
+        .setGrowthStageIntervals([18000, 27000, 27000, 27000, 27000, 27000])
+        .setReGrowthStageIntervals([27000])
+        .setBaseWaterConsumption(0.1)
         .setCurrentGrowthStageFrame(30)
         .setStartGrowthStageFrame(30)
         .setMaxGrowthStageFrame(34)
