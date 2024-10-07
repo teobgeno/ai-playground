@@ -15,17 +15,20 @@ export class Seed extends BaseItem implements Storable{
     public growthStageIntervals: Array<number>;         // growthStageInterval intervals to add growth if any. Values in desired days.
     public reGrowthStageIntervals: Array<number> = [];  // reGrowthStageInterval intervals to add growth if any. Values in desired days.
     public currentInterval: number;                     // current key of growthStageFrames or reGrowthStageFrames
+    public currentStageIntervals: Array<number>;   
     public baseWaterConsumption: number;                // water consumption per growthStageInterval
     public growthStageFrames: Array<number>;            // grow frame sprite
     public reGrowthStageFrames: Array<number>;          // regrow frame sprite
     public currentFrame: number;                        // current key of growthStageFrames or reGrowthStageFrames
+    public currentStageFrames: Array<number>;
+          
 
 
     /***
      * Day = 900 secs / 15 minutes
      * E.x Corn  stages Frame 0  -> growthStageInterval every 18 sec to reach 100% for next level ->  18*100 = 1800 = 2 days
      * E.x Corn  stages Frame 1  -> growthStageInterval every 27 sec to reach 100% for next level ->  27*100 = 2700 = 3 days 
-     * E.x Corn growthStageIntervals = [2, 3, 3, 3, 3, 3].
+     * E.x Corn growthStageIntervals = [2, 3, 3, 3, 3].
      * E.x Corn reGrowthStageIntervals = [3].
      * E.x Corn growthStageFrames = [30,31,32,33,34].
      * E.x Corn reGrowthStageFrames = [33,34].
@@ -58,13 +61,6 @@ export class Seed extends BaseItem implements Storable{
         .setCrop(GenericItem.clone(orig.crop));
     }
 
-    public getInventory() {
-        return this.inventory;
-    }
-
-    public canRegow() {
-        return this.reGrowthStageIntervals.length > 0;
-    }
 
     public setBaseGrowthRate(baseGrowthRate: number) {
         this.baseGrowthRate = baseGrowthRate;
@@ -111,11 +107,25 @@ export class Seed extends BaseItem implements Storable{
         return this;
     }
 
-   
-
     public setCrop(crop: GenericItem) {
         this.crop = crop;
         return this;
+    }
+
+    public getCurrentFrames(regrow: boolean) {
+        this.currentStageFrames = regrow ? this.reGrowthStageFrames : this.growthStageFrames
+    }
+
+    public getCurrentIntervals(regrow: boolean) {
+        this.currentStageIntervals = regrow ? this.reGrowthStageFrames : this.growthStageIntervals
+    }
+
+    public getInventory() {
+        return this.inventory;
+    }
+
+    public canRegow() {
+        return this.reGrowthStageIntervals.length > 0;
     }
 
     public getCropFromHarvest() {

@@ -123,6 +123,8 @@ export class Crop implements MapObject{
 
     public updateGrow(time: number, elements: LandElements) {
         if (this.lastTimestamp) {
+
+            //this.seed.getCurrentIntervals();
             
             if (
                 ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
