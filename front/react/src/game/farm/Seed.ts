@@ -13,15 +13,19 @@ export class Seed extends BaseItem implements Storable{
     public baseGrowthRate: number;                  // base value for growth stage.
     public currentGrowthStagePercentage: number;    // when 100% go to next level
     public growthStageInterval: number;             // growthStageInterval intervals to add growth if any -> time to ms
+    public growthStageIntervals: Array<number>;     // growthStageInterval intervals to add growth if any -> time to ms
     public baseWaterConsumption: number;            // water consumption per growthStageInterval
+    public canRegrow: boolean;                      // if crop can regrow
     public currentGrowthStageFrame: number;         // current sprite frame
     public startGrowthStageFrame: number;           // start sprite frame
     public maxGrowthStageFrame: number;             // end sprite frame
+    public regrowStageFrame: number;                // end sprite frame
 
     /***
      * Day = 900 secs / 15 minutes
      * E.x Corn  stages Frame 0  -> growthStageInterval every 18 sec to reach 100% for next level ->  18*100 = 1800 = 2 days
      * E.x Corn  stages Frame 1  -> growthStageInterval every 27 sec to reach 100% for next level ->  27*100 = 2700 = 3 days 
+     * E.x Corn growthStageIntervals = [18000, 27000, 27000, 27000, 27000, 27000].The number(s) after key maxGrowthStageFrame - startGrowthStageFrame is the regrow interval
      * ((86400*desiredDays)/TimeScale)/100
      */
 
