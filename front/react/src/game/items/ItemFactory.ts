@@ -32,10 +32,10 @@ export class ItemFactory {
         .setCurrentGrowthStagePercentage(0)
         .setGrowthStageIntervals([18000, 27000, 27000, 27000, 27000, 27000])
         .setReGrowthStageIntervals([27000])
-        .setBaseWaterConsumption(0.1)
-        .setCurrentGrowthStageFrame(30)
-        .setStartGrowthStageFrame(30)
-        .setMaxGrowthStageFrame(34)
+        .setCurrentInterval(0)
+        .setGrowthStageFrames([30, 31, 32, 33, 34])
+        .setReGrowthStageFrames([33, 34])
+        .setCurrentFrame(0)
         .setCrop(seedCrop);
 
         return cornSeed;

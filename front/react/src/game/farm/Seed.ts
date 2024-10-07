@@ -12,25 +12,24 @@ export class Seed extends BaseItem implements Storable{
     public health: number;                              // defines health of the growing plant and the quality of the initial crop. 
     public baseGrowthRate: number;                      // base value for growth stage.
     public currentGrowthStagePercentage: number = 0;    // when 100% go to next level
-    public growthStageIntervals: Array<number>;         // growthStageInterval intervals to add growth if any.
-    public reGrowthStageIntervals: Array<number> = [];  // reGrowthStageInterval intervals to add growth if any -> time to ms
+    public growthStageIntervals: Array<number>;         // growthStageInterval intervals to add growth if any. Values in desired days.
+    public reGrowthStageIntervals: Array<number> = [];  // reGrowthStageInterval intervals to add growth if any. Values in desired days.
+    public currentInterval: number;                     // current key of growthStageFrames or reGrowthStageFrames
     public baseWaterConsumption: number;                // water consumption per growthStageInterval
-    public currentGrowthStageFrame: number;             // current sprite frame
-    public growthStageFrames: Array<number>;
-    public reGrowthStageFrames: Array<number>;
-    public startGrowthStageFrame: number;               // start sprite frame
-    public maxGrowthStageFrame: number;                 // end sprite frame
-    public regrowStageFrame: number;                    // end sprite frame
+    public growthStageFrames: Array<number>;            // grow frame sprite
+    public reGrowthStageFrames: Array<number>;          // regrow frame sprite
+    public currentFrame: number;                        // current key of growthStageFrames or reGrowthStageFrames
+
 
     /***
      * Day = 900 secs / 15 minutes
      * E.x Corn  stages Frame 0  -> growthStageInterval every 18 sec to reach 100% for next level ->  18*100 = 1800 = 2 days
      * E.x Corn  stages Frame 1  -> growthStageInterval every 27 sec to reach 100% for next level ->  27*100 = 2700 = 3 days 
-     * E.x Corn growthStageIntervals = [18000, 27000, 27000, 27000, 27000, 27000].
-     * E.x Corn reGrowthStageIntervals = [27000].
+     * E.x Corn growthStageIntervals = [2, 3, 3, 3, 3, 3].
+     * E.x Corn reGrowthStageIntervals = [3].
      * E.x Corn growthStageFrames = [30,31,32,33,34].
      * E.x Corn reGrowthStageFrames = [33,34].
-     * ((86400*desiredDays)/TimeScale)/100
+     * growthStageIntervals and reGrowthStageIntervals values are converted to sec based on timescale -> ((86400*desiredDays)/TimeScale)/100
      */
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
@@ -50,10 +49,12 @@ export class Seed extends BaseItem implements Storable{
         .setCurrentGrowthStagePercentage(orig.currentGrowthStagePercentage)
         .setGrowthStageIntervals(orig.growthStageIntervals)
         .setReGrowthStageIntervals(orig.reGrowthStageIntervals)
+        .setCurrentInterval(orig.currentInterval)
         .setBaseWaterConsumption(orig.baseWaterConsumption)
-        .setCurrentGrowthStageFrame(orig.currentGrowthStageFrame)
-        .setStartGrowthStageFrame(orig.startGrowthStageFrame)
-        .setMaxGrowthStageFrame(orig.maxGrowthStageFrame)
+        .setGrowthStageFrames(orig.growthStageFrames)
+        .setReGrowthStageFrames(orig.reGrowthStageFrames)
+        .setCurrentFrame(orig.currentFrame)
+      
         .setCrop(GenericItem.clone(orig.crop));
     }
 
@@ -85,25 +86,32 @@ export class Seed extends BaseItem implements Storable{
         return this;
     }
 
+    public setCurrentInterval(currentInterval: number) {
+        this.currentInterval = currentInterval;
+        return this;
+    }
+
     public setBaseWaterConsumption(baseWaterConsumption: number) {
         this.baseWaterConsumption = baseWaterConsumption;
         return this;
     }
 
-    public setCurrentGrowthStageFrame(currentGrowthStageFrame: number) {
-        this.currentGrowthStageFrame = currentGrowthStageFrame;
+    public setGrowthStageFrames(growthStageFrames: Array<number>) {
+        this.growthStageFrames = growthStageFrames;
         return this;
     }
 
-    public setStartGrowthStageFrame(startGrowthStageFrame: number) {
-        this.startGrowthStageFrame = startGrowthStageFrame;
+    public setReGrowthStageFrames(reGrowthStageFrames: Array<number>) {
+        this.reGrowthStageFrames = reGrowthStageFrames;
         return this;
     }
 
-    public setMaxGrowthStageFrame(maxGrowthStageFrame: number) {
-        this.maxGrowthStageFrame = maxGrowthStageFrame;
+    public setCurrentFrame(currentFrame: number) {
+        this.currentFrame = currentFrame;
         return this;
     }
+
+   
 
     public setCrop(crop: GenericItem) {
         this.crop = crop;
