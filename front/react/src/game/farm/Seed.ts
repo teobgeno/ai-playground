@@ -9,7 +9,7 @@ import { Utils } from "../core/Utils";
 export class Seed extends BaseItem implements Storable{
     public inventory: InventoryItem;
     public crop: GenericItem;
-    public health: number;                          // defines health of the growing plant and the quality of the inal crop. 
+    public health: number;                          // defines health of the growing plant and the quality of the initial crop. 
     public baseGrowthRate: number;                  // base value for growth stage.
     public currentGrowthStagePercentage: number;    // when 100% go to next level
     public growthStageInterval: number;             // growthStageInterval intervals to check for growth time to ms
@@ -17,6 +17,12 @@ export class Seed extends BaseItem implements Storable{
     public currentGrowthStageFrame: number;         // current sprite frame
     public startGrowthStageFrame: number;           // start sprite frame
     public maxGrowthStageFrame: number;             // end sprite frame
+
+    /***
+     * Day = 900 secs / 15 minutes
+     * E.x Corn  stages Frame 0  -> growthStageInterval every 18 sec to reach 100% for next level ->  18*100 = 1800 = 2 days 
+     * E.x Corn  stages Frame 1  -> growthStageInterval every 27 sec to reach 100% for next level ->  27*100 = 2700 = 3 days 
+     */
 
     constructor(objectId: ObjectId, title: string, inventory: InventoryItem) {
         super(Utils.generateId(), objectId, title);
