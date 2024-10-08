@@ -39,6 +39,8 @@ export class TilesSelectCursor implements Cursor {
         this.gridEngine = gridEngine;
         this.character = character;
         this.marker = marker;
+        this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+        this.graphics.setDepth(10);
     }
 
     public setCanExecute(canExecute: boolean) {
