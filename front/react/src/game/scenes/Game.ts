@@ -56,6 +56,13 @@ export class Game extends Scene {
     private weatherManager: WeatherManager;
     private collideObjects:Map<string, boolean>;
     private dayNight: DayNight;
+
+    public graphics: Phaser.GameObjects.Graphics;
+    public isDrawing: boolean = false;
+    public startPoint: { x: number, y: number } = { x: 0, y: 0 };
+    public currentRect: { x: number, y: number, width: number, height: number } = { x: 0, y: 0, width: 0, height: 0 };
+
+
     constructor() {
         super("Game");
     }
@@ -75,8 +82,8 @@ export class Game extends Scene {
         this.initEventBusMessages();
         this.initGridEngine();
         this.initCamera(this.map);
-
-      
+        this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+        this.graphics.setDepth(10);
         this.marker = this.add.rectangle(
             0,
             0,
@@ -92,12 +99,57 @@ export class Game extends Scene {
             this.cursorManager.onPointerUp(
                 this.input.activePointer.positionToCamera(this.cameras.main)
             );
+            
+            if(this.isDrawing) {
+                const elem = [];
+                const inRec:Array<number> = [];
+                for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
+
+
+                    for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
+                        const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(xPos) || 0, this.map.worldToTileY(yPos) || 0); 
+                        if(mapObj !== null && mapObj !== undefined) {
+                            if(!inRec.includes(mapObj.id + mapObj.objectId)) {
+                                inRec.push(mapObj.id + mapObj.objectId);
+                                elem.push(mapObj);
+                            }
+                            
+                        }
+                    }
+                  
+                    
+                }
+                //console.log(this.currentRect)
+                console.log(elem)
+                //console.log(this.mapManager.getPlotLandCoords())
+                this.isDrawing = false;
+            }
+            
+
         });
 
         this.input.on("pointermove", () => {
             this.cursorManager.onPointerMove(
                 this.input.activePointer.positionToCamera(this.cameras.main)
             );
+
+            if (this.isDrawing) {
+                const p =this.input.activePointer.positionToCamera(this.cameras.main)
+                const width = (p as Phaser.Math.Vector2).x - this.startPoint.x;
+                const height = (p as Phaser.Math.Vector2).y - this.startPoint.y;
+    
+                this.currentRect.x = this.startPoint.x;
+                this.currentRect.y = this.startPoint.y;
+                this.currentRect.width = width;
+                this.currentRect.height = height;
+            }
+        });
+
+        this.input.on('pointerdown', () => {
+            const p =this.input.activePointer.positionToCamera(this.cameras.main)
+            this.startPoint.x = (p as Phaser.Math.Vector2).x;
+            this.startPoint.y = (p as Phaser.Math.Vector2).y;
+            this.isDrawing = true;
         });
 
         
@@ -410,6 +462,15 @@ export class Game extends Scene {
             }
         }
         this.timeManager.update(Date.now());
+
+        if (this.isDrawing) {
+            // Clear the previous rectangle
+            this.graphics.clear();
+    
+            // Redraw the rectangle as the pointer moves
+            this.graphics.strokeRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
+        }
+
         //this.dayNight.update(0, 0);
     }
 
