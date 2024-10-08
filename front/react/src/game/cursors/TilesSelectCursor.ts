@@ -74,7 +74,6 @@ export class TilesSelectCursor implements Cursor {
         if(this.isDrawing) {
             const inRec:Array<number> = [];
             for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
-
                 for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
                     const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY); 
                     if(mapObj !== null && mapObj !== undefined) {
