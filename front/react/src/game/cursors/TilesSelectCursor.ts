@@ -17,6 +17,7 @@ export class TilesSelectCursor implements Cursor {
     private canExecute: boolean = false;
     private item: Storable;
     private activeMarker: Phaser.GameObjects.Sprite | null;
+    private selectedItems : Array<MapObject> = [];
 
     public graphics: Phaser.GameObjects.Graphics;
     public isDrawing: boolean = false;
@@ -45,29 +46,32 @@ export class TilesSelectCursor implements Cursor {
     }
 
     public hidePointer() {
-        this.activeMarker?.destroy();
-        this.activeMarker = null;
-        this.canExecute = false;
+        this.isDrawing = false;
+        this.graphics.clear();
+        this.currentRect.x = 0; 
+        this.currentRect.y = 0;
+        this.currentRect.width = 0;
+        this.currentRect.height = 0;
+        this.selectedItems = [];
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
 
         if (this.isDrawing) {
-            // const p = this.input.activePointer.positionToCamera(this.cameras.main)
-            // const width = (p as Phaser.Math.Vector2).x - this.startPoint.x;
-            // const height = (p as Phaser.Math.Vector2).y - this.startPoint.y;
+            
+            const width = (this.map.tileToWorldX(pointerTileX) || 0) - this.startPoint.x;
+            const height = (this.map.tileToWorldY(pointerTileY) || 0) - this.startPoint.y;
 
-            // this.currentRect.x = this.startPoint.x;
-            // this.currentRect.y = this.startPoint.y;
-            // this.currentRect.width = width;
-            // this.currentRect.height = height;
+            this.currentRect.x = this.startPoint.x;
+            this.currentRect.y = this.startPoint.y;
+            this.currentRect.width = width;
+            this.currentRect.height = height;
         }
-       
+    
     }
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if(this.isDrawing) {
-            const elem : Array<MapObject> = [];
             const inRec:Array<number> = [];
             for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
 
@@ -76,13 +80,13 @@ export class TilesSelectCursor implements Cursor {
                     if(mapObj !== null && mapObj !== undefined) {
                         if(!inRec.includes(mapObj.id + mapObj.objectId)) {
                             inRec.push(mapObj.id + mapObj.objectId);
-                            elem.push(mapObj);
+                            this.selectedItems.push(mapObj);
                         }
                     }
                 }
             }
 
-            console.log(elem)
+            console.log(this.selectedItems)
             this.isDrawing = false;
         }
     }
