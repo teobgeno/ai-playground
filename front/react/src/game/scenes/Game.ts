@@ -141,11 +141,23 @@ export class Game extends Scene {
             }
         });
 
-        this.input.on('pointerdown', () => {
-            const p =this.input.activePointer.positionToCamera(this.cameras.main)
-            this.startPoint.x = (p as Phaser.Math.Vector2).x;
-            this.startPoint.y = (p as Phaser.Math.Vector2).y;
-            this.isDrawing = true;
+        this.input.on('pointerdown', (pointer:Phaser.Input.Pointer) => {
+            const p = this.input.activePointer.positionToCamera(this.cameras.main)
+            if (pointer.rightButtonDown()) {
+                this.startPoint.x = (p as Phaser.Math.Vector2).x;
+                this.startPoint.y = (p as Phaser.Math.Vector2).y;
+                this.isDrawing = true;
+            }
+            if (pointer.leftButtonDown()) {
+                this.startPoint.x = (p as Phaser.Math.Vector2).x;
+                this.startPoint.y = (p as Phaser.Math.Vector2).y;
+                this.isDrawing = false;
+                this.graphics.clear();
+                this.currentRect.x = 0; 
+                this.currentRect.y = 0;
+                this.currentRect.width = 0;
+                this.currentRect.height = 0;
+            }
         });
 
         
