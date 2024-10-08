@@ -101,10 +101,9 @@ export class Game extends Scene {
             );
             
             if(this.isDrawing) {
-                const elem = [];
+                const elem : Array<MapObject> = [];
                 const inRec:Array<number> = [];
                 for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
-
 
                     for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
                         const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(xPos) || 0, this.map.worldToTileY(yPos) || 0); 
@@ -113,11 +112,8 @@ export class Game extends Scene {
                                 inRec.push(mapObj.id + mapObj.objectId);
                                 elem.push(mapObj);
                             }
-                            
                         }
                     }
-                  
-                    
                 }
                 //console.log(this.currentRect)
                 console.log(elem)
