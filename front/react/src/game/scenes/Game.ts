@@ -100,26 +100,26 @@ export class Game extends Scene {
                 this.input.activePointer.positionToCamera(this.cameras.main)
             );
             
-            if(this.isDrawing) {
-                const elem : Array<MapObject> = [];
-                const inRec:Array<number> = [];
-                for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
+            // if(this.isDrawing) {
+            //     const elem : Array<MapObject> = [];
+            //     const inRec:Array<number> = [];
+            //     for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
 
-                    for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
-                        const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(xPos) || 0, this.map.worldToTileY(yPos) || 0); 
-                        if(mapObj !== null && mapObj !== undefined) {
-                            if(!inRec.includes(mapObj.id + mapObj.objectId)) {
-                                inRec.push(mapObj.id + mapObj.objectId);
-                                elem.push(mapObj);
-                            }
-                        }
-                    }
-                }
-                //console.log(this.currentRect)
-                console.log(elem)
-                //console.log(this.mapManager.getPlotLandCoords())
-                this.isDrawing = false;
-            }
+            //         for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
+            //             const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(xPos) || 0, this.map.worldToTileY(yPos) || 0); 
+            //             if(mapObj !== null && mapObj !== undefined) {
+            //                 if(!inRec.includes(mapObj.id + mapObj.objectId)) {
+            //                     inRec.push(mapObj.id + mapObj.objectId);
+            //                     elem.push(mapObj);
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     //console.log(this.currentRect)
+            //     console.log(elem)
+            //     //console.log(this.mapManager.getPlotLandCoords())
+            //     this.isDrawing = false;
+            // }
             
 
         });
@@ -129,35 +129,42 @@ export class Game extends Scene {
                 this.input.activePointer.positionToCamera(this.cameras.main)
             );
 
-            if (this.isDrawing) {
-                const p =this.input.activePointer.positionToCamera(this.cameras.main)
-                const width = (p as Phaser.Math.Vector2).x - this.startPoint.x;
-                const height = (p as Phaser.Math.Vector2).y - this.startPoint.y;
+            // if (this.isDrawing) {
+            //     const p =this.input.activePointer.positionToCamera(this.cameras.main)
+            //     const width = (p as Phaser.Math.Vector2).x - this.startPoint.x;
+            //     const height = (p as Phaser.Math.Vector2).y - this.startPoint.y;
     
-                this.currentRect.x = this.startPoint.x;
-                this.currentRect.y = this.startPoint.y;
-                this.currentRect.width = width;
-                this.currentRect.height = height;
-            }
+            //     this.currentRect.x = this.startPoint.x;
+            //     this.currentRect.y = this.startPoint.y;
+            //     this.currentRect.width = width;
+            //     this.currentRect.height = height;
+            // }
         });
 
         this.input.on('pointerdown', (pointer:Phaser.Input.Pointer) => {
-            const p = this.input.activePointer.positionToCamera(this.cameras.main)
-            if (pointer.rightButtonDown()) {
-                this.startPoint.x = (p as Phaser.Math.Vector2).x;
-                this.startPoint.y = (p as Phaser.Math.Vector2).y;
-                this.isDrawing = true;
-            }
-            if (pointer.leftButtonDown()) {
-                this.startPoint.x = (p as Phaser.Math.Vector2).x;
-                this.startPoint.y = (p as Phaser.Math.Vector2).y;
-                this.isDrawing = false;
-                this.graphics.clear();
-                this.currentRect.x = 0; 
-                this.currentRect.y = 0;
-                this.currentRect.width = 0;
-                this.currentRect.height = 0;
-            }
+
+
+            this.cursorManager.onPointerDown(
+                pointer,
+                this.input.activePointer.positionToCamera(this.cameras.main)
+            );
+
+            // const p = this.input.activePointer.positionToCamera(this.cameras.main)
+            // if (pointer.rightButtonDown()) {
+            //     this.startPoint.x = (p as Phaser.Math.Vector2).x;
+            //     this.startPoint.y = (p as Phaser.Math.Vector2).y;
+            //     this.isDrawing = true;
+            // }
+            // if (pointer.leftButtonDown()) {
+            //     this.startPoint.x = (p as Phaser.Math.Vector2).x;
+            //     this.startPoint.y = (p as Phaser.Math.Vector2).y;
+            //     this.isDrawing = false;
+            //     this.graphics.clear();
+            //     this.currentRect.x = 0; 
+            //     this.currentRect.y = 0;
+            //     this.currentRect.width = 0;
+            //     this.currentRect.height = 0;
+            // }
         });
 
         

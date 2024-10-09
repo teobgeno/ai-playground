@@ -11,11 +11,8 @@ export class TilesSelectCursor implements Cursor {
     private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
-    private gridEngine: GridEngine;
-    private character: Character;
     private marker: Phaser.GameObjects.Rectangle;
     private canExecute: boolean = false;
-    private item: Storable;
     private activeMarker: Phaser.GameObjects.Sprite | null;
     private selectedItems : Array<MapObject> = [];
 
@@ -29,15 +26,11 @@ export class TilesSelectCursor implements Cursor {
         scene: Phaser.Scene,
         map: Tilemaps.Tilemap,
         mapManager: MapManager,
-        gridEngine: GridEngine,
-        character: Character,
         marker: Phaser.GameObjects.Rectangle
     ) {
         this.scene = scene;
         this.map = map;
         this.mapManager = mapManager;
-        this.gridEngine = gridEngine;
-        this.character = character;
         this.marker = marker;
         this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
         this.graphics.setDepth(10);
@@ -55,6 +48,13 @@ export class TilesSelectCursor implements Cursor {
         this.currentRect.width = 0;
         this.currentRect.height = 0;
         this.selectedItems = [];
+    }
+
+    public onPointerDown(pointerTileX: number, pointerTileY: number) {
+
+        this.startPoint.x = pointerTileX;
+        this.startPoint.y = pointerTileY;
+        this.isDrawing = true;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {

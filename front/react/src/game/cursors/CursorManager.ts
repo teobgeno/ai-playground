@@ -7,6 +7,7 @@ import { PlaceItemCursor } from "./PlaceItemCursor";
 import { CropCursor } from "./CropCursor";
 import { FenceCursor } from "./FenceCursor";
 import { ExternalInteractionCursor } from "./ExternalInteractionCursor";
+import { TilesSelectCursor } from "./TilesSelectCursor";
 
 import { Cursor, CursorType } from "./types";
 import { Storable } from "../items/types";
@@ -20,6 +21,7 @@ export class CursorManager {
     private cropCursor: CropCursor;
     private fenceCursor: FenceCursor;
     private externalInteractionCursor: ExternalInteractionCursor;
+    private tilesSelectCursor: TilesSelectCursor;
     private currentCursor: Cursor | null;
     private currentCursorType: CursorType;
     private marker: Phaser.GameObjects.Rectangle;
@@ -78,6 +80,13 @@ export class CursorManager {
             character,
             marker
         );
+
+        this.tilesSelectCursor = new TilesSelectCursor(
+            scene,
+            map,
+            this.mapManager,
+            marker
+        );
     }
     public onPointerMove(worldPoint: object | Phaser.Math.Vector2) {
         if (this.currentCursor) {
@@ -100,6 +109,21 @@ export class CursorManager {
                 this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) ||
                 0;
             this.currentCursor.onPointerUp(pointerTileX, pointerTileY);
+        }
+    }
+
+    public onPointerDown(
+        pointer: Phaser.Input.Pointer,
+        worldPoint: object | Phaser.Math.Vector2
+    ) {
+        if (pointer.rightButtonDown()) {
+            const pointerTileX =
+                this.map.worldToTileX((worldPoint as Phaser.Math.Vector2).x) ||
+                0;
+            const pointerTileY =
+                this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) ||
+                0;
+            this.tilesSelectCursor.onPointerDown(pointerTileX, pointerTileY);
         }
     }
 
