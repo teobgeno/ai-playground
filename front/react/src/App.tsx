@@ -8,6 +8,7 @@ import { TimeWidget } from "./components/TimeWidget";
 import { Hotbar } from "./components/Hotbar";
 import { Inventory } from "./components/Inventory";
 import { StaminaBar } from "./components/StaminaBar";
+import { CreateOrder } from "./components/CreateOrder";
 import { MoveStorableProps } from "./components/types";
 import "./App.css";
 
@@ -84,6 +85,7 @@ function App() {
     return (
         <div id="app">
             <div style={{ position: "relative" }}>
+                <CreateOrder stamina={playerStamina} />
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
                 <StaminaBar stamina={playerStamina} />

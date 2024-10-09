@@ -1,9 +1,5 @@
 import { Tilemaps } from "phaser";
 import { MapManager } from "../MapManager";
-import { GridEngine } from "grid-engine";
-
-import { Storable } from "../items/types";
-import { Character } from "../characters/types";
 import { Cursor } from "./types";
 import { MapObject } from "../core/types";
 
@@ -12,7 +8,6 @@ export class TilesSelectCursor implements Cursor {
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private marker: Phaser.GameObjects.Rectangle;
-    private canExecute: boolean = false;
     private activeMarker: Phaser.GameObjects.Sprite | null;
     private selectedItems : Array<MapObject> = [];
 
@@ -34,10 +29,6 @@ export class TilesSelectCursor implements Cursor {
         this.marker = marker;
         this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
         this.graphics.setDepth(10);
-    }
-
-    public setCanExecute(canExecute: boolean) {
-       return false;
     }
 
     public hidePointer() {
