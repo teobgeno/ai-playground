@@ -61,7 +61,7 @@ export class TilesSelectCursor implements Cursor {
 
         if (this.isDrawing) {
             this.graphics.clear();
-            
+
             const width = (this.map.tileToWorldX(pointerTileX) || 0) - this.startPoint.x;
             const height = (this.map.tileToWorldY(pointerTileY) || 0) - this.startPoint.y;
 
@@ -77,12 +77,10 @@ export class TilesSelectCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if(this.isDrawing) {
-            console.log(pointerTileX)
-            console.log(pointerTileY)
             const inRec:Array<number> = [];
             for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
                 for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
-                    const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY); 
+                    const mapObj = this.mapManager.getPlotLandCoord(this.map.worldToTileX(xPos) || 0, this.map.worldToTileY(yPos) || 0); 
                     if(mapObj !== null && mapObj !== undefined) {
                         if(!inRec.includes(mapObj.id + mapObj.objectId)) {
                             inRec.push(mapObj.id + mapObj.objectId);
@@ -92,7 +90,6 @@ export class TilesSelectCursor implements Cursor {
                 }
             }
 
-            console.log(this.selectedItems)
             this.isDrawing = false;
         }
     }
