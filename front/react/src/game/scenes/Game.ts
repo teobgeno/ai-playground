@@ -105,7 +105,6 @@ export class Game extends Scene {
                 pointer,
                 this.input.activePointer.positionToCamera(this.cameras.main)
             );
-
         });
 
         this.cursorManager = new CursorManager(
