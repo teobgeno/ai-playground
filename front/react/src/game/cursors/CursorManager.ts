@@ -9,11 +9,13 @@ import { FenceCursor } from "./FenceCursor";
 import { ExternalInteractionCursor } from "./ExternalInteractionCursor";
 import { TilesSelectCursor } from "./TilesSelectCursor";
 
+import { Game } from "../scenes/Game";
 import { Cursor, CursorType } from "./types";
 import { Storable } from "../items/types";
 import { Character } from "../characters/types";
 
 export class CursorManager {
+    private scene: Phaser.Scene;
     private map: Tilemaps.Tilemap;
     private mapManager: MapManager;
     private hoeCursor: HoeCursor;
@@ -34,6 +36,7 @@ export class CursorManager {
         character: Character,
         marker: Phaser.GameObjects.Rectangle
     ) {
+        this.scene = scene;
         this.map = map;
         this.mapManager = mapManager;
         this.marker = marker;
@@ -123,18 +126,28 @@ export class CursorManager {
             const pointerTileY =
                 this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) ||
                 0;
+                
+            this.setCurrentCursor(this.tilesSelectCursor);
             this.tilesSelectCursor.onPointerDown(pointerTileX, pointerTileY);
-            this.currentCursor = this.tilesSelectCursor;
         }
 
         if (pointer.leftButtonDown() && this.currentCursor ===  this.tilesSelectCursor) {
             this.tilesSelectCursor.hidePointer();
-            this.currentCursor = null;
+            this.setCurrentCursor(null);
         }
     }
 
     public hasActiveCursor() {
         return this.currentCursor ? true : false;
+    }
+
+    private setCurrentCursor(cursor: Cursor | null) {
+        
+        //hide previous cursor if any
+        this.currentCursor?.hidePointer();
+
+        this.currentCursor = cursor;
+        (this.scene as Game).updateItemsInteraction();
     }
 
     public getCurrentCursor() {
@@ -155,28 +168,28 @@ export class CursorManager {
         switch (selectedToolType) {
             case CursorType.HOE:
                 this.hoeCursor.setItem(item);
-                this.currentCursor = this.hoeCursor;
+                this.setCurrentCursor(this.hoeCursor);
                 break;
             case CursorType.CROP:
                 this.cropCursor.setItem(item);
-                this.currentCursor = this.cropCursor;
+                this.setCurrentCursor(this.cropCursor);
                 break;
             case CursorType.PLACE_ITEM:
                 this.externalInteractionCursor.setItem(item);
                 this.externalInteractionCursor.setCursorImage();
-                this.currentCursor = this.placeItemCanCursor;
+                this.setCurrentCursor(this.placeItemCanCursor);
                 break;
             case CursorType.FENCE:
-                this.currentCursor = this.fenceCursor;
+                this.setCurrentCursor(this.fenceCursor);
                 break;
             case CursorType.EXTERNAL_INTERACTION:
                 this.externalInteractionCursor.setItem(item);
                 this.externalInteractionCursor.setCursorImage();
-                this.currentCursor = this.externalInteractionCursor;
+                this.setCurrentCursor(this.externalInteractionCursor);
                 break;
             default:
                 this.currentCursor?.hidePointer();
-                this.currentCursor = null;
+                this.setCurrentCursor(null);
                 break;
         }
         if (this.currentCursorType) {

@@ -427,11 +427,11 @@ export class Game extends Scene {
 
     setActiveItem(item: Storable) {
         this.cursorManager.setActiveItemCursor(item);
-        this.setItemsInteraction();
+        this.updateItemsInteraction();
 
     }
 
-    setItemsInteraction() {
+    updateItemsInteraction() {
         this.mapManager.getPlotLandCoords().forEach((item)=>{
             if (typeof item?.getInteractive !== "undefined") { 
                 item?.getInteractive().setExternalActiveCursor(this.cursorManager.getCurrentCursor());
