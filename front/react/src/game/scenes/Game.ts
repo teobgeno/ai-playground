@@ -138,6 +138,8 @@ export class Game extends Scene {
             //     this.currentRect.y = this.startPoint.y;
             //     this.currentRect.width = width;
             //     this.currentRect.height = height;
+
+            //     console.log(this.currentRect)
             // }
         });
 
@@ -478,20 +480,23 @@ export class Game extends Scene {
         }
         this.timeManager.update(Date.now());
 
-        if (this.isDrawing) {
-            // Clear the previous rectangle
-            this.graphics.clear();
+        // if (this.isDrawing) {
+        //     // Clear the previous rectangle
+        //     this.graphics.clear();
     
-            // Redraw the rectangle as the pointer moves
-            this.graphics.strokeRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
-        }
+        //     // Redraw the rectangle as the pointer moves
+        //     this.graphics.strokeRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
+        // }
 
         //this.dayNight.update(0, 0);
     }
 
     setActiveItem(item: Storable) {
         this.cursorManager.setActiveItemCursor(item);
-        
+        this.setItemsInteraction();
+    }
+
+    setItemsInteraction() {
         this.mapManager.getPlotLandCoords().forEach((item)=>{
             if (typeof item?.getInteractive !== "undefined") { 
                 item?.getInteractive().setExternalActiveCursor(this.cursorManager.getCurrentCursor());

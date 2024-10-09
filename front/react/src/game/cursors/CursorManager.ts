@@ -116,7 +116,7 @@ export class CursorManager {
         pointer: Phaser.Input.Pointer,
         worldPoint: object | Phaser.Math.Vector2
     ) {
-        if (pointer.rightButtonDown()) {
+        if (pointer.rightButtonDown() && !this.currentCursor) {
             const pointerTileX =
                 this.map.worldToTileX((worldPoint as Phaser.Math.Vector2).x) ||
                 0;
@@ -124,6 +124,12 @@ export class CursorManager {
                 this.map.worldToTileY((worldPoint as Phaser.Math.Vector2).y) ||
                 0;
             this.tilesSelectCursor.onPointerDown(pointerTileX, pointerTileY);
+            this.currentCursor = this.tilesSelectCursor;
+        }
+
+        if (pointer.leftButtonDown() && this.currentCursor ===  this.tilesSelectCursor) {
+            this.tilesSelectCursor.hidePointer();
+            this.currentCursor = null;
         }
     }
 

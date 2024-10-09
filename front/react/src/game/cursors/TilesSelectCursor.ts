@@ -52,14 +52,15 @@ export class TilesSelectCursor implements Cursor {
 
     public onPointerDown(pointerTileX: number, pointerTileY: number) {
 
-        this.startPoint.x = pointerTileX;
-        this.startPoint.y = pointerTileY;
+        this.startPoint.x = this.map.tileToWorldX(pointerTileX) || 0;
+        this.startPoint.y = this.map.tileToWorldY(pointerTileY) || 0;
         this.isDrawing = true;
     }
 
     public onPointerMove(pointerTileX: number, pointerTileY: number) {
 
         if (this.isDrawing) {
+            this.graphics.clear();
             
             const width = (this.map.tileToWorldX(pointerTileX) || 0) - this.startPoint.x;
             const height = (this.map.tileToWorldY(pointerTileY) || 0) - this.startPoint.y;
@@ -68,12 +69,16 @@ export class TilesSelectCursor implements Cursor {
             this.currentRect.y = this.startPoint.y;
             this.currentRect.width = width;
             this.currentRect.height = height;
+       
+            this.graphics.strokeRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
         }
     
     }
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if(this.isDrawing) {
+            console.log(pointerTileX)
+            console.log(pointerTileY)
             const inRec:Array<number> = [];
             for (let xPos = this.currentRect.x; xPos < (this.currentRect.x + this.currentRect.width); xPos ++) {
                 for (let yPos = this.currentRect.y; yPos < (this.currentRect.y + this.currentRect.height); yPos ++) {
