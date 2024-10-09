@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import "./CreateOrder.css";
 
 export type CreateOrderProps = {
@@ -7,13 +7,27 @@ export type CreateOrderProps = {
 
 export function CreateOrder(props: CreateOrderProps) {
 
-    const handleCreateOrder = () => {
-        console.log('order')
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    
+    const handleOpenModal = () => {
+        setModalIsOpen(true)
+    };
+
+    const handleCloseModal = () => {
+        setModalIsOpen(false)
     };
 
     return (
         <>
-           <button onClick={() => handleCreateOrder()}>Order</button>
+            <button onClick={() => handleOpenModal()}>Order</button>
+            {modalIsOpen && (
+            <div id="myModal" className="order-modal">
+                <div className="order-modal-content" onClick={() => handleCloseModal()}>
+                    <span className="order-modal-close">&times;</span>
+                    <p>Some text in the Modal..</p>
+                </div>
+            </div>
+            )}
         </>
     );
 }
