@@ -131,10 +131,10 @@ export class CursorManager {
             this.tilesSelectCursor.onPointerDown(pointerTileX, pointerTileY);
         }
 
-        if (pointer.leftButtonDown() && this.currentCursor ===  this.tilesSelectCursor) {
-            this.tilesSelectCursor.hidePointer();
-            this.setCurrentCursor(null);
-        }
+        // if (pointer.leftButtonDown() && this.currentCursor ===  this.tilesSelectCursor) {
+        //     this.tilesSelectCursor.hidePointer();
+        //     this.setCurrentCursor(null);
+        // }
     }
 
     public hasActiveCursor() {

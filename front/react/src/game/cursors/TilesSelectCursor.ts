@@ -1,7 +1,10 @@
 import { Tilemaps } from "phaser";
 import { MapManager } from "../MapManager";
+
+import { Game } from "../scenes/Game";
 import { Cursor } from "./types";
 import { MapObject } from "../core/types";
+
 
 export class TilesSelectCursor implements Cursor {
     private scene: Phaser.Scene;
@@ -39,6 +42,7 @@ export class TilesSelectCursor implements Cursor {
         this.currentRect.width = 0;
         this.currentRect.height = 0;
         this.selectedItems = [];
+        (this.scene as Game).emitEvent('on-cursor-tiles-selection', this.selectedItems);
     }
 
     public onPointerDown(pointerTileX: number, pointerTileY: number) {
@@ -82,6 +86,7 @@ export class TilesSelectCursor implements Cursor {
             }
 
             this.isDrawing = false;
+            (this.scene as Game).emitEvent('on-cursor-tiles-selection', this.selectedItems);
         }
     }
 }

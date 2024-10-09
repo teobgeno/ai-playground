@@ -9,7 +9,9 @@ import { Hotbar } from "./components/Hotbar";
 import { Inventory } from "./components/Inventory";
 import { StaminaBar } from "./components/StaminaBar";
 import { CreateOrder } from "./components/CreateOrder";
+
 import { MoveStorableProps } from "./components/types";
+import { MapObject } from "./game/core/types";
 import "./App.css";
 
 export type Message = {
@@ -68,6 +70,11 @@ function App() {
             setPlayerStamina(stamina);
         });
 
+        EventBus.on("on-cursor-tiles-selection", (mapObjects: Array<MapObject>) => {
+            console.log(mapObjects)
+            //setPlayerStamina(stamina);
+        });
+
         return () => {
             EventBus.removeListener("on-character-inventory-update");
             EventBus.removeListener("on-character-controller-i-key");
@@ -75,6 +82,7 @@ function App() {
             EventBus.removeListener("on-chat-add-message");
             EventBus.removeListener("on-chat-end-conversation");
             EventBus.removeListener("on-player-stamina-change");
+            EventBus.removeListener("on-cursor-tiles-selection");
         };
     }, []);
 
