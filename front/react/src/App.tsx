@@ -21,6 +21,7 @@ export type Message = {
 };
 
 function App() {
+    const [orderItems, setOrderItems] = useState<Array<MapObject>>([]);
     const [inventoryHotbarItems, setInventoryHotbarItems] = useState<Array<Storable | null>>([]);
     const [inventoryRestItems, setInventoryRestItems] = useState<Array<Storable | null>>([]);
     const [craftIngridientsItems, setCraftIngridientsItems] = useState<Array<Storable | null>>([]);
@@ -71,8 +72,7 @@ function App() {
         });
 
         EventBus.on("on-cursor-tiles-selection", (mapObjects: Array<MapObject>) => {
-            console.log(mapObjects)
-            //setPlayerStamina(stamina);
+            mapObjects.length ? setOrderItems(mapObjects): setOrderItems([])
         });
 
         return () => {
@@ -93,7 +93,7 @@ function App() {
     return (
         <div id="app">
             <div style={{ position: "relative" }}>
-                <CreateOrder stamina={playerStamina} />
+                <CreateOrder items={orderItems} />
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
                 <Hotbar items={inventoryHotbarItems} setActiveItem={setActiveItem} />
                 <StaminaBar stamina={playerStamina} />

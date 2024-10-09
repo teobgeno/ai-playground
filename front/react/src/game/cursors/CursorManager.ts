@@ -188,7 +188,7 @@ export class CursorManager {
                 this.setCurrentCursor(this.externalInteractionCursor);
                 break;
             default:
-                this.currentCursor?.hidePointer();
+                //this.currentCursor?.hidePointer();
                 this.setCurrentCursor(null);
                 break;
         }
