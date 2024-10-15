@@ -1,6 +1,10 @@
 import { GridEngine } from "grid-engine";
 import { OrderStatus, Order, Task, TaskStatus } from "./types";
-import { CharacterState, Character } from "../characters/types";
+import {  Character } from "../characters/types";
+import { ServiceLocator } from "../core/serviceLocator";
+import { TimeManager } from "../TimeManager";
+
+
 
 export class BaseOrder implements Order{
     protected gridEngine: GridEngine;
@@ -35,19 +39,49 @@ export class BaseOrder implements Order{
         //this.currentTask = this.tasks[0];
     }
 
+    public isInTimeRange() {
+
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+
+        if(this.startDate && 
+            this.endDate && 
+            timeManager.getCurrentDate() >= this.startDate &&
+            timeManager.getCurrentDate() <= this.endDate
+        ) {
+            return true;
+        }
+
+        if(!this.startDate && !this.endDate) {
+            
+            return true;
+        }
+        
+        return false;
+    }
+
     public update() {
         if (
-            (this.tasks.length > 0 && !this.currentTask) ||
-            (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)
+            (this.tasks.length > 0 && this.taskPointer < this.tasks.length) &&
+            (
+                (!this.currentTask) ||
+                (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)
+            )
         ) {
+            
             this.currentTask = this.tasks[this.taskPointer];
+            
             if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
                 this.currentTask.start();
             }
+            this.taskPointer++;
         }
-       
+
         if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
             this.currentTask.cancel();
+        }
+
+        if(this.tasks.length === this.tasks.length && this.isRecurring) {
+            console.log('ok');
         }
     }
 
