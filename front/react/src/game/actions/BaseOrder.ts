@@ -53,21 +53,31 @@ export class BaseOrder implements Order{
     public isInTimeRange() {
 
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-
+        let ret = false;
         if(this.startDate && 
             this.endDate && 
             timeManager.getCurrentDate() >= this.startDate &&
             timeManager.getCurrentDate() <= this.endDate
         ) {
-            return true;
+            ret = true;
         }
 
         if(!this.startDate && !this.endDate) {
             
-            return true;
+            ret = true;
         }
         
-        return false;
+        return ret;
+    }
+
+    public canRun() {
+        // let ret = false;
+
+        // if(this.status === OrderStatus.Running) {
+        //     ret = true;
+        // }
+
+        // return ret;
     }
 
     public runTasks() {
@@ -95,7 +105,7 @@ export class BaseOrder implements Order{
     public update() {
 
         if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
-
+            this.setStatus(OrderStatus.Running);
             this.runTasks();
         }
 
@@ -103,6 +113,7 @@ export class BaseOrder implements Order{
 
             if(this.isRecurring) {
                 this.taskPointer = 0;
+                this.setStatus(OrderStatus.Running);
                 this.runTasks();
             } else {
                 this.setStatus(OrderStatus.Completed);
