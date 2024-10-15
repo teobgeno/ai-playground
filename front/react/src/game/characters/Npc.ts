@@ -77,8 +77,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private updateOrders() {
         if (
             (this.orders.length > 0 && !this.currentOrder) ||
-            (this.currentOrder &&
-                this.currentOrder.getStatus() === OrderStatus.Completed)
+            (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed)
         ) {
             this.currentOrder = this.orders.shift();
             if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Initialized) {
