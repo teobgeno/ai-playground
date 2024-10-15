@@ -31,12 +31,23 @@ export class BaseOrder implements Order{
         return this.tasks.push(task);
     }
 
+    public setStatus(status: OrderStatus) {
+        this.status = status;
+    }
     public getStatus() {
        return this.status;
     }
 
     public start() {
-        //this.currentTask = this.tasks[0];
+        this.setStatus(OrderStatus.Running);
+    }
+
+    public cancel() {
+        this.setStatus(OrderStatus.Canceled);
+    }
+
+    public pause() {
+        this.setStatus(OrderStatus.Paused);
     }
 
     public isInTimeRange() {
@@ -59,32 +70,50 @@ export class BaseOrder implements Order{
         return false;
     }
 
-    public update() {
+    public runTasks() {
         if (
-            (this.tasks.length > 0 && this.taskPointer < this.tasks.length) &&
-            (
-                (!this.currentTask) ||
-                (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)
-            )
+
+            (!this.currentTask) ||
+            (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)
+            
         ) {
             
             this.currentTask = this.tasks[this.taskPointer];
             
-            if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
+            if (this.currentTask.getStatus() === TaskStatus.Initialized) {
                 this.currentTask.start();
             }
+
+            if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
+                this.currentTask.cancel();
+            }
+
             this.taskPointer++;
         }
-
-        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
-            this.currentTask.cancel();
-        }
-
-        if(this.tasks.length === this.tasks.length && this.isRecurring) {
-            console.log('ok');
-        }
     }
 
-    public cancel() {
+    public update() {
+
+        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
+
+            this.runTasks();
+        }
+
+        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
+
+            if(this.isRecurring) {
+                this.taskPointer = 0;
+                this.runTasks();
+            } else {
+                this.setStatus(OrderStatus.Completed);
+            }
+           
+        }
+        
+        if(!this.isInTimeRange() && this.isRecurring){
+            this.setStatus(OrderStatus.WaitingNextReccur);
+        } 
+
     }
+
 }
