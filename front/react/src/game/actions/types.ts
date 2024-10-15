@@ -3,6 +3,14 @@ export interface Action
 	execute: () => void
 }
 
+export enum OrderStatus {
+    Canceled = 0,
+    Running = 1,
+    Completed = 2,
+    Initialized = 3,
+    Rollback = 4
+}
+
 export enum TaskStatus {
     Canceled = 0,
     Running = 1,
@@ -18,5 +26,11 @@ export interface Task
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
     getMoveDestinationPoint: () => {x: number, y: number}
+}
+
+
+export interface Order
+{
+    start: () => void;
 }
 

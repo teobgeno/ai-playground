@@ -1,5 +1,5 @@
 import Phaser, { Physics } from "phaser";
-import { Task } from "../actions/types";
+import { Order, Task } from "../actions/types";
 import StateMachine from "./StateMachine";
 import { CharacterInventory } from "./CharacterInventory";
 
@@ -7,7 +7,8 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public id: number;
     public idTag: string;
     protected charName: string;
-    public  scene: Phaser.Scene;
+    public scene: Phaser.Scene;
+    protected orders: Array<Order> = [];
     protected tasks: Array<Task> = [];
     protected stateMachine: StateMachine;
     protected characterInventory: CharacterInventory;
@@ -78,6 +79,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
     public getInventory() {
         return this.characterInventory;
+    }
+
+    public addOrder(order: Order) {
+        this.orders.push(order);
     }
 
     public addTask(task: Task) {
