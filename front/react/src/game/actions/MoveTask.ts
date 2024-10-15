@@ -81,7 +81,6 @@ export default class MoveTask implements Task{
     }
 
     protected shouldMoveCharacter(x: number, y: number) {
-        //this.pointer = 2;
         const characterPos = this.gridEngine.getPosition(
             this.character.getIdTag()
         );

@@ -14,6 +14,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected characterInventory: CharacterInventory;
     protected convId: number;
     protected stamina:number = 100;
+    public currentOrder: Order | undefined;
     public currentTask: Task | undefined;
     public isNpc: boolean;
 

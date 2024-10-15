@@ -5,6 +5,7 @@ import { InteractiveItem } from "../items/InteractiveItem";
 import { SpriteItem } from "../items/SpriteItem";
 import { MapObjectInteractable } from "../core/types";
 import { CharacterState, Character } from "./types";
+import { OrderStatus } from "../actions/types";
 export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private gridEngine: GridEngine;
     private interactive: InteractiveItem;
@@ -69,6 +70,24 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
 
     update(dt: number) {
         this.stateMachine.update(dt);
+    }
+
+
+    private updateOrdersQueue() {
+        if (
+            (this.orders.length > 0 && !this.currentOrder) ||
+            (this.currentOrder &&
+                this.currentOrder.getStatus() === OrderStatus.Completed)
+        ) {
+            this.currentOrder = this.orders.shift();
+            if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Initialized) {
+                this.currentOrder.start();
+            }
+        }
+       
+        if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
+            this.currentOrder.cancel();
+        }
     }
     
 }

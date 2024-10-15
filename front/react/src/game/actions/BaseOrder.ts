@@ -25,6 +25,10 @@ export class BaseOrder implements Order{
         return this.tasks.push(task);
     }
 
+    public getStatus() {
+       return this.status;
+    }
+
     public start() {
        
     }
