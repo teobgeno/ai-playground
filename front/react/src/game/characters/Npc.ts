@@ -70,10 +70,11 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
 
     update(dt: number) {
         this.stateMachine.update(dt);
+        this.updateOrders();
     }
 
 
-    private updateOrdersQueue() {
+    private updateOrders() {
         if (
             (this.orders.length > 0 && !this.currentOrder) ||
             (this.currentOrder &&
@@ -84,7 +85,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
                 this.currentOrder.start();
             }
         }
-       
+
         if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
             this.currentOrder.cancel();
         }
