@@ -10,6 +10,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private gridEngine: GridEngine;
     private interactive: InteractiveItem;
     public sprites: Array<SpriteItem> = [];
+    protected orderPointer: number = 0;
 
     constructor(
         scene: Phaser.Scene,
@@ -77,17 +78,23 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private updateOrders() {
         if (
             (this.orders.length > 0 && !this.currentOrder) ||
-            (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed)
+            (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Running)
         ) {
-            this.currentOrder = this.orders.shift();
+            //this.currentOrder = this.orders.shift();
+            this.currentOrder = this.orders[this.orderPointer];
+
             if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Initialized) {
                 this.currentOrder.start();
             }
+
+            if (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Completed) {
+                this.currentOrder.update();
+            }
         }
 
-        if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
-            this.currentOrder.cancel();
-        }
+        // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
+        //     this.currentOrder.cancel();
+        // }
     }
     
 }

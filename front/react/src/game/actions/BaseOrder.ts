@@ -70,16 +70,6 @@ export class BaseOrder implements Order{
         return ret;
     }
 
-    public canRun() {
-        // let ret = false;
-
-        // if(this.status === OrderStatus.Running) {
-        //     ret = true;
-        // }
-
-        // return ret;
-    }
-
     public runTasks() {
         if (
 

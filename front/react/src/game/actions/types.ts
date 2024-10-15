@@ -35,6 +35,8 @@ export interface Order
 {
     start: () => void;
     cancel: () => void;
+    update: () => void;
     getStatus: () => OrderStatus;
+
 }
 
