@@ -9,7 +9,7 @@ import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
 
 
-export default class MoveTask implements Task{
+export  class MoveTask implements Task{
     private character: Character;
     private gridEngine: GridEngine;
     protected destinationMoveX: number = 0;
@@ -34,6 +34,14 @@ export default class MoveTask implements Task{
         this.status = TaskStatus.Initialized;
     }
 
+    public getStatus() {
+        return this.status;
+    }
+
+    public setStatus(status: TaskStatus) {
+        this.status = status;
+    }
+
     public start() {
         this.status =
             this.status === TaskStatus.Initialized
@@ -51,7 +59,7 @@ export default class MoveTask implements Task{
     };
 
     public finish = () => {
-
+        this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.status = TaskStatus.Completed;
         }

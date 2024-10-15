@@ -36,6 +36,7 @@ export interface Order
     start: () => void;
     cancel: () => void;
     update: () => void;
+    getTasks: () => Array<Task>;
     getStatus: () => OrderStatus;
 
 }

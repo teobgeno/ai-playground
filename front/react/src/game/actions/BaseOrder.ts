@@ -1,15 +1,11 @@
-import { GridEngine } from "grid-engine";
 import { OrderStatus, Order, Task, TaskStatus } from "./types";
-import {  Character } from "../characters/types";
 import { ServiceLocator } from "../core/serviceLocator";
 import { TimeManager } from "../TimeManager";
 
 
 
 export class BaseOrder implements Order{
-    protected gridEngine: GridEngine;
-    protected character: Character;
-    protected tasks: Array<Task>;
+    protected tasks: Array<Task> = [];
     protected currentTask: Task;
     protected startDate: Date;
     protected endDate: Date;
@@ -21,14 +17,17 @@ export class BaseOrder implements Order{
     protected destinationMoveX: number = 0;
     protected destinationMoveY: number = 0;
 
-    constructor(gridEngine: GridEngine, character: Character) {
-        this.character = character;
-        this.gridEngine = gridEngine;
+    constructor() {
+
         this.status = OrderStatus.Initialized;
     }
 
     public addTask(task: Task) {
         return this.tasks.push(task);
+    }
+
+    public getTasks() {
+        return this.tasks;
     }
 
     public setStatus(status: OrderStatus) {
@@ -99,7 +98,7 @@ export class BaseOrder implements Order{
             this.runTasks();
         }
 
-        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
+        if(this.isInTimeRange() && this.taskPointer > this.tasks.length) {
 
             if(this.isRecurring) {
                 this.taskPointer = 0;

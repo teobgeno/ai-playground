@@ -28,6 +28,9 @@ import { Lake } from "../items/Lake";
 import { FarmLand } from "../farm/FarmLand";
 
 import { HarvestTask } from "../actions/HarvestTask";
+import { BaseOrder } from "../actions/BaseOrder";
+import { MoveTask } from "../actions/MoveTask";
+import { Order } from "../actions/types";
 
 import { CursorType } from "../cursors/types";
 import { MapObject, ObjectId, SceneProps } from "../core/types";
@@ -151,6 +154,16 @@ export class Game extends Scene {
         house.setDepth(2);
 
         this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setTestCollision(a,b)}, this)
+
+
+
+        const npc0 = this.charactersMap.get("npc0");
+
+        const orderMove = new BaseOrder();
+        const moveTask = new MoveTask(npc0, this.gridEngine, 20, 10);
+        orderMove.addTask(moveTask);
+        npc0?.addOrder(orderMove);
+
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide
         //https://codepen.io/samme/pen/WaZQOX
         
@@ -376,6 +389,16 @@ export class Game extends Scene {
                         char.currentTask.next();
                     }
                 }
+                if (char && char.currentOrder) {
+                    if (
+                        enterTile.x == char.currentOrder.getTasks()[0].getMoveDestinationPoint().x &&
+                        enterTile.y == char.currentOrder.getTasks()[0].getMoveDestinationPoint().y
+                    ) {
+                        char.currentOrder.getTasks()[0].next();
+                    }
+                }
+
+                
             });
     }
 

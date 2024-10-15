@@ -43,6 +43,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
         this.stateMachine
             .addState(CharacterState.IDLE, {})
             .addState(CharacterState.WALK, {})
+            .addState(CharacterState.AUTOWALK, {})
             .addState(CharacterState.TALK, {})
             .setState(CharacterState.IDLE);
     }
@@ -83,13 +84,18 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
             //this.currentOrder = this.orders.shift();
             this.currentOrder = this.orders[this.orderPointer];
 
-            if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Initialized) {
-                this.currentOrder.start();
-            }
+          
+            // if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Initialized) {
+            //     this.currentOrder.start();
+            // }
 
             if (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Completed) {
                 this.currentOrder.update();
             }
+
+            
+
+            this.orderPointer++;
         }
 
         // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
