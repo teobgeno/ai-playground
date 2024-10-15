@@ -93,7 +93,7 @@ export class BaseOrder implements Order{
 
     public update() {
 
-        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
+        if(this.isInTimeRange() && this.taskPointer <= this.tasks.length) {
             this.setStatus(OrderStatus.Running);
             this.runTasks();
         }
