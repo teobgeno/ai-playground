@@ -96,7 +96,7 @@ export class TillageTask extends BaseTask implements Task {
         this.initTimestamp =  this.lastTimestamp;
         this.IntervalProcess = setInterval(this.tillGroundProc, 1000)
 
-        //this.character.anims.play("attack_right", true);
+        //sdsathis.character.anims.play("attack_right", true);
         this.character.setCharState(CharacterState.TILL);
     }
 
