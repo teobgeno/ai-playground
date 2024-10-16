@@ -30,6 +30,7 @@ import { FarmLand } from "../farm/FarmLand";
 import { HarvestTask } from "../actions/HarvestTask";
 import { BaseOrder } from "../actions/BaseOrder";
 import { MoveTask } from "../actions/MoveTask";
+import { TillageTask } from "../actions/TillageTask";
 import { Order } from "../actions/types";
 
 import { CursorType } from "../cursors/types";
@@ -158,11 +159,31 @@ export class Game extends Scene {
 
 
         const npc0 = this.charactersMap.get("npc0");
+        const hoe = new Hoe(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_hoe.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.HOE)
+        )
 
-        const orderMove = new BaseOrder();
-        const moveTask = new MoveTask(npc0, this.gridEngine, 20, 10);
-        orderMove.addTask(moveTask);
-        npc0?.addOrder(orderMove);
+        const order = new BaseOrder();
+        const moveTask = new MoveTask(this.gridEngine, npc0, 20, 10);
+        const tillageTask = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 20, 10);
+
+        const moveTask2 = new MoveTask(this.gridEngine, npc0, 21, 10);
+        const tillageTask2 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 21, 10);
+
+        const moveTask3 = new MoveTask(this.gridEngine, npc0, 22, 10);
+        const tillageTask3 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 22, 10);
+        
+        order.addTask(moveTask);
+        order.addTask(tillageTask);
+        order.addTask(moveTask2);
+        order.addTask(tillageTask2);
+        order.addTask(moveTask3);
+        order.addTask(tillageTask3);
+        npc0?.addOrder(order);
 
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide
         //https://codepen.io/samme/pen/WaZQOX
@@ -391,10 +412,10 @@ export class Game extends Scene {
                 }
                 if (char && char.currentOrder) {
                     if (
-                        enterTile.x == char.currentOrder.getTasks()[0].getMoveDestinationPoint().x &&
-                        enterTile.y == char.currentOrder.getTasks()[0].getMoveDestinationPoint().y
+                        enterTile.x == char.currentOrder.getCurrentTask().getMoveDestinationPoint().x &&
+                        enterTile.y == char.currentOrder.getCurrentTask().getMoveDestinationPoint().y
                     ) {
-                        char.currentOrder.getTasks()[0].next();
+                        char.currentOrder.getCurrentTask().next();
                     }
                 }
 

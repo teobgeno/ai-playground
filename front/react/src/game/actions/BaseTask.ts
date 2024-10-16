@@ -7,8 +7,6 @@ export abstract class BaseTask {
     protected character: Character;
     protected status: TaskStatus;
     protected pointer: number = 0;
-    protected destinationMoveX: number = 0;
-    protected destinationMoveY: number = 0;
     protected initTimestamp: number = 0;
     protected lastTimestamp: number = 0;
     protected IntervalProcess: ReturnType<typeof setInterval>;
@@ -28,27 +26,4 @@ export abstract class BaseTask {
         this.status = status;
     }
     
-    public getMoveDestinationPoint() {
-        return { x: this.destinationMoveX, y: this.destinationMoveY };
-    }
-    protected shouldMoveCharacter(x: number, y: number) {
-        this.pointer = 2;
-        const characterPos = this.gridEngine.getPosition(
-            this.character.getIdTag()
-        );
-        if (characterPos.x === x && characterPos.y === y) {
-            return false;
-        }
-        return true;
-    }
-
-    protected moveCharacter(x: number, y: number) {
-        this.character.setCharState(CharacterState.AUTOWALK);
-        this.destinationMoveX = x;
-        this.destinationMoveY = y;
-        this.gridEngine.moveTo(this.character.getIdTag(), {
-            x: x,
-            y: y,
-        });
-    }
 }

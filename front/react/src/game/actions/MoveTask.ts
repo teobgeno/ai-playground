@@ -9,37 +9,23 @@ import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
 
 
-export  class MoveTask implements Task{
-    private character: Character;
-    private gridEngine: GridEngine;
+export class MoveTask extends BaseTask implements Task{
     protected destinationMoveX: number = 0;
     protected destinationMoveY: number = 0;
     private posX: number;
     private posY: number;
 
-    protected status: TaskStatus;
-    protected pointer: number;
-
     constructor(
-        character: Character,
         gridEngine: GridEngine,
+        character: Character,
         posX: number,
         posY: number
     ) {
-        this.character = character;
-        this.gridEngine = gridEngine;
+        super(gridEngine, character);
         this.posX = posX;
         this.posY = posY;
         
         this.status = TaskStatus.Initialized;
-    }
-
-    public getStatus() {
-        return this.status;
-    }
-
-    public setStatus(status: TaskStatus) {
-        this.status = status;
     }
 
     public start() {
@@ -71,13 +57,13 @@ export  class MoveTask implements Task{
                     }
                     break;
                 case 2:
-                    this.finish();
+                    this.complete();
                     break;
             }
         }
     }
 
-    public finish = () => {
+    public complete = () => {
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.status = TaskStatus.Completed;

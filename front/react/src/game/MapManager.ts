@@ -10,7 +10,9 @@ export class MapManager {
     constructor(map: Tilemaps.Tilemap) {
         this.map = map;
     }
-
+    public getMap() {
+        return this.map;
+    }
     public createPlotLandCoords() {
         for (let y = 0; y < this.map.height; y++) {
             for (let x = 0; x < this.map.width; x++) {
@@ -52,7 +54,6 @@ export class MapManager {
             tile.properties = { ge_collide: collide };
         }
     }
-
 
     public  getMapObjects() {
         return this.mapObjects;

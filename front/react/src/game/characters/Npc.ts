@@ -45,6 +45,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
             .addState(CharacterState.WALK, {})
             .addState(CharacterState.AUTOWALK, {})
             .addState(CharacterState.TALK, {})
+            .addState(CharacterState.TILL, {})
             .setState(CharacterState.IDLE);
     }
 

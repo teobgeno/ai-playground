@@ -10,28 +10,21 @@ import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
 
 export class TillageTask extends BaseTask implements Task {
-    private scene: Phaser.Scene;
     private mapManager: MapManager;
     private landEntity: FarmLand;
     private hoe: Hoe;
-    private posX: number;
-    private posY: number;
 
     constructor(
+        mapManager: MapManager,
         gridEngine: GridEngine,
         character: Character,
-        scene: Phaser.Scene,
-        mapManager: MapManager,
-        hoe: Hoe,
-        posX: number,
-        posY: number
+        landEntity: FarmLand,
+        hoe: Hoe
     ) {
         super(gridEngine, character);
-        this.scene = scene;
         this.mapManager = mapManager;
         this.hoe = hoe;
-        this.posX = posX;
-        this.posY = posY;
+        this.landEntity = landEntity;
     }
 
     public start() {
@@ -66,9 +59,15 @@ export class TillageTask extends BaseTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.initPlotLand();
-                    this.pointer = 2;
-                    this.next();
+                    this.shouldMoveCharacter(
+                        this.landEntity.getSprite().getX(),
+                        this.landEntity.getSprite().getY()
+                    )
+                        ? this.moveCharacter(
+                              this.landEntity.getSprite().getX(),
+                              this.landEntity.getSprite().getY()
+                          )
+                        : this.next();
                     break;
                 case 2:
                     this.tillGround();
@@ -77,26 +76,12 @@ export class TillageTask extends BaseTask implements Task {
         }
     };
 
-    private initPlotLand() {
-     
-        const tileGround = this.mapManager.getMap().getTileAt(this.posX, this.posY, false, "Ground");
-
-        if(tileGround) {
-            this.landEntity = new FarmLand(
-                this.scene,
-                {x: this.posX, y: this.posY, pixelX: this.mapManager.getMap().tileToWorldX(this.posX) || 0, pixelY: this.mapManager.getMap().tileToWorldY(this.posY) || 0}
-            );
-            
-            this.mapManager.setPlotLandCoords( this.posX, this.posY, this.landEntity);
-        }
-    }
-
     private tillGround() {
         this.lastTimestamp = Utils.getTimeStamp();
         this.initTimestamp =  this.lastTimestamp;
         this.IntervalProcess = setInterval(this.tillGroundProc, 1000)
 
-        //this.character.anims.play("attack_right", true);
+        this.character.anims.play("attack_right", true);
         this.character.setCharState(CharacterState.TILL);
     }
 
@@ -110,7 +95,7 @@ export class TillageTask extends BaseTask implements Task {
         }
     }
 
-    public complete() {
+    private complete() {
 
        this.updateCharacter();
 
@@ -121,9 +106,23 @@ export class TillageTask extends BaseTask implements Task {
     }
 
     private updateCharacter() {
-        //this.character.anims.restart();
-        //this.character.anims.stop();
+        this.character.anims.restart();
+        this.character.anims.stop();
         this.character.decreaseStamina(this.staminaCost);
         this.character.setCharState(CharacterState.IDLE);
     }
 }
+
+/*
+public initTimestamp: number = 0;
+public lastTimestamp: number = 0;
+public IntervalProcess;
+
+ this.lastTimestamp = Utils.getTimeStamp();
+ this.initTimestamp =  this.lastTimestamp;
+
+ ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.hoe.weedSpeed
+    complete
+  else
+    this.lastTimestamp = Utils.getTimeStamp();
+*/

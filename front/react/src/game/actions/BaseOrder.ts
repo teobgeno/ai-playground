@@ -30,6 +30,10 @@ export class BaseOrder implements Order{
         return this.tasks;
     }
 
+    public getCurrentTask() {
+        return this.currentTask;
+    }
+
     public setStatus(status: OrderStatus) {
         this.status = status;
     }

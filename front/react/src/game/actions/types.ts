@@ -25,9 +25,9 @@ export interface Task
     start: () => void;
     cancel: () => void;
     next: () => void;
+    complete: () => void;
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
-    getMoveDestinationPoint: () => {x: number, y: number}
 }
 
 
@@ -37,6 +37,7 @@ export interface Order
     cancel: () => void;
     update: () => void;
     getTasks: () => Array<Task>;
+    getCurrentTask: () => Task;
     getStatus: () => OrderStatus;
 
 }
