@@ -87,18 +87,22 @@ export class BaseOrder implements Order{
                 this.currentTask.cancel();
             }
 
-            this.taskPointer++;
+            
         }
     }
 
     public update() {
 
-        if(this.isInTimeRange() && this.taskPointer <= this.tasks.length) {
+        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
+            this.taskPointer++;
+        }
+
+        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
             this.setStatus(OrderStatus.Running);
             this.runTasks();
         }
 
-        if(this.isInTimeRange() && this.taskPointer > this.tasks.length) {
+        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
 
             if(this.isRecurring) {
                 this.taskPointer = 0;
