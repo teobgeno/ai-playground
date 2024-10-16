@@ -86,8 +86,6 @@ export class BaseOrder implements Order{
             if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
                 this.currentTask.cancel();
             }
-
-            
         }
     }
 
