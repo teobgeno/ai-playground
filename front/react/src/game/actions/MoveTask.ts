@@ -58,13 +58,6 @@ export  class MoveTask implements Task{
         this.status = TaskStatus.Completed;
     };
 
-    public finish = () => {
-        this.character.setCharState(CharacterState.IDLE);
-        if (this.status === TaskStatus.Running) {
-            this.status = TaskStatus.Completed;
-        }
-    };
-
     public next() {
 
         if (this.status === TaskStatus.Running) {
@@ -83,6 +76,13 @@ export  class MoveTask implements Task{
             }
         }
     }
+
+    public finish = () => {
+        this.character.setCharState(CharacterState.IDLE);
+        if (this.status === TaskStatus.Running) {
+            this.status = TaskStatus.Completed;
+        }
+    };
 
     public getMoveDestinationPoint() {
         return { x: this.destinationMoveX, y: this.destinationMoveY };
