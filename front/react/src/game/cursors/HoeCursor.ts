@@ -3,6 +3,7 @@ import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
 
 import { Hoe } from "../items/Hoe";
+import { BaseOrder } from "../actions/BaseOrder";
 import { TillageTask } from "../actions/TillageTask";
 import { FarmLand } from "../farm/FarmLand";
 
@@ -80,33 +81,41 @@ export class HoeCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (this.canExecute) {
-            const tileGround = this.map.getTileAt(
+            const tillage = new TillageTask(
+                this.gridEngine,
+                this.character,
+                this.scene,
+                this.mapManager,
+                this.hoe,
                 pointerTileX,
-                pointerTileY,
-                false,
-                "Ground"
+                pointerTileY
             );
+
+            const order = new BaseOrder();
+            order.addTask(tillage)
+
+            this.character.addTask(tillage);
+
+
+
+            // const tileGround = this.map.getTileAt(
+            //     pointerTileX,
+            //     pointerTileY,
+            //     false,
+            //     "Ground"
+            // );
             
-            if (tileGround) {
+            // if (tileGround) {
 
-                const landEntity = new FarmLand(
-                    this.scene,
-                    {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
-                );
+            //     const landEntity = new FarmLand(
+            //         this.scene,
+            //         {x: tileGround.x, y: tileGround.y, pixelX: tileGround.pixelX, pixelY: tileGround.pixelY}
+            //     );
                 
 
-                this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, landEntity);
+            //     this.mapManager.setPlotLandCoords( tileGround.x,  tileGround.y, landEntity);
 
-                
-                const t = new TillageTask(
-                    this.mapManager,
-                    this.gridEngine,
-                    this.character,
-                    landEntity,
-                    this.hoe
-                );
-                this.character.addTask(t);
-            }
+            // }
         }
     }
 }
