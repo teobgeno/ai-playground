@@ -93,7 +93,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
             this.orderPointer = this.orderPointer < this.orders.length ? this.orderPointer + 1 : 0;
         }
 
-        //delete order if is completed or canceled. Keep orderPointer to the same value as array is length -1.
+        //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.
         if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed) {
             this.currentOrder = undefined;
             this.orders.shift();
