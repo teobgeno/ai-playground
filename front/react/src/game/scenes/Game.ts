@@ -122,9 +122,7 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-        if(props.map == undefined || props.map ==='farm') {
-            this.test();
-        }
+       
 
         this.timeManager = new TimeManager()
         ServiceLocator.register('timeManager', this.timeManager);
@@ -135,6 +133,10 @@ export class Game extends Scene {
         ServiceLocator.register('mapManager', this.mapManager);
         
         this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
+
+        if(props.map == undefined || props.map ==='farm') {
+            this.test();
+        }
 
         EventBus.emit("current-scene-ready", this);
     }
@@ -161,6 +163,10 @@ export class Game extends Scene {
 
         const npc0 = this.charactersMap.get("npc0")!;
         OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 20, 10);
+        OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 14);
+        OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 15);
+        OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16);
+        OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 17);
 
 
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide

@@ -57,11 +57,8 @@ export class HoeCursor implements Cursor {
         this.marker.y = (this.map.tileToWorldY(pointerTileY) || 0) + 16;
         this.marker.setAlpha(1);
 
-        const mapObj = this.mapManager.getPlotLandCoord(pointerTileX, pointerTileY);
-
         if (
-            this.mapManager.isTilePlotExist(pointerTileX, pointerTileY) &&
-            mapObj === null &&
+            this.mapManager.canTillageToTile(pointerTileX, pointerTileY) &&
             !this.gridEngine.isBlocked({ x: pointerTileX, y: pointerTileY },"CharLayer")
         ) {
             this.canExecute = true;
@@ -82,6 +79,9 @@ export class HoeCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (this.canExecute) {
+
+            OrderFactory.createTillageOrder(this.gridEngine, this.character, this.scene, pointerTileX, pointerTileY);
+
             // const tillage = new TillageTask(
             //     this.gridEngine,
             //     this.character,
@@ -92,17 +92,17 @@ export class HoeCursor implements Cursor {
             //     pointerTileY
             // );
 
-            const tileGround = this.mapManager.getTileAt(pointerTileX, pointerTileY, false, "Ground");
+            // const tileGround = this.mapManager.getTileAt(pointerTileX, pointerTileY, false, "Ground");
 
-            if(tileGround) {
-                const landEntity = new FarmLand(
-                    this.scene,
-                    {x: pointerTileX, y: pointerTileY, pixelX: this.mapManager.tileToWorldX(pointerTileX) || 0, pixelY: this.mapManager.tileToWorldY(pointerTileY) || 0}
-                );
-                this.mapManager.setPlotLandCoords( pointerTileX, pointerTileY, landEntity);
-            }
+            // if(this.mapManager.canTillageToTile(pointerTileX, pointerTileY)) {
+            //     const landEntity = new FarmLand(
+            //         this.scene,
+            //         {x: pointerTileX, y: pointerTileY, pixelX: this.mapManager.tileToWorldX(pointerTileX) || 0, pixelY: this.mapManager.tileToWorldY(pointerTileY) || 0}
+            //     );
+            //     this.mapManager.setPlotLandCoords( pointerTileX, pointerTileY, landEntity);
+            // }
 
-            OrderFactory.createTillageOrderWithNoLock(this.gridEngine, this.character, pointerTileX, pointerTileY);
+            
 
             // const order = new BaseOrder();
             // order.addTask(tillage)
