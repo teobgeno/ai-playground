@@ -90,6 +90,11 @@ export class BaseOrder implements Order{
             if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
                 this.currentTask.cancel();
             }
+
+            if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
+                //this.currentTask.cancel();
+                console.log('error from order')
+            }
         }
     }
 

@@ -50,6 +50,7 @@ export class MoveTask extends BaseTask implements Task{
                         this.pointer = 2;
                         this.next();
                     } else {
+                        this.setStatus(TaskStatus.Error);
                         console.log('error cannot move')
                     }
                     break;
