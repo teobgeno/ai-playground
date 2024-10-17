@@ -48,21 +48,21 @@ export class InteractWithItemTask extends BaseTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    if(this.canMoveCharacter()) {
-                        this.pointer = 2;
-                        this.next();
-                    } else {
-                        this.setStatus(TaskStatus.Error);
-                        console.warn('error cannot move');
-                    }
+                    // if(this.canMoveCharacter()) {
+                    //     this.pointer = 2;
+                    //     this.next();
+                    // } else {
+                    //     this.setStatus(TaskStatus.Error);
+                    //     console.warn('error cannot move');
+                    // }
                     break;
                 case 2:
-                    if(this.shouldMoveCharacter()) {
-                        this.moveCharacter()
-                    } else {
-                        this.pointer = 3;
-                        this.next();
-                    }
+                    // if(this.shouldMoveCharacter()) {
+                    //     this.moveCharacter()
+                    // } else {
+                    //     this.pointer = 3;
+                    //     this.next();
+                    // }
                     break;
                 case 3:
                     this.complete();
@@ -77,4 +77,7 @@ export class InteractWithItemTask extends BaseTask implements Task {
             this.setStatus(TaskStatus.Completed);
         }
     };
+
+    public interact() {
+    }
 }
