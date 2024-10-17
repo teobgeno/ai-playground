@@ -4,21 +4,22 @@ export interface Action
 }
 
 export enum OrderStatus {
-    Canceled = 0,
     Initialized = 1,
     Running = 2,
     Completed = 3,
     Rollback = 4,
-    Paused = 5,
-    WaitingNextReccur = 6
+    Canceled = 5,
+    Paused = 6,
+    WaitingNextReccur = 7
 }
 
 export enum TaskStatus {
-    Canceled = 0,
-    Running = 1,
-    Completed = 2,
-    Initialized = 3,
-    Rollback = 4
+    Initialized = 1,
+    Running = 2,
+    Completed = 3,
+    Rollback = 4,
+    Canceled = 5,
+    Error = 6
 }
 export interface Task
 {

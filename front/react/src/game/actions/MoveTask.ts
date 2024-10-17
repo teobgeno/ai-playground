@@ -26,8 +26,8 @@ export class MoveTask extends BaseTask implements Task{
 
     public start() {
 
-        if (this.status === TaskStatus.Running) {
-            this.setStatus(TaskStatus.Initialized);
+        if (this.status === TaskStatus.Initialized) {
+            this.setStatus(TaskStatus.Running);
         }
 
         this.pointer = 1;
@@ -46,14 +46,22 @@ export class MoveTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    if(this.shouldMoveCharacter(this.posX, this.posY)) {
-                        this.moveCharacter(this.posX, this.posY)
-                    } else {
+                    if(this.canMoveCharacter()) {
                         this.pointer = 2;
                         this.next();
+                    } else {
+                        console.log('error cannot move')
                     }
                     break;
                 case 2:
+                    if(this.shouldMoveCharacter()) {
+                        this.moveCharacter()
+                    } else {
+                        this.pointer = 3;
+                        this.next();
+                    }
+                    break;
+                case 3:
                     this.complete();
                     break;
             }
@@ -71,23 +79,32 @@ export class MoveTask extends BaseTask implements Task{
         return { x: this.destinationMoveX, y: this.destinationMoveY };
     }
 
-    protected shouldMoveCharacter(x: number, y: number) {
-        const characterPos = this.gridEngine.getPosition(
-            this.character.getIdTag()
-        );
-        if (characterPos.x === x && characterPos.y === y) {
+    protected canMoveCharacter() {
+        if(this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")) {
             return false;
         }
+
         return true;
     }
 
-    protected moveCharacter(x: number, y: number) {
+    protected shouldMoveCharacter() {
+        const characterPos = this.gridEngine.getPosition(
+            this.character.getIdTag()
+        );
+        if (characterPos.x === this.posX && characterPos.y === this.posY) {
+            return false;
+        }
+      
+        return true;
+    }
+
+    protected moveCharacter() {
         this.character.setCharState(CharacterState.AUTOWALK);
-        this.destinationMoveX = x;
-        this.destinationMoveY = y;
+        this.destinationMoveX = this.posX;
+        this.destinationMoveY = this.posY;
         this.gridEngine.moveTo(this.character.getIdTag(), {
-            x: x,
-            y: y,
+            x: this.posX,
+            y: this.posY,
         });
     }
 

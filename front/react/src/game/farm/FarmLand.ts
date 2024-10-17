@@ -14,7 +14,7 @@ import {
 import { Utils } from "../core/Utils";
 export class FarmLand implements MapObject, MapObjectInteractable {
     public id: number;
-    public objectId: ObjectId = ObjectId.Crop;
+    public objectId: ObjectId = ObjectId.FarmLand;
     private crop: Crop | null;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];

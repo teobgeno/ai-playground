@@ -33,8 +33,8 @@ export class TillageTask extends BaseTask implements Task {
 
     public start() {
         
-        if (this.status === TaskStatus.Running) {
-            this.setStatus(TaskStatus.Initialized);
+        if (this.status === TaskStatus.Initialized) {
+            this.setStatus(TaskStatus.Running);
         }
 
         this.pointer = 1;
@@ -86,6 +86,8 @@ export class TillageTask extends BaseTask implements Task {
 
         if(farmLand?.objectId === ObjectId.FarmLand) {
             this.landEntity = farmLand as FarmLand
+        } else {
+            console.log('error tillage')
         }
         //TODO:: trigger error and cancel if not farmland 
     }
