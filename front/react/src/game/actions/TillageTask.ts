@@ -10,6 +10,7 @@ import { Hoe } from "../items/Hoe";
 
 import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
+import { ObjectId } from "../core/types";
 
 export class TillageTask extends BaseTask implements Task {
     private landEntity: FarmLand;
@@ -81,8 +82,8 @@ export class TillageTask extends BaseTask implements Task {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
 
-        if(farmLand instanceof FarmLand) {
-            this.landEntity = farmLand
+        if(farmLand?.objectId === ObjectId.FarmLand) {
+            this.landEntity = farmLand as FarmLand
         }
         //TODO:: trigger error and cancel if not farmland 
     }
