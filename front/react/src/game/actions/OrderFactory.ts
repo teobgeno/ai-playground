@@ -35,4 +35,25 @@ export class OrderFactory {
        
     }
 
+    public static createTillageOrderWithNoLock(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
+
+        const hoe = new Hoe(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_hoe.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.HOE)
+        )
+
+        const moveTask = new MoveTask(gridEngine, character, posX, posY);
+        const tillageTask = new TillageTask(gridEngine, character, hoe, posX, posY);
+
+        const order = new BaseOrder();
+        order.addTask(moveTask);
+        order.addTask(tillageTask);
+ 
+        character.addOrder(order);
+       
+    }
+
 }

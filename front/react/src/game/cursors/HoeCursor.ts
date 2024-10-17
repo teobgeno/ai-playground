@@ -92,7 +92,17 @@ export class HoeCursor implements Cursor {
             //     pointerTileY
             // );
 
-            OrderFactory.createTillageOrder(this.gridEngine, this.character, this.scene, pointerTileX, pointerTileY);
+            const tileGround = this.mapManager.getTileAt(pointerTileX, pointerTileY, false, "Ground");
+
+            if(tileGround) {
+                const landEntity = new FarmLand(
+                    this.scene,
+                    {x: pointerTileX, y: pointerTileY, pixelX: this.mapManager.tileToWorldX(pointerTileX) || 0, pixelY: this.mapManager.tileToWorldY(pointerTileY) || 0}
+                );
+                this.mapManager.setPlotLandCoords( pointerTileX, pointerTileY, landEntity);
+            }
+
+            OrderFactory.createTillageOrderWithNoLock(this.gridEngine, this.character, pointerTileX, pointerTileY);
 
             // const order = new BaseOrder();
             // order.addTask(tillage)
