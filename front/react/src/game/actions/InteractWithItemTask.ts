@@ -1,9 +1,18 @@
 import { BaseTask } from "./BaseTask";
 import { GridEngine } from "grid-engine";
+import { ServiceLocator } from "../core/serviceLocator";
+import { MapManager } from "../MapManager";
 
 import { TaskStatus, Task } from "./types";
 import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types";
+import {
+    CoordsData,
+    MapObject,
+    MapObjectInteractable,
+    MapObjectDestructable,
+    ObjectId,
+} from "../core/types";
 
 
 export class InteractWithItemTask extends BaseTask implements Task {
@@ -55,6 +64,7 @@ export class InteractWithItemTask extends BaseTask implements Task {
                     //     this.setStatus(TaskStatus.Error);
                     //     console.warn('error cannot move');
                     // }
+                    this.interact();
                     break;
                 case 2:
                     // if(this.shouldMoveCharacter()) {
@@ -79,5 +89,17 @@ export class InteractWithItemTask extends BaseTask implements Task {
     };
 
     public interact() {
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+        const mapItem = mapManager.getPlotLandCoord(this.posX, this.posY);
+        if(mapItem && mapItem.getInteractive) {
+            mapItem.getInteractive().setIntercativeObject(this.item);
+            if(mapItem.getInteractive().canInteractWithItem()){
+                mapItem.getInteractive().interactWithItem();
+                console.log('ok');
+            }
+        } else{
+            this.setStatus(TaskStatus.Error);
+            console.warn('cannot find mapitem');
+        }
     }
 }

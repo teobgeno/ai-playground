@@ -6,9 +6,11 @@ import { Character } from "../characters/types";
 import { MoveTask } from "../actions/MoveTask";
 import { TillageTask } from "../actions/TillageTask";
 import { LockTillageTask } from "../actions/LockTillageTask";
+import { InteractWithItemTask } from "../actions/InteractWithItemTask";
 import { BaseOrder } from "../actions/BaseOrder";
 
 import { Hoe } from "../items/Hoe";
+import { PickAxe } from "../items/PickAxe";
 import { FarmLand } from "../farm/FarmLand";
 import { InventoryItem } from "../items/InventoryItem"
 import { CursorType } from "../cursors/types";
@@ -50,6 +52,25 @@ export class OrderFactory {
  
         character.addOrder(order);
        
+    }
+
+    public static createInteractWithItemOrder(gridEngine: GridEngine, character: Character, scene: Phaser.Scene, posX: number, posY: number, highlight = true) {
+        const pickAxe = new PickAxe(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
+        )
+
+        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
+        const order = new BaseOrder();
+
+        order.addTask(moveTask);
+        order.addTask(interactWithItemTask);
+ 
+        character.addOrder(order);
     }
 
 }

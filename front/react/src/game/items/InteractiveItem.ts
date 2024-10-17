@@ -132,6 +132,15 @@ export class InteractiveItem {
         }
     };
 
+    public canInteractWithItem() {
+        if (
+            this.interactiveObjectIds.includes(this.selectedObject?.objectId) &&
+            this.interactionfactors(this.selectedObject)
+        ) {
+            return true;
+        }
+    }
+
     public interactWithItem() {
         this.interactionResult(this.selectedObject);
     }

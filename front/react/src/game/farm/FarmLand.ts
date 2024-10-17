@@ -125,7 +125,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         //this.bar = scene.add.rectangle(x - 16, y - 16, 0, 2, 0x00ee00);
     }
 
-    public interactWithItem = (selectedObject: Storable | Seed | null) => {
+    public interactWithItem = (selectedObject: Storable | null) => {
         if (selectedObject) {
             //console.log(selectedObject);
             switch (selectedObject.objectId) {

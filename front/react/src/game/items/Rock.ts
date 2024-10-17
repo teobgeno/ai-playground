@@ -110,7 +110,7 @@ export class Rock
         return this.interactive;
     }
 
-    public interactWithItem() {
+    public interactWithItem(selectedObject: Storable | null) {
         //item (axe), character -> addInventory
         this.sprites[0].setAlpha(0);
         this.toggleCollisions(false);
