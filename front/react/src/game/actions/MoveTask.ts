@@ -1,9 +1,5 @@
 import { BaseTask } from "./BaseTask";
-import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
-
-import { FarmLand } from "../farm/FarmLand";
-import { Seed } from "../farm/Seed";
 
 import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";

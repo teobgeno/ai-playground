@@ -1,6 +1,8 @@
 import { BaseTask } from "./BaseTask";
-import { MapManager } from "../MapManager";
 import { GridEngine } from "grid-engine";
+import { ServiceLocator } from "../core/serviceLocator";
+import { MapManager } from "../MapManager";
+
 import { Utils } from "../core/Utils";
 
 import { FarmLand } from "../farm/FarmLand";
@@ -10,8 +12,6 @@ import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
 
 export class TillageTask extends BaseTask implements Task {
-    private scene: Phaser.Scene;
-    private mapManager: MapManager;
     private landEntity: FarmLand;
     private hoe: Hoe;
     private posX: number;
@@ -20,15 +20,11 @@ export class TillageTask extends BaseTask implements Task {
     constructor(
         gridEngine: GridEngine,
         character: Character,
-        scene: Phaser.Scene,
-        mapManager: MapManager,
         hoe: Hoe,
         posX: number,
         posY: number
     ) {
         super(gridEngine, character);
-        this.scene = scene;
-        this.mapManager = mapManager;
         this.hoe = hoe;
         this.posX = posX;
         this.posY = posY;
@@ -44,14 +40,14 @@ export class TillageTask extends BaseTask implements Task {
     }
 
     public cancel = () => {
-        console.log("cancel task");
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         clearInterval(this.IntervalProcess);
         this.status = TaskStatus.Rollback;
 
         this.gridEngine.stopMovement(this.character.getIdTag());
         this.landEntity.rollbackLand();
 
-        this.mapManager.setPlotLandCoords(
+        mapManager.setPlotLandCoords(
             this.landEntity.getSprite().getX(),
             this.landEntity.getSprite().getY(),
             null
@@ -73,22 +69,22 @@ export class TillageTask extends BaseTask implements Task {
                 case 2:
                     this.tillGround();
                     break;
+                case 3:
+                    this.complete();
+                    break;
             }
         }
     };
 
     private initPlotLand() {
      
-        const tileGround = this.mapManager.getMap().getTileAt(this.posX, this.posY, false, "Ground");
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+        const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
 
-        if(tileGround) {
-            this.landEntity = new FarmLand(
-                this.scene,
-                {x: this.posX, y: this.posY, pixelX: this.mapManager.getMap().tileToWorldX(this.posX) || 0, pixelY: this.mapManager.getMap().tileToWorldY(this.posY) || 0}
-            );
-            
-            this.mapManager.setPlotLandCoords( this.posX, this.posY, this.landEntity);
+        if(farmLand instanceof FarmLand) {
+            this.landEntity = farmLand
         }
+        //TODO:: trigger error and cancel if not farmland 
     }
 
     private tillGround() {
@@ -96,7 +92,7 @@ export class TillageTask extends BaseTask implements Task {
         this.initTimestamp =  this.lastTimestamp;
         this.IntervalProcess = setInterval(this.tillGroundProc, 1000)
 
-        //sdsathis.character.anims.play("attack_right", true);
+        //this.character.anims.play("attack_right", true);
         this.character.setCharState(CharacterState.TILL);
     }
 
@@ -104,7 +100,8 @@ export class TillageTask extends BaseTask implements Task {
         if(((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.hoe.weedSpeed) {
             this.staminaCost = this.staminaCost + 5;
             clearInterval(this.IntervalProcess);
-            this.complete();
+            this.pointer = 3;
+            this.next();
         } else {
             this.staminaCost = this.staminaCost + 5;
         }
@@ -126,4 +123,6 @@ export class TillageTask extends BaseTask implements Task {
         this.character.decreaseStamina(this.staminaCost);
         this.character.setCharState(CharacterState.IDLE);
     }
+
+
 }

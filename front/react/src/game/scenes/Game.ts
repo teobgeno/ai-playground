@@ -31,6 +31,7 @@ import { HarvestTask } from "../actions/HarvestTask";
 import { BaseOrder } from "../actions/BaseOrder";
 import { MoveTask } from "../actions/MoveTask";
 import { TillageTask } from "../actions/TillageTask";
+import { LockTillageTask } from "../actions/LockTillageTask";
 import { Order } from "../actions/types";
 
 import { CursorType } from "../cursors/types";
@@ -132,6 +133,8 @@ export class Game extends Scene {
        
         this.weatherManager = new WeatherManager(this);
         ServiceLocator.register('weatherManager', this.weatherManager);
+
+        ServiceLocator.register('mapManager', this.mapManager);
         
         this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
 
@@ -168,21 +171,24 @@ export class Game extends Scene {
         )
 
         const order = new BaseOrder();
-        const moveTask = new MoveTask(this.gridEngine, npc0, 20, 10);
-        const tillageTask = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 20, 10);
-
-        const moveTask2 = new MoveTask(this.gridEngine, npc0, 21, 10);
-        const tillageTask2 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 21, 10);
-
-        const moveTask3 = new MoveTask(this.gridEngine, npc0, 22, 10);
-        const tillageTask3 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 22, 10);
         
+        
+        const lockTillageTask = new LockTillageTask(this.gridEngine, npc0, this, 20, 10);
+        const moveTask = new MoveTask(this.gridEngine, npc0, 20, 10);
+        const tillageTask = new TillageTask(this.gridEngine, npc0, hoe, 20, 10);
+
+        // const moveTask2 = new MoveTask(this.gridEngine, npc0, 21, 10);
+        // const tillageTask2 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 21, 10);
+
+        // const moveTask3 = new MoveTask(this.gridEngine, npc0, 22, 10);
+        // const tillageTask3 = new TillageTask(this.gridEngine, npc0, this, this.mapManager, hoe, 22, 10);
+        order.addTask(lockTillageTask);
         order.addTask(moveTask);
         order.addTask(tillageTask);
-        order.addTask(moveTask2);
-        order.addTask(tillageTask2);
-        order.addTask(moveTask3);
-        order.addTask(tillageTask3);
+        // order.addTask(moveTask2);
+        // order.addTask(tillageTask2);
+        // order.addTask(moveTask3);
+        // order.addTask(tillageTask3);
         npc0?.addOrder(order);
 
         //https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Physics.Arcade.World-collide
