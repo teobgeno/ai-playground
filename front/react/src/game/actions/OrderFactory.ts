@@ -1,4 +1,5 @@
 import { GridEngine } from "grid-engine";
+import { MapManager } from "../MapManager";
 import { ServiceLocator } from "../core/serviceLocator";
 import { Character } from "../characters/types";
 
