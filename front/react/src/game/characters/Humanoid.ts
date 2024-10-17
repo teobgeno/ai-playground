@@ -9,7 +9,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected charName: string;
     public scene: Phaser.Scene;
     protected orders: Array<Order> = [];
-    protected currentOrder: Order | undefined;
+    public currentOrder: Order | undefined;
     protected orderPointer: number = 0;
     protected tasks: Array<Task> = [];
     public currentTask: Task | undefined;
@@ -94,6 +94,16 @@ export class Humanoid extends Physics.Arcade.Sprite {
     public getBody(): Physics.Arcade.Body {
         return this.body as Physics.Arcade.Body;
     }
+
+    // Initialized = 1,
+    // Running = 2,
+   
+    // Rollback = 4,
+    // Canceled = 5,
+    // Paused = 6,
+
+     // Completed = 3,
+    // WaitingNextReccur = 7
 
     public updateOrdersQueue() {
         if (

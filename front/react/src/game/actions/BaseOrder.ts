@@ -46,7 +46,13 @@ export class BaseOrder implements Order{
     }
 
     public cancel() {
-        this.setStatus(OrderStatus.Canceled);
+        this.setStatus(OrderStatus.Rollback);
+        for (const task of this.tasks) {
+            if(task.getStatus() === TaskStatus.Completed || this.currentTask === task) {
+                task.cancel();
+            }
+        }
+        this.setStatus(OrderStatus.Completed);
     }
 
     public pause() {
@@ -87,18 +93,22 @@ export class BaseOrder implements Order{
                 this.currentTask.start();
             }
 
-            if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
-                this.currentTask.cancel();
-            }
-
             if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
-                //this.currentTask.cancel();
+                this.setStatus(OrderStatus.Canceled);
+                this.cancel();
                 console.log('error from order')
             }
         }
     }
 
     public update() {
+        if(
+            this.status === OrderStatus.Paused || 
+            this.status === OrderStatus.Rollback || 
+            this.status === OrderStatus.Canceled
+        ) {
+            return
+        }
 
         if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
             this.taskPointer++;
@@ -123,7 +133,7 @@ export class BaseOrder implements Order{
         
         if(!this.isInTimeRange() && this.isRecurring){
             this.setStatus(OrderStatus.WaitingNextReccur);
-        } 
+        }
 
     }
 
