@@ -34,7 +34,7 @@ export class TillageTask extends BaseTask implements Task {
     public start() {
         
         if (this.status === TaskStatus.Running) {
-            this.setStatus(TaskStatus.Initialized)
+            this.setStatus(TaskStatus.Initialized);
         }
 
         this.pointer = 1;
@@ -115,7 +115,7 @@ export class TillageTask extends BaseTask implements Task {
        this.updateCharacter();
 
         if (this.status === TaskStatus.Running) {
-            this.status = TaskStatus.Completed;
+            this.setStatus(TaskStatus.Completed);
             this.landEntity.init();
         }
     }

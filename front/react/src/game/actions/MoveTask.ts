@@ -25,19 +25,20 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     public start() {
-        this.status =
-            this.status === TaskStatus.Initialized
-                ? TaskStatus.Running
-                : this.status;
+
+        if (this.status === TaskStatus.Running) {
+            this.setStatus(TaskStatus.Initialized);
+        }
+
         this.pointer = 1;
         this.next();
     }
 
     public cancel = () => {
 
-        this.status = TaskStatus.Rollback;
+        this.setStatus(TaskStatus.Rollback);
         this.gridEngine.stopMovement(this.character.getIdTag());
-        this.status = TaskStatus.Completed;
+        this.setStatus(TaskStatus.Completed);
     };
 
     public next() {
@@ -62,7 +63,7 @@ export class MoveTask extends BaseTask implements Task{
     public complete = () => {
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
-            this.status = TaskStatus.Completed;
+            this.setStatus(TaskStatus.Completed);
         }
     };
 
