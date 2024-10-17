@@ -6,8 +6,8 @@ import { CharacterState, Character } from "../characters/types";
 
 
 export class MoveTask extends BaseTask implements Task{
-    protected destinationMoveX: number = 0;
-    protected destinationMoveY: number = 0;
+    private destinationMoveX: number = 0;
+    private destinationMoveY: number = 0;
     private posX: number;
     private posY: number;
 
@@ -80,7 +80,7 @@ export class MoveTask extends BaseTask implements Task{
         return { x: this.destinationMoveX, y: this.destinationMoveY };
     }
 
-    protected canMoveCharacter() {
+    private canMoveCharacter() {
         if(this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")) {
             return false;
         }
@@ -88,7 +88,7 @@ export class MoveTask extends BaseTask implements Task{
         return true;
     }
 
-    protected shouldMoveCharacter() {
+    private shouldMoveCharacter() {
         const characterPos = this.gridEngine.getPosition(
             this.character.getIdTag()
         );
@@ -99,7 +99,7 @@ export class MoveTask extends BaseTask implements Task{
         return true;
     }
 
-    protected moveCharacter() {
+    private moveCharacter() {
         this.character.setCharState(CharacterState.AUTOWALK);
         this.destinationMoveX = this.posX;
         this.destinationMoveY = this.posY;

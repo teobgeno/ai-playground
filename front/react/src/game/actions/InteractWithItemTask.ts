@@ -2,22 +2,24 @@ import { BaseTask } from "./BaseTask";
 import { GridEngine } from "grid-engine";
 
 import { TaskStatus, Task } from "./types";
+import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types";
 
 
-export class InteractWithItemTask extends BaseTask implements Task{
-    protected destinationMoveX: number = 0;
-    protected destinationMoveY: number = 0;
+export class InteractWithItemTask extends BaseTask implements Task {
+    private item: Storable;
     private posX: number;
     private posY: number;
 
     constructor(
         gridEngine: GridEngine,
         character: Character,
+        item: Storable,
         posX: number,
         posY: number
     ) {
         super(gridEngine, character);
+        this.item = item;
         this.posX = posX;
         this.posY = posY;
         
@@ -75,38 +77,4 @@ export class InteractWithItemTask extends BaseTask implements Task{
             this.setStatus(TaskStatus.Completed);
         }
     };
-
-    public getMoveDestinationPoint() {
-        return { x: this.destinationMoveX, y: this.destinationMoveY };
-    }
-
-    protected canMoveCharacter() {
-        if(this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")) {
-            return false;
-        }
-
-        return true;
-    }
-
-    protected shouldMoveCharacter() {
-        const characterPos = this.gridEngine.getPosition(
-            this.character.getIdTag()
-        );
-        if (characterPos.x === this.posX && characterPos.y === this.posY) {
-            return false;
-        }
-      
-        return true;
-    }
-
-    protected moveCharacter() {
-        this.character.setCharState(CharacterState.AUTOWALK);
-        this.destinationMoveX = this.posX;
-        this.destinationMoveY = this.posY;
-        this.gridEngine.moveTo(this.character.getIdTag(), {
-            x: this.posX,
-            y: this.posY,
-        });
-    }
-
 }
