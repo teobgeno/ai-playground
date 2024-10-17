@@ -32,10 +32,11 @@ export class TillageTask extends BaseTask implements Task {
     }
 
     public start() {
-        this.status =
-            this.status === TaskStatus.Initialized
-                ? TaskStatus.Running
-                : this.status;
+        
+        if (this.status === TaskStatus.Running) {
+            this.setStatus(TaskStatus.Initialized)
+        }
+
         this.pointer = 1;
         this.next();
     }
@@ -43,7 +44,8 @@ export class TillageTask extends BaseTask implements Task {
     public cancel = () => {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         clearInterval(this.IntervalProcess);
-        this.status = TaskStatus.Rollback;
+        this.setStatus(TaskStatus.Rollback);
+ 
 
         this.gridEngine.stopMovement(this.character.getIdTag());
         this.landEntity.rollbackLand();
@@ -56,7 +58,7 @@ export class TillageTask extends BaseTask implements Task {
 
         this.updateCharacter();
 
-        this.status = TaskStatus.Completed;
+        this.setStatus(TaskStatus.Completed);
     };
 
     public next = () => {
