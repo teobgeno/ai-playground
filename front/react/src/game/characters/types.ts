@@ -1,6 +1,7 @@
 
 import { CharacterInventory } from "./CharacterInventory";
-import { Task } from "../actions/types";
+import { Task, Order } from "../actions/types";
+import { Humanoid } from "./Humanoid";
 
 export enum InventoryAction {
     Remove = -1,
@@ -16,7 +17,7 @@ export enum CharacterState {
 }
 
 
- export interface Character
+ export interface Character extends Humanoid
 {
     anims: Phaser.Animations.AnimationState
     getId: () => number;
@@ -26,4 +27,5 @@ export enum CharacterState {
     decreaseStamina:(staminaAmount: number) => void;
     getInventory:() => CharacterInventory
     addTask:(task: Task) => void
+    addOrder:(order: Order) => void
 }

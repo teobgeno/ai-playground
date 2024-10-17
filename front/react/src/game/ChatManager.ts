@@ -2,7 +2,7 @@ import { Game } from "./scenes/Game";
 import { httpProvider } from "./core/httpProvider";
 import { ServiceLocator } from "./core/serviceLocator";
 import { TimeManager } from "./TimeManager";
-import { Humanoid } from "./characters/Humanoid";
+import { Character } from "./characters/Character";
 import { CharacterState } from "./characters/types";
 
 
@@ -23,18 +23,18 @@ type ApiTalkResponse = {
 
 type conversation = {
     id: string;
-    participants: Array<Humanoid>;
+    participants: Array<Character>;
     currentParticipantTalkIndex:number
     messages: Array<Message>;
     hasFinished:boolean;
 };
 export class ChatManager {
     private scene: Phaser.Scene;
-    private charactersMap:  Map<string, Humanoid>;
+    private charactersMap:  Map<string, Character>;
     private conversations: Map<string, conversation> = new Map();
     private participantsToConv: Map<string, string> = new Map();
 
-    constructor(scene: Phaser.Scene, charactersMap:  Map<string, Humanoid>) {
+    constructor(scene: Phaser.Scene, charactersMap:  Map<string, Character>) {
         this.scene = scene;
         this.charactersMap = charactersMap;
     }
@@ -50,7 +50,7 @@ export class ChatManager {
         this.exitConversation();
     }
 
-    public async initConversation(participants: Array<Humanoid>) {
+    public async initConversation(participants: Array<Character>) {
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager');
         timeManager?.setTimeFlowReal();
         const req = { character_ids: participants.map(x => x.getId()), game_time: timeManager?.getCurrentDateTimeToString()};
@@ -88,7 +88,7 @@ export class ChatManager {
         return convId;
     }
 
-    public addParticipant(character: Humanoid, convId: string) {
+    public addParticipant(character: Character, convId: string) {
         const conversation = this.conversations.get(convId)!;
         conversation.participants.push(character);
         this.participantsToConv.set(character.getIdTag(),convId);

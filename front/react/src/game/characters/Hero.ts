@@ -43,7 +43,7 @@ export class Hero extends Humanoid implements Character{
 
     update(dt: number): void {
         this.characterController.update(dt);
-        this.updateTasksQueue();
+        this.updateOrdersQueue();
         //https://www.html5gamedevs.com/topic/40592-how-do-i-call-a-callback-function-when-two-objects-stop-overlapping/
         //console.log(this.getBody().embedded)
     }
@@ -60,22 +60,22 @@ export class Hero extends Humanoid implements Character{
         (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
     }
 
-    private updateTasksQueue() {
-        if (
-            (this.tasks.length > 0 && !this.currentTask) ||
-            (this.currentTask &&
-                this.currentTask.getStatus() === TaskStatus.Completed)
-        ) {
-            this.currentTask = this.tasks.shift();
-            if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
-                this.currentTask.start();
-            }
-        }
+    // private updateTasksQueue() {
+    //     if (
+    //         (this.tasks.length > 0 && !this.currentTask) ||
+    //         (this.currentTask &&
+    //             this.currentTask.getStatus() === TaskStatus.Completed)
+    //     ) {
+    //         this.currentTask = this.tasks.shift();
+    //         if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
+    //             this.currentTask.start();
+    //         }
+    //     }
        
-        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
-            this.currentTask.cancel();
-        }
-    }
+    //     if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
+    //         this.currentTask.cancel();
+    //     }
+    // }
 
     private createMovementAnimations() {
         this.createAnimation("right", this.getIdTag(), 143, 147, 15, true, true);

@@ -6,6 +6,7 @@ import { Hoe } from "../items/Hoe";
 import { BaseOrder } from "../actions/BaseOrder";
 import { TillageTask } from "../actions/TillageTask";
 import { FarmLand } from "../farm/FarmLand";
+import { OrderFactory } from "../actions/OrderFactory";
 
 import { Storable } from "../items/types";
 import { Character } from "../characters/types";
@@ -81,20 +82,22 @@ export class HoeCursor implements Cursor {
 
     public onPointerUp(pointerTileX: number, pointerTileY: number) {
         if (this.canExecute) {
-            const tillage = new TillageTask(
-                this.gridEngine,
-                this.character,
-                this.scene,
-                this.mapManager,
-                this.hoe,
-                pointerTileX,
-                pointerTileY
-            );
+            // const tillage = new TillageTask(
+            //     this.gridEngine,
+            //     this.character,
+            //     this.scene,
+            //     this.mapManager,
+            //     this.hoe,
+            //     pointerTileX,
+            //     pointerTileY
+            // );
 
-            const order = new BaseOrder();
-            order.addTask(tillage)
+            OrderFactory.createTillageOrder(this.gridEngine, this.character, this.scene, pointerTileX, pointerTileY);
 
-            this.character.addTask(tillage);
+            // const order = new BaseOrder();
+            // order.addTask(tillage)
+
+            // this.character.addTask(tillage);
 
 
 

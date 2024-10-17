@@ -73,36 +73,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
 
     update(dt: number) {
         this.stateMachine.update(dt);
-        this.updateOrders();
-    }
-
-
-    private updateOrders() {
-        if (
-            (this.orders.length > 0 && !this.currentOrder) ||
-            (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Running)
-        ) {
-            this.currentOrder = this.orders[this.orderPointer];
-        }
-        // run order if is not completed or canceled
-        if (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Completed) {
-            this.currentOrder.update();
-        }
-
-        //if reccuring order and waiting seek to next order.
-        if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.WaitingNextReccur) {
-            this.orderPointer = this.orderPointer < this.orders.length ? this.orderPointer + 1 : 0;
-        }
-
-        //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.
-        if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed) {
-            this.currentOrder = undefined;
-            this.orders.shift();
-        }
-
-        // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
-        //     this.currentOrder.cancel();
-        // }
+        this.updateOrdersQueue();
     }
     
 }
