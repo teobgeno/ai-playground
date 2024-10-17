@@ -51,7 +51,7 @@ export class MoveTask extends BaseTask implements Task{
                         this.next();
                     } else {
                         this.setStatus(TaskStatus.Error);
-                        console.log('error cannot move')
+                        console.warn('error cannot move');
                     }
                     break;
                 case 2:

@@ -28,10 +28,11 @@ export class LockTillageTask extends BaseTask implements Task {
     }
 
     public start() {
-        this.status =
-            this.status === TaskStatus.Initialized
-                ? TaskStatus.Running
-                : this.status;
+        
+        if (this.status === TaskStatus.Initialized) {
+            this.setStatus(TaskStatus.Running);
+        }
+
         this.pointer = 1;
         this.next();
     }
@@ -41,14 +42,16 @@ export class LockTillageTask extends BaseTask implements Task {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         this.status = TaskStatus.Rollback;
 
-        this.landEntity.rollbackLand();
+        if(this.landEntity) {
+            this.landEntity.rollbackLand();
 
-        mapManager.setPlotLandCoords(
-            this.landEntity.getSprite().getX(),
-            this.landEntity.getSprite().getY(),
-            null
-        );
-
+            mapManager.setPlotLandCoords(
+                this.landEntity.getSprite().getX(),
+                this.landEntity.getSprite().getY(),
+                null
+            );
+        }
+       
         this.status = TaskStatus.Completed;
     };
 
@@ -69,9 +72,11 @@ export class LockTillageTask extends BaseTask implements Task {
     private initPlotLand() {
      
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
-        const tileGround = mapManager.getTileAt(this.posX, this.posY, false, "Ground");
 
-        if(tileGround) {
+        if(
+            mapManager.canTillageToTile(this.posX, this.posY) &&
+            !this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")
+        ) {
             this.landEntity = new FarmLand(
                 this.scene,
                 {x: this.posX, y: this.posY, pixelX: mapManager.tileToWorldX(this.posX) || 0, pixelY: mapManager.tileToWorldY(this.posY) || 0}
@@ -79,10 +84,15 @@ export class LockTillageTask extends BaseTask implements Task {
             
             mapManager.setPlotLandCoords( this.posX, this.posY, this.landEntity);
             this.setStatus(TaskStatus.Completed);
+
+            this.pointer = 2;
+            this.next();
+        } else {
+            this.setStatus(TaskStatus.Error);
+            console.warn('error cannot lock farm land for create.');
         }
         
-        this.pointer = 2;
-        this.next();
+       
     }
 
     public complete() {

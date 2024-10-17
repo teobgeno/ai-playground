@@ -79,6 +79,16 @@ export class TillageTask extends BaseTask implements Task {
         }
     };
 
+    public complete() {
+
+        this.updateCharacter();
+ 
+         if (this.status === TaskStatus.Running) {
+             this.setStatus(TaskStatus.Completed);
+             this.landEntity.init();
+         }
+     }
+
     private initPlotLand() {
      
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
@@ -109,16 +119,6 @@ export class TillageTask extends BaseTask implements Task {
             this.next();
         } else {
             this.staminaCost = this.staminaCost + 5;
-        }
-    }
-
-    public complete() {
-
-       this.updateCharacter();
-
-        if (this.status === TaskStatus.Running) {
-            this.setStatus(TaskStatus.Completed);
-            this.landEntity.init();
         }
     }
 
