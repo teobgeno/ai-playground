@@ -6,14 +6,6 @@ import { MapManager } from "../MapManager";
 import { TaskStatus, Task } from "./types";
 import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types";
-import {
-    CoordsData,
-    MapObject,
-    MapObjectInteractable,
-    MapObjectDestructable,
-    ObjectId,
-} from "../core/types";
-
 
 export class InteractWithItemTask extends BaseTask implements Task {
     private item: Storable;
@@ -92,10 +84,13 @@ export class InteractWithItemTask extends BaseTask implements Task {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         const mapItem = mapManager.getPlotLandCoord(this.posX, this.posY);
         if(mapItem && mapItem.getInteractive) {
+            //TODO:: select proper item from character inventory
             mapItem.getInteractive().setIntercativeObject(this.item);
             if(mapItem.getInteractive().canInteractWithItem()){
                 mapItem.getInteractive().interactWithItem();
                 console.log('ok');
+            } else {
+                console.warn('cannot interact with map item with current tool');
             }
         } else{
             this.setStatus(TaskStatus.Error);
