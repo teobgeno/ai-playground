@@ -75,7 +75,8 @@ export class TimeManager {
     }
 
     public getCurrentDate() {
-        return new Date(this.gameCurrentTimestamp);
+        const currentDate = new Date(this.gameCurrentTimestamp);
+        return new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds())
     }
     
     public getCurrentDateTimeToString() {

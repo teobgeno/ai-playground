@@ -119,7 +119,13 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
         //if reccuring order and waiting seek to next order.
         if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.WaitingNextReccur) {
-            this.orderPointer = this.orderPointer < this.orders.length ? this.orderPointer + 1 : 0;
+            //TODO:: check if order will start. If not  this.orderPointer + 1
+            if(this.currentOrder.canContinueReccur()) {
+                this.currentOrder.update();
+            } else {
+                this.orderPointer = this.orderPointer < this.orders.length ? this.orderPointer + 1 : 0;
+            }
+           
         }
 
         //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.

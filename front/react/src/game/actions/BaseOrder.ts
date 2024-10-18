@@ -7,17 +7,15 @@ import parser from 'cron-parser';
 
 
 export class BaseOrder implements Order{
-    protected tasks: Array<Task> = [];
-    protected currentTask: Task;
-    protected isRecurring: boolean;
-    protected interval: string;
-    protected startTime: string;
-    protected endTime: string;
-    protected taskPointer: number = 0;
-    protected status: OrderStatus;
-    protected pointer: number = 0;
-    protected destinationMoveX: number = 0;
-    protected destinationMoveY: number = 0;
+    private tasks: Array<Task> = [];
+    private currentTask: Task;
+    private isRecurring: boolean;
+    private interval: string;
+    private startTime: string;
+    private endTime: string;
+    private lastEndDate: Date;
+    private taskPointer: number = 0;
+    private status: OrderStatus;
 
     constructor() {
         this.status = OrderStatus.Initialized;
@@ -68,6 +66,69 @@ export class BaseOrder implements Order{
         this.setStatus(OrderStatus.Running);
     }
 
+    public canContinueReccur() {
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        if(timeManager.getCurrentDate() > this.checkNextInterval() && this.isInTimeRange()) {
+            return true;
+        }
+        return false;
+    }
+
+    public update() {
+        if(
+            this.status === OrderStatus.Paused || 
+            this.status === OrderStatus.Rollback || 
+            this.status === OrderStatus.Canceled
+        ) {
+            return
+        }
+
+        
+        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
+            this.taskPointer++;
+        }
+
+        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
+            this.setStatus(OrderStatus.Running);
+            this.runTasks();
+        }
+
+        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
+
+            if(this.isRecurring) {
+                const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+
+                if(!this.lastEndDate || (this.lastEndDate < timeManager.getCurrentDate())) {
+                    this.lastEndDate = timeManager.getCurrentDate();
+                }
+               
+                //console.log(this.checkNextInterval());
+                if(timeManager.getCurrentDate() > this.checkNextInterval()) {
+                    this.taskPointer = 0;
+                    this.setStatus(OrderStatus.Running);
+                    this.runTasks();
+                } else {
+                    this.setStatus(OrderStatus.WaitingNextReccur);
+                }
+                //TODO:: if isRecurring check cron interval if pass  reset tasks status to running, order to running, taskPointer = 0
+                //TODO::if isRecurring check cron interval if not pass set order status OrderStatus.WaitingNextReccur
+               
+            } else {
+                this.setStatus(OrderStatus.Completed);
+            }
+           
+        }
+        
+        if(!this.isInTimeRange() && this.isRecurring){
+            this.setStatus(OrderStatus.WaitingNextReccur);
+        }
+
+    }
+
+    public pause() {
+        this.setStatus(OrderStatus.Paused);
+    }
+
     public cancel() {
         this.setStatus(OrderStatus.Rollback);
         for (const task of this.tasks) {
@@ -78,42 +139,7 @@ export class BaseOrder implements Order{
         this.setStatus(OrderStatus.Completed);
     }
 
-    public pause() {
-        this.setStatus(OrderStatus.Paused);
-    }
-
-    private isInTimeRange() {
-
-        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        
-        if(!this.startTime && !this.endTime) {
-            return true;
-        }
-    
-        const current = new Date();
-        current.setHours(timeManager.getCurrentDate().getHours());
-        current.setMinutes(timeManager.getCurrentDate().getMinutes());
-        current.setSeconds(timeManager.getCurrentDate().getSeconds());
-
-        const start = new Date();
-        const startTimeParts = this.startTime.split(':');
-        start.setHours(Number(startTimeParts[0]));
-        start.setMinutes(Number(startTimeParts[1]));
-        start.setSeconds(Number(startTimeParts[2]));
-
-        const end = new Date();
-        const endTimeParts = this.endTime.split(':');
-        end.setHours(Number(endTimeParts[0]));
-        end.setMinutes(Number(endTimeParts[1]));
-        end.setSeconds(Number(endTimeParts[2]));
-
-        if( current >= start && current <= end) {
-           return true;
-        }
-
-         return false;
-    }
-
+   
     private runTasks() {
         if (
 
@@ -133,55 +159,45 @@ export class BaseOrder implements Order{
         }
     }
 
-    public update() {
-        if(
-            this.status === OrderStatus.Paused || 
-            this.status === OrderStatus.Rollback || 
-            this.status === OrderStatus.Canceled
-        ) {
-            return
-        }
+    private isInTimeRange() {
 
-        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
-            this.taskPointer++;
-        }
-
-        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
-            this.setStatus(OrderStatus.Running);
-            this.runTasks();
-        }
-
-        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
-
-            if(this.isRecurring) {
-                this.taskPointer = 0;
-                this.setStatus(OrderStatus.Running);
-                //TODO:: if isRecurring check cron interval if pass  reset tasks status to running, order to running, taskPointer = 0
-                //TODO::if isRecurring check cron interval if not pass set order status OrderStatus.WaitingNextReccur
-                this.runTasks();
-            } else {
-                this.setStatus(OrderStatus.Completed);
-            }
-           
-        }
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         
-        if(!this.isInTimeRange() && this.isRecurring){
-            this.setStatus(OrderStatus.WaitingNextReccur);
+        if(!this.startTime && !this.endTime) {
+            return true;
+        }
+    
+        const current = timeManager.getCurrentDate();
+   
+        const start = timeManager.getCurrentDate();
+        const startTimeParts = this.startTime.split(':');
+        start.setHours(Number(startTimeParts[0]));
+        start.setMinutes(Number(startTimeParts[1]));
+        start.setSeconds(Number(startTimeParts[2]));
+
+        const end = timeManager.getCurrentDate();
+        const endTimeParts = this.endTime.split(':');
+        end.setHours(Number(endTimeParts[0]));
+        end.setMinutes(Number(endTimeParts[1]));
+        end.setSeconds(Number(endTimeParts[2]));
+
+        if( current >= start && current <= end) {
+           return true;
         }
 
+         return false;
     }
 
     private checkNextInterval() {
         //https://github.com/harrisiirak/cron-parser#readme
 
-        // var options = {
-        //     currentDate: new Date('Wed, 26 Dec 2012 12:38:53 UTC'),
-        //     endDate: new Date('Wed, 26 Dec 2012 14:40:00 UTC'),
-        //     iterator: true
-        //   };
+        const options = {
+            currentDate:  this.lastEndDate ,
+        };
 
-        // var interval = parser.parseExpression('*/22 * * * *', options);
-        //  var obj = interval.next();
+        const interval = parser.parseExpression(this.interval, options);
+        //console.log(interval.next().toString());
+        return interval.next().toDate();
         
     }
 

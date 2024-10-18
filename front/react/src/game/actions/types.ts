@@ -40,6 +40,7 @@ export interface Order
     getTasks: () => Array<Task>;
     getCurrentTask: () => Task;
     getStatus: () => OrderStatus;
+    canContinueReccur: () => boolean;
 
 }
 
