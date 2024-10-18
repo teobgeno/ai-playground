@@ -162,9 +162,26 @@ export class Game extends Scene {
 
 
         const npc0 = this.charactersMap.get("npc0")!;
-        OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 20, 10, false);
-        //OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16, false);
-        OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, 11, 16);
+       
+        const landEntity1 = new FarmLand(
+            this,
+            {x: 18, y: 10, pixelX: this.mapManager.tileToWorldX(18) || 0, pixelY: this.mapManager.tileToWorldY(10) || 0}
+        );
+        landEntity1.init();
+        this.mapManager.setPlotLandCoords( 18, 10, landEntity1);
+
+        const landEntity2 = new FarmLand(
+            this,
+            {x: 19, y: 10, pixelX: this.mapManager.tileToWorldX(19) || 0, pixelY: this.mapManager.tileToWorldY(10) || 0}
+        );
+        landEntity2.init();
+        this.mapManager.setPlotLandCoords( 19, 10, landEntity2);
+
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 18, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 19, 10);
+
+        //OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16, false); // test fail (stone)
+        //OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, 11, 16);
         
        
         // OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 14);

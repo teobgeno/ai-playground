@@ -11,6 +11,7 @@ export class TimeManager {
         this.gameStartTime = Date.now();
         this.scaleFactor = 96;
         this.initDate = Date.UTC(2024, 9, 3, 10, 30, 0);
+        this.gameCurrentTimestamp = this.initDate;
     }
 
     public update(currentTime: number) {

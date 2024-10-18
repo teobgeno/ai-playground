@@ -88,8 +88,11 @@ export class InteractWithItemTask extends BaseTask implements Task {
             mapItem.getInteractive().setIntercativeObject(this.item);
             if(mapItem.getInteractive().canInteractWithItem()){
                 mapItem.getInteractive().interactWithItem();
+                this.pointer = 3;
+                this.next();
                 console.log('ok');
             } else {
+                this.setStatus(TaskStatus.Error);
                 console.warn('cannot interact with map item with current tool');
             }
         } else{

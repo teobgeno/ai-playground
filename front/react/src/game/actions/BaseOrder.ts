@@ -96,13 +96,13 @@ export class BaseOrder implements Order{
         current.setSeconds(timeManager.getCurrentDate().getSeconds());
 
         const start = new Date();
-        const startTimeParts = this.startTime.split('-');
+        const startTimeParts = this.startTime.split(':');
         start.setHours(Number(startTimeParts[0]));
         start.setMinutes(Number(startTimeParts[1]));
         start.setSeconds(Number(startTimeParts[2]));
 
         const end = new Date();
-        const endTimeParts = this.endTime.split('-');
+        const endTimeParts = this.endTime.split(':');
         end.setHours(Number(endTimeParts[0]));
         end.setMinutes(Number(endTimeParts[1]));
         end.setSeconds(Number(endTimeParts[2]));
