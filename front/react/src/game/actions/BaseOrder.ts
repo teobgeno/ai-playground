@@ -59,7 +59,7 @@ export class BaseOrder implements Order{
         this.setStatus(OrderStatus.Paused);
     }
 
-    public isInTimeRange() {
+    private isInTimeRange() {
 
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         let ret = false;
@@ -79,7 +79,7 @@ export class BaseOrder implements Order{
         return ret;
     }
 
-    public runTasks() {
+    private runTasks() {
         if (
 
             (!this.currentTask) ||

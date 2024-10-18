@@ -164,7 +164,7 @@ export class Game extends Scene {
         const npc0 = this.charactersMap.get("npc0")!;
         OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 20, 10, false);
         //OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16, false);
-        OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, this, 11, 16, false);
+        OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, 11, 16);
         
        
         // OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 14);

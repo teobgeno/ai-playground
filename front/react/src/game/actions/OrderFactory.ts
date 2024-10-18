@@ -27,8 +27,6 @@ export class OrderFactory {
             .setCursorType(CursorType.HOE)
         )
 
-       
-       
         const moveTask = new MoveTask(gridEngine, character, posX, posY);
         const tillageTask = new TillageTask(gridEngine, character, hoe, posX, posY);
         const order = new BaseOrder();
@@ -54,7 +52,7 @@ export class OrderFactory {
        
     }
 
-    public static createInteractWithItemOrder(gridEngine: GridEngine, character: Character, scene: Phaser.Scene, posX: number, posY: number, highlight = true) {
+    public static createInteractWithItemOrder(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
         const pickAxe = new PickAxe(
             new InventoryItem()
             .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')

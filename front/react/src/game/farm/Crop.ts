@@ -30,7 +30,7 @@ export class Crop implements MapObject{
         this.sprites.push(
             new SpriteItem(
                 scene,
-                { texture: "crops", frame: this.seed.currentGrowthStageFrame },
+                { texture: "crops", frame: this.seed.currentFrame },
                 {
                     x: coords.x,
                     y: coords.y,
