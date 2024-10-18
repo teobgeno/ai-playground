@@ -113,7 +113,12 @@ export class Humanoid extends Physics.Arcade.Sprite {
             this.currentOrder = this.orders[this.orderPointer];
         }
         // run order if is not completed or canceled
-        if (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Completed) {
+        if (this.currentOrder && 
+            (
+                this.currentOrder.getStatus() === OrderStatus.Initialized ||
+                this.currentOrder.getStatus() === OrderStatus.Running
+            )
+        ) {
             this.currentOrder.update();
         }
 
@@ -123,7 +128,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
             if(this.currentOrder.canContinueReccur()) {
                 this.currentOrder.update();
             } else {
-                this.orderPointer = this.orderPointer < this.orders.length ? this.orderPointer + 1 : 0;
+                this.orderPointer = this.orderPointer + 1 < this.orders.length ? this.orderPointer + 1 : 0;
             }
            
         }

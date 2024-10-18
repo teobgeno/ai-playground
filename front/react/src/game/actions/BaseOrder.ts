@@ -8,7 +8,7 @@ import parser from 'cron-parser';
 
 export class BaseOrder implements Order{
     private tasks: Array<Task> = [];
-    private currentTask: Task;
+    private currentTask: Task | null;
     private isRecurring: boolean;
     private interval: string;
     private startTime: string;
@@ -75,13 +75,13 @@ export class BaseOrder implements Order{
     }
 
     public update() {
-        if(
-            this.status === OrderStatus.Paused || 
-            this.status === OrderStatus.Rollback || 
-            this.status === OrderStatus.Canceled
-        ) {
-            return
-        }
+        // if(
+        //     this.status === OrderStatus.Paused || 
+        //     this.status === OrderStatus.Rollback || 
+        //     this.status === OrderStatus.Canceled
+        // ) {
+        //     return
+        // }
 
         
         if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
@@ -109,6 +109,7 @@ export class BaseOrder implements Order{
                     this.runTasks();
                 } else {
                     this.setStatus(OrderStatus.WaitingNextReccur);
+                    this.restartTasks();
                 }
                 //TODO:: if isRecurring check cron interval if pass  reset tasks status to running, order to running, taskPointer = 0
                 //TODO::if isRecurring check cron interval if not pass set order status OrderStatus.WaitingNextReccur
@@ -121,6 +122,7 @@ export class BaseOrder implements Order{
         
         if(!this.isInTimeRange() && this.isRecurring){
             this.setStatus(OrderStatus.WaitingNextReccur);
+            this.restartTasks();
         }
 
     }
@@ -139,7 +141,13 @@ export class BaseOrder implements Order{
         this.setStatus(OrderStatus.Completed);
     }
 
-   
+    private restartTasks() {
+        this.taskPointer = 0;
+        for (const task of this.tasks) {
+            task.setStatus(TaskStatus.Running)
+        }
+        this.currentTask = null;
+    }
     private runTasks() {
         if (
 

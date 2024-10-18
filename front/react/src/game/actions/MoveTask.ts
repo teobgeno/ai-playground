@@ -81,6 +81,14 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private canMoveCharacter() {
+        const characterPos = this.gridEngine.getPosition(
+            this.character.getIdTag()
+        );
+
+        if (characterPos.x === this.posX && characterPos.y === this.posY) {
+            return true;
+        }
+
         if(this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")) {
             return false;
         }

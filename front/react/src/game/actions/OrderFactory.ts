@@ -88,7 +88,7 @@ export class OrderFactory {
             new BaseOrder()
             .setIsRecurring(true)
             .setStartTime('10:00:00')
-            .setEndTime('22:00:00')
+            .setEndTime('13:00:00')
             .setInterval('0 * * * *')
 
         order.addTask(moveTask);

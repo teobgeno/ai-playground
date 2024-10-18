@@ -177,8 +177,28 @@ export class Game extends Scene {
         landEntity2.init();
         this.mapManager.setPlotLandCoords( 19, 10, landEntity2);
 
+        const landEntity3 = new FarmLand(
+            this,
+            {x: 20, y: 10, pixelX: this.mapManager.tileToWorldX(20) || 0, pixelY: this.mapManager.tileToWorldY(10) || 0}
+        );
+        landEntity3.init();
+        this.mapManager.setPlotLandCoords( 20, 10, landEntity3);
+
+
+        const landEntity4 = new FarmLand(
+            this,
+            {x: 18, y: 11, pixelX: this.mapManager.tileToWorldX(18) || 0, pixelY: this.mapManager.tileToWorldY(11) || 0}
+        );
+        landEntity4.init();
+        this.mapManager.setPlotLandCoords( 18, 11, landEntity4);
+
+
+        
+
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 18, 10);
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 19, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 20, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 18, 11);
 
         //OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16, false); // test fail (stone)
         //OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, 11, 16);
