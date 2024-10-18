@@ -156,6 +156,8 @@ export class BaseOrder implements Order{
             if(this.isRecurring) {
                 this.taskPointer = 0;
                 this.setStatus(OrderStatus.Running);
+                //TODO:: if isRecurring check cron interval if pass  reset tasks status to running, order to running, taskPointer = 0
+                //TODO::if isRecurring check cron interval if not pass set order status OrderStatus.WaitingNextReccur
                 this.runTasks();
             } else {
                 this.setStatus(OrderStatus.Completed);
