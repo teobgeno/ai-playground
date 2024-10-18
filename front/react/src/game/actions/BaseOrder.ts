@@ -1,25 +1,46 @@
 import { OrderStatus, Order, Task, TaskStatus } from "./types";
 import { ServiceLocator } from "../core/serviceLocator";
 import { TimeManager } from "../TimeManager";
+//const { default: parser } = require('cron-parser');
+import parser from 'cron-parser';
 
 
 
 export class BaseOrder implements Order{
     protected tasks: Array<Task> = [];
     protected currentTask: Task;
-    protected startDate: Date;
-    protected endDate: Date;
     protected isRecurring: boolean;
+    protected interval: string;
+    protected startTime: string;
+    protected endTime: string;
     protected taskPointer: number = 0;
-
     protected status: OrderStatus;
     protected pointer: number = 0;
     protected destinationMoveX: number = 0;
     protected destinationMoveY: number = 0;
 
     constructor() {
-
         this.status = OrderStatus.Initialized;
+    }
+
+    public setIsRecurring(isRecurring: boolean) {
+        this.isRecurring = isRecurring;
+        return this;
+    }
+
+    public setInterval(interval: string) {
+        this.interval = interval;
+        return this;
+    }
+
+    public setStartTime(startTime: string) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    public setEndTime(endTime: string) {
+        this.endTime = endTime;
+        return this;
     }
 
     public addTask(task: Task) {
@@ -37,10 +58,12 @@ export class BaseOrder implements Order{
     public setStatus(status: OrderStatus) {
         this.status = status;
     }
+
     public getStatus() {
        return this.status;
     }
 
+    
     public start() {
         this.setStatus(OrderStatus.Running);
     }
@@ -62,21 +85,34 @@ export class BaseOrder implements Order{
     private isInTimeRange() {
 
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        let ret = false;
-        if(this.startDate && 
-            this.endDate && 
-            timeManager.getCurrentDate() >= this.startDate &&
-            timeManager.getCurrentDate() <= this.endDate
-        ) {
-            ret = true;
+        
+        
+        if(!this.startTime && !this.endTime) {
+            return true;
+        }
+    
+        const current = new Date();
+        current.setHours(timeManager.getCurrentDate().getHours());
+        current.setMinutes(timeManager.getCurrentDate().getMinutes());
+        current.setSeconds(timeManager.getCurrentDate().getSeconds());
+
+        const start = new Date();
+        const startTimeParts = this.startTime.split('-');
+        start.setHours(Number(startTimeParts[0]));
+        start.setMinutes(Number(startTimeParts[1]));
+        start.setSeconds(Number(startTimeParts[2]));
+
+        const end = new Date();
+        const endTimeParts = this.endTime.split('-');
+        end.setHours(Number(endTimeParts[0]));
+        end.setMinutes(Number(endTimeParts[1]));
+        end.setSeconds(Number(endTimeParts[2]));
+
+        if( current >= start && current <= end) {
+           return true
         }
 
-        if(!this.startDate && !this.endDate) {
-            
-            ret = true;
-        }
-        
-        return ret;
+         return false
     }
 
     private runTasks() {
@@ -88,15 +124,12 @@ export class BaseOrder implements Order{
         ) {
             
             this.currentTask = this.tasks[this.taskPointer];
-            
-            if (this.currentTask.getStatus() === TaskStatus.Initialized) {
-                this.currentTask.start();
-            }
+            this.currentTask.start();
 
+            //throw error from task cancel order
             if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
                 this.setStatus(OrderStatus.Canceled);
                 this.cancel();
-                console.log('error from order')
             }
         }
     }
@@ -135,6 +168,20 @@ export class BaseOrder implements Order{
             this.setStatus(OrderStatus.WaitingNextReccur);
         }
 
+    }
+
+    private checkNextInterval() {
+        //https://github.com/harrisiirak/cron-parser#readme
+
+        // var options = {
+        //     currentDate: new Date('Wed, 26 Dec 2012 12:38:53 UTC'),
+        //     endDate: new Date('Wed, 26 Dec 2012 14:40:00 UTC'),
+        //     iterator: true
+        //   };
+
+        // var interval = parser.parseExpression('*/22 * * * *', options);
+        //  var obj = interval.next();
+        
     }
 
 }

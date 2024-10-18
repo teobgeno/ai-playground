@@ -11,6 +11,7 @@ import { BaseOrder } from "../actions/BaseOrder";
 
 import { Hoe } from "../items/Hoe";
 import { PickAxe } from "../items/PickAxe";
+import { WaterCan } from "../items/WaterCan";
 import { FarmLand } from "../farm/FarmLand";
 import { InventoryItem } from "../items/InventoryItem"
 import { CursorType } from "../cursors/types";
@@ -64,6 +65,31 @@ export class OrderFactory {
         const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
         const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         const order = new BaseOrder();
+
+        order.addTask(moveTask);
+        order.addTask(interactWithItemTask);
+ 
+        character.addOrder(order);
+    }
+
+    public static createWaterPlantsOrder(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
+        
+        const waterCan = new WaterCan(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
+        )
+
+        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, waterCan, posX, posY);
+        const order = 
+            new BaseOrder()
+            .setIsRecurring(true)
+            .setStartTime('10:00:00')
+            .setEndTime('22:00:00')
+            .setInterval('0 * * * *')
 
         order.addTask(moveTask);
         order.addTask(interactWithItemTask);

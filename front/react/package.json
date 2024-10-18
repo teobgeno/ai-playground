@@ -25,6 +25,7 @@
         "build": "vite build --config vite/config.prod.mjs"
     },
     "dependencies": {
+        "cron-parser": "^4.9.0",
         "grid-engine": "^2.44.6",
         "js-sha256": "^0.11.0",
         "phaser": "^3.80.1",
@@ -32,6 +33,7 @@
         "react-dom": "^18.2.0"
     },
     "devDependencies": {
+        "@types/node": "^22.7.6",
         "@types/react": "^18.2.55",
         "@types/react-dom": "^18.2.19",
         "@typescript-eslint/eslint-plugin": "^7.1.0",
