@@ -86,7 +86,6 @@ export class BaseOrder implements Order{
 
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         
-        
         if(!this.startTime && !this.endTime) {
             return true;
         }
@@ -109,10 +108,10 @@ export class BaseOrder implements Order{
         end.setSeconds(Number(endTimeParts[2]));
 
         if( current >= start && current <= end) {
-           return true
+           return true;
         }
 
-         return false
+         return false;
     }
 
     private runTasks() {
