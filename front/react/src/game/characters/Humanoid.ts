@@ -105,42 +105,95 @@ export class Humanoid extends Physics.Arcade.Sprite {
      // Completed = 3,
     // WaitingNextReccur = 7
 
+    // public updateOrdersQueue() {
+    //     if (
+    //         (this.orders.length > 0 && !this.currentOrder) ||
+    //         (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Running)
+    //     ) {
+    //         this.currentOrder = this.orders[this.orderPointer];
+    //     }
+    //     // run order if is not completed or canceled
+    //     if (this.currentOrder && 
+    //         (
+    //             this.currentOrder.getStatus() === OrderStatus.Initialized ||
+    //             this.currentOrder.getStatus() === OrderStatus.Running
+    //         )
+    //     ) {
+    //         this.currentOrder.update();
+    //     }
+
+    //     //if reccuring order and waiting seek to next order.
+    //     if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.WaitingNextReccur) {
+    //         //TODO:: check if order will start. If not  this.orderPointer + 1
+    //         if(this.currentOrder.canContinueReccur()) {
+    //             this.currentOrder.update();
+    //         } else {
+    //             this.orderPointer = this.orderPointer + 1 < this.orders.length ? this.orderPointer + 1 : 0;
+    //         }
+           
+    //     }
+
+    //     //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.
+    //     if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed) {
+    //         this.currentOrder = undefined;
+    //         this.orders.shift();
+    //     }
+
+    //     // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
+    //     //     this.currentOrder.cancel();
+    //     // }
+    // }
+
+
     public updateOrdersQueue() {
-        if (
-            (this.orders.length > 0 && !this.currentOrder) ||
-            (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Running)
-        ) {
+        // Ensure there's an order to process and the current order isn't running
+        if (this.orders.length > 0 && (!this.currentOrder || this.currentOrder.getStatus() !== OrderStatus.Running)) {
             this.currentOrder = this.orders[this.orderPointer];
         }
-        // run order if is not completed or canceled
-        if (this.currentOrder && 
-            (
-                this.currentOrder.getStatus() === OrderStatus.Initialized ||
-                this.currentOrder.getStatus() === OrderStatus.Running
-            )
-        ) {
-            this.currentOrder.update();
-        }
-
-        //if reccuring order and waiting seek to next order.
-        if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.WaitingNextReccur) {
-            //TODO:: check if order will start. If not  this.orderPointer + 1
-            if(this.currentOrder.canContinueReccur()) {
+    
+        if (!this.currentOrder) return; // Exit early if no current order
+    
+        const currentStatus = this.currentOrder.getStatus();
+    
+        switch (currentStatus) {
+            case OrderStatus.Initialized:
+            case OrderStatus.Running:
                 this.currentOrder.update();
-            } else {
-                this.orderPointer = this.orderPointer + 1 < this.orders.length ? this.orderPointer + 1 : 0;
-            }
-           
+                break;
+    
+            case OrderStatus.WaitingNextReccur:
+                this.handleRecurringOrder();
+                break;
+    
+            case OrderStatus.Completed:
+                this.completeOrder();
+                break;
+    
+            // Optionally handle canceled orders if required
+            // case OrderStatus.Canceled:
+            //     this.currentOrder.cancel();
+            //     break;
         }
-
-        //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.
-        if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed) {
-            this.currentOrder = undefined;
-            this.orders.shift();
+    }
+    
+    private handleRecurringOrder() {
+        if (this.currentOrder && this.currentOrder.canContinueReccur()) {
+            this.currentOrder.update();
+        } else {
+            // Move to next order or reset pointer
+            this.orderPointer = (this.orderPointer + 1) % this.orders.length;
         }
+    }
+    
+    private completeOrder() {
 
-        // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
-        //     this.currentOrder.cancel();
+        this.currentOrder = undefined;
+        this.orders.shift();
+        // this.currentOrder = undefined;
+        // this.orders.splice(this.orderPointer, 1); // Safer than shift, doesn't move all array elements
+        // // Optionally reset pointer if all orders are completed
+        // if (this.orders.length === 0) {
+        //     this.orderPointer = 0;
         // }
     }
 }

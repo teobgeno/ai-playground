@@ -74,58 +74,35 @@ export class BaseOrder implements Order{
         return false;
     }
 
+   
     public update() {
-        // if(
-        //     this.status === OrderStatus.Paused || 
-        //     this.status === OrderStatus.Rollback || 
-        //     this.status === OrderStatus.Canceled
-        // ) {
-        //     return
-        // }
-
-        
-        if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed){
+        // Exit early if no tasks or order is in a terminal state
+        if (!this.isRunnable()) return;
+    
+        // If current task is completed, move to the next one
+        if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed) {
             this.taskPointer++;
         }
-
-        if(this.isInTimeRange() && this.taskPointer < this.tasks.length) {
+    
+        // Check if we're in the valid time range and there are remaining tasks
+        if (this.isInTimeRange() && this.taskPointer < this.tasks.length) {
             this.setStatus(OrderStatus.Running);
             this.runTasks();
+        } 
+    
+        // Check for completion or recurring logic
+        else if (this.isInTimeRange() && this.taskPointer === this.tasks.length) {
+            this.handleOrderCompletionOrRecurrence();
         }
-
-        if(this.isInTimeRange() && this.taskPointer === this.tasks.length) {
-
-            if(this.isRecurring) {
-                const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-
-                if(!this.lastEndDate || (this.lastEndDate < timeManager.getCurrentDate())) {
-                    this.lastEndDate = timeManager.getCurrentDate();
-                }
-               
-                //console.log(this.checkNextInterval());
-                if(timeManager.getCurrentDate() > this.checkNextInterval()) {
-                    this.taskPointer = 0;
-                    this.setStatus(OrderStatus.Running);
-                    this.runTasks();
-                } else {
-                    this.setStatus(OrderStatus.WaitingNextReccur);
-                    this.restartTasks();
-                }
-                //TODO:: if isRecurring check cron interval if pass  reset tasks status to running, order to running, taskPointer = 0
-                //TODO::if isRecurring check cron interval if not pass set order status OrderStatus.WaitingNextReccur
-               
-            } else {
-                this.setStatus(OrderStatus.Completed);
-            }
-           
-        }
-        
-        if(!this.isInTimeRange() && this.isRecurring){
+    
+        // Handle case when not in time range for recurring orders
+        if (!this.isInTimeRange() && this.isRecurring) {
             this.setStatus(OrderStatus.WaitingNextReccur);
             this.restartTasks();
         }
-
     }
+
+
 
     public pause() {
         this.setStatus(OrderStatus.Paused);
@@ -148,22 +125,50 @@ export class BaseOrder implements Order{
         }
         this.currentTask = null;
     }
-    private runTasks() {
-        if (
 
-            (!this.currentTask) ||
-            (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed)
-            
-        ) {
-            
+    
+    private isRunnable(): boolean {
+        return !(
+            this.status === OrderStatus.Paused || 
+            this.status === OrderStatus.Rollback || 
+            this.status === OrderStatus.Canceled
+        );
+    }
+    
+    // Manage task execution and status checking
+    private runTasks() {
+        if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed) {
             this.currentTask = this.tasks[this.taskPointer];
             this.currentTask.start();
-
-            //throw error from task cancel order
-            if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
+    
+            // Handle task errors
+            if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
                 this.setStatus(OrderStatus.Canceled);
                 this.cancel();
             }
+        }
+    }
+    
+    // Handle completion or recurrence for recurring orders
+    private handleOrderCompletionOrRecurrence() {
+        if (this.isRecurring) {
+            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+            const currentTime = timeManager.getCurrentDate();
+    
+            if (!this.lastEndDate || this.lastEndDate < currentTime) {
+                this.lastEndDate = currentTime;
+            }
+    
+            if (currentTime > this.checkNextInterval()) {
+                this.taskPointer = 0;
+                this.setStatus(OrderStatus.Running);
+                this.runTasks();
+            } else {
+                this.setStatus(OrderStatus.WaitingNextReccur);
+                this.restartTasks();
+            }
+        } else {
+            this.setStatus(OrderStatus.Completed);
         }
     }
 
