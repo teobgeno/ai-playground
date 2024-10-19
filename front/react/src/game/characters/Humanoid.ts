@@ -105,45 +105,6 @@ export class Humanoid extends Physics.Arcade.Sprite {
      // Completed = 3,
     // WaitingNextReccur = 7
 
-    // public updateOrdersQueue() {
-    //     if (
-    //         (this.orders.length > 0 && !this.currentOrder) ||
-    //         (this.currentOrder && this.currentOrder.getStatus() !== OrderStatus.Running)
-    //     ) {
-    //         this.currentOrder = this.orders[this.orderPointer];
-    //     }
-    //     // run order if is not completed or canceled
-    //     if (this.currentOrder && 
-    //         (
-    //             this.currentOrder.getStatus() === OrderStatus.Initialized ||
-    //             this.currentOrder.getStatus() === OrderStatus.Running
-    //         )
-    //     ) {
-    //         this.currentOrder.update();
-    //     }
-
-    //     //if reccuring order and waiting seek to next order.
-    //     if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.WaitingNextReccur) {
-    //         //TODO:: check if order will start. If not  this.orderPointer + 1
-    //         if(this.currentOrder.canContinueReccur()) {
-    //             this.currentOrder.update();
-    //         } else {
-    //             this.orderPointer = this.orderPointer + 1 < this.orders.length ? this.orderPointer + 1 : 0;
-    //         }
-           
-    //     }
-
-    //     //delete order if is completed/completed from canceled. Keep orderPointer to the same value as array is length -1.
-    //     if (this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Completed) {
-    //         this.currentOrder = undefined;
-    //         this.orders.shift();
-    //     }
-
-    //     // if(this.currentOrder && this.currentOrder.getStatus() === OrderStatus.Canceled) {
-    //     //     this.currentOrder.cancel();
-    //     // }
-    // }
-
 
     public updateOrdersQueue() {
         // Ensure there's an order to process and the current order isn't running
