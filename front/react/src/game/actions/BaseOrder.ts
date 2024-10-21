@@ -109,6 +109,7 @@ export class BaseOrder implements Order{
     }
 
     public cancel() {
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
         this.setStatus(OrderStatus.Rollback);
         for (const task of this.tasks) {
             if(task.getStatus() === TaskStatus.Completed || this.currentTask === task) {
@@ -116,6 +117,7 @@ export class BaseOrder implements Order{
             }
         }
         this.setStatus(OrderStatus.Completed);
+        gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
     }
 
     private restartTasks() {
@@ -171,7 +173,6 @@ export class BaseOrder implements Order{
                 this.restartTasks();
             }
         } else {
-            //this.scene.emit()
             this.setStatus(OrderStatus.Completed);
             gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
         }

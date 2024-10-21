@@ -145,19 +145,24 @@ export class Humanoid extends Physics.Arcade.Sprite {
             this.currentOrder.update();
         } else {
             // Move to next order or reset pointer
-            this.orderPointer = (this.orderPointer + 1) % this.orders.length;
+            if(this.hasOrdersToRun()) {
+                this.orderPointer = (this.orderPointer + 1) % this.orders.length;
+                this.updateOrdersQueue();
+            }
         }
     }
     
     private completeOrder() {
 
-        this.currentOrder = undefined;
-        this.orders.shift();
-        // this.currentOrder = undefined;
-        // this.orders.splice(this.orderPointer, 1); // Safer than shift, doesn't move all array elements
-        // // Optionally reset pointer if all orders are completed
-        // if (this.orders.length === 0) {
-        //     this.orderPointer = 0;
-        // }
+        this.orders = this.orders.filter(x=> x.getStatus() !== OrderStatus.Completed);
+        if(this.hasOrdersToRun()) {
+            this.orderPointer = 0;
+            this.updateOrdersQueue();
+        }
     }
+
+    private hasOrdersToRun() {
+        return this.orders.find(x=> x.getStatus() === OrderStatus.Initialized) ? true : false;
+    }
+
 }
