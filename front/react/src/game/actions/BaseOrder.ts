@@ -6,8 +6,6 @@ import { OrderStatus, Order, Task, TaskStatus } from "./types";
 
 import parser from 'cron-parser';
 
-
-
 export class BaseOrder implements Order{
     private tasks: Array<Task> = [];
     private currentTask: Task | null;
@@ -168,7 +166,7 @@ export class BaseOrder implements Order{
                 this.setStatus(OrderStatus.Running);
                 this.runTasks();
             } else {
-                gameMediator.emitEvent('on-base-order-complete', {characterTag:this.currentTask?.getCharacterIdTag(), status: this.status})
+                gameMediator.emitEvent('on-base-order-complete', {characterIdTag: this.currentTask?.getCharacterIdTag(), status: this.status})
                 this.setStatus(OrderStatus.WaitingNextReccur);
                 this.restartTasks();
             }

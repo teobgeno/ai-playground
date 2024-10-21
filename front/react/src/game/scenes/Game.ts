@@ -124,7 +124,7 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-        this.gameMediator = new GameMediator(this);
+        this.gameMediator = new GameMediator(this, this.charactersMap);
         ServiceLocator.register('gameMediator', this.gameMediator);
 
         this.timeManager = new TimeManager()

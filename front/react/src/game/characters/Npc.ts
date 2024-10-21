@@ -73,7 +73,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
 
     update(dt: number) {
         this.stateMachine.update(dt);
-        this.updateOrdersQueue();
+        //this.updateOrdersQueue();
     }
     
 }

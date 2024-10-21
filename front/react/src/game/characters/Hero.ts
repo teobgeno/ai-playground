@@ -43,7 +43,7 @@ export class Hero extends Humanoid implements Character{
 
     update(dt: number): void {
         this.characterController.update(dt);
-        this.updateOrdersQueue();
+        //this.updateOrdersQueue();
         //https://www.html5gamedevs.com/topic/40592-how-do-i-call-a-callback-function-when-two-objects-stop-overlapping/
         //console.log(this.getBody().embedded)
     }
