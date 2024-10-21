@@ -130,13 +130,8 @@ export class Humanoid extends Physics.Arcade.Sprite {
                 break;
     
             case OrderStatus.Completed:
-                this.completeOrder();
+                this.handleCompleteOrder();
                 break;
-    
-            // Optionally handle canceled orders if required
-            // case OrderStatus.Canceled:
-            //     this.currentOrder.cancel();
-            //     break;
         }
     }
     
@@ -152,7 +147,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
         }
     }
     
-    private completeOrder() {
+    private handleCompleteOrder() {
 
         this.orders = this.orders.filter(x=> x.getStatus() !== OrderStatus.Completed);
         if(this.hasOrdersToRun()) {
