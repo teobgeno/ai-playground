@@ -154,9 +154,10 @@ export class BaseOrder implements Order{
     // Handle completion or recurrence for recurring orders
     private handleOrderCompletionOrRecurrence() {
         const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
-
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        
         if (this.isRecurring) {
-            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+            
             const currentTime = timeManager.getCurrentDate();
     
             if (!this.lastEndDate || this.lastEndDate < currentTime) {
@@ -210,7 +211,7 @@ export class BaseOrder implements Order{
     private checkNextInterval() {
         //https://github.com/harrisiirak/cron-parser#readme
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        return timeManager.addMinutesToDate(this.lastEndDate, this.interval);
+        return timeManager.addMinutesToUTCDate(this.lastEndDate, this.interval);
 
         // const options = {
         //     currentDate:  this.lastEndDate ,

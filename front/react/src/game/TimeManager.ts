@@ -85,7 +85,7 @@ export class TimeManager {
       
     }
 
-    public addMinutesToDate(currentDate: Date, minutes: number) {
+    public addMinutesToUTCDate(currentDate: Date, minutes: number) {
         
         return new Date(currentDate.getTime() + minutes*60000);
     }
