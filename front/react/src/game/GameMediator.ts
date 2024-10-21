@@ -33,7 +33,12 @@ export class GameMediator {
             const character = this.charactersMap.get(data.characterIdTag)!;
             character.updateOrdersQueue();
         });
-       
+
+        EventBus.on("on-order-next-reccur", (data: BaseOrderCompleteData) => {
+            const character = this.charactersMap.get(data.characterIdTag)!;
+            character.startOrdersQueue();
+        });
+
     }
 
     async emitEvent<T extends object>(event: string, params : T) {

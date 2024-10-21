@@ -85,9 +85,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
     public addOrder(order: Order) {
         this.orders.push(order);
-        if(this.orders.length === 1) {
-            this.updateOrdersQueue();
-        }
+        this.startOrdersQueue();
     }
 
     public addTask(task: Task) {
@@ -108,6 +106,11 @@ export class Humanoid extends Physics.Arcade.Sprite {
      // Completed = 3,
     // WaitingNextReccur = 7
 
+    public startOrdersQueue() {
+        if(this.hasOrdersToRun() && !this.hasRunningOrder()) {
+            this.updateOrdersQueue();
+        }
+    }
 
     public updateOrdersQueue() {
         // Ensure there's an order to process and the current order isn't running
@@ -158,6 +161,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
     private hasOrdersToRun() {
         return this.orders.find(x=> x.getStatus() === OrderStatus.Initialized) ? true : false;
+    }
+
+    private hasRunningOrder() {
+        return this.orders.find(x=> x.getStatus() === OrderStatus.Running) ? true : false;
     }
 
 }

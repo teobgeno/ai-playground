@@ -14,6 +14,7 @@ export class BaseOrder implements Order{
     private startTime: string;
     private endTime: string;
     private lastEndDate: Date;
+    private recurringTimer: ReturnType<typeof setInterval>;
     private taskPointer: number = 0;
     private status: OrderStatus;
 
@@ -97,8 +98,7 @@ export class BaseOrder implements Order{
     
         // Handle case when not in time range for recurring orders
         if (!this.isInTimeRange() && this.isRecurring) {
-            this.setStatus(OrderStatus.WaitingNextReccur);
-            this.restartTasks();
+            this.startWaiting();
         }
     }
 
@@ -117,7 +117,7 @@ export class BaseOrder implements Order{
             }
         }
         this.setStatus(OrderStatus.Completed);
-        gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
+        gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
     }
 
     private restartTasks() {
@@ -169,15 +169,32 @@ export class BaseOrder implements Order{
                 this.setStatus(OrderStatus.Running);
                 this.runTasks();
             } else {
-                this.setStatus(OrderStatus.WaitingNextReccur);
-                gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
-                this.restartTasks();
+                this.startWaiting();
             }
         } else {
             this.setStatus(OrderStatus.Completed);
-            gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
+            gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
         }
     }
+
+    private startWaiting() {
+
+        this.setStatus(OrderStatus.WaitingNextReccur);
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
+        gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
+        this.restartTasks();
+
+        this.recurringTimer = setInterval(()=>{
+            if(this.canContinueReccur()){ 
+                console.log('trigger wake order');
+                clearInterval(this.recurringTimer);
+                this.setStatus(OrderStatus.Initialized);
+                gameMediator.emitEvent('on-order-next-reccur', {characterIdTag: this.tasks[0].getCharacterIdTag()});
+            }
+        }, 1000);
+    }
+
+    
 
     private isInTimeRange() {
 
