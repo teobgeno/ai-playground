@@ -10,7 +10,7 @@ export class BaseOrder implements Order{
     private tasks: Array<Task> = [];
     private currentTask: Task | null;
     private isRecurring: boolean;
-    private interval: string;
+    private interval: number;
     private startTime: string;
     private endTime: string;
     private lastEndDate: Date;
@@ -26,7 +26,7 @@ export class BaseOrder implements Order{
         return this;
     }
 
-    public setInterval(interval: string) {
+    public setInterval(interval: number) {
         this.interval = interval;
         return this;
     }
@@ -209,14 +209,16 @@ export class BaseOrder implements Order{
 
     private checkNextInterval() {
         //https://github.com/harrisiirak/cron-parser#readme
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        return timeManager.addMinutes(this.interval);
 
-        const options = {
-            currentDate:  this.lastEndDate ,
-        };
+        // const options = {
+        //     currentDate:  this.lastEndDate ,
+        // };
 
-        const interval = parser.parseExpression(this.interval, options);
-        //console.log(interval.next().toString());
-        return interval.next().toDate();
+        // const interval = parser.parseExpression(this.interval, options);
+        // //console.log(interval.next().toString());
+        // return interval.next().toDate();
         
     }
 

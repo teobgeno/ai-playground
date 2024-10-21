@@ -89,7 +89,7 @@ export class OrderFactory {
             .setIsRecurring(true)
             .setStartTime('10:00:00')
             .setEndTime('13:00:00')
-            .setInterval('0 * * * *')
+            .setInterval(60)
 
         order.addTask(moveTask);
         order.addTask(interactWithItemTask);

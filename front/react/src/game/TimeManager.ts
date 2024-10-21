@@ -84,4 +84,10 @@ export class TimeManager {
         return `${currentDate.getUTCFullYear()}-${Utils.zeroPad(currentDate.getUTCMonth(), 2)}-${Utils.zeroPad(currentDate.getUTCDate(), 2)} ${Utils.zeroPad(currentDate.getUTCHours(), 2)}:${Utils.zeroPad(currentDate.getUTCMinutes(), 2)}:${Utils.zeroPad(currentDate.getUTCSeconds(), 2)}`
       
     }
+
+    public addMinutes(minutes: number) {
+        //TODO::day.js.org
+        const nextDate = new Date(this.gameCurrentTimestamp + minutes*60000);
+        return new Date(nextDate.getUTCFullYear(), nextDate.getUTCMonth(), nextDate.getUTCDate(), nextDate.getUTCHours(), nextDate.getUTCMinutes(), nextDate.getUTCSeconds())
+    }
 }
