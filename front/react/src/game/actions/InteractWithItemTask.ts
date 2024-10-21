@@ -77,6 +77,7 @@ export class InteractWithItemTask extends BaseTask implements Task {
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.setStatus(TaskStatus.Completed);
+            this.notifyOrder({characterIdTag: this.character.getIdTag()});
         }
     };
 

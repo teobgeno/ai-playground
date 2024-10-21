@@ -166,13 +166,14 @@ export class BaseOrder implements Order{
                 this.setStatus(OrderStatus.Running);
                 this.runTasks();
             } else {
-                gameMediator.emitEvent('on-base-order-complete', {characterIdTag: this.currentTask?.getCharacterIdTag(), status: this.status})
                 this.setStatus(OrderStatus.WaitingNextReccur);
+                gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
                 this.restartTasks();
             }
         } else {
             //this.scene.emit()
             this.setStatus(OrderStatus.Completed);
+            gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.currentTask?.getCharacterIdTag()});
         }
     }
 

@@ -1,6 +1,9 @@
+import { ServiceLocator } from "../core/serviceLocator";
+import { GameMediator } from "../GameMediator";
 import { GridEngine } from "grid-engine";
 import { TaskStatus } from "./types";
 import { CharacterState, Character } from "../characters/types";
+
 
 export abstract class BaseTask {
     protected gridEngine: GridEngine;
@@ -28,6 +31,11 @@ export abstract class BaseTask {
 
     public getCharacterIdTag() {
         return this.character.getIdTag();
+    }
+
+    protected notifyOrder<T extends object>(data: T) {
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
+        gameMediator.emitEvent('on-order-task-change-status', data);
     }
 
 }

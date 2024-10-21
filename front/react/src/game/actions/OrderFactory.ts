@@ -95,7 +95,6 @@ export class OrderFactory {
         order.addTask(interactWithItemTask);
  
         character.addOrder(order);
-        character.updateOrdersQueue();
     }
 
 }

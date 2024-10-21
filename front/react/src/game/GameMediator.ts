@@ -5,13 +5,6 @@ import { OrderStatus, Order, Task, TaskStatus } from "./actions/types";
 
 interface BaseOrderCompleteData{
     characterIdTag: string,
-    status: OrderStatus
-}
-
-interface BaseOrderTaskCompleteData{
-    orderId: number,
-    characterIdTag: string,
-    status: OrderStatus
 }
 
 export class GameMediator {
@@ -31,12 +24,12 @@ export class GameMediator {
 
     private initEventBusMessages() {
 
-        EventBus.on("on-base-order-complete", (data: BaseOrderCompleteData) => {
+        EventBus.on("on-order-change-status", (data: BaseOrderCompleteData) => {
             const character = this.charactersMap.get(data.characterIdTag)!;
             character.updateOrdersQueue();
         });
 
-        EventBus.on("on-base-order-task-complete", (data: BaseOrderCompleteData) => {
+        EventBus.on("on-order-task-change-status", (data: BaseOrderCompleteData) => {
             const character = this.charactersMap.get(data.characterIdTag)!;
             character.updateOrdersQueue();
         });
