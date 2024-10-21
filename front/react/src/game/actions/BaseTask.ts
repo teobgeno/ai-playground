@@ -25,5 +25,9 @@ export abstract class BaseTask {
     public setStatus(status: TaskStatus) {
         this.status = status;
     }
-    
+
+    public getCharacterIdTag() {
+        return this.character.getIdTag();
+    }
+
 }

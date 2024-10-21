@@ -29,6 +29,7 @@ export interface Task
     complete: () => void;
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
+    getCharacterIdTag: () => string;
 }
 
 

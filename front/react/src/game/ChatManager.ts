@@ -2,8 +2,7 @@ import { Game } from "./scenes/Game";
 import { httpProvider } from "./core/httpProvider";
 import { ServiceLocator } from "./core/serviceLocator";
 import { TimeManager } from "./TimeManager";
-import { Character } from "./characters/Character";
-import { CharacterState } from "./characters/types";
+import { Character, CharacterState } from "./characters/types";
 
 
 export type Message = {

@@ -7,6 +7,7 @@ import { Hero } from "../characters/Hero";
 import { Npc } from "../characters/Npc";
 import { Humanoid } from "../characters/Humanoid";
 
+import { GameMediator } from "../GameMediator";
 import { TimeManager } from "../TimeManager";
 import { WeatherManager } from "../WeatherManager";
 import { CursorManager } from "../cursors/CursorManager";
@@ -51,6 +52,7 @@ export class Game extends Scene {
 
     // private activeTool: number;
     // private propertiesText;
+    private gameMediator: GameMediator;
     private charactersMap: Map<string, Character>;
     private cursorManager: CursorManager;
     private chatManager: ChatManager;
@@ -122,7 +124,8 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-       
+        this.gameMediator = new GameMediator(this);
+        ServiceLocator.register('gameMediator', this.gameMediator);
 
         this.timeManager = new TimeManager()
         ServiceLocator.register('timeManager', this.timeManager);
@@ -133,6 +136,8 @@ export class Game extends Scene {
         ServiceLocator.register('mapManager', this.mapManager);
         
         this.dayNight = new DayNight(this, 0, 0, 10000, 10000, this.timeManager);
+
+        
 
         if(props.map == undefined || props.map ==='farm') {
             this.test();
@@ -195,13 +200,13 @@ export class Game extends Scene {
 
         
 
-        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 18, 10);
-        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 19, 10);
-        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 20, 10);
-        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, 18, 11);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 19, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 20, 10);
+        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 11);
 
         //OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 11, 16, false); // test fail (stone)
-        //OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, 11, 16);
+        //OrderFactory.createInteractWithItemOrder(this.gridEngine, npc0, this, 11, 16);
         
        
         // OrderFactory.createTillageOrder(this.gridEngine, npc0, this, 10, 14);

@@ -1,7 +1,9 @@
-import { OrderStatus, Order, Task, TaskStatus } from "./types";
 import { ServiceLocator } from "../core/serviceLocator";
+import { GameMediator } from "../GameMediator";
 import { TimeManager } from "../TimeManager";
-//const { default: parser } = require('cron-parser');
+
+import { OrderStatus, Order, Task, TaskStatus } from "./types";
+
 import parser from 'cron-parser';
 
 
@@ -151,6 +153,8 @@ export class BaseOrder implements Order{
     
     // Handle completion or recurrence for recurring orders
     private handleOrderCompletionOrRecurrence() {
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
+
         if (this.isRecurring) {
             const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
             const currentTime = timeManager.getCurrentDate();
@@ -164,10 +168,12 @@ export class BaseOrder implements Order{
                 this.setStatus(OrderStatus.Running);
                 this.runTasks();
             } else {
+                gameMediator.emitEvent('on-base-order-complete', {characterTag:this.currentTask?.getCharacterIdTag(), status: this.status})
                 this.setStatus(OrderStatus.WaitingNextReccur);
                 this.restartTasks();
             }
         } else {
+            //this.scene.emit()
             this.setStatus(OrderStatus.Completed);
         }
     }
