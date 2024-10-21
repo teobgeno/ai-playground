@@ -210,7 +210,7 @@ export class BaseOrder implements Order{
     private checkNextInterval() {
         //https://github.com/harrisiirak/cron-parser#readme
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        return timeManager.addMinutes(this.interval);
+        return timeManager.addMinutesToDate(this.lastEndDate, this.interval);
 
         // const options = {
         //     currentDate:  this.lastEndDate ,

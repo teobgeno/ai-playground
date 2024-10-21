@@ -85,9 +85,8 @@ export class TimeManager {
       
     }
 
-    public addMinutes(minutes: number) {
-        //TODO::day.js.org
-        const nextDate = new Date(this.gameCurrentTimestamp + minutes*60000);
-        return new Date(nextDate.getUTCFullYear(), nextDate.getUTCMonth(), nextDate.getUTCDate(), nextDate.getUTCHours(), nextDate.getUTCMinutes(), nextDate.getUTCSeconds())
+    public addMinutesToDate(currentDate: Date, minutes: number) {
+        
+        return new Date(currentDate.getTime() + minutes*60000);
     }
 }
