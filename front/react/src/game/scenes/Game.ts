@@ -78,7 +78,6 @@ export class Game extends Scene {
         this.initHero();
         this.chatManager = new ChatManager(this, this.charactersMap);
         this.initNpcs();
-        this.initEventBusMessages();
         this.initGridEngine();
         this.initCamera(this.map);
         this.marker = this.add.rectangle(
@@ -124,7 +123,7 @@ export class Game extends Scene {
         // setTimeout(() => {
         //     this.scene.restart({ level: 1 });
         //   }, 4000);
-        this.gameMediator = new GameMediator(this, this.charactersMap);
+        this.gameMediator = new GameMediator(this, this.charactersMap, this.chatManager);
         ServiceLocator.register('gameMediator', this.gameMediator);
 
         this.timeManager = new TimeManager()
@@ -465,17 +464,7 @@ export class Game extends Scene {
         this.cameras.main.fadeIn();
     }
 
-    private initEventBusMessages() {
-
-        EventBus.on("on-chat-character-player-message", (data: Message) => {
-            this.chatManager.onChatCharacterPlayerMessage(data)
-        });
-
-        EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {
-            this.chatManager.onChatCharacterPlayerCloseConversation(data)
-        });
-    }
-
+  
     update(time: number, delta: number): void {
         
         for (const [, character] of this.charactersMap) {
