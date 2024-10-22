@@ -124,7 +124,6 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private instantMove() {
-      
       this.getDuration();
     }
 
@@ -162,7 +161,7 @@ export class MoveTask extends BaseTask implements Task{
             gameSecs : cost * timeManager.scaleFactor,
             realSecs : cost
         }
-        
+
         return ret;
     }
 
