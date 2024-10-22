@@ -110,6 +110,12 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private moveCharacter() {
+        if(this.levelOfDetail === 1) {
+            this.animateMove();
+        }
+    }
+
+    private animateMove() {
         this.character.setCharState(CharacterState.AUTOWALK);
         this.destinationMoveX = this.posX;
         this.destinationMoveY = this.posY;

@@ -14,6 +14,7 @@ export abstract class BaseTask {
     protected lastTimestamp: number = 0;
     protected IntervalProcess: ReturnType<typeof setInterval>;
     protected staminaCost: number = 0;
+    protected levelOfDetail: number = 1;
 
     constructor(gridEngine: GridEngine, character: Character) {
         this.character = character;
@@ -27,6 +28,14 @@ export abstract class BaseTask {
 
     public setStatus(status: TaskStatus) {
         this.status = status;
+    }
+
+    public getLevelOfDetail() {
+        return this.levelOfDetail;
+    }
+
+    public setLevelOfDetail(levelOfDetail: number) {
+        this.levelOfDetail = levelOfDetail;
     }
 
     public getCharacterIdTag() {
