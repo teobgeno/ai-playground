@@ -48,11 +48,13 @@ export class TillageTask extends BaseTask implements Task {
  
 
         this.gridEngine.stopMovement(this.character.getIdTag());
-        this.landEntity.rollbackLand();
+        const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
+        (farmLand as FarmLand).rollbackLand();
+        //this.landEntity.rollbackLand();
 
         mapManager.setPlotLandCoords(
-            this.landEntity.getSprite().getX(),
-            this.landEntity.getSprite().getY(),
+            (farmLand as FarmLand).getSprite().getX(),
+            (farmLand as FarmLand).getSprite().getY(),
             null
         );
 
@@ -86,6 +88,7 @@ export class TillageTask extends BaseTask implements Task {
          if (this.status === TaskStatus.Running) {
              this.setStatus(TaskStatus.Completed);
              this.landEntity.init();
+             this.notifyOrder({characterIdTag: this.character.getIdTag()});
          }
      }
 

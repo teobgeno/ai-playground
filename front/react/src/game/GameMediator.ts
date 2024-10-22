@@ -34,11 +34,17 @@ export class GameMediator {
             const hero = this.charactersMap.get("hero")!;
             for (const order of hero.getOrders()) {
               order.setStatus(OrderStatus.Canceled);
+              for (const task of order.getTasks()) {
+                if(task.getStatus() !== TaskStatus.Completed) {
+                    task.cancel();
+                }
+              }
             }
+            hero.startOrdersQueue();
         });
 
         EventBus.on("on-chat-character-player-message", (data: Message) => {
-            this.chatManager.onChatCharacterPlayerMessage(data)
+            this.chatManager.onChatCharacterPlayerMessage(data);
         });
 
         EventBus.on("on-chat-character-player-close-conversation", (data: Message) => {

@@ -164,7 +164,7 @@ export class Game extends Scene {
         this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setTestCollision(a,b)}, this)
 
 
-
+        return;
         const npc0 = this.charactersMap.get("npc0")!;
        
         const landEntity1 = new FarmLand(
