@@ -88,6 +88,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
         this.startOrdersQueue();
     }
 
+    public getOrders() {
+        return this.orders;
+    }
+
     public addTask(task: Task) {
         this.tasks.push(task);
     }

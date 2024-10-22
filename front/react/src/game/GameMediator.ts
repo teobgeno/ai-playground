@@ -30,6 +30,13 @@ export class GameMediator {
     private initEventBusMessages() {
 
 
+        EventBus.on("on-character-controller-esc-key", () => {
+            const hero = this.charactersMap.get("hero")!;
+            for (const order of hero.getOrders()) {
+              order.setStatus(OrderStatus.Canceled);
+            }
+        });
+
         EventBus.on("on-chat-character-player-message", (data: Message) => {
             this.chatManager.onChatCharacterPlayerMessage(data)
         });

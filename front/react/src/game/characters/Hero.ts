@@ -1,10 +1,10 @@
 import { GridEngine } from "grid-engine";
-import { Game } from "../scenes/Game";
+import { ServiceLocator } from "../core/serviceLocator";
+import { GameMediator } from "../GameMediator";
 import { CharacterController } from "./CharacterController";
-import { TaskStatus } from "../actions/types";
+import { OrderStatus, TaskStatus } from "../actions/types";
 import { Character } from "./types";
 import { Humanoid } from "./Humanoid";
-import { EventBus } from "../EventBus";
 
 export class Hero extends Humanoid implements Character{
     private gridEngine: GridEngine;
@@ -26,13 +26,6 @@ export class Hero extends Humanoid implements Character{
             this.stateMachine,
             this.idTag
         );
-       
-        EventBus.on("on-character-controller-esc-key", () => {
-            this.tasks.forEach((task) => task.setStatus(TaskStatus.Canceled));
-            if( this.currentTask) {
-                this.currentTask.setStatus(TaskStatus.Canceled);
-            }
-        });
     }
 
     public init() {
@@ -49,15 +42,16 @@ export class Hero extends Humanoid implements Character{
     }
 
     public increaseStamina(staminaAmount: number) {
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
         super.increaseStamina(staminaAmount);
-        (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
-        
+        gameMediator.emitEvent('on-player-stamina-change', this.stamina);  
     }
 
     public decreaseStamina(staminaAmount: number) {
+        const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
         super.decreaseStamina(staminaAmount);
         //this.gridEngine.setSpeed(this.getIdTag(), 1);
-        (this.scene as Game).emitEvent("on-player-stamina-change", this.stamina);
+        gameMediator.emitEvent('on-player-stamina-change', this.stamina);
     }
 
     // private updateTasksQueue() {
