@@ -18,6 +18,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected convId: number;
     protected stamina:number = 100;
     public isNpc: boolean;
+    protected levelOfDetail: number = 1;
 
     constructor(scene: Phaser.Scene, texture: string, id: number, idTag: string, charName: string) {
         super(scene, 0, 0, texture);
@@ -79,6 +80,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
         this.stateMachine.setState(state);
     }
 
+    public getLevelOfDetail() {
+        return this.levelOfDetail;
+    }
+
     public getInventory() {
         return this.characterInventory;
     }
@@ -94,10 +99,6 @@ export class Humanoid extends Physics.Arcade.Sprite {
 
     public addTask(task: Task) {
         this.tasks.push(task);
-    }
-
-    public getBody(): Physics.Arcade.Body {
-        return this.body as Physics.Arcade.Body;
     }
 
     // Initialized = 1,
@@ -171,4 +172,7 @@ export class Humanoid extends Physics.Arcade.Sprite {
         return this.orders.find(x=> x.getStatus() === OrderStatus.Running) ? true : false;
     }
 
+    public getBody(): Physics.Arcade.Body {
+        return this.body as Physics.Arcade.Body;
+    }
 }

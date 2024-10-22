@@ -164,7 +164,7 @@ export class Game extends Scene {
         this.physics.add.collider(this.hero, house, (a,b)=>{this.testCollision(a,b)}, (a,b)=>{return this.setTestCollision(a,b)}, this)
 
 
-        return;
+      
         const npc0 = this.charactersMap.get("npc0")!;
        
         const landEntity1 = new FarmLand(
@@ -200,6 +200,7 @@ export class Game extends Scene {
         
 
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 10);
+        return;
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 19, 10);
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 20, 10);
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 11);

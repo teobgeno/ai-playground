@@ -1,5 +1,8 @@
-import { BaseTask } from "./BaseTask";
 import { GridEngine } from "grid-engine";
+import { BaseTask } from "./BaseTask";
+
+import { ServiceLocator } from "../core/serviceLocator";
+import { TimeManager } from "../TimeManager";
 
 import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
@@ -110,9 +113,57 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private moveCharacter() {
-        if(this.levelOfDetail === 1) {
+
+        if(this.character.getLevelOfDetail() === 1) {
+            this.instantMove();
+        }
+
+        if(this.character.getLevelOfDetail() === 0) {
             this.animateMove();
         }
+    }
+
+    private instantMove() {
+      
+      this.getDuration();
+    }
+
+    private tickMove() {
+
+    }
+
+    private getDuration() {
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        
+        const characterPos = this.gridEngine.getPosition(
+            this.character.getIdTag()
+        );
+
+        const shortestPath = this.gridEngine.findShortestPath(
+            {
+                charLayer: 'CharLayer',
+                position: {
+                    x : characterPos.x,
+                    y: characterPos.y
+                }
+            },
+            {
+                charLayer: 'CharLayer',
+                position: {
+                    x : this.posX,
+                    y: this.posY
+                }
+            }
+        );
+         
+        const cost = ( shortestPath.path.length - 2 ) / this.gridEngine.getSpeed( this.character.getIdTag() );
+        
+        const ret = {
+            gameSecs : cost * timeManager.scaleFactor,
+            realSecs : cost
+        }
+        
+        return ret;
     }
 
     private animateMove() {
