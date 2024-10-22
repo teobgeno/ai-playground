@@ -9,10 +9,9 @@ import { CharacterState, Character } from "../characters/types";
 
 
 export class MoveTask extends BaseTask implements Task{
-    private destinationMoveX: number = 0;
-    private destinationMoveY: number = 0;
     private posX: number;
     private posY: number;
+    private intervalCount: number = 0;
 
     constructor(
         gridEngine: GridEngine,
@@ -82,7 +81,7 @@ export class MoveTask extends BaseTask implements Task{
     };
 
     public getMoveDestinationPoint() {
-        return { x: this.destinationMoveX, y: this.destinationMoveY };
+        return { x: this.posX, y: this.posY };
     }
 
     private canMoveCharacter() {
@@ -124,10 +123,13 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private instantMove() {
-      this.getDuration();
+      const duration = this.getDuration();
+      if(duration.realSecs > 0) {
+        this.IntervalProcess = setInterval(() =>{this.tickMove(duration.realSecs)}, 1000)
+      }
     }
 
-    private tickMove() {
+    private tickMove(secs: number) {
 
     }
 
@@ -155,7 +157,7 @@ export class MoveTask extends BaseTask implements Task{
             }
         );
          
-        const cost = ( shortestPath.path.length - 2 ) / this.gridEngine.getSpeed( this.character.getIdTag() );
+        const cost = Math.ceil( ( shortestPath.path.length - 2 ) / this.gridEngine.getSpeed( this.character.getIdTag() ) );
         
         const ret = {
             gameSecs : cost * timeManager.scaleFactor,
@@ -167,8 +169,6 @@ export class MoveTask extends BaseTask implements Task{
 
     private animateMove() {
         this.character.setCharState(CharacterState.AUTOWALK);
-        this.destinationMoveX = this.posX;
-        this.destinationMoveY = this.posY;
         this.gridEngine.moveTo(this.character.getIdTag(), {
             x: this.posX,
             y: this.posY,
