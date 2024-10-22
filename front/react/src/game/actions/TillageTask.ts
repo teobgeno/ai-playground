@@ -101,6 +101,8 @@ export class TillageTask extends BaseTask implements Task {
         const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
 
         if(farmLand?.objectId !== ObjectId.FarmLand) {
+            this.setStatus(TaskStatus.Error);
+            this.notifyOrder({characterIdTag: this.character.getIdTag()});
             console.log('error tillage')
         } 
         //TODO:: trigger error and cancel if not farmland 
