@@ -4,7 +4,7 @@ import { TimeManager } from "../TimeManager";
 
 import { OrderStatus, Order, Task, TaskStatus } from "./types";
 
-import parser from 'cron-parser';
+//import parser from 'cron-parser';
 
 export class BaseOrder implements Order{
     private tasks: Array<Task> = [];
@@ -62,20 +62,36 @@ export class BaseOrder implements Order{
        return this.status;
     }
 
-    
+    private getStartDateTime() {
+
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+
+        const start = timeManager.getCurrentDate();
+        const startTimeParts = this.startTime.split(':');
+        start.setHours(Number(startTimeParts[0]));
+        start.setMinutes(Number(startTimeParts[1]));
+        start.setSeconds(Number(startTimeParts[2]));
+
+        return start;
+    }
+
+    private getEndDateTime() {
+
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+
+        const end = timeManager.getCurrentDate();
+        const endTimeParts = this.endTime.split(':');
+        end.setHours(Number(endTimeParts[0]));
+        end.setMinutes(Number(endTimeParts[1]));
+        end.setSeconds(Number(endTimeParts[2]));
+
+        return end;
+    }
+
     public start() {
         this.setStatus(OrderStatus.Running);
     }
 
-    public canContinueReccur() {
-        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        if(timeManager.getCurrentDate() > this.checkNextInterval() && this.isInTimeRange()) {
-            return true;
-        }
-        return false;
-    }
-
-   
     public update() {
         // Exit early if no tasks or order is in a terminal state
         if (!this.isRunnable()) return;
@@ -102,8 +118,6 @@ export class BaseOrder implements Order{
         }
     }
 
-
-
     public pause() {
         this.setStatus(OrderStatus.Paused);
     }
@@ -120,6 +134,22 @@ export class BaseOrder implements Order{
         gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
     }
 
+    private isRunnable(): boolean {
+        return !(
+            this.status === OrderStatus.Paused || 
+            this.status === OrderStatus.Rollback || 
+            this.status === OrderStatus.Canceled
+        );
+    }
+
+    public canContinueReccur() {
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        if(timeManager.getCurrentDate() > this.checkNextInterval() && this.isInTimeRange()) {
+            return true;
+        }
+        return false;
+    }
+
     private restartTasks() {
         this.taskPointer = 0;
         for (const task of this.tasks) {
@@ -128,15 +158,6 @@ export class BaseOrder implements Order{
         this.currentTask = null;
     }
 
-    
-    private isRunnable(): boolean {
-        return !(
-            this.status === OrderStatus.Paused || 
-            this.status === OrderStatus.Rollback || 
-            this.status === OrderStatus.Canceled
-        );
-    }
-    
     // Manage task execution and status checking
     private runTasks() {
         if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed) {
@@ -194,8 +215,6 @@ export class BaseOrder implements Order{
         }, 1000);
     }
 
-    
-
     private isInTimeRange() {
 
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
@@ -204,21 +223,7 @@ export class BaseOrder implements Order{
             return true;
         }
     
-        const current = timeManager.getCurrentDate();
-   
-        const start = timeManager.getCurrentDate();
-        const startTimeParts = this.startTime.split(':');
-        start.setHours(Number(startTimeParts[0]));
-        start.setMinutes(Number(startTimeParts[1]));
-        start.setSeconds(Number(startTimeParts[2]));
-
-        const end = timeManager.getCurrentDate();
-        const endTimeParts = this.endTime.split(':');
-        end.setHours(Number(endTimeParts[0]));
-        end.setMinutes(Number(endTimeParts[1]));
-        end.setSeconds(Number(endTimeParts[2]));
-
-        if( current >= start && current <= end) {
+        if( timeManager.getCurrentDate() >= this.getStartDateTime() && timeManager.getCurrentDate() <= this.getEndDateTime()) {
            return true;
         }
 
@@ -228,8 +233,12 @@ export class BaseOrder implements Order{
     private checkNextInterval() {
         //https://github.com/harrisiirak/cron-parser#readme
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
-        return timeManager.addMinutesToUTCDate(this.lastEndDate, this.interval);
+        let nextDate = timeManager.addMinutesToUTCDate(this.lastEndDate, this.interval);
+        if(nextDate > this.getEndDateTime()) {
+            nextDate = this.getStartDateTime();
+        }
 
+        return nextDate;
         // const options = {
         //     currentDate:  this.lastEndDate ,
         // };
