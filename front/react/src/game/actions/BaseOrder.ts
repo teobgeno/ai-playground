@@ -126,7 +126,7 @@ export class BaseOrder implements Order{
         const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
         this.setStatus(OrderStatus.Rollback);
         for (const task of this.tasks) {
-            if(task.getStatus() === TaskStatus.Completed || this.currentTask === task) {
+            if(task.getStatus() !== TaskStatus.Completed) {
                 task.cancel();
             }
         }

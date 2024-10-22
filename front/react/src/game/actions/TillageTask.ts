@@ -13,7 +13,6 @@ import { CharacterState, Character } from "../characters/types";
 import { ObjectId } from "../core/types";
 
 export class TillageTask extends BaseTask implements Task {
-    private landEntity: FarmLand;
     private hoe: Hoe;
     private posX: number;
     private posY: number;
@@ -48,10 +47,11 @@ export class TillageTask extends BaseTask implements Task {
  
 
         this.gridEngine.stopMovement(this.character.getIdTag());
+        
         const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
+        
         (farmLand as FarmLand).rollbackLand();
-        //this.landEntity.rollbackLand();
-
+   
         mapManager.setPlotLandCoords(
             (farmLand as FarmLand).getSprite().getX(),
             (farmLand as FarmLand).getSprite().getY(),
@@ -61,6 +61,7 @@ export class TillageTask extends BaseTask implements Task {
         this.updateCharacter();
 
         this.setStatus(TaskStatus.Completed);
+        //this.notifyOrder({characterIdTag: this.character.getIdTag()});
     };
 
     public next = () => {
@@ -87,7 +88,9 @@ export class TillageTask extends BaseTask implements Task {
  
          if (this.status === TaskStatus.Running) {
              this.setStatus(TaskStatus.Completed);
-             this.landEntity.init();
+             const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+             const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
+             (farmLand as FarmLand).init();
              this.notifyOrder({characterIdTag: this.character.getIdTag()});
          }
      }
@@ -97,11 +100,9 @@ export class TillageTask extends BaseTask implements Task {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         const farmLand = mapManager.getPlotLandCoord(this.posX, this.posY);
 
-        if(farmLand?.objectId === ObjectId.FarmLand) {
-            this.landEntity = farmLand as FarmLand
-        } else {
+        if(farmLand?.objectId !== ObjectId.FarmLand) {
             console.log('error tillage')
-        }
+        } 
         //TODO:: trigger error and cancel if not farmland 
     }
 

@@ -34,11 +34,7 @@ export class GameMediator {
             const hero = this.charactersMap.get("hero")!;
             for (const order of hero.getOrders()) {
               order.setStatus(OrderStatus.Canceled);
-              for (const task of order.getTasks()) {
-                if(task.getStatus() !== TaskStatus.Completed) {
-                    task.cancel();
-                }
-              }
+              order.cancel();
             }
             hero.startOrdersQueue();
         });
