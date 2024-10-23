@@ -96,30 +96,8 @@ export class Crop implements MapObject{
         return this.seed.getCropFromHarvest();
     }
 
-    public updateGrowOld(time: number, elements: LandElements) {
-        if(elements.water > 0) {
-            if (this.lastTimestamp) {
-                if (
-                    ((Utils.getTimeStamp() - this.lastTimestamp)*1000) >= this.seed.growthStageInterval &&
-                    this.seed.currentGrowthStageFrame < this.seed.maxGrowthStageFrame
-                ) {
-                    this.lastTimestamp = Utils.getTimeStamp();
-                    let growthFrame = this.seed.startGrowthStageFrame + (Utils.getTimeStamp() - this.initTimestamp);
-                    if(growthFrame > this.seed.maxGrowthStageFrame) {
-                        growthFrame = this.seed.maxGrowthStageFrame
-                    }
-                    this.seed.currentGrowthStageFrame = growthFrame;
-                    this.updateTile();
-                }
-            } else {
-                this.lastTimestamp = Utils.getTimeStamp();
-                this.initTimestamp =  this.lastTimestamp;
-            }
-        } else {
-            this.lastTimestamp = Utils.getTimeStamp();
-            this.initTimestamp =  this.lastTimestamp;
-        }
-        
+    public startGrowProcess() {
+
     }
 
     public updateGrow(time: number, elements: LandElements) {
@@ -202,37 +180,9 @@ export class Crop implements MapObject{
         this.sprites[0].getSprite().setFrame(frame);
     }
 
-    
-
-    // public initHarvestInteractive() {
-    //     this.sprite.setInteractive({
-    //         cursor: "url(assets/cursors/axe.cur), pointer",
-    //     });
-    // }
-
-    // public removeHarvestInteractive() {
-    //     this.sprite.removeInteractive();
-    // }
-
-    // public pauseHarvestInteractive() {
-    //     if (this.sprite.input && this.sprite.input.enabled) {
-    //         this.sprite.disableInteractive();
-    //     }
-    // }
-
-    // public resumeHarvestInteractive() {
-    //     if (this.sprite.input && !this.sprite.input.enabled) {
-    //         this.sprite.setInteractive();
-    //     }
-    // }
-
     public remove() {
         this.sprites[0].destroy();
         this.sprites = [];
     }
 
-    // public getInteractive() {
-    //     return this.interactive;
-    // }
-    
 }
