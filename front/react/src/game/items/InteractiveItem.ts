@@ -134,7 +134,7 @@ export class InteractiveItem {
 
     public canInteractWithItem() {
         if (
-            this.interactiveObjectIds.includes(this.selectedObject?.objectId) &&
+            this.interactiveObjectIds.includes(this.selectedObject?.objectId || 0) &&
             this.interactionfactors(this.selectedObject)
         ) {
             return true;
