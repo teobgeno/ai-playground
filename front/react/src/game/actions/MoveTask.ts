@@ -1,4 +1,4 @@
-import { GridEngine } from "grid-engine";
+import { GridEngine, LayerPosition  } from "grid-engine";
 import { BaseTask } from "./BaseTask";
 
 import { ServiceLocator } from "../core/serviceLocator";
@@ -11,7 +11,7 @@ import { CharacterState, Character } from "../characters/types";
 export class MoveTask extends BaseTask implements Task{
     private posX: number;
     private posY: number;
-    private intervalCount: number = 0;
+    private pathTickCount: number = 0;
 
     constructor(
         gridEngine: GridEngine,
@@ -123,17 +123,32 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     private instantMove() {
-      const duration = this.getDuration();
-      if(duration.realSecs > 0) {
-        this.IntervalProcess = setInterval(() =>{this.tickMove(duration.realSecs)}, 1000)
+      const tickPath = this.getTickPath();
+      if(tickPath.realSecs > 0) {
+        this.pathTickCount = 0;
+        this.IntervalProcess = setInterval(() =>{this.tickMove(tickPath.realSecs, tickPath.path)}, 1000)
       }
     }
 
-    private tickMove(secs: number) {
+    private tickMove(secs: number, path: Array<LayerPosition>) {
+        this.pathTickCount ++;
+        if( this.pathTickCount < path.length) {
 
+            this.gridEngine.setPosition(
+                this.character.getIdTag(),
+                {
+                    x : path[this.pathTickCount].position.x,
+                    y: path[this.pathTickCount].position.y
+                },
+                'CharLayer'
+            )
+            
+        } else{
+            clearInterval(this.IntervalProcess);
+        }
     }
 
-    private getDuration() {
+    private getTickPath() {
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         
         const characterPos = this.gridEngine.getPosition(
@@ -158,10 +173,18 @@ export class MoveTask extends BaseTask implements Task{
         );
          
         const cost = Math.ceil( ( shortestPath.path.length - 2 ) / this.gridEngine.getSpeed( this.character.getIdTag() ) );
-        
+        /*
+        //TODO:: fast forward action if from pause
+        Check pause game time. timeToSimulate = currentGameTime - pauseGameTime
+        Simulate all order-tasks till timeToSimulate = 0
+        For the following  timeToSimulate = timeToSimulate - gameSecs
+        Modify cost to 0 to return 0 durations
+        */
+
         const ret = {
             gameSecs : cost * timeManager.scaleFactor,
-            realSecs : cost
+            realSecs : cost,
+            path: shortestPath.path
         }
 
         return ret;
