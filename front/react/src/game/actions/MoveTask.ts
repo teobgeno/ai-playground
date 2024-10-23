@@ -114,7 +114,7 @@ export class MoveTask extends BaseTask implements Task{
     private moveCharacter() {
 
         if(this.character.getLevelOfDetail() === 1) {
-            this.instantMove();
+            this.tickMove();
         }
 
         if(this.character.getLevelOfDetail() === 0) {
@@ -122,15 +122,25 @@ export class MoveTask extends BaseTask implements Task{
         }
     }
 
-    private instantMove() {
+    private tickMove() {
       const tickPath = this.getTickPath();
       if(tickPath.realSecs > 0) {
         this.pathTickCount = 0;
-        this.IntervalProcess = setInterval(() =>{this.tickMove(tickPath.realSecs, tickPath.path)}, 1000)
+        const stepTime = ( 1 / this.gridEngine.getSpeed( this.character.getIdTag() ) ) * 1000;
+        this.IntervalProcess = setInterval(() =>{this.tickProgressMove(tickPath.realSecs, tickPath.path)}, stepTime)
+      } else {
+        this.gridEngine.setPosition(
+            this.character.getIdTag(),
+            {
+                x :  tickPath.path[tickPath.path.length - 1].position.x,
+                y:  tickPath.path[tickPath.path.length - 1].position.y
+            },
+            'CharLayer'
+        )
       }
     }
 
-    private tickMove(secs: number, path: Array<LayerPosition>) {
+    private tickProgressMove(secs: number, path: Array<LayerPosition>) {
         this.pathTickCount ++;
         if( this.pathTickCount < path.length) {
 
