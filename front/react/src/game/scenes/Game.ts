@@ -380,7 +380,7 @@ export class Game extends Scene {
         );
         this.physics.add.existing(npc);
         this.add.existing(npc);
-        npc.init();
+        //npc.init();
         this.charactersMap.set(npc.getIdTag(), npc);
     }
 
@@ -400,7 +400,7 @@ export class Game extends Scene {
         };
 
 
-        const npc0 = this.charactersMap.get("npc0");
+        const npc0 = this.charactersMap.get("npc0")!;
         if (npc0) {
             gridEngineConfig.characters.push({
                 id: npc0.getIdTag(),
@@ -452,6 +452,8 @@ export class Game extends Scene {
 
                 
             });
+
+            npc0?.init();
     }
 
     private initCamera(map: Tilemaps.Tilemap): void {

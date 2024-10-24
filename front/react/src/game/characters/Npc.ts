@@ -10,7 +10,7 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
     private gridEngine: GridEngine;
     private interactive: InteractiveItem;
     public sprites: Array<SpriteItem> = [];
-    protected orderPointer: number = 0;
+    private staminaBar : Phaser.GameObjects.Rectangle;
 
     constructor(
         scene: Phaser.Scene,
@@ -47,6 +47,8 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
             .addState(CharacterState.TALK, {})
             .addState(CharacterState.TILL, {})
             .setState(CharacterState.IDLE);
+
+           
     }
 
     public init() {
@@ -61,6 +63,13 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
         });
         this.interactive.startInteraction();
         this.interactive.setSelfInteractionCursor('assets/cursors/axe.cur')
+
+        // const characterPos = this.gridEngine.getPosition(
+        //     this.getIdTag()
+        // );
+
+        this.staminaBar = this.scene.add.rectangle(this.x + 16, this.y - 16, 50, 2, 0x00ee00);
+        this.staminaBar.setDepth(10)
     }
 
     public getInteractive() {
@@ -73,6 +82,8 @@ export class Npc extends Humanoid implements Character, MapObjectInteractable {
 
     update(dt: number) {
         this.stateMachine.update(dt);
+        this.staminaBar.x = this.x + 20;
+        this.staminaBar.y = this.y - 8;
         //this.updateOrdersQueue();
     }
     

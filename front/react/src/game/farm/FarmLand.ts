@@ -99,32 +99,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         this.tooltip.add(this.tooltipText)
         this.tooltip.setDepth(10)
         this.tooltip.setVisible(false);
-
-        // this.sprite = scene.add.sprite(
-        //     this.pixelX,
-        //     this.pixelY,
-        //     "fence",
-        //     'sprite8'
-        // );
-
-        // const r = Math.floor(Math.random() * 10)
-        // if(r > 5) {
-        //   t.setTint(Phaser.Display.Color.GetColor(190, 190, 190));
-        // }
-
-        //this.sprite.setAlpha(0.4);
-
-        // this.sprite = scene.add.sprite(x+16, y, "crops", 30);
-        // this.sprite.setInteractive({ useHandCursor: true });
-        // this.sprite.setDepth(2);
-
-        // this.life = 90;
-        // this.health = 0.002;
-        // this.health = ((( this.health + 1) / 2) * 0.4) + 0.6;
-
-        //this.sprite.setTint(Phaser.Display.Color.GetColor( this.health * 255,  this.health * 255,  this.health * 255));
-        //this.sprite.setTint(0xff0000)
-        //this.bar = scene.add.rectangle(x - 16, y - 16, 0, 2, 0x00ee00);
     }
 
     public interactWithItem = (selectedObject: Storable | null) => {
@@ -171,7 +145,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public init() {
         this.landState = LandState.PLOWED;
         this.sprites[0].setAlpha(1);
-        
+
         this.IntervalLandProcess = setInterval(() =>{
             if(this.elements.water > 0) {
                 this.evaporateWater();
