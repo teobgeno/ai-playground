@@ -113,11 +113,15 @@ export class MoveTask extends BaseTask implements Task{
 
     private moveCharacter() {
 
-        if(this.character.getLevelOfDetail() === 1) {
+        if(this.character.getLevelOfDetail() === 1 && this.character.isNpc) {
             this.tickMove();
+        } 
+
+        if(this.character.getLevelOfDetail() === 0 && this.character.isNpc) {
+            this.animateMove();
         }
 
-        if(this.character.getLevelOfDetail() === 0) {
+        if(!this.character.isNpc) {
             this.animateMove();
         }
     }
@@ -129,6 +133,7 @@ export class MoveTask extends BaseTask implements Task{
         const stepTime = ( 1 / this.gridEngine.getSpeed( this.character.getIdTag() ) ) * 1000;
         this.IntervalProcess = setInterval(() =>{this.tickProgressMove(tickPath.realSecs, tickPath.path)}, stepTime)
       } else {
+        this.pointer = 3;
         this.gridEngine.setPosition(
             this.character.getIdTag(),
             {
@@ -154,6 +159,7 @@ export class MoveTask extends BaseTask implements Task{
             )
             
         } else{
+            this.pointer = 3;
             clearInterval(this.IntervalProcess);
         }
     }
@@ -202,6 +208,7 @@ export class MoveTask extends BaseTask implements Task{
 
     private animateMove() {
         this.character.setCharState(CharacterState.AUTOWALK);
+        this.pointer = 3;
         this.gridEngine.moveTo(this.character.getIdTag(), {
             x: this.posX,
             y: this.posY,

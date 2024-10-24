@@ -16,18 +16,11 @@ export class Crop implements MapObject{
     public sprites: Array<SpriteItem> = [];
     private seed: Seed;
     private lastTimestamp: number = 0;
-    private IntervalProcess: ReturnType<typeof setInterval>;
-    private elements: LandElements = {
-        water: 0,
-        fertilizer: 0,
-    };
 
     //https://docs.google.com/spreadsheets/d/1DPAq3AyaXIlqML1KummuMHDS_MV3uH0Z7kXAZXKFsSQ/edit?pli=1&gid=0#gid=0  List crops
     constructor(scene: Phaser.Scene, seed: Seed, coords: CoordsData) {
         this.id = Utils.generateId();
-        //this.scene = scene;
         this.seed = seed;
-        //this.interactive = interactive;
         this.lastTimestamp = 0;
 
         this.sprites.push(
@@ -44,23 +37,14 @@ export class Crop implements MapObject{
                 0
             )
         );
-        // this.sprite = this.scene.add.sprite(
-        //     x + 16,
-        //     y,
-        //     "crops",
-        //     this.seed.currentGrowthStageFrame
-        // );
+
         this.sprites[0].setDepth(2);
         this.sprites[0].setAlpha(0.8);
-        
-        
     }
     public init() {
         this.sprites[0].setAlpha(1);
         const dp = 2 + Utils.shiftPad(this.sprites[0].getSprite().y + this.sprites[0].getSprite().displayHeight/2, 7);
         this.sprites[0].setDepth(dp);
-        this.startGrowProcess();
-
         //wiggle anim test
         // this.scene.tweens.add({
         //     targets: [ this.sprite ],
@@ -72,10 +56,6 @@ export class Crop implements MapObject{
         //     repeat: -1,
         // });
 
-    }
-
-    public setWaterAmount(waterAmount: number) {
-        this.elements.water = waterAmount;
     }
 
     public getSeed() {
@@ -92,11 +72,7 @@ export class Crop implements MapObject{
         return this.seed.getCropFromHarvest();
     }
 
-    public startGrowProcess() {
-        //this.IntervalProcess = setInterval(() =>{this.updateGrow(tickPath.realSecs, tickPath.path)}, stepTime)
-    }
-
-    public updateGrow(time: number, elements: LandElements) {
+    public updateGrow(elements: LandElements) {
         
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         const currentTimestamp = timeManager.getCurrentTimestamp();
@@ -104,8 +80,7 @@ export class Crop implements MapObject{
         if (this.lastTimestamp) {
 
             const currentDaysInterval = this.seed.getCurrentIntervals()[this.seed.currentInterval];
-            const currentSecInterval = ((86400 * currentDaysInterval)/timeManager.scaleFactor)/100;
-            
+            const currentSecInterval = ((86400 * currentDaysInterval)*1000)/100;
             
             if 
             (

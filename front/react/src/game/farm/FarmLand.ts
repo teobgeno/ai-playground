@@ -16,6 +16,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public id: number;
     public objectId: ObjectId = ObjectId.FarmLand;
     private crop: Crop | null;
+    private IntervalCropProcess: ReturnType<typeof setInterval>;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
     private interactive: InteractiveItem;
@@ -185,7 +186,6 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     private setWaterAmount(waterAmount: number) {
         this.elements.water = waterAmount;
-        this.crop?.setWaterAmount(waterAmount);
     }
 
     private evaporateWater() {
@@ -220,10 +220,27 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     public plantCrop() {
         if (this.crop && this.landState === LandState.PLOWED) {
-            this.crop.setWaterAmount(this.elements.water);
             this.crop.init();
             this.landState = LandState.PLANTED;
+            this.startCropGrowProcess();
         }
+    }
+
+    private startCropGrowProcess() {
+        this.IntervalCropProcess = setInterval(() =>{
+            if(this.crop) {
+                this.elements= this.crop?.updateGrow(this.elements);
+            }
+
+            if(this.elements.water > 0) {
+                this.evaporateWater();
+            }
+           
+            if (this.crop?.isFullGrown()) {
+                clearInterval(this.IntervalCropProcess);
+                this.landState = LandState.READY;
+            }
+        }, 1000);
     }
 
     public executeHarvestCrop() {
@@ -253,18 +270,16 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             this.setTooltipText();
         }
 
-        if(this.elements.water > 0) {
-            this.evaporateWater();
-        }
+        // if(this.elements.water > 0) {
+        //     this.evaporateWater();
+        // }
        
-        if (this.landState === LandState.PLANTED) {
-            this.crop?.updateGrow(time, this.elements);
-            if (this.crop?.isFullGrown()) {
-                this.landState = LandState.READY;
-                //this.interactive.setSelfInteraction(true);
-            }
-        }
-        
+        // if (this.landState === LandState.PLANTED) {
+        //     this.crop?.updateGrow(time, this.elements);
+        //     if (this.crop?.isFullGrown()) {
+        //         this.landState = LandState.READY;
+        //     }
+        // }
     }
 
     updateTile() {
