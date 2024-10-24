@@ -17,6 +17,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public objectId: ObjectId = ObjectId.FarmLand;
     private crop: Crop | null;
     private IntervalCropProcess: ReturnType<typeof setInterval>;
+    private IntervalLandProcess: ReturnType<typeof setInterval>;
     private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
     private interactive: InteractiveItem;
@@ -170,6 +171,12 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public init() {
         this.landState = LandState.PLOWED;
         this.sprites[0].setAlpha(1);
+        
+        this.IntervalLandProcess = setInterval(() =>{
+            if(this.elements.water > 0) {
+                this.evaporateWater();
+            }
+        }, 1000);
     }
 
     public rollbackLand() {
@@ -255,6 +262,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     public destroyCrop() {
         //this.removeInteractive();
         //this.interactive.setSelfInteraction(false);
+        clearInterval(this.IntervalCropProcess);
         this.crop?.remove();
         this.crop = null;
         this.updateTile();
@@ -265,24 +273,12 @@ export class FarmLand implements MapObject, MapObjectInteractable {
     //https://www.html5gamedevs.com/topic/38318-change-cursor-on-demand/
     //https://labs.phaser.io/edit.html?src=src/input/cursors/custom%20cursor.js
     public update(time: number) {
-        
         if(this.crop) {
             this.setTooltipText();
         }
-
-        // if(this.elements.water > 0) {
-        //     this.evaporateWater();
-        // }
-       
-        // if (this.landState === LandState.PLANTED) {
-        //     this.crop?.updateGrow(time, this.elements);
-        //     if (this.crop?.isFullGrown()) {
-        //         this.landState = LandState.READY;
-        //     }
-        // }
     }
 
-    updateTile() {
+    private updateTile() {
         let frame = 0;
         switch (this.landState) {
             case LandState.PLOWED:
