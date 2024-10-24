@@ -13,12 +13,15 @@ import {
 export class Crop implements MapObject{
     public id: number;
     public objectId: ObjectId = ObjectId.FarmLand;
-    //private scene: Phaser.Scene;
     public sprites: Array<SpriteItem> = [];
-    //private interactive: InteractiveItem;
     private seed: Seed;
-    public initTimestamp: number = 0;
-    public lastTimestamp: number = 0;
+    private lastTimestamp: number = 0;
+    private IntervalProcess: ReturnType<typeof setInterval>;
+    private elements: LandElements = {
+        water: 0,
+        fertilizer: 0,
+    };
+
     //https://docs.google.com/spreadsheets/d/1DPAq3AyaXIlqML1KummuMHDS_MV3uH0Z7kXAZXKFsSQ/edit?pli=1&gid=0#gid=0  List crops
     constructor(scene: Phaser.Scene, seed: Seed, coords: CoordsData) {
         this.id = Utils.generateId();
@@ -55,7 +58,8 @@ export class Crop implements MapObject{
     public init() {
         this.sprites[0].setAlpha(1);
         const dp = 2 + Utils.shiftPad(this.sprites[0].getSprite().y + this.sprites[0].getSprite().displayHeight/2, 7);
-        this.sprites[0].setDepth(dp)
+        this.sprites[0].setDepth(dp);
+        this.startGrowProcess();
 
         //wiggle anim test
         // this.scene.tweens.add({
@@ -70,17 +74,9 @@ export class Crop implements MapObject{
 
     }
 
-    // public getSprite() {
-    //     return this.sprite;
-    // }
-
-    // public getCurrentGrowthStage() {
-    //     return this.seed.currentGrowthStageFrame;
-    // }
-
-    // public getCurrentGrowthStagePercentage() {
-    //     return this.seed.currentGrowthStagePercentage;
-    // }
+    public setWaterAmount(waterAmount: number) {
+        this.elements.water = waterAmount;
+    }
 
     public getSeed() {
         return this.seed;
@@ -97,24 +93,28 @@ export class Crop implements MapObject{
     }
 
     public startGrowProcess() {
-
+        //this.IntervalProcess = setInterval(() =>{this.updateGrow(tickPath.realSecs, tickPath.path)}, stepTime)
     }
 
     public updateGrow(time: number, elements: LandElements) {
+        
+        const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
+        const currentTimestamp = timeManager.getCurrentTimestamp();
+
         if (this.lastTimestamp) {
 
-            const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
             const currentDaysInterval = this.seed.getCurrentIntervals()[this.seed.currentInterval];
             const currentSecInterval = ((86400 * currentDaysInterval)/timeManager.scaleFactor)/100;
             
+            
             if 
             (
-                (Utils.getTimeStamp() - this.lastTimestamp) >= currentSecInterval &&
+                (currentTimestamp - this.lastTimestamp) >= currentSecInterval &&
                 this.seed.currentFrame < this.seed.getCurrentFrames().length - 1 
             ) {
                 
-                const executionTimes = Math.floor((Utils.getTimeStamp() - this.lastTimestamp)/currentSecInterval);
-                this.lastTimestamp = Utils.getTimeStamp();
+                const executionTimes = Math.floor((currentTimestamp - this.lastTimestamp)/currentSecInterval);
+                this.lastTimestamp = currentTimestamp;
                
                 for(let i = 0; i < executionTimes; i++) {
                     this.seed.currentGrowthStagePercentage += this.calculateGrowth(elements);
@@ -131,8 +131,7 @@ export class Crop implements MapObject{
                 }
             }
         } else {
-            this.lastTimestamp = Utils.getTimeStamp();
-            this.initTimestamp =  this.lastTimestamp;
+            this.lastTimestamp = currentTimestamp;
         }
 
         return elements;
@@ -144,7 +143,6 @@ export class Crop implements MapObject{
         return this.seed.baseGrowthRate*waterFactor
     }
 
-    
     private getWaterConsumptionFactor(waterAvailable: number) {
         let waterFactor = 1;
         const currentWaterConsumption = this.getWaterConsumption();

@@ -130,7 +130,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
             //console.log(selectedObject);
             switch (selectedObject.objectId) {
                 case ObjectId.WaterCan:
-                    this.elements.water = 100;
+                    this.setWaterAmount(100);
                     this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190, 190, 190));
                     break;
                 case ObjectId.CornSeed:{
@@ -183,6 +183,11 @@ export class FarmLand implements MapObject, MapObjectInteractable {
         return this.landState;
     }
 
+    private setWaterAmount(waterAmount: number) {
+        this.elements.water = waterAmount;
+        this.crop?.setWaterAmount(waterAmount);
+    }
+
     private evaporateWater() {
         if (this.lastTimestamp) {
             const diff = (Utils.getTimeStamp() - this.lastTimestamp);
@@ -191,8 +196,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
                 const waterSubstract = Math.floor((diff * 1000)/checkEvery);
                 console.log('Wtr: ' + (diff * 1000)/checkEvery)
-                this.elements.water = this.elements.water - waterSubstract >=0 ? this.elements.water - waterSubstract : 0;
-
+                this.setWaterAmount(this.elements.water - waterSubstract >=0 ? this.elements.water - waterSubstract : 0);
                 let tintPerc = Math.floor(Math.abs((65 * (this.elements.water/100)) - 65));
                 tintPerc = tintPerc <= 65 ? tintPerc : 65;
                 this.sprites[0].getSprite().setTint(Phaser.Display.Color.GetColor(190 + tintPerc, 190 + tintPerc, 190 + tintPerc));
@@ -216,6 +220,7 @@ export class FarmLand implements MapObject, MapObjectInteractable {
 
     public plantCrop() {
         if (this.crop && this.landState === LandState.PLOWED) {
+            this.crop.setWaterAmount(this.elements.water);
             this.crop.init();
             this.landState = LandState.PLANTED;
         }
