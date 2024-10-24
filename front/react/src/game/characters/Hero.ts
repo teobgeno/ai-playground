@@ -54,23 +54,6 @@ export class Hero extends Humanoid implements Character{
         gameMediator.emitEvent('on-player-stamina-change', this.stamina);
     }
 
-    // private updateTasksQueue() {
-    //     if (
-    //         (this.tasks.length > 0 && !this.currentTask) ||
-    //         (this.currentTask &&
-    //             this.currentTask.getStatus() === TaskStatus.Completed)
-    //     ) {
-    //         this.currentTask = this.tasks.shift();
-    //         if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Initialized) {
-    //             this.currentTask.start();
-    //         }
-    //     }
-       
-    //     if(this.currentTask && this.currentTask.getStatus() === TaskStatus.Canceled) {
-    //         this.currentTask.cancel();
-    //     }
-    // }
-
     private createMovementAnimations() {
         this.createAnimation("right", this.getIdTag(), 143, 147, 15, true, true);
         this.createAnimation("down-right", this.getIdTag(), 143, 147, 15, true, true);
@@ -188,30 +171,6 @@ export class Hero extends Humanoid implements Character{
         );
     }
 
-    // private createAnimation(
-    //     key: string,
-    //     texture: string,
-    //     start: number,
-    //     end: number,
-    //     rate: number | null,
-    //     repeat: boolean | null,
-    //     revert: any
-    // ) {
-    //     rate = rate || 10;
-    //     const config = {
-    //         key: key,
-    //         frames: this.scene.anims.generateFrameNumbers(texture, {
-    //             start: start,
-    //             end: end,
-    //         }),
-    //         frameRate: rate,
-    //         repeat: 0,
-    //     };
-    //     if (repeat) config.repeat = -1;
-    //     //if (revert) config.frames.push({ key: texture, frame: start });
-    //     this.scene.anims.create(config);
-    // }
-
     public getStopFrame(direction: string) {
         switch (direction) {
             case "up":
@@ -229,8 +188,4 @@ export class Hero extends Humanoid implements Character{
         }
         return -1;
     }
-
-    // public getBody(): Physics.Arcade.Body {
-    //     return this.body as Physics.Arcade.Body;
-    // }
 }

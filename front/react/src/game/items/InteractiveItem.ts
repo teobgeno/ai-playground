@@ -34,6 +34,10 @@ export class InteractiveItem {
         this.interactionfactors = func;
     }
 
+    public setInteractiveObjectIds(interactiveObjectIds: Array<ObjectId>) {
+        this.interactiveObjectIds = interactiveObjectIds;
+    }
+
     public setInteractionResult(
         func: (selectedObject: Storable | null) => void
     ) {
@@ -50,10 +54,6 @@ export class InteractiveItem {
         func: () => void
     ) {
         this.interactionHoverOut = func;
-    }
-
-    public setInteractiveObjectIds(interactiveObjectIds: Array<ObjectId>) {
-        this.interactiveObjectIds = interactiveObjectIds;
     }
 
     public setSelfInteraction(hasSelfInteraction: boolean) {
@@ -86,7 +86,7 @@ export class InteractiveItem {
         this.sprite.getSprite().on("pointerup", this.onPointerUp);
     }
 
-    private onPointerOver = () =>  { 
+    private onPointerOver = () =>  {
         if (this.activeCursor) {
             this.toggleCursorExecution(true);
         }
