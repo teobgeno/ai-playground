@@ -12,6 +12,8 @@ export class InteractWithItemTask extends BaseTask implements Task {
     private item: Storable;
     private posX: number;
     private posY: number;
+    private intervalStep: number = 0;
+    private intervalTick: number = 0;
 
     constructor(
         gridEngine: GridEngine,
@@ -32,6 +34,18 @@ export class InteractWithItemTask extends BaseTask implements Task {
         func: (task: InteractWithItemTask) => void
     ) {
         this.interactionProc = func;
+    }
+
+    public setIntervalStep(intervalStep: number) {
+        this.intervalStep = intervalStep;
+    }
+
+    public getIntervalTick() {
+        return this.intervalTick;
+    }
+
+    public setIntervalTick(intervalTick: number) {
+        return this.intervalTick = intervalTick;
     }
 
     public start() {
@@ -96,6 +110,12 @@ export class InteractWithItemTask extends BaseTask implements Task {
             mapItem.getInteractive().setIntercativeObject(this.item);
             if(mapItem.getInteractive().canInteractWithItem()) {
                 
+                if(this.intervalStep > 0) {
+                    this.IntervalProcess = setInterval(() => {
+                        this.interactionProc(this);
+                    }, this.intervalStep)
+
+                }
                 /*
                 mapItem.getInteractive().interactWithItem();
                 this.pointer = 3;

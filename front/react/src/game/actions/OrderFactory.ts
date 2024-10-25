@@ -107,11 +107,13 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const moveTask = new MoveTask(gridEngine, character, posX - 1, posY);
         const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
-        // interactWithItemTask.setInteractionProc((task: InteractWithItemTask)=>{
-          
-        // });
+        interactWithItemTask.setIntervalStep(1000);
+        interactWithItemTask.setInteractionProc((task: InteractWithItemTask)=>{
+            task.setIntervalTick(task.getIntervalTick() + 1);
+            console.log(task.getIntervalTick());
+        });
         const order = new BaseOrder();
 
         order.addTask(moveTask);

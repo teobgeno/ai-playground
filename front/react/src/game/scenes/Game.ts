@@ -198,8 +198,8 @@ export class Game extends Scene {
 
 
         
-
-        OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 10);
+        OrderFactory.createBreakRockOrder(this.gridEngine, npc0, this, 11, 16);
+       // OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 18, 10);
         return;
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 19, 10);
         OrderFactory.createWaterPlantsOrder(this.gridEngine, npc0, this, 20, 10);

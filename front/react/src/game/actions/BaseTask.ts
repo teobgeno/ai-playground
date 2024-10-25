@@ -13,6 +13,7 @@ export abstract class BaseTask {
     protected initTimestamp: number = 0;
     protected lastTimestamp: number = 0;
     protected IntervalProcess: ReturnType<typeof setInterval>;
+    protected IntervalTicks: number = 0;
     protected staminaCost: number = 0;
 
     constructor(gridEngine: GridEngine, character: Character) {
