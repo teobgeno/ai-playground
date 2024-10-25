@@ -8,6 +8,7 @@ import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types";
 
 export class InteractWithItemTask extends BaseTask implements Task {
+    private interactionProc: (task: InteractWithItemTask) => void;
     private item: Storable;
     private posX: number;
     private posY: number;
@@ -25,6 +26,12 @@ export class InteractWithItemTask extends BaseTask implements Task {
         this.posY = posY;
         
         this.status = TaskStatus.Initialized;
+    }
+
+    public setInteractionProc(
+        func: (task: InteractWithItemTask) => void
+    ) {
+        this.interactionProc = func;
     }
 
     public start() {
@@ -87,11 +94,16 @@ export class InteractWithItemTask extends BaseTask implements Task {
         if(mapItem && mapItem.getInteractive) {
             //TODO:: select proper item from character inventory
             mapItem.getInteractive().setIntercativeObject(this.item);
-            if(mapItem.getInteractive().canInteractWithItem()){
+            if(mapItem.getInteractive().canInteractWithItem()) {
+                
+                /*
                 mapItem.getInteractive().interactWithItem();
                 this.pointer = 3;
                 this.next();
                 console.log('ok');
+                */
+
+
             } else {
                 this.setStatus(TaskStatus.Error);
                 console.warn('cannot interact with map item with current tool');

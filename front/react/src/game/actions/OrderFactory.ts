@@ -97,4 +97,28 @@ export class OrderFactory {
         character.addOrder(order);
     }
 
+    public static createBreakRockOrder(gridEngine: GridEngine, character: Character, scene: Phaser.Scene, posX: number, posY: number) {
+        
+        const pickAxe = new PickAxe(
+            new InventoryItem()
+            .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')
+            .setIsStackable(false)
+            .setAmount(1)
+            .setCursorType(CursorType.EXTERNAL_INTERACTION)
+        )
+
+        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
+        // interactWithItemTask.setInteractionProc((task: InteractWithItemTask)=>{
+          
+        // });
+        const order = new BaseOrder();
+
+        order.addTask(moveTask);
+        order.addTask(interactWithItemTask);
+ 
+        character.addOrder(order);
+    }
+    
+
 }
