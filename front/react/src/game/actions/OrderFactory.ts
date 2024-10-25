@@ -110,9 +110,10 @@ export class OrderFactory {
         const moveTask = new MoveTask(gridEngine, character, posX - 1, posY);
         const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         interactWithItemTask.setIntervalStep(1000);
-        interactWithItemTask.setInteractionProc((task: InteractWithItemTask)=>{
+        interactWithItemTask.setInteractionProc((task: InteractWithItemTask) => {
             task.setIntervalTick(task.getIntervalTick() + 1);
-            console.log(task.getIntervalTick());
+            pickAxe.getBreakSpeed();
+            //console.log(task.getIntervalTick());
         });
         const order = new BaseOrder();
 
