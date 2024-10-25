@@ -3,6 +3,7 @@ import { GridEngine } from "grid-engine";
 import { ServiceLocator } from "../core/serviceLocator";
 import { MapManager } from "../MapManager";
 
+import { MapObject } from "../core/types";
 import { TaskStatus, Task } from "./types";
 import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types";
@@ -14,6 +15,7 @@ export class InteractWithItemTask extends BaseTask implements Task {
     private posY: number;
     private intervalStep: number = 0;
     private intervalTick: number = 0;
+    private mapItem: MapObject;
 
     constructor(
         gridEngine: GridEngine,
@@ -46,6 +48,14 @@ export class InteractWithItemTask extends BaseTask implements Task {
 
     public setIntervalTick(intervalTick: number) {
         return this.intervalTick = intervalTick;
+    }
+
+    public getItem() {
+        return this.item;
+    }
+
+    public getMapItem() {
+        return this.mapItem;
     }
 
     public start() {
@@ -105,29 +115,16 @@ export class InteractWithItemTask extends BaseTask implements Task {
     public interact() {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         const mapItem = mapManager.getPlotLandCoord(this.posX, this.posY);
-        if(mapItem && mapItem.getInteractive) {
+
+        if(mapItem) {
             //TODO:: select proper item from character inventory
-            mapItem.getInteractive().setIntercativeObject(this.item);
-            if(mapItem.getInteractive().canInteractWithItem()) {
-                
-                if(this.intervalStep > 0) {
-                    this.IntervalProcess = setInterval(() => {
-                        this.interactionProc(this);
-                    }, this.intervalStep)
 
-                }
-                /*
-                mapItem.getInteractive().interactWithItem();
-                this.pointer = 3;
-                this.next();
-                console.log('ok');
-                */
-
-
-            } else {
-                this.setStatus(TaskStatus.Error);
-                console.warn('cannot interact with map item with current tool');
+            if(this.intervalStep > 0) {
+                this.IntervalProcess = setInterval(() => {
+                    this.interactionProc(this);
+                }, this.intervalStep)
             }
+
         } else{
             this.setStatus(TaskStatus.Error);
             console.warn('cannot find mapitem');

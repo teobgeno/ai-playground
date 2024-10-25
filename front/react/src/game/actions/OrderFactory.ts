@@ -15,6 +15,7 @@ import { WaterCan } from "../items/WaterCan";
 import { FarmLand } from "../farm/FarmLand";
 import { InventoryItem } from "../items/InventoryItem"
 import { CursorType } from "../cursors/types";
+import { MapObject } from "../core/types";
 
 export class OrderFactory {
 
@@ -110,9 +111,20 @@ export class OrderFactory {
         const moveTask = new MoveTask(gridEngine, character, posX - 1, posY);
         const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         interactWithItemTask.setIntervalStep(1000);
+
         interactWithItemTask.setInteractionProc((task: InteractWithItemTask) => {
             task.setIntervalTick(task.getIntervalTick() + 1);
-            pickAxe.getBreakSpeed();
+            if(task.getIntervalTick() * 1000 === pickAxe.getBreakSpeed()) {
+
+                const mapItem = task.getMapItem();
+                if(mapItem.getInteractive) {
+                    mapItem.getInteractive().setIntercativeObject(task.getItem());
+                    if(mapItem.getInteractive().canInteractWithItem()) {
+                        mapItem.getInteractive().interactWithItem();
+                    }
+                }
+            }
+          
             //console.log(task.getIntervalTick());
         });
         const order = new BaseOrder();

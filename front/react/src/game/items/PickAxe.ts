@@ -11,7 +11,7 @@ export class PickAxe extends BaseItem implements Storable {
     constructor(inventory: InventoryItem) {
         super(ObjectId.PickAxe, ObjectId.PickAxe, 'PickAxe');
         this.inventory = inventory;
-        this.baseBreakSpeed = 1000;
+        this.baseBreakSpeed = 3000;
     }
 
     public getInventory() {
