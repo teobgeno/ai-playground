@@ -9,7 +9,6 @@ import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types.ts";
 
 export class BaseInteractWithItemTask extends BaseTask implements Task {
-    //private interactionProc: (task: InteractWithItemTask) => void;
     private item: Storable;
     private posX: number;
     private posY: number;
@@ -32,12 +31,6 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
         this.status = TaskStatus.Initialized;
     }
 
-    // public setInteractionProc(
-    //     func: (task: InteractWithItemTask) => void
-    // ) {
-    //     this.interactionProc = func;
-    // }
-
     public getIntervalStep() {
         return this.intervalStep;
     }
@@ -57,9 +50,26 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
     public getItem() {
         return this.item;
     }
+   
+    protected getAvailableMapItem() {
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+        const mapItem = mapManager.getPlotLandCoord(this.posX, this.posY);
 
-    public getMapItem() {
-        return this.mapItem;
+        if(!mapItem) {
+            return null;
+        }
+
+        if(!mapItem.getInteractive) {
+            return null;
+        }
+        
+        mapItem.getInteractive().setIntercativeObject(this.getItem());
+
+        if(!mapItem.getInteractive().canInteractWithItem()) {
+            return null;
+        }
+
+        return mapItem;
     }
 
     public start() {
@@ -74,38 +84,13 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
 
     public cancel () {
 
-        this.setStatus(TaskStatus.Rollback);
-        this.gridEngine.stopMovement(this.character.getIdTag());
-        this.setStatus(TaskStatus.Completed);
+        // this.setStatus(TaskStatus.Rollback);
+        // this.gridEngine.stopMovement(this.character.getIdTag());
+        // this.setStatus(TaskStatus.Completed);
     }
 
     public next() {
 
-        if (this.status === TaskStatus.Running) {
-            switch (this.pointer) {
-                case 1:
-                    // if(this.canMoveCharacter()) {
-                    //     this.pointer = 2;
-                    //     this.next();
-                    // } else {
-                    //     this.setStatus(TaskStatus.Error);
-                    //     console.warn('error cannot move');
-                    // }
-                    this.interact();
-                    break;
-                case 2:
-                    // if(this.shouldMoveCharacter()) {
-                    //     this.moveCharacter()
-                    // } else {
-                    //     this.pointer = 3;
-                    //     this.next();
-                    // }
-                    break;
-                case 3:
-                    this.complete();
-                    break;
-            }
-        }
     }
 
     public complete () {
@@ -113,25 +98,6 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
         if (this.status === TaskStatus.Running) {
             this.setStatus(TaskStatus.Completed);
             this.notifyOrder({characterIdTag: this.character.getIdTag()});
-        }
-    }
-
-    public interact() {
-        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
-        const mapItem = mapManager.getPlotLandCoord(this.posX, this.posY);
-
-        if(mapItem) {
-            //TODO:: select proper item from character inventory
-
-            // if(this.intervalStep > 0) {
-            //     this.IntervalProcess = setInterval(() => {
-            //         this.interactionProc(this);
-            //     }, this.intervalStep)
-            // }
-
-        } else{
-            this.setStatus(TaskStatus.Error);
-            console.warn('cannot find mapitem');
         }
     }
 }

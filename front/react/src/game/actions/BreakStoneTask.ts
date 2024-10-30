@@ -1,11 +1,9 @@
 import { BaseInteractWithItemTask } from "./BaseInteractWithItemTask";
-import { MapManager } from "../MapManager";
-import { ServiceLocator } from "../core/serviceLocator";
+
 import { GridEngine } from "grid-engine";
 
-import { FarmLand } from "../farm/FarmLand";
-
-import { TaskStatus, Task } from "./types";
+import { MapObject } from "../core/types.ts";
+import { TaskStatus } from "./types";
 import { Character } from "../characters/types";
 import { PickAxe } from "../items/PickAxe";
 
@@ -45,21 +43,20 @@ export class BreakStoneTask extends BaseInteractWithItemTask{
     };
 
     private breakStone() {
-        this.IntervalProcess = setInterval(() => {
-                this.breakStonedProc();
+        const mapItem = super.getAvailableMapItem()!;
+        if(mapItem) {
+            this.IntervalProcess = setInterval(() => {
+                this.breakStonedProc(mapItem);
             }, super.getIntervalStep())
+        } else {
+            console.warn('cannot find mapitem');
+        }
     }
 
-    private breakStonedProc = () => {
+    private breakStonedProc = (mapItem:  MapObject) => {
         super.setIntervalTick(super.getIntervalTick() + 1);
         if(super.getIntervalTick() * 1000 === (super.getItem() as PickAxe).getBreakSpeed()) {
-            const mapItem = super.getMapItem();
-            if(mapItem.getInteractive) {
-                mapItem.getInteractive().setIntercativeObject(super.getItem());
-                if(mapItem.getInteractive().canInteractWithItem()) {
-                    mapItem.getInteractive().interactWithItem();
-                }
-            }
+            mapItem.getInteractive().interactWithItem();
         }
     }
 
