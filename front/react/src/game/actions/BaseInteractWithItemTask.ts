@@ -1,15 +1,15 @@
-import { BaseTask } from "./BaseTask";
+import { BaseTask } from "./BaseTask.ts";
 import { GridEngine } from "grid-engine";
-import { ServiceLocator } from "../core/serviceLocator";
-import { MapManager } from "../MapManager";
+import { ServiceLocator } from "../core/serviceLocator.ts";
+import { MapManager } from "../MapManager.ts";
 
-import { MapObject } from "../core/types";
-import { TaskStatus, Task } from "./types";
+import { MapObject } from "../core/types.ts";
+import { TaskStatus, Task } from "./types.ts";
 import { Storable } from "../items/types.ts";
-import { CharacterState, Character } from "../characters/types";
+import { CharacterState, Character } from "../characters/types.ts";
 
-export class InteractWithItemTask extends BaseTask implements Task {
-    private interactionProc: (task: InteractWithItemTask) => void;
+export class BaseInteractWithItemTask extends BaseTask implements Task {
+    //private interactionProc: (task: InteractWithItemTask) => void;
     private item: Storable;
     private posX: number;
     private posY: number;
@@ -32,10 +32,14 @@ export class InteractWithItemTask extends BaseTask implements Task {
         this.status = TaskStatus.Initialized;
     }
 
-    public setInteractionProc(
-        func: (task: InteractWithItemTask) => void
-    ) {
-        this.interactionProc = func;
+    // public setInteractionProc(
+    //     func: (task: InteractWithItemTask) => void
+    // ) {
+    //     this.interactionProc = func;
+    // }
+
+    public getIntervalStep() {
+        return this.intervalStep;
     }
 
     public setIntervalStep(intervalStep: number) {
@@ -68,12 +72,12 @@ export class InteractWithItemTask extends BaseTask implements Task {
         this.next();
     }
 
-    public cancel = () => {
+    public cancel () {
 
         this.setStatus(TaskStatus.Rollback);
         this.gridEngine.stopMovement(this.character.getIdTag());
         this.setStatus(TaskStatus.Completed);
-    };
+    }
 
     public next() {
 
@@ -104,13 +108,13 @@ export class InteractWithItemTask extends BaseTask implements Task {
         }
     }
 
-    public complete = () => {
+    public complete () {
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.setStatus(TaskStatus.Completed);
             this.notifyOrder({characterIdTag: this.character.getIdTag()});
         }
-    };
+    }
 
     public interact() {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
@@ -119,11 +123,11 @@ export class InteractWithItemTask extends BaseTask implements Task {
         if(mapItem) {
             //TODO:: select proper item from character inventory
 
-            if(this.intervalStep > 0) {
-                this.IntervalProcess = setInterval(() => {
-                    this.interactionProc(this);
-                }, this.intervalStep)
-            }
+            // if(this.intervalStep > 0) {
+            //     this.IntervalProcess = setInterval(() => {
+            //         this.interactionProc(this);
+            //     }, this.intervalStep)
+            // }
 
         } else{
             this.setStatus(TaskStatus.Error);

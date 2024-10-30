@@ -6,7 +6,7 @@ import { Character } from "../characters/types";
 import { MoveTask } from "../actions/MoveTask";
 import { TillageTask } from "../actions/TillageTask";
 import { LockTillageTask } from "../actions/LockTillageTask";
-import { InteractWithItemTask } from "../actions/InteractWithItemTask";
+import { BaseInteractWithItemTask } from "./BaseInteractWithItemTask";
 import { BaseOrder } from "../actions/BaseOrder";
 
 import { Hoe } from "../items/Hoe";
@@ -64,7 +64,7 @@ export class OrderFactory {
         )
 
         const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
-        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
+        const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         const order = new BaseOrder();
 
         order.addTask(moveTask);
@@ -84,7 +84,7 @@ export class OrderFactory {
         )
 
         const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
-        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, waterCan, posX, posY);
+        const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, waterCan, posX, posY);
         const order = 
             new BaseOrder()
             .setIsRecurring(true)
@@ -109,24 +109,23 @@ export class OrderFactory {
         )
 
         const moveTask = new MoveTask(gridEngine, character, posX - 1, posY);
-        const interactWithItemTask = new InteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
-        interactWithItemTask.setIntervalStep(1000);
+        const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
 
-        interactWithItemTask.setInteractionProc((task: InteractWithItemTask) => {
-            task.setIntervalTick(task.getIntervalTick() + 1);
-            if(task.getIntervalTick() * 1000 === pickAxe.getBreakSpeed()) {
+        // interactWithItemTask.setInteractionProc((task: InteractWithItemTask) => {
+        //     task.setIntervalTick(task.getIntervalTick() + 1);
+        //     if(task.getIntervalTick() * 1000 === pickAxe.getBreakSpeed()) {
 
-                const mapItem = task.getMapItem();
-                if(mapItem.getInteractive) {
-                    mapItem.getInteractive().setIntercativeObject(task.getItem());
-                    if(mapItem.getInteractive().canInteractWithItem()) {
-                        mapItem.getInteractive().interactWithItem();
-                    }
-                }
-            }
+        //         const mapItem = task.getMapItem();
+        //         if(mapItem.getInteractive) {
+        //             mapItem.getInteractive().setIntercativeObject(task.getItem());
+        //             if(mapItem.getInteractive().canInteractWithItem()) {
+        //                 mapItem.getInteractive().interactWithItem();
+        //             }
+        //         }
+        //     }
           
-            //console.log(task.getIntervalTick());
-        });
+        //     //console.log(task.getIntervalTick());
+        // });
         const order = new BaseOrder();
 
         order.addTask(moveTask);
