@@ -123,3 +123,213 @@ function matchRecipies(
     return [recipes]
 }
 
+----
+NPC search item(s) pattern
+
+class ScanningNPC extends Phaser.GameObjects.Sprite {
+  constructor(scene, x, y) {
+    super(scene, x, y, 'npc');
+    
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
+
+    this.body.setCollideWorldBounds(true);
+    this.body.setBounce(0.2);
+    this.body.setGravityY(300);
+
+    this.createScanningArea();
+    this.setupPathfinding();
+    this.setupItemDetection();
+  }
+
+  createScanningArea() {
+    // Define the scanning area dimensions
+    this.scanningRadius = 200;
+    this.scanningArea = new Phaser.Geom.Circle(this.x, this.y, this.scanningRadius);
+  }
+
+  setupPathfinding() {
+    // Implement pathfinding logic here
+    // Use BFS or A* algorithm to find paths around obstacles
+  }
+
+  setupItemDetection() {
+    // Set up spatial partitioning or quad tree
+    this.spatialIndex = new QuadTree(new Phaser.Geom.Rectangle(0, 0, 800, 600));
+    
+    // Populate spatial index with items
+    this.scene.children.each(child => {
+      if (child instanceof Item) {
+        this.spatialIndex.insert(child);
+      }
+    });
+  }
+
+  update() {
+    // Pathfinding logic here
+    const target = this.findClosestItem();
+    if (target) {
+      this.moveTo(target.x, target.y);
+    } else {
+      // Wander around randomly if no items found
+      this.wanderAround();
+    }
+    
+    // Check for collisions with items
+    this.checkCollisions();
+  }
+
+  findClosestItem() {
+    let closestDistance = Infinity;
+    let closestItem;
+
+    this.spatialIndex.query(this.scanningArea, (item) => {
+      const distance = Phaser.Math.Distance.BetweenPoints(this, item);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestItem = item;
+      }
+    });
+
+    return closestItem;
+  }
+
+  moveTo(x, y) {
+    // Implement movement towards target position
+  }
+
+  wanderAround() {
+    // Implement random wandering behavior
+  }
+
+  checkCollisions() {
+    // Check for collisions with items in scanning area
+    // Handle collision detection and item collection
+  }
+}
+
+class Item extends Phaser.GameObjects.Sprite {
+  constructor(scene, x, y) {
+    super(scene, x, y, 'item');
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
+
+    this.body.setImmovable(true);
+  }
+}
+
+
+
+
+***** 
+Pattern 1: Spiral Search
+The NPC follows a spiral pattern, gradually increasing its radius while searching.
+wanderAround() {
+  const angleStep = Math.PI / 180; // Adjust speed of rotation
+  const radiusStep = 5; // Increase radius each iteration
+  
+  this.angle += angleStep;
+  
+  // Calculate new position
+  const newX = this.x + Math.cos(this.angle) * this.radius;
+  const newY = this.y + Math.sin(this.angle) * this.radius;
+  
+  // Update radius
+  this.radius += radiusStep;
+  
+  // Move towards new position
+  this.setVelocityX((newX - this.x) * 100); // Adjust speed as needed
+  this.setVelocityY((newY - this.y) * 100);
+}
+
+***** 
+Pattern 2: Zigzag Search
+The NPC alternates directions in a zigzag pattern.
+
+wanderAround() {
+  const angleStep = Math.PI / 180;
+  const zigzagStep = Math.PI / 90; // Adjust frequency
+  
+  this.angle += angleStep + (zigzagStep * (Math.floor(this.frame % 2)));
+  
+  // Calculate new position
+  const newX = this.x + Math.cos(this.angle) * this.radius;
+  const newY = this.y + Math.sin(this.angle) * this.radius;
+  
+  // Move towards new position
+  this.setVelocityX((newX - this.x) * 100);
+  this.setVelocityY((newY - this.y) * 100);
+}
+***** 
+Pattern 3: Randomized Grid Search
+The NPC moves in a grid pattern with random turns.
+
+wanderAround() {
+  const gridSize = 50; // Size of each cell in the grid
+  let direction = Phaser.Math.RND.pick(['up', 'down', 'left', 'right']);
+  
+  switch(direction) {
+    case 'up':
+      this.y -= gridSize;
+      break;
+    case 'down':
+      this.y += gridSize;
+      break;
+    case 'left':
+      this.x -= gridSize;
+      break;
+    case 'right':
+      this.x += gridSize;
+      break;
+  }
+  
+  // Randomize turn frequency
+  if (Phaser.Math.RND.between(1, 10) === 1) {
+    direction = Phaser.Math.RND.pick(['up', 'down', 'left', 'right']);
+  }
+}
+
+***** 
+Pattern 4: Wave-like Search
+The NPC follows a wave pattern, oscillating between two points.
+
+wanderAround() {
+  const waveAmplitude = 50;
+  const waveFrequency = 0.01;
+  const wavePhase = this.frame * waveFrequency;
+  
+  // Calculate wave values
+  const waveX = waveAmplitude * Math.sin(wavePhase);
+  const waveY = waveAmplitude * Math.cos(wavePhase);
+  
+  // Move towards the center of the wave
+  const centerX = this.x + waveX;
+  const centerY = this.y + waveY;
+  
+  // Move towards the center
+  this.setVelocityX((centerX - this.x) * 50);
+  this.setVelocityY((centerY - this.y) * 50);
+}
+
+***** 
+Pattern 5: Randomized Sector Search
+The NPC divides the area into sectors and randomly selects one to explore.
+
+wanderAround() {
+  const sectorSize = 90; // Size of each sector in degrees
+  
+  // Determine current sector
+  const currentSector = Math.floor(this.angle / sectorSize);
+  
+  // Generate random sector
+  const targetSector = Phaser.Math.RND.between(0, 360 / sectorSize);
+  
+  // Move towards the edge of the current sector
+  const angleToEdge = (currentSector % sectorSize) * Math.PI / 180;
+  const newX = this.x + Math.cos(angleToEdge) * this.radius;
+  const newY = this.y + Math.sin(angleToEdge) * this.radius;
+  
+  // Move towards new position
+  this.setVelocityX((newX - this.x) * 100);
+  this.setVelocityY((newY - this.y) * 100);
+}
