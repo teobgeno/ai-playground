@@ -2,7 +2,7 @@ import { BaseInteractWithItemTask } from "./BaseInteractWithItemTask";
 
 import { GridEngine } from "grid-engine";
 
-import { MapObject, MapObjectInteractable } from "../core/types.ts";
+import { MapObject } from "../core/types.ts";
 import { TaskStatus } from "./types";
 import { Character } from "../characters/types";
 import { PickAxe } from "../items/PickAxe";
