@@ -2,7 +2,7 @@ import { BaseInteractWithItemTask } from "./BaseInteractWithItemTask";
 
 import { GridEngine } from "grid-engine";
 
-import { MapObject } from "../core/types.ts";
+import { MapObject, MapObjectInteractable } from "../core/types.ts";
 import { TaskStatus } from "./types";
 import { Character } from "../characters/types";
 import { PickAxe } from "../items/PickAxe";
@@ -49,14 +49,18 @@ export class BreakStoneTask extends BaseInteractWithItemTask{
                 this.breakStonedProc(mapItem);
             }, super.getIntervalStep())
         } else {
+            this.setStatus(TaskStatus.Error);
+            this.notifyOrder({characterIdTag: this.character.getIdTag()});
             console.warn('cannot find mapitem');
         }
     }
 
-    private breakStonedProc = (mapItem:  MapObject) => {
+    private breakStonedProc = (mapItem: MapObject) => {
         super.setIntervalTick(super.getIntervalTick() + 1);
         if(super.getIntervalTick() * 1000 === (super.getItem() as PickAxe).getBreakSpeed()) {
-            mapItem.getInteractive().interactWithItem();
+            if(mapItem.getInteractive) {
+                mapItem.getInteractive().interactWithItem();
+            }
         }
     }
 
