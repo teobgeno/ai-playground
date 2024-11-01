@@ -10,7 +10,8 @@ import { CharacterState, Character } from "../characters/types.ts";
 
 export class SeekFindTask extends BaseTask implements Task {
     private itemToFind: ObjectId;
-    private areaToScan: Array<Array<number>> = [[5, 1], [5, 2], [5, 3]];
+    private areaToScan: Array<Array<number>>;
+    private viewDirections: Array<Array<number>>;
     private posX: number;
     private posY: number;
     private intervalStep: number = 0;
@@ -31,6 +32,14 @@ export class SeekFindTask extends BaseTask implements Task {
         this.posY = posY;
         
         this.status = TaskStatus.Initialized;
+
+        this.areaToScan = [
+             [2, 5], [2, 6], [3, 5], [3, 6], [4, 5], [4, 6]
+        ]
+        this.viewDirections = [
+            [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
+            [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
+        ];
     }
 
  

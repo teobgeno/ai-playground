@@ -333,3 +333,53 @@ wanderAround() {
   this.setVelocityX((newX - this.x) * 100);
   this.setVelocityY((newY - this.y) * 100);
 }
+
+
+
+
+function exploreArea(area, startX, startY, visionRadius) {
+    const directions = [
+        [0, 1], [1, 0], [0, -1], [-1, 0], // right, down, left, up
+        [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
+    ];
+    const visited = new Set();
+    const queue = [[startX, startY, []]]; // [x, y, path]
+    const path = [];
+    
+    // Helper to check if cell is within bounds and not visited
+    const isInBoundsAndUnvisited = (x, y) => {
+        return area.some(coord => coord[0] === x && coord[1] === y) && !visited.has(`${x},${y}`);
+    };
+    
+    while (queue.length > 0) {
+        const [x, y, currentPath] = queue.shift();
+        
+        // Mark as visited and add to path
+        visited.add(`${x},${y}`);
+        path.push([x, y]);
+        
+        // Explore neighbors within vision radius
+        directions.forEach(([dx, dy]) => {
+            for (let r = 1; r <= visionRadius; r++) {
+                const nx = x + dx * r;
+                const ny = y + dy * r;
+                if (isInBoundsAndUnvisited(nx, ny)) {
+                    visited.add(`${nx},${ny}`);
+                    queue.push([nx, ny, currentPath.concat([[nx, ny]])]);
+                }
+            }
+        });
+    }
+
+    return path;
+}
+
+// Example usage
+const area = [
+    [2, 5], [2, 6], [3, 5], [3, 6], // example rectangle coordinates
+    [4, 5], [4, 6]
+];
+const startX = 2, startY = 5, visionRadius = 1;
+
+const path = exploreArea(area, startX, startY, visionRadius);
+console.log("Optimal path to cover area:", path);
