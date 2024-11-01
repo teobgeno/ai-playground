@@ -10,8 +10,10 @@ import { CharacterState, Character } from "../characters/types.ts";
 
 export class SeekFindTask extends BaseTask implements Task {
     private itemToFind: ObjectId;
-    private areaToScan: Array<Array<number>>;
     private viewDirections: Array<Array<number>>;
+    private areaToScan: Array<Array<number>>;
+    private coordsVisited = new Set();
+   
     private posX: number;
     private posY: number;
     private intervalStep: number = 0;
@@ -42,7 +44,24 @@ export class SeekFindTask extends BaseTask implements Task {
         ];
     }
 
- 
+    private scanArea(curPosX: number, curPosY: number) {
+        this.viewDirections.forEach(([dx, dy]) => {
+            for (let r = 1; r <= this.character.getVisionRange(); r++) {
+                const nx = curPosX + dx * r;
+                const ny = curPosY + dy * r;
+                if (this.isInBoundsAndUnvisited(nx, ny)) {
+                    this.coordsVisited.add(`${nx},${ny}`);
+                    //TODO::check if itemToFind exist
+                    //queue.push([nx, ny, currentPath.concat([[nx, ny]])]);
+                }
+            }
+        });
+    }
+
+    private isInBoundsAndUnvisited (x: number, y: number) {
+        return this.areaToScan.some(coord => coord[0] === x && coord[1] === y) && !this.coordsVisited.has(`${x},${y}`);
+    }
+    
     public setCoord (coord, value) {
         //obj["c" + coord[0] + coord[1]] = { coord: coord, value: value};
     }
