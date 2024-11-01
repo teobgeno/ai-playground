@@ -1,7 +1,7 @@
 import { ServiceLocator } from "../core/serviceLocator";
 import { GameMediator } from "../GameMediator";
 import { GridEngine } from "grid-engine";
-import { TaskStatus } from "./types";
+import { TaskStatus, Task } from "./types";
 import { CharacterState, Character } from "../characters/types";
 
 
@@ -15,6 +15,8 @@ export abstract class BaseTask {
     protected IntervalProcess: ReturnType<typeof setInterval>;
     protected IntervalTicks: number = 0;
     protected staminaCost: number = 0;
+    protected childtasks: Array<Task> = [];
+    protected runOnce: boolean = false;
 
     constructor(gridEngine: GridEngine, character: Character) {
         this.character = character;
@@ -29,6 +31,23 @@ export abstract class BaseTask {
     public setStatus(status: TaskStatus) {
         this.status = status;
     }
+
+    public getRunOnce() {
+        return this.runOnce;
+    }
+
+    public setRunOnce(runOnce: boolean) {
+        this.runOnce = runOnce;
+    }
+
+    public addChildTask(task: Task) {
+        this.childtasks.push(task);
+    }
+
+    public getChildTasks() {
+        return this.childtasks;
+    }
+
 
     public getCharacterIdTag() {
         return this.character.getIdTag();

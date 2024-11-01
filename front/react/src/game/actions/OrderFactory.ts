@@ -100,6 +100,24 @@ export class OrderFactory {
 
     public static createBreakRockOrder(gridEngine: GridEngine, character: Character, scene: Phaser.Scene, posX: number, posY: number) {
         
+       
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX - 1, posY);
+        const breakStoneTask = OrderFactory.createBreakRockTask(gridEngine, character, posX, posY);
+        const order = new BaseOrder();
+
+        order.addTask(moveTask);
+        order.addTask(breakStoneTask);
+ 
+        character.addOrder(order);
+    }
+
+
+    public static createMoveTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
+        
+        return new MoveTask(gridEngine, character, posX - 1, posY);
+    }
+
+    public static createBreakRockTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
         const pickAxe = new PickAxe(
             new InventoryItem()
             .setIcon('https://assets.codepen.io/7237686/iridium_pickaxe.svg?format=auto')
@@ -108,15 +126,7 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX - 1, posY);
-        const breakStoneTask = new BreakStoneTask(gridEngine, character, pickAxe, posX, posY);
-        const order = new BaseOrder();
-
-        order.addTask(moveTask);
-        order.addTask(breakStoneTask);
- 
-        character.addOrder(order);
+        return new BreakStoneTask(gridEngine, character, pickAxe, posX, posY);
     }
-    
 
 }

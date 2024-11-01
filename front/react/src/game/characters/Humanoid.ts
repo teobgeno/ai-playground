@@ -11,14 +11,15 @@ export class Humanoid extends Physics.Arcade.Sprite {
     protected orders: Array<Order> = [];
     public currentOrder: Order | undefined;
     protected orderPointer: number = 0;
-    protected tasks: Array<Task> = [];
-    public currentTask: Task | undefined;
+    // protected tasks: Array<Task> = [];
+    // public currentTask: Task | undefined;
     protected stateMachine: StateMachine;
     protected characterInventory: CharacterInventory;
     protected convId: number;
     protected stamina:number = 100;
     public isNpc: boolean;
     protected levelOfDetail: number = 1;
+    protected visionRange: number = 1;
 
     constructor(scene: Phaser.Scene, texture: string, id: number, idTag: string, charName: string) {
         super(scene, 0, 0, texture);
@@ -80,6 +81,10 @@ export class Humanoid extends Physics.Arcade.Sprite {
         this.stateMachine.setState(state);
     }
 
+    public getVisionRange() {
+        return this.visionRange;
+    }
+
     public getLevelOfDetail() {
         return this.levelOfDetail;
     }
@@ -97,9 +102,9 @@ export class Humanoid extends Physics.Arcade.Sprite {
         return this.orders;
     }
 
-    public addTask(task: Task) {
-        this.tasks.push(task);
-    }
+    // public addTask(task: Task) {
+    //     this.tasks.push(task);
+    // }
 
     // Initialized = 1,
     // Running = 2,
