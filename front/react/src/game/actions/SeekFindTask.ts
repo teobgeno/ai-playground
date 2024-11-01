@@ -3,13 +3,14 @@ import { GridEngine } from "grid-engine";
 import { ServiceLocator } from "../core/serviceLocator.ts";
 import { MapManager } from "../MapManager.ts";
 
-import { MapObject } from "../core/types.ts";
+import { MapObject, ObjectId } from "../core/types.ts";
 import { TaskStatus, Task } from "./types.ts";
 import { Storable } from "../items/types.ts";
 import { CharacterState, Character } from "../characters/types.ts";
 
 export class SeekFindTask extends BaseTask implements Task {
-    private item: Storable;
+    private itemToFind: ObjectId;
+    private areaToScan: Array<Array<number>> = [[5, 1], [5, 2], [5, 3]];
     private posX: number;
     private posY: number;
     private intervalStep: number = 0;
@@ -20,12 +21,12 @@ export class SeekFindTask extends BaseTask implements Task {
     constructor(
         gridEngine: GridEngine,
         character: Character,
-        item: Storable,
+        itemToFind: ObjectId,
         posX: number,
         posY: number
     ) {
         super(gridEngine, character);
-        this.item = item;
+        this.itemToFind = itemToFind;
         this.posX = posX;
         this.posY = posY;
         
@@ -33,6 +34,13 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
  
+    public setCoord (coord, value) {
+        //obj["c" + coord[0] + coord[1]] = { coord: coord, value: value};
+    }
+    
+    public getCoord (coord) {
+        //return obj["c" + coord[0] + coord[1]];
+    }
 
     public start() {
 
