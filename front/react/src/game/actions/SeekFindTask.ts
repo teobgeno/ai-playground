@@ -12,6 +12,9 @@ export class SeekFindTask extends BaseTask implements Task {
     private itemToFind: ObjectId;
     private viewDirections: Array<Array<number>>;
     private areaToScan: Array<Array<number>>;
+    private processQueue: Array<Array<number | Array<number>>>;
+    private optimalPath: Array<Array<number>>;
+
     private coordsVisited = new Set();
    
     private posX: number;
@@ -42,20 +45,27 @@ export class SeekFindTask extends BaseTask implements Task {
             [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
             [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
         ];
+        
+        this.processQueue = [[this.areaToScan[0][0], this.areaToScan[0][1], []]];
     }
 
     private scanArea(curPosX: number, curPosY: number) {
-        this.viewDirections.forEach(([dx, dy]) => {
-            for (let r = 1; r <= this.character.getVisionRange(); r++) {
-                const nx = curPosX + dx * r;
-                const ny = curPosY + dy * r;
-                if (this.isInBoundsAndUnvisited(nx, ny)) {
-                    this.coordsVisited.add(`${nx},${ny}`);
-                    //TODO::check if itemToFind exist
-                    //queue.push([nx, ny, currentPath.concat([[nx, ny]])]);
+        
+        if(this.processQueue.length > 0) {
+            const [x, y, currentPath] = this.processQueue.shift();
+       
+            this.viewDirections.forEach(([dx, dy]) => {
+                for (let r = 1; r <= this.character.getVisionRange(); r++) {
+                    const nx = curPosX + dx * r;
+                    const ny = curPosY + dy * r;
+                    if (this.isInBoundsAndUnvisited(nx, ny)) {
+                        this.coordsVisited.add(`${nx},${ny}`);
+                        //TODO::check if itemToFind exist
+                        this.processQueue.push([nx, ny, currentPath.concat([[nx, ny]])]);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private isInBoundsAndUnvisited (x: number, y: number) {
