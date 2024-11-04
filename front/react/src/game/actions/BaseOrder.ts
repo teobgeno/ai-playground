@@ -10,11 +10,14 @@ export class BaseOrder implements Order{
     private tasks: Array<Task> = [];
     private currentTask: Task | null;
     private isRecurring: boolean;
-    private interval: number;
-    private startTime: string;
-    private endTime: string;
+    private interval: number;                                   // + game minutes to finish time for the next run. 
+    private maxIterations: number = 0;                          // how many times the order will repeat. > 0 = n times. 0 = forever
+    private repeatOnCancel: boolean = false;                    // when a recurring order is canceled the order is set to completed and destroyed. When true the order s set to WaitingNextReccur.
+    private startTime: string;                                  // game time to start order. 
+    private endTime: string;                                    // game time to finish order. 
     private lastEndDate: Date;
     private recurringTimer: ReturnType<typeof setInterval>;
+    private curIterations: number = 0;
     private taskPointer: number = 0;
     private status: OrderStatus;
 
@@ -97,7 +100,9 @@ export class BaseOrder implements Order{
         if (!this.isRunnable()) return;
     
         // If current task is completed, move to the next one
-        if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Completed) {
+        if (this.currentTask && 
+            ( this.currentTask.getStatus() === TaskStatus.Completed || this.currentTask.getStatus() === TaskStatus.WaitingNextIteration)
+        ) {
             this.taskPointer++;
         }
     
@@ -108,7 +113,7 @@ export class BaseOrder implements Order{
         } 
     
         // Check for completion or recurring logic
-        else if (this.isInTimeRange() && this.taskPointer === this.tasks.length) {
+        if (this.isInTimeRange() && this.taskPointer === this.tasks.length) {
             this.handleOrderCompletionOrRecurrence();
         }
     
@@ -158,6 +163,18 @@ export class BaseOrder implements Order{
         this.currentTask = null;
     }
 
+    private isCompletedIteration() {
+        let completedIteration = true;
+        for (const task of this.tasks) {
+            if(task.getStatus() !== TaskStatus.Completed) {
+                completedIteration = false; 
+                break;
+            }
+        }
+
+       return completedIteration;
+    }
+
     // Manage task execution and status checking
     private runTasks() {
         if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed) {
@@ -178,20 +195,27 @@ export class BaseOrder implements Order{
         const timeManager = ServiceLocator.getInstance<TimeManager>('timeManager')!;
         
         if (this.isRecurring) {
-            
             const currentTime = timeManager.getCurrentDate();
-    
+            this.curIterations = this.isCompletedIteration() ? this.curIterations + 1: this.curIterations;
+
             if (!this.lastEndDate || this.lastEndDate < currentTime) {
                 this.lastEndDate = currentTime;
             }
-    
-            if (currentTime > this.checkNextInterval()) {
-                this.taskPointer = 0;
-                this.setStatus(OrderStatus.Running);
-                this.runTasks();
+            
+            if(this.maxIterations === 0  || this.curIterations <= this.maxIterations) {
+                if (currentTime > this.checkNextInterval()) {
+                    this.taskPointer = 0;
+                    this.setStatus(OrderStatus.Running);
+                    this.runTasks();
+                } else {
+                    this.startWaiting();
+                }
             } else {
-                this.startWaiting();
+                this.setStatus(OrderStatus.Completed);
+                gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
             }
+            
+
         } else {
             this.setStatus(OrderStatus.Completed);
             gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});

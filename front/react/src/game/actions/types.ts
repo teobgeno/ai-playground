@@ -19,7 +19,8 @@ export enum TaskStatus {
     Completed = 3,
     Rollback = 4,
     Canceled = 5,
-    Error = 6
+    Error = 6,
+    WaitingNextIteration = 7
 }
 export interface Task
 {
