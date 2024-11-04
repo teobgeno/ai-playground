@@ -42,6 +42,7 @@ export class MoveTask extends BaseTask implements Task{
             }
         }
 
+        //check movement to min, max distance. Around tile
         if(tileToMove.length === 0) {
             for (let r = this.distanceFromTarget[0]; r <= this.distanceFromTarget[1]; r++) {
 
@@ -95,7 +96,8 @@ export class MoveTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    if(this.canMoveCharacter(this.posX, this.posY)) {
+                    [this.posX, this.posY] = this.calculateTargetPosition();
+                    if(this.posX && this.posY) {
                         this.pointer = 2;
                         this.next();
                     } else {
