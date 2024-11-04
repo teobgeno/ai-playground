@@ -12,6 +12,7 @@ export class MoveTask extends BaseTask implements Task{
     private posX: number;
     private posY: number;
     private pathTickCount: number = 0;
+    private distanceFromTarget: Array<number> = [1, 1]; // min, max
 
     constructor(
         gridEngine: GridEngine,
@@ -24,6 +25,52 @@ export class MoveTask extends BaseTask implements Task{
         this.posY = posY;
         
         this.status = TaskStatus.Initialized;
+    }
+
+    private calculateTargetPosition() {
+
+        const directions = [
+            [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
+            [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
+        ];
+        let tileToMove: Array<number> = [];
+
+         //check movement to min = 0 distance. On tile
+        if(this.distanceFromTarget[0] === 0 && this.distanceFromTarget[1] === 0) {
+            if(this.canMoveCharacter(this.posX, this.posY)) {
+                tileToMove = [this.posX, this.posY];
+            }
+        }
+
+        if(tileToMove.length === 0) {
+            for (let r = this.distanceFromTarget[0]; r <= this.distanceFromTarget[1]; r++) {
+
+                for (let i = 0; i <= directions.length; i++) {
+                    const nx = this.posX + directions[i][0] * r;
+                    const ny = this.posY + directions[i][1] * r;
+        
+                    if(this.canMoveCharacter(nx, ny)) {
+                        tileToMove = [nx, ny];
+                    }
+                }
+            }
+        }
+        
+        // //check movement to min > 0 distance. Around tile
+        // if( this.distanceFromTarget[0] > 0) {
+        //     for (let i = 0; i <= directions.length; i++) {
+        //         const nx = this.posX + directions[i][0] * this.distanceFromTarget[0];
+        //         const ny = this.posY + directions[i][1] * this.distanceFromTarget[0];
+    
+        //         if(this.canMoveCharacter(nx, ny)) {
+        //             tileToMove = [nx, ny];
+        //         }
+        //     }
+        // }
+
+        //check movement to min max distance. Around tile
+       
+        return tileToMove;
     }
 
     public start() {
@@ -48,7 +95,7 @@ export class MoveTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    if(this.canMoveCharacter()) {
+                    if(this.canMoveCharacter(this.posX, this.posY)) {
                         this.pointer = 2;
                         this.next();
                     } else {
@@ -84,16 +131,16 @@ export class MoveTask extends BaseTask implements Task{
         return { x: this.posX, y: this.posY };
     }
 
-    private canMoveCharacter() {
+    private canMoveCharacter(targX: number, targY: number) {
         const characterPos = this.gridEngine.getPosition(
             this.character.getIdTag()
         );
 
-        if (characterPos.x === this.posX && characterPos.y === this.posY) {
+        if (characterPos.x === targX && characterPos.y === targY) {
             return true;
         }
 
-        if(this.gridEngine.isBlocked({ x: this.posX, y: this.posY },"CharLayer")) {
+        if(this.gridEngine.isBlocked({ x: targX, y: targY },"CharLayer")) {
             return false;
         }
 
