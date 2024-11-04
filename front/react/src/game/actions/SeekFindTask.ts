@@ -13,6 +13,7 @@ export class SeekFindTask extends BaseTask implements Task {
     private viewDirections: Array<Array<number>>;
     private areaToScan: Array<Array<number>>;
     private processQueue: Array<Array<number | Array<number>>>;
+    private itemsFoundCoords: Array<Array<number>> = [];
     private optimalPath: Array<Array<number>>;
 
     private coordsVisited = new Set();
@@ -50,7 +51,8 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     private scanArea(curPosX: number, curPosY: number) {
-        
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+       
         if(this.processQueue.length > 0) {
             const [x, y, currentPath] = this.processQueue.shift();
        
@@ -61,6 +63,10 @@ export class SeekFindTask extends BaseTask implements Task {
                     if (this.isInBoundsAndUnvisited(nx, ny)) {
                         this.coordsVisited.add(`${nx},${ny}`);
                         //TODO::check if itemToFind exist
+                        const mapItem = mapManager.getPlotLandCoord(nx, ny);
+                        if(mapItem && mapItem.objectId === this.itemToFind) {
+                            this.itemsFoundCoords.push([nx, ny]);
+                        }
                         this.processQueue.push([nx, ny, currentPath.concat([[nx, ny]])]);
                     }
                 }
