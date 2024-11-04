@@ -177,7 +177,7 @@ export class BaseOrder implements Order{
 
     // Manage task execution and status checking
     private runTasks() {
-        if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed) {
+        if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed || this.currentTask.getStatus() === TaskStatus.WaitingNextIteration) {
             this.currentTask = this.tasks[this.taskPointer];
             this.currentTask.start();
     
@@ -201,7 +201,7 @@ export class BaseOrder implements Order{
             if (!this.lastEndDate || this.lastEndDate < currentTime) {
                 this.lastEndDate = currentTime;
             }
-            
+
             if(this.maxIterations === 0  || this.curIterations <= this.maxIterations) {
                 if (currentTime > this.checkNextInterval()) {
                     this.taskPointer = 0;
