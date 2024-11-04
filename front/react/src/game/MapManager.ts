@@ -4,7 +4,7 @@ import { MapObject } from "./core/types";
 export class MapManager {
     private map: Tilemaps.Tilemap;
     private mapObjects: Array<MapObject> = [];
-    private plotLandCoords: Map<string, MapObject | null> = new Map();
+    private plotLandCoords: Map<string, MapObject | null> = new Map(); // current tiles for player farm operations
     // private plotLandCoords: Map<string, LandProperties> = new Map();
     // private plotLandEntities: Array<FarmLand> = [];
     constructor(map: Tilemaps.Tilemap) {

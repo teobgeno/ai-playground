@@ -62,7 +62,6 @@ export class SeekFindTask extends BaseTask implements Task {
                     const ny = curPosY + dy * r;
                     if (this.isInBoundsAndUnvisited(nx, ny)) {
                         this.coordsVisited.add(`${nx},${ny}`);
-                        //TODO::check if itemToFind exist
                         const mapItem = mapManager.getPlotLandCoord(nx, ny);
                         if(mapItem && mapItem.objectId === this.itemToFind) {
                             this.itemsFoundCoords.push([nx, ny]);
