@@ -446,14 +446,14 @@ export class Game extends Scene {
                         enterTile.x == (char.currentOrder.getCurrentTask() as MoveTask).getMoveDestinationPoint().x &&
                         enterTile.y == (char.currentOrder.getCurrentTask() as MoveTask).getMoveDestinationPoint().y
                     ) {
-                        char.currentOrder.getCurrentTask().next();
+                        char.currentOrder.getCurrentTask()?.next();
                     }
                 }
 
                 
             });
 
-            npc0?.init();
+            (npc0 as Npc).init();
     }
 
     private initCamera(map: Tilemaps.Tilemap): void {

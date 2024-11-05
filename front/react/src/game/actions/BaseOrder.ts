@@ -11,8 +11,8 @@ export class BaseOrder implements Order{
     private currentTask: Task | null;
     private isRecurring: boolean;
     private interval: number;                                   // + game minutes to finish time for the next run. 
-    private maxIterations: number = 0;                          // how many times the order will repeat. > 0 = n times. 0 = forever
-    private repeatOnCancel: boolean = false;                    // when a recurring order is canceled the order is set to completed and destroyed. When true the order s set to WaitingNextReccur.
+    private maxIterations: number = 0;                          // how many times the recurring order will repeat. > 0 = n times. 0 = forever
+    private repeatOnCancel: boolean = false;                    // when a recurring order is canceled the order is set to completed and destroyed. When true the order is set to WaitingNextReccur.
     private startTime: string;                                  // game time to start order. 
     private endTime: string;                                    // game time to finish order. 
     private lastEndDate: Date;
@@ -20,6 +20,15 @@ export class BaseOrder implements Order{
     private curIterations: number = 0;
     private taskPointer: number = 0;
     private status: OrderStatus;
+    private tasksSharedData = {
+        positionData: { // To be used by movement tasks
+          targetPoints:  { x: 0, y: 0 } 
+        },
+        itemData: { // To be used by item-related tasks
+          itemExists: false,
+          inventory: []
+        }
+      };
 
     constructor() {
         this.status = OrderStatus.Initialized;
@@ -46,7 +55,8 @@ export class BaseOrder implements Order{
     }
 
     public addTask(task: Task) {
-        return this.tasks.push(task);
+        task.setSharedData(this.updateSharedDataPool);
+        this.tasks.push(task);
     }
 
     public getTasks() {
@@ -64,6 +74,12 @@ export class BaseOrder implements Order{
     public getStatus() {
        return this.status;
     }
+
+    public updateSharedDataPool = <T extends object>(obj: T) => {
+        this.tasksSharedData = {...this.tasksSharedData, ...obj};
+        console.log('Modify task shared data')
+        console.log(this.tasksSharedData);
+     }
 
     private getStartDateTime() {
 

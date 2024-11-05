@@ -18,12 +18,13 @@ export class MoveTask extends BaseTask implements Task{
         gridEngine: GridEngine,
         character: Character,
         posX: number,
-        posY: number
+        posY: number,
+        distanceFromTarget: Array<number>
     ) {
         super(gridEngine, character);
         this.posX = posX;
         this.posY = posY;
-        
+        this.distanceFromTarget = distanceFromTarget;
         this.status = TaskStatus.Initialized;
     }
 
@@ -92,6 +93,7 @@ export class MoveTask extends BaseTask implements Task{
             [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
             [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
         ];
+
         let tileToMove: Array<number> = [];
 
          //check movement to min = 0 distance. On tile
@@ -105,31 +107,20 @@ export class MoveTask extends BaseTask implements Task{
         if(tileToMove.length === 0) {
             for (let r = this.distanceFromTarget[0]; r <= this.distanceFromTarget[1]; r++) {
 
-                for (let i = 0; i <= directions.length; i++) {
+                if(tileToMove.length > 0) break;
+
+                for (let i = 0; i < directions.length; i++) {
                     const nx = this.posX + directions[i][0] * r;
                     const ny = this.posY + directions[i][1] * r;
         
                     if(this.canMoveCharacter(nx, ny)) {
                         tileToMove = [nx, ny];
+                        break;
                     }
                 }
             }
         }
         
-        // //check movement to min > 0 distance. Around tile
-        // if( this.distanceFromTarget[0] > 0) {
-        //     for (let i = 0; i <= directions.length; i++) {
-        //         const nx = this.posX + directions[i][0] * this.distanceFromTarget[0];
-        //         const ny = this.posY + directions[i][1] * this.distanceFromTarget[0];
-    
-        //         if(this.canMoveCharacter(nx, ny)) {
-        //             tileToMove = [nx, ny];
-        //         }
-        //     }
-        // }
-
-        //check movement to min max distance. Around tile
-       
         return tileToMove;
     }
 
@@ -162,11 +153,11 @@ export class MoveTask extends BaseTask implements Task{
 
     private moveCharacter() {
 
-        if(this.character.getLevelOfDetail() === 1 && this.character.isNpc) {
+        if(this.character.getLevelOfDetail() === 0 && this.character.isNpc) {
             this.tickMove();
         } 
 
-        if(this.character.getLevelOfDetail() === 0 && this.character.isNpc) {
+        if(this.character.getLevelOfDetail() === 1 && this.character.isNpc) {
             this.animateMove();
         }
 

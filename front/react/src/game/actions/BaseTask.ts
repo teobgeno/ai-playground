@@ -15,8 +15,9 @@ export abstract class BaseTask {
     protected IntervalProcess: ReturnType<typeof setInterval>;
     protected IntervalTicks: number = 0;
     protected staminaCost: number = 0;
-    protected childtasks: Array<Task> = [];
-    protected runOnce: boolean = false;
+    // protected childtasks: Array<Task> = []; //in case task need to generate tasks and return them to order for execution
+    // protected runOnce: boolean = false; // flag task for delete from the order after execution. Better add maxIterations like order.
+    protected updateSharedDataPool: <T extends object>(obj: T) => void;
 
     constructor(gridEngine: GridEngine, character: Character) {
         this.character = character;
@@ -32,25 +33,20 @@ export abstract class BaseTask {
         this.status = status;
     }
 
-    public getRunOnce() {
-        return this.runOnce;
-    }
+    // public getRunOnce() {
+    //     return this.runOnce;
+    // }
 
-    public setRunOnce(runOnce: boolean) {
-        this.runOnce = runOnce;
-    }
-
-    public addChildTask(task: Task) {
-        this.childtasks.push(task);
-    }
-
-    public getChildTasks() {
-        return this.childtasks;
-    }
-
+    // public setRunOnce(runOnce: boolean) {
+    //     this.runOnce = runOnce;
+    // }
 
     public getCharacterIdTag() {
         return this.character.getIdTag();
+    }
+
+    public setSharedData(func:<T extends object>(obj: T) => void) {
+        this.updateSharedDataPool = func;
     }
 
     protected notifyOrder<T extends object>(data: T) {

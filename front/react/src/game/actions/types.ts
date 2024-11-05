@@ -31,6 +31,7 @@ export interface Task
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
     getCharacterIdTag: () => string;
+    setSharedData: (func:<T extends object>(obj: T) => void)=> void;
 }
 
 

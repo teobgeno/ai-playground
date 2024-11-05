@@ -114,7 +114,7 @@ export class OrderFactory {
 
     public static createMoveTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
         
-        return new MoveTask(gridEngine, character, posX - 1, posY);
+        return new MoveTask(gridEngine, character, posX, posY, [1, 1]);
     }
 
     public static createBreakRockTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {

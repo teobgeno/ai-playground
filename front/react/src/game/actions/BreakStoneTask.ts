@@ -44,6 +44,7 @@ export class BreakStoneTask extends BaseInteractWithItemTask{
 
     private breakStone() {
         const mapItem = super.getAvailableMapItem()!;
+        //TODO:: chek if character is near the item
         if(mapItem) {
             this.IntervalProcess = setInterval(() => {
                 this.breakStonedProc(mapItem);

@@ -103,7 +103,27 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     public next() {
+        this.updateSharedDataPool({
+            positionData: {
+                targetMove:  { x: this.posX, y: this.posY },
+                targetMoveDistance: [1, 1]
+            },
+        });
+        if (this.status === TaskStatus.Running) {
+            switch (this.pointer) {
+                case 1:
+                    this.scanArea();
+                    this.pointer = 2;
+                    this.next();
+                    break;
+                case 2:
+                    
+                    break;
+                case 3:
 
+                    break;
+            }
+        }
     }
 
     public complete () {
