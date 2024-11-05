@@ -57,7 +57,6 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     private scanArea(curPosX: number, curPosY: number) {
-        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
        
         if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
 
@@ -78,6 +77,25 @@ export class SeekFindTask extends BaseTask implements Task {
                     this.processQueue.push([nx, ny]);
                 }
             });
+
+
+
+            // const [x, y, currentPath] = this.processQueue.shift();
+       
+            // this.viewDirections.forEach(([dx, dy]) => {
+            //     for (let r = 1; r <= this.character.getVisionRange(); r++) {
+            //         const nx = curPosX + dx * r;
+            //         const ny = curPosY + dy * r;
+            //         if (this.isInBoundsAndUnvisited(nx, ny)) {
+            //             this.coordsVisited.add(`${nx},${ny}`);
+            //             const mapItem = mapManager.getPlotLandCoord(nx, ny);
+            //             if(mapItem && mapItem.objectId === this.itemToFind) {
+            //                 this.itemsFoundCoords.push([nx, ny]);
+            //             }
+            //             this.processQueue.push([nx, ny, currentPath.concat([[nx, ny]])]);
+            //         }
+            //     }
+            // });
         }
     }
 
@@ -86,11 +104,18 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     private markSeen(x: number, y: number) {
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         this.viewDirections.forEach(([dx, dy]) => {
             for (let r = 0; r <= this.character.getVisionRange(); r++) {
                 const nx = x + dx * r;
                 const ny = y + dy * r;
                 const key = `${nx},${ny}`;
+                
+                const mapItem = mapManager.getPlotLandCoord(nx, ny);
+                if(mapItem && mapItem.objectId === this.itemToFind) {
+                    this.itemsFoundCoords.push([nx, ny]);
+                 }
+
                 if (this.areaSet.has(key) && !this.seen.has(key)) {
                     this.seen.add(key);
                 }
