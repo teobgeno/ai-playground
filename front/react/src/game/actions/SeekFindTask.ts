@@ -13,6 +13,11 @@ export class SeekFindTask extends BaseTask implements Task {
     private viewDirections: Array<Array<number>>;
     private areaToScan: Array<Array<number>>;
     private processQueue: Array<Array<number | Array<number>>>;
+
+    private areaSet: Set<string> = new Set();
+    private seen: Set<string> = new Set();
+    private visited: Set<string> = new Set();
+
     private itemsFoundCoords: Array<Array<number>> = [];
     private optimalPath: Array<Array<number>>;
 
@@ -38,9 +43,10 @@ export class SeekFindTask extends BaseTask implements Task {
         this.posY = posY;
         
         this.status = TaskStatus.Initialized;
-
         this.areaToScan = [
-             [2, 5], [2, 6], [3, 5], [3, 6], [4, 5], [4, 6]
+            [10, 15], [11, 15], [12, 15], [13, 15], [14, 15],
+            [10, 16], [11, 16], [12, 16], [13, 16], [14, 16],
+            [10, 17], [11, 17], [12, 17], [13, 17], [14, 17]
         ]
         this.viewDirections = [
             [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
@@ -53,21 +59,23 @@ export class SeekFindTask extends BaseTask implements Task {
     private scanArea(curPosX: number, curPosY: number) {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
        
-        if(this.processQueue.length > 0) {
-            const [x, y, currentPath] = this.processQueue.shift();
-       
+        if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
+
+            const [x, y] = this.processQueue.shift();
+            const key = `${x},${y}`;
+
+            if (!this.visited.has(key)) {
+                this.visited.add(key);
+                //path.push([x, y]);
+                this.markSeen(x, y);  // Mark all cells within vision radius as seen
+            }
+
             this.viewDirections.forEach(([dx, dy]) => {
-                for (let r = 1; r <= this.character.getVisionRange(); r++) {
-                    const nx = curPosX + dx * r;
-                    const ny = curPosY + dy * r;
-                    if (this.isInBoundsAndUnvisited(nx, ny)) {
-                        this.coordsVisited.add(`${nx},${ny}`);
-                        const mapItem = mapManager.getPlotLandCoord(nx, ny);
-                        if(mapItem && mapItem.objectId === this.itemToFind) {
-                            this.itemsFoundCoords.push([nx, ny]);
-                        }
-                        this.processQueue.push([nx, ny, currentPath.concat([[nx, ny]])]);
-                    }
+                const nx = x + dx;
+                const ny = y + dy;
+                const nkey = `${nx},${ny}`;
+                if (this.areaSet.has(nkey) && !this.visited.has(nkey)) {
+                    this.processQueue.push([nx, ny]);
                 }
             });
         }
@@ -76,6 +84,20 @@ export class SeekFindTask extends BaseTask implements Task {
     private isInBoundsAndUnvisited (x: number, y: number) {
         return this.areaToScan.some(coord => coord[0] === x && coord[1] === y) && !this.coordsVisited.has(`${x},${y}`);
     }
+
+    private markSeen(x: number, y: number) {
+        this.viewDirections.forEach(([dx, dy]) => {
+            for (let r = 0; r <= this.character.getVisionRange(); r++) {
+                const nx = x + dx * r;
+                const ny = y + dy * r;
+                const key = `${nx},${ny}`;
+                if (this.areaSet.has(key) && !this.seen.has(key)) {
+                    this.seen.add(key);
+                }
+            }
+        });
+    }
+
     
     public setCoord (coord, value) {
         //obj["c" + coord[0] + coord[1]] = { coord: coord, value: value};
