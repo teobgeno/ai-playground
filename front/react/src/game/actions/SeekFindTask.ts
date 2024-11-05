@@ -112,12 +112,12 @@ export class SeekFindTask extends BaseTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.scanArea();
+                    this.scanArea(1, 1);
                     this.pointer = 2;
                     this.next();
                     break;
                 case 2:
-                    
+                    this.complete();
                     break;
                 case 3:
 
@@ -127,10 +127,7 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     public complete () {
-        this.character.setCharState(CharacterState.IDLE);
-        if (this.status === TaskStatus.Running) {
-            this.setStatus(TaskStatus.Completed);
-            this.notifyOrder({characterIdTag: this.character.getIdTag()});
-        }
+        this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
+        this.notifyOrder({characterIdTag: this.character.getIdTag()});
     }
 }
