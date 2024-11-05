@@ -12,7 +12,7 @@ export class SeekFindTask extends BaseTask implements Task {
     private itemToFind: ObjectId;
     private viewDirections: Array<Array<number>>;
     private areaToScan: Array<Array<number>>;
-    private processQueue: Array<Array<number | Array<number>>>;
+    private processQueue: Array<Array<number>>;
 
     private areaSet: Set<string> = new Set();
     private seen: Set<string> = new Set();
@@ -53,14 +53,14 @@ export class SeekFindTask extends BaseTask implements Task {
             [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
         ];
         
-        this.processQueue = [[this.areaToScan[0][0], this.areaToScan[0][1], []]];
+        this.processQueue = [[this.areaToScan[0][0], this.areaToScan[0][1]]];
     }
 
     private scanArea(curPosX: number, curPosY: number) {
        
         if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
 
-            const [x, y] = this.processQueue.shift();
+            const [x, y] = this.processQueue.shift()!;
             const key = `${x},${y}`;
 
             if (!this.visited.has(key)) {
@@ -77,8 +77,6 @@ export class SeekFindTask extends BaseTask implements Task {
                     this.processQueue.push([nx, ny]);
                 }
             });
-
-
 
             // const [x, y, currentPath] = this.processQueue.shift();
        
@@ -99,10 +97,6 @@ export class SeekFindTask extends BaseTask implements Task {
         }
     }
 
-    private isInBoundsAndUnvisited (x: number, y: number) {
-        return this.areaToScan.some(coord => coord[0] === x && coord[1] === y) && !this.coordsVisited.has(`${x},${y}`);
-    }
-
     private markSeen(x: number, y: number) {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         this.viewDirections.forEach(([dx, dy]) => {
@@ -121,15 +115,6 @@ export class SeekFindTask extends BaseTask implements Task {
                 }
             }
         });
-    }
-
-    
-    public setCoord (coord, value) {
-        //obj["c" + coord[0] + coord[1]] = { coord: coord, value: value};
-    }
-    
-    public getCoord (coord) {
-        //return obj["c" + coord[0] + coord[1]];
     }
 
     public start() {
