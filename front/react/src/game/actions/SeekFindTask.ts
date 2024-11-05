@@ -135,16 +135,16 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     public next() {
-        this.updateSharedDataPool({
-            positionData: {
-                targetMove:  { x: this.posX, y: this.posY },
-                targetMoveDistance: [1, 1]
-            },
-        });
+       
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    this.scanArea(1, 1);
+                    if(this.itemsFoundCoords.length > 0) {
+                        console.log('ok')
+                    } else {
+                        this.scanArea(1, 1);
+                    }
+                    
                     this.pointer = 2;
                     this.next();
                     break;
@@ -159,6 +159,39 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     public complete () {
+
+        const o = {
+            positionData: {
+                targetMove:  { x: -1, y: -1 },
+                targetMoveDistance: [1, 1]
+            },
+            itemData: {
+                objectId: -1,
+                itemCoords: { x: -1, y: -1 },
+            }
+        };
+
+        if(this.itemsFoundCoords.length > 0) {
+            const [x, y] = this.itemsFoundCoords.shift()!;
+            o.positionData = {
+                targetMove: { x: x, y: y },
+                targetMoveDistance: [1, 1]
+            };
+
+            o.itemData = {
+                objectId: this.itemToFind,
+                itemCoords: { x: x, y: y },
+            }
+        } else {
+            o.positionData = {
+                targetMove: { x: this.processQueue[0][0], y: this.processQueue[0][1] },
+                targetMoveDistance: [1, 1]
+            };
+        }
+
+        this.updateSharedDataPool(o);
+
+
         this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
         this.notifyOrder({characterIdTag: this.character.getIdTag()});
     }
