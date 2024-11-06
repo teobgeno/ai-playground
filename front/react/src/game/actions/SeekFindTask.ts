@@ -59,7 +59,16 @@ export class SeekFindTask extends BaseTask implements Task {
        
         if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
 
-            const [x, y] = this.processQueue.shift()!;
+            const characterPos = this.gridEngine.getPosition(this.character.getIdTag());
+            const x = characterPos.x;
+            const y = characterPos.y;
+
+            const pairIndex = this.areaToScan.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
+            if(pairIndex) {
+                this.processQueue.splice(pairIndex, 1);
+            }
+            
+            //const [x, y] = this.processQueue.shift()!;
             const key = `${x},${y}`;
 
             if (!this.visited.has(key)) {
@@ -121,12 +130,7 @@ export class SeekFindTask extends BaseTask implements Task {
         if (this.status === TaskStatus.Running) {
             switch (this.pointer) {
                 case 1:
-                    if(this.itemsFoundCoords.length > 0) {
-                        console.log('ok')
-                    } else {
-                        this.scanArea();
-                    }
-                    
+                    this.scanArea();
                     this.pointer = 2;
                     this.next();
                     break;

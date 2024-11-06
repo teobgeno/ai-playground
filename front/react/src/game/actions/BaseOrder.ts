@@ -47,7 +47,8 @@ export class BaseOrder implements Order{
     }
 
     public addTask(task: Task) {
-        task.setSharedData(this.updateSharedDataPool);
+        task.setSharedDataPool(this.tasksSharedData);
+        task.setSharedDataPoolFunc(this.updateSharedDataPool);
         this.tasks.push(task);
     }
 

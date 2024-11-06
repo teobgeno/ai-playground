@@ -2,8 +2,9 @@ import { ServiceLocator } from "../core/serviceLocator";
 import { Utils } from "../core/Utils";
 import { GameMediator } from "../GameMediator";
 import { GridEngine } from "grid-engine";
-import { TaskStatus, Task } from "./types";
+import { TaskStatus, Task, SharedDataItem } from "./types";
 import { CharacterState, Character } from "../characters/types";
+
 
 
 export abstract class BaseTask {
@@ -19,6 +20,7 @@ export abstract class BaseTask {
     protected staminaCost: number = 0;
     // protected childtasks: Array<Task> = []; //in case task need to generate tasks and return them to order for execution
     // protected runOnce: boolean = false; // flag task for delete from the order after execution. Better add maxIterations like order.
+    protected sharedDataPool: Array<SharedDataItem>;
     protected updateSharedDataPool: <T extends object>(obj: T) => void;
 
     constructor(gridEngine: GridEngine, character: Character) {
@@ -52,8 +54,27 @@ export abstract class BaseTask {
         return this.character.getIdTag();
     }
 
-    public setSharedData(func:<T extends object>(obj: T) => void) {
+    public setSharedDataPool(sharedDataPool: Array<SharedDataItem>) {
+        this.sharedDataPool = sharedDataPool;
+    }
+
+    public setSharedDataPoolFunc(func:<T extends object>(obj: T) => void) {
         this.updateSharedDataPool = func;
+    }
+
+    public modifyPropertiesFromShared(childObj: Task) {
+        const c = [];
+        const r = [];
+        for (const item of this.sharedDataPool) {
+            if (item.forId === this.getId()) { 
+                for (const [key, value] of Object.entries(item)) {
+                    if (typeof childObj['set' + key] === 'function') {
+                        c.push( () => { childObj['set' + key.charAt(0).toUpperCase()](value)} );
+                        r.push( () => { childObj['set' + key.charAt(0).toUpperCase()](childObj['get' + key.charAt(0).toUpperCase()])} );
+                    }
+                }
+            }
+        }
     }
 
     protected notifyOrder<T extends object>(data: T) {

@@ -28,6 +28,22 @@ export class MoveTask extends BaseTask implements Task{
         this.status = TaskStatus.Initialized;
     }
 
+    public setPosX(posX: number) {
+        this.posX = posX;
+    }
+
+    public getPosX() {
+        return this.posX;
+    }
+
+    public setPosY(posY: number) {
+        this.posY = posY;
+    }
+
+    public getPosY() {
+        return this.posY;
+    }
+
     public start() {
 
         if (this.status === TaskStatus.Initialized) {
