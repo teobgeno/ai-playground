@@ -19,6 +19,10 @@ export class SeekFindTask extends BaseTask implements Task {
     private visited: Set<string> = new Set();
 
     private itemsFoundCoords: Array<Array<number>> = [];
+
+    private positionData: {posX: number, posY: number, outputTaskId: number | null};
+    private itemFindData: {groupId: ObjectId, outputTaskId: number | null};
+
     private optimalPath: Array<Array<number>>;
 
     private coordsVisited = new Set();
@@ -34,13 +38,13 @@ export class SeekFindTask extends BaseTask implements Task {
         gridEngine: GridEngine,
         character: Character,
         itemToFind: ObjectId,
-        posX: number,
-        posY: number
+        positionData:{posX: number, posY: number, outputTaskId: number | null},
+        itemFindData:{groupId: ObjectId, outputTaskId: number | null}
     ) {
         super(gridEngine, character);
-        this.itemToFind = itemToFind;
-        this.posX = posX;
-        this.posY = posY;
+        this.itemToFind = itemFindData.groupId;
+        this.positionData = positionData;
+        this.itemFindData = itemFindData;
         
         this.status = TaskStatus.Initialized;
         this.areaToScan = [
@@ -160,38 +164,64 @@ export class SeekFindTask extends BaseTask implements Task {
 
     public complete () {
 
-        const o = {
-            positionData: {
-                targetMove:  { x: -1, y: -1 },
-                targetMoveDistance: [1, 1]
-            },
-            itemData: {
-                objectId: -1,
-                itemCoords: { x: -1, y: -1 },
-            }
-        };
+        // const o = {
+        //     positionData: {
+        //         targetMove:  { x: -1, y: -1 },
+        //         targetMoveDistance: [1, 1]
+        //     },
+        //     itemData: {
+        //         objectId: -1,
+        //         itemCoords: { x: -1, y: -1 },
+        //     }
+        // };
+
+        const m = {
+            forId: null,
+            posX:  null,
+            posY:  null,
+        }
+
+        const i = {
+            forId: null,
+            posX:  null,
+            posY:  null,
+        }
+
+        // if(this.positionData.outputTaskId) {
+           
+        // }
 
         if(this.itemsFoundCoords.length > 0) {
             const [x, y] = this.itemsFoundCoords.shift()!;
-            o.positionData = {
-                targetMove: { x: x, y: y },
-                targetMoveDistance: [1, 1]
-            };
+            // o.positionData = {
+            //     targetMove: { x: x, y: y },
+            //     targetMoveDistance: [1, 1]
+            // };
 
-            o.itemData = {
-                objectId: this.itemToFind,
-                itemCoords: { x: x, y: y },
-            }
+            // o.itemData = {
+            //     objectId: this.itemToFind,
+            //     itemCoords: { x: x, y: y },
+            // }
+            m.posX = x;
+            m.posY = y;
+            i.posX = x;
+            i.posY = y;
+
         } else {
-            o.positionData = {
-                targetMove: { x: this.processQueue[0][0], y: this.processQueue[0][1] },
-                targetMoveDistance: [1, 1]
-            };
+            // o.positionData = {
+            //     targetMove: { x: this.processQueue[0][0], y: this.processQueue[0][1] },
+            //     targetMoveDistance: [1, 1]
+            // };
+            m.posX = this.processQueue[0][0];
+            m.posY = this.processQueue[0][1]
         }
 
-        this.updateSharedDataPool(o);
+        if(this.positionData.outputTaskId) {
+            m.forId = this.positionData.outputTaskId;
+            this.updateSharedDataPool(m);
+        }
 
-
+        
         this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
         this.notifyOrder({characterIdTag: this.character.getIdTag()});
     }

@@ -20,15 +20,7 @@ export class BaseOrder implements Order{
     private curIterations: number = 0;
     private taskPointer: number = 0;
     private status: OrderStatus;
-    private tasksSharedData = {
-        positionData: { // To be used by movement tasks
-          targetPoints:  { x: 0, y: 0 } 
-        },
-        itemData: { // To be used by item-related tasks
-          itemExists: false,
-          inventory: []
-        }
-      };
+    private tasksSharedData: Array<object>;
 
     constructor() {
         this.status = OrderStatus.Initialized;
@@ -76,7 +68,7 @@ export class BaseOrder implements Order{
     }
 
     public updateSharedDataPool = <T extends object>(obj: T) => {
-        this.tasksSharedData = {...this.tasksSharedData, ...obj};
+        this.tasksSharedData.push(obj);
         console.log('Modify task shared data')
         console.log(this.tasksSharedData);
      }
