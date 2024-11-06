@@ -63,14 +63,15 @@ export abstract class BaseTask {
     }
 
     public modifyPropertiesFromShared(childObj: Task) {
-        const c = [];
-        const r = [];
+        // const c = [];
+        // const r = [];
         for (const item of this.sharedDataPool) {
             if (item.forId === this.getId()) { 
                 for (const [key, value] of Object.entries(item)) {
-                    if (typeof childObj['set' + key] === 'function') {
-                        c.push( () => { childObj['set' + key.charAt(0).toUpperCase()](value)} );
-                        r.push( () => { childObj['set' + key.charAt(0).toUpperCase()](childObj['get' + key.charAt(0).toUpperCase()])} );
+                    if (typeof childObj['set' + key.charAt(0).toUpperCase()] === 'function') {
+                        childObj['set' + key.charAt(0).toUpperCase()](value);
+                        // c.push( () => { childObj['set' + key.charAt(0).toUpperCase()](value)} );
+                        // r.push( () => { childObj['set' + key.charAt(0).toUpperCase()](childObj['get' + key.charAt(0).toUpperCase()])} );
                     }
                 }
             }
