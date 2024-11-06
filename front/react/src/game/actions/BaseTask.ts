@@ -1,4 +1,5 @@
 import { ServiceLocator } from "../core/serviceLocator";
+import { Utils } from "../core/Utils";
 import { GameMediator } from "../GameMediator";
 import { GridEngine } from "grid-engine";
 import { TaskStatus, Task } from "./types";
@@ -6,6 +7,7 @@ import { CharacterState, Character } from "../characters/types";
 
 
 export abstract class BaseTask {
+    protected id: number;
     protected gridEngine: GridEngine;
     protected character: Character;
     protected status: TaskStatus;
@@ -20,9 +22,14 @@ export abstract class BaseTask {
     protected updateSharedDataPool: <T extends object>(obj: T) => void;
 
     constructor(gridEngine: GridEngine, character: Character) {
+        this.id = Utils.generateId();
         this.character = character;
         this.gridEngine = gridEngine;
         this.status = TaskStatus.Initialized;
+    }
+
+    public getId() {
+        return this.id;
     }
 
     public getStatus() {

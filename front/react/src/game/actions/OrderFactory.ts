@@ -29,7 +29,7 @@ export class OrderFactory {
             .setCursorType(CursorType.HOE)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX, posY);
+        const moveTask = new MoveTask(gridEngine, character, posX, posY, [1, 1]);
         const tillageTask = new TillageTask(gridEngine, character, hoe, posX, posY);
         const order = new BaseOrder();
        
@@ -63,7 +63,7 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const moveTask = new MoveTask(gridEngine, character, posX-1, posY, [1, 1]);
         //const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         const order = new BaseOrder();
 
@@ -83,7 +83,7 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX-1, posY);
+        const moveTask = new MoveTask(gridEngine, character, posX-1, posY, [1, 1]);
         //const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, waterCan, posX, posY);
         const order = 
             new BaseOrder()
