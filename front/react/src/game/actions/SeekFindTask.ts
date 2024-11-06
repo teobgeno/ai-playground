@@ -55,7 +55,7 @@ export class SeekFindTask extends BaseTask implements Task {
         this.outputDataTaskIds = data;
     }
 
-    private scanArea(curPosX: number, curPosY: number) {
+    private scanArea() {
        
         if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
 
@@ -76,23 +76,6 @@ export class SeekFindTask extends BaseTask implements Task {
                     this.processQueue.push([nx, ny]);
                 }
             });
-
-            // const [x, y, currentPath] = this.processQueue.shift();
-       
-            // this.viewDirections.forEach(([dx, dy]) => {
-            //     for (let r = 1; r <= this.character.getVisionRange(); r++) {
-            //         const nx = curPosX + dx * r;
-            //         const ny = curPosY + dy * r;
-            //         if (this.isInBoundsAndUnvisited(nx, ny)) {
-            //             this.coordsVisited.add(`${nx},${ny}`);
-            //             const mapItem = mapManager.getPlotLandCoord(nx, ny);
-            //             if(mapItem && mapItem.objectId === this.itemToFind) {
-            //                 this.itemsFoundCoords.push([nx, ny]);
-            //             }
-            //             this.processQueue.push([nx, ny, currentPath.concat([[nx, ny]])]);
-            //         }
-            //     }
-            // });
         }
     }
 
@@ -141,7 +124,7 @@ export class SeekFindTask extends BaseTask implements Task {
                     if(this.itemsFoundCoords.length > 0) {
                         console.log('ok')
                     } else {
-                        this.scanArea(1, 1);
+                        this.scanArea();
                     }
                     
                     this.pointer = 2;
@@ -185,7 +168,7 @@ export class SeekFindTask extends BaseTask implements Task {
 
         } else {
             m.posX = this.processQueue[0][0];
-            m.posY = this.processQueue[0][1]
+            m.posY = this.processQueue[0][1];
         }
 
         if(this.outputDataTaskIds.moveCoords.length > 0) {
