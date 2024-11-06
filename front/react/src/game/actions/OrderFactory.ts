@@ -7,6 +7,7 @@ import { MoveTask } from "../actions/MoveTask";
 import { TillageTask } from "../actions/TillageTask";
 import { LockTillageTask } from "../actions/LockTillageTask";
 import { BreakStoneTask } from "./BreakStoneTask";
+import { SeekFindTask } from "../actions/SeekFindTask";
 import { BaseOrder } from "../actions/BaseOrder";
 
 import { Hoe } from "../items/Hoe";
@@ -15,7 +16,7 @@ import { WaterCan } from "../items/WaterCan";
 import { FarmLand } from "../farm/FarmLand";
 import { InventoryItem } from "../items/InventoryItem"
 import { CursorType } from "../cursors/types";
-import { MapObject } from "../core/types";
+import { MapObject, ObjectId } from "../core/types";
 
 export class OrderFactory {
 
@@ -29,7 +30,7 @@ export class OrderFactory {
             .setCursorType(CursorType.HOE)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX, posY, [1, 1]);
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX, posY, [1, 1]);
         const tillageTask = new TillageTask(gridEngine, character, hoe, posX, posY);
         const order = new BaseOrder();
        
@@ -63,7 +64,7 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX-1, posY, [1, 1]);
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX-1, posY, [1, 1]);
         //const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, pickAxe, posX, posY);
         const order = new BaseOrder();
 
@@ -83,7 +84,7 @@ export class OrderFactory {
             .setCursorType(CursorType.EXTERNAL_INTERACTION)
         )
 
-        const moveTask = new MoveTask(gridEngine, character, posX-1, posY, [1, 1]);
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX, posY, [1, 1]);
         //const interactWithItemTask = new BaseInteractWithItemTask(gridEngine, character, waterCan, posX, posY);
         const order = 
             new BaseOrder()
@@ -101,7 +102,7 @@ export class OrderFactory {
     public static createBreakRockOrder(gridEngine: GridEngine, character: Character, scene: Phaser.Scene, posX: number, posY: number) {
         
        
-        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX - 1, posY);
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, posX, posY, [1, 1]);
         const breakStoneTask = OrderFactory.createBreakRockTask(gridEngine, character, posX, posY);
         const order = new BaseOrder();
 
@@ -111,10 +112,34 @@ export class OrderFactory {
         character.addOrder(order);
     }
 
-
-    public static createMoveTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
+    public static createSeekAndFindOrder(gridEngine: GridEngine, character: Character) {
         
-        return new MoveTask(gridEngine, character, posX, posY, [1, 1]);
+        const areaToScan = [
+            [10, 15], [11, 15], [12, 15], [13, 15], [14, 15],
+            [10, 16], [11, 16], [12, 16], [13, 16], [14, 16],
+            [10, 17], [11, 17], [12, 17], [13, 17], [14, 17]
+        ]
+
+        const seekAndFindTask = OrderFactory.createSeekAndFindTask(gridEngine, character, areaToScan, ObjectId.Stone);
+        const moveTask = OrderFactory.createMoveTask(gridEngine, character, -1, -1, [1, 1]);
+        const breakRockTask = OrderFactory.createBreakRockTask(gridEngine, character, -1, -1);
+        seekAndFindTask.setOutputDataTaskIds({moveCoords: [moveTask.getId()], itemCoords: [breakRockTask.getId()]});
+    }
+
+
+    public static createMoveTask(gridEngine: GridEngine, character: Character, posX: number, posY: number, distanceFromTarget: Array<number>) {
+        
+        return new MoveTask(gridEngine, character, posX, posY, distanceFromTarget);
+    }
+
+    public static createSeekAndFindTask(gridEngine: GridEngine, character: Character, areaToScan: Array<Array<number>>, objectId: ObjectId) {
+        
+        return new SeekFindTask(
+            gridEngine, 
+            character, 
+            areaToScan,
+            {groupId: objectId}
+        );
     }
 
     public static createBreakRockTask(gridEngine: GridEngine, character: Character, posX: number, posY: number) {
@@ -128,5 +153,6 @@ export class OrderFactory {
 
         return new BreakStoneTask(gridEngine, character, pickAxe, posX, posY);
     }
+
 
 }

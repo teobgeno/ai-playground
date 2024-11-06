@@ -20,15 +20,13 @@ export class SeekFindTask extends BaseTask implements Task {
 
     private itemsFoundCoords: Array<Array<number>> = [];
 
-    private positionData: {posX: number, posY: number, outputTaskId: number | null};
-    private itemFindData: {groupId: ObjectId, outputTaskId: number | null};
+    private seekData: {groupId: ObjectId};
+    private outputDataTaskIds:{moveCoords: Array<number>, itemCoords: Array<number>}
 
     private optimalPath: Array<Array<number>>;
 
     private coordsVisited = new Set();
    
-    private posX: number;
-    private posY: number;
     private intervalStep: number = 0;
     private intervalTick: number = 0;
     private mapItem: MapObject;
@@ -37,27 +35,24 @@ export class SeekFindTask extends BaseTask implements Task {
     constructor(
         gridEngine: GridEngine,
         character: Character,
-        itemToFind: ObjectId,
-        positionData:{posX: number, posY: number, outputTaskId: number | null},
-        itemFindData:{groupId: ObjectId, outputTaskId: number | null}
+        areaToScan: Array<Array<number>>,
+        seekData: { groupId: ObjectId },
     ) {
         super(gridEngine, character);
-        this.itemToFind = itemFindData.groupId;
-        this.positionData = positionData;
-        this.itemFindData = itemFindData;
-        
+        this.itemToFind = seekData.groupId;
+       
         this.status = TaskStatus.Initialized;
-        this.areaToScan = [
-            [10, 15], [11, 15], [12, 15], [13, 15], [14, 15],
-            [10, 16], [11, 16], [12, 16], [13, 16], [14, 16],
-            [10, 17], [11, 17], [12, 17], [13, 17], [14, 17]
-        ]
+        this.areaToScan = areaToScan;
         this.viewDirections = [
             [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
             [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
         ];
         
         this.processQueue = [[this.areaToScan[0][0], this.areaToScan[0][1]]];
+    }
+
+    public setOutputDataTaskIds(data: {moveCoords: Array<number>, itemCoords: Array<number>}) {
+        this.outputDataTaskIds = data;
     }
 
     private scanArea(curPosX: number, curPosY: number) {
@@ -163,18 +158,12 @@ export class SeekFindTask extends BaseTask implements Task {
     }
 
     public complete () {
+        this.setOutputData();
+        this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
+        this.notifyOrder({characterIdTag: this.character.getIdTag()});
+    }
 
-        // const o = {
-        //     positionData: {
-        //         targetMove:  { x: -1, y: -1 },
-        //         targetMoveDistance: [1, 1]
-        //     },
-        //     itemData: {
-        //         objectId: -1,
-        //         itemCoords: { x: -1, y: -1 },
-        //     }
-        // };
-
+    private setOutputData() {
         const m = {
             forId: null,
             posX:  null,
@@ -187,42 +176,26 @@ export class SeekFindTask extends BaseTask implements Task {
             posY:  null,
         }
 
-        // if(this.positionData.outputTaskId) {
-           
-        // }
-
         if(this.itemsFoundCoords.length > 0) {
             const [x, y] = this.itemsFoundCoords.shift()!;
-            // o.positionData = {
-            //     targetMove: { x: x, y: y },
-            //     targetMoveDistance: [1, 1]
-            // };
-
-            // o.itemData = {
-            //     objectId: this.itemToFind,
-            //     itemCoords: { x: x, y: y },
-            // }
             m.posX = x;
             m.posY = y;
             i.posX = x;
             i.posY = y;
 
         } else {
-            // o.positionData = {
-            //     targetMove: { x: this.processQueue[0][0], y: this.processQueue[0][1] },
-            //     targetMoveDistance: [1, 1]
-            // };
             m.posX = this.processQueue[0][0];
             m.posY = this.processQueue[0][1]
         }
 
-        if(this.positionData.outputTaskId) {
-            m.forId = this.positionData.outputTaskId;
+        if(this.outputDataTaskIds.moveCoords.length > 0) {
+            m.forId = this.outputDataTaskIds.moveCoords[0];
             this.updateSharedDataPool(m);
         }
 
-        
-        this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
-        this.notifyOrder({characterIdTag: this.character.getIdTag()});
+        if(this.outputDataTaskIds.itemCoords.length > 0) {
+            i.forId = this.outputDataTaskIds.itemCoords[0];
+            this.updateSharedDataPool(m);
+        }
     }
 }
