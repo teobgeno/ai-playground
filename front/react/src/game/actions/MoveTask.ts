@@ -12,7 +12,7 @@ export class MoveTask extends BaseTask implements Task{
     private posX: number;
     private posY: number;
     private pathTickCount: number = 0;
-    private distanceFromTarget: Array<number> = [1, 1]; // min, max
+    private distanceFromTarget: Array<number> = [0, 0]; // min, max
 
     constructor(
         gridEngine: GridEngine,
@@ -43,6 +43,15 @@ export class MoveTask extends BaseTask implements Task{
     public getPosY() {
         return this.posY;
     }
+
+    public setDistanceFromTarget(distanceFromTarget: Array<number>) {
+        this.distanceFromTarget = distanceFromTarget;
+    }
+
+    public getDistanceFromTarget() {
+        return this.distanceFromTarget;
+    }
+
 
     public start() {
 
