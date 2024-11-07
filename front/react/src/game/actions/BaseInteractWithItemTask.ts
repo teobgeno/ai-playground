@@ -91,11 +91,11 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
     public start() {
 
         if (this.status === TaskStatus.Initialized) {
-            super.start(this);
-            this.modifyPropertiesFromShared();
             this.setStatus(TaskStatus.Running);
         }
-
+        
+        super.start(this);
+        this.modifyPropertiesFromShared();
         this.pointer = 1;
         this.next();
     }

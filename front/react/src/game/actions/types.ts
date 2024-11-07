@@ -31,7 +31,7 @@ export interface Task
     getStatus: () => TaskStatus;
     setStatus: (status:TaskStatus) => void;
     getCharacterIdTag: () => string;
-    setSharedDataPoolFunc: (func:<T extends object>(obj: T) => void)=> void;
+    setSharedDataPoolFunc: (func:(obj: SharedDataItem) => void)=> void;
     setSharedDataPool: (sharedDataPool: Array<SharedDataItem>) => void;
 }
 

@@ -21,7 +21,7 @@ export abstract class BaseTask {
     // protected childtasks: Array<Task> = []; //in case task need to generate tasks and return them to order for execution
     // protected runOnce: boolean = false; // flag task for delete from the order after execution. Better add maxIterations like order.
     protected sharedDataPool: Array<SharedDataItem> = [];
-    protected updateSharedDataPool: <T extends object>(obj: T) => void;
+    protected updateSharedDataPool: (obj: SharedDataItem) => void;
     protected modifyPropertiesFunc: Array<()=>void> = [];
     protected restorePropertiesFunc: Array<()=>void> = [];
 
@@ -60,7 +60,7 @@ export abstract class BaseTask {
         this.sharedDataPool = sharedDataPool;
     }
 
-    public setSharedDataPoolFunc(func:<T extends object>(obj: T) => void) {
+    public setSharedDataPoolFunc(func:(obj: SharedDataItem) => void) {
         this.updateSharedDataPool = func;
     }
 

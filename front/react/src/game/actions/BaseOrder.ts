@@ -2,7 +2,7 @@ import { ServiceLocator } from "../core/serviceLocator";
 import { GameMediator } from "../GameMediator";
 import { TimeManager } from "../TimeManager";
 
-import { OrderStatus, Order, Task, TaskStatus } from "./types";
+import { OrderStatus, Order, Task, TaskStatus, SharedDataItem } from "./types";
 
 //import parser from 'cron-parser';
 
@@ -20,7 +20,7 @@ export class BaseOrder implements Order{
     private curIterations: number = 0;
     private taskPointer: number = 0;
     private status: OrderStatus;
-    private tasksSharedData: Array<object> = [];
+    private tasksSharedData: Array<SharedDataItem> = [];
 
     constructor() {
         this.status = OrderStatus.Initialized;
@@ -33,6 +33,16 @@ export class BaseOrder implements Order{
 
     public setInterval(interval: number) {
         this.interval = interval;
+        return this;
+    }
+
+    public setMaxIterations(maxIterations: number) {
+        this.maxIterations = maxIterations;
+        return this;
+    }
+
+    public setRepeatOnCancel(repeatOnCancel: boolean) {
+        this.repeatOnCancel = repeatOnCancel;
         return this;
     }
 
@@ -68,10 +78,8 @@ export class BaseOrder implements Order{
        return this.status;
     }
 
-    public updateSharedDataPool = <T extends object>(obj: T) => {
+    public updateSharedDataPool = (obj: SharedDataItem) => {
         this.tasksSharedData.push(obj);
-        console.log('Modify task shared data')
-        console.log(this.tasksSharedData);
      }
 
     private getStartDateTime() {
@@ -109,16 +117,22 @@ export class BaseOrder implements Order{
         if (!this.isRunnable()) return;
     
         // If current task is completed, move to the next one
+        let doTaskChange = false;
+        if (!this.currentTask){
+            doTaskChange = true;
+        }
+
         if (this.currentTask && 
             ( this.currentTask.getStatus() === TaskStatus.Completed || this.currentTask.getStatus() === TaskStatus.WaitingNextIteration)
         ) {
             this.taskPointer++;
+            doTaskChange = true;
         }
-    
+
         // Check if we're in the valid time range and there are remaining tasks
         if (this.isInTimeRange() && this.taskPointer < this.tasks.length) {
             this.setStatus(OrderStatus.Running);
-            this.runTasks();
+            this.runTasks(doTaskChange);
         } 
     
         // Check for completion or recurring logic
@@ -139,13 +153,22 @@ export class BaseOrder implements Order{
     public cancel() {
         const gameMediator = ServiceLocator.getInstance<GameMediator>('gameMediator')!;
         this.setStatus(OrderStatus.Rollback);
-        for (const task of this.tasks) {
-            if(task.getStatus() !== TaskStatus.Completed) {
-                task.cancel();
+        for (let i = 0; i < this.tasks.length; i++) {
+            if(i >= this.taskPointer && this.tasks[i].getStatus() !== TaskStatus.Completed) {
+                this.tasks[i].cancel();
             }
         }
-        this.setStatus(OrderStatus.Completed);
-        gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
+        // for (const task of this.tasks) {
+        //     if(task.getStatus() !== TaskStatus.Completed) {
+        //         task.cancel();
+        //     }
+        // }
+        if(this.repeatOnCancel) {
+            this.handleOrderCompletionOrRecurrence();
+        } else {
+            this.setStatus(OrderStatus.Completed);
+            gameMediator.emitEvent('on-order-change-status', {characterIdTag: this.tasks[0].getCharacterIdTag()});
+        }
     }
 
     private isRunnable(): boolean {
@@ -185,16 +208,16 @@ export class BaseOrder implements Order{
     }
 
     // Manage task execution and status checking
-    private runTasks() {
-        if (!this.currentTask || this.currentTask.getStatus() === TaskStatus.Completed || this.currentTask.getStatus() === TaskStatus.WaitingNextIteration) {
+    private runTasks(doTaskChange = false) {
+        if (doTaskChange) {
             this.currentTask = this.tasks[this.taskPointer];
             this.currentTask.start();
-    
-            // Handle task errors
-            if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
-                this.setStatus(OrderStatus.Canceled);
-                this.cancel();
-            }
+        }
+
+        // Handle task errors
+        if (this.currentTask && this.currentTask.getStatus() === TaskStatus.Error) {
+            this.setStatus(OrderStatus.Canceled);
+            this.cancel();
         }
     }
     
@@ -215,7 +238,7 @@ export class BaseOrder implements Order{
                 if (currentTime > this.checkNextInterval()) {
                     this.taskPointer = 0;
                     this.setStatus(OrderStatus.Running);
-                    this.runTasks();
+                    this.runTasks(true);
                 } else {
                     this.startWaiting();
                 }

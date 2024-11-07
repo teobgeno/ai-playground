@@ -120,12 +120,20 @@ export class OrderFactory {
             [10, 17], [11, 17], [12, 17], [13, 17], [14, 17]
         ]
 
-        const seekAndFindTask = OrderFactory.createSeekAndFindTask(gridEngine, character, areaToScan, ObjectId.Stone);
+        const seekAndFindTask = OrderFactory.createSeekAndFindTask(gridEngine, character, areaToScan, ObjectId.Rock);
         const moveTask = OrderFactory.createMoveTask(gridEngine, character, -1, -1, [1, 1]);
         const breakRockTask = OrderFactory.createBreakRockTask(gridEngine, character, -1, -1);
         seekAndFindTask.setOutputDataTaskIds({moveCoords: [moveTask.getId()], itemCoords: [breakRockTask.getId()]});
 
-        const order = new BaseOrder();
+ 
+        const order = 
+        new BaseOrder()
+            .setIsRecurring(true)
+            .setStartTime('10:00:00')
+            .setEndTime('18:00:00')
+            .setInterval(1)
+            .setMaxIterations(1)
+            .setRepeatOnCancel(true)
 
         order.addTask(seekAndFindTask);
         order.addTask(moveTask);
