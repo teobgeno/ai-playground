@@ -49,7 +49,7 @@ export class MoveTask extends BaseTask implements Task{
         if (this.status === TaskStatus.Initialized) {
             this.setStatus(TaskStatus.Running);
         }
-        
+
         super.start(this);
         this.modifyPropertiesFromShared();
         this.pointer = 1;
@@ -219,8 +219,9 @@ export class MoveTask extends BaseTask implements Task{
             )
             
         } else{
-            this.pointer = 3;
             clearInterval(this.IntervalProcess);
+            this.pointer = 3;
+            this.next();
         }
     }
 

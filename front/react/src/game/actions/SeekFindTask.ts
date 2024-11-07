@@ -64,7 +64,7 @@ export class SeekFindTask extends BaseTask implements Task {
             const x = characterPos.x;
             const y = characterPos.y;
 
-            const pairIndex = this.areaToScan.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
+            const pairIndex = this.processQueue.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
             if(pairIndex > -1) {
                 this.processQueue.splice(pairIndex, 1);
             }

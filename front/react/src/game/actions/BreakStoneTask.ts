@@ -61,6 +61,9 @@ export class BreakStoneTask extends BaseInteractWithItemTask{
         if(super.getIntervalTick() * 1000 === (super.getItem() as PickAxe).getBreakSpeed()) {
             if(mapItem.getInteractive) {
                 mapItem.getInteractive().interactWithItem();
+                clearInterval(this.IntervalProcess);
+                this.pointer = 2;
+                this.next();
             }
         }
     }
