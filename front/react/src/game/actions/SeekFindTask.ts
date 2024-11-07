@@ -145,9 +145,13 @@ export class SeekFindTask extends BaseTask implements Task {
         }
     }
 
-    public complete () {
+    public complete() {
         this.setOutputData();
-        this.processQueue.length > 0 ? this.setStatus(TaskStatus.WaitingNextIteration) :  this.setStatus(TaskStatus.Completed);
+        if( this.seen.size === this.areaSet.size &&  this.itemsFoundCoords.length === 0 ){
+            this.setStatus(TaskStatus.Completed);
+        } else {
+            this.setStatus(TaskStatus.WaitingNextIteration)
+        }
         this.notifyOrder({characterIdTag: this.character.getIdTag()});
     }
 
@@ -156,6 +160,7 @@ export class SeekFindTask extends BaseTask implements Task {
             forId: 0,
             posX:  -1,
             posY:  -1,
+            distanceFromTarget: [0, 0]
         }
 
         const i = {
