@@ -20,8 +20,10 @@ export abstract class BaseTask {
     protected staminaCost: number = 0;
     // protected childtasks: Array<Task> = []; //in case task need to generate tasks and return them to order for execution
     // protected runOnce: boolean = false; // flag task for delete from the order after execution. Better add maxIterations like order.
-    protected sharedDataPool: Array<SharedDataItem>;
+    protected sharedDataPool: Array<SharedDataItem> = [];
     protected updateSharedDataPool: <T extends object>(obj: T) => void;
+    protected modifyPropertiesFunc: Array<()=>void> = [];
+    protected restorePropertiesFunc: Array<()=>void> = [];
 
     constructor(gridEngine: GridEngine, character: Character) {
         this.id = Utils.generateId();
@@ -62,19 +64,44 @@ export abstract class BaseTask {
         this.updateSharedDataPool = func;
     }
 
-    public modifyPropertiesFromShared(childObj: Task) {
+    public start(childObj: Task) {
+        this.createFuncForModifyProperties(childObj);
+    }
+
+    protected clearForExit() {
+        this.restorePropertiesFromShared();
+        this.modifyPropertiesFunc = [];
+        this.restorePropertiesFunc = [];
+    }
+
+    protected createFuncForModifyProperties(childObj: Task) {
         // const c = [];
         // const r = [];
         for (const item of this.sharedDataPool) {
             if (item.forId === this.getId()) { 
                 for (const [key, value] of Object.entries(item)) {
-                    if (typeof childObj['set' + key.charAt(0).toUpperCase()] === 'function') {
-                        childObj['set' + key.charAt(0).toUpperCase()](value);
-                        // c.push( () => { childObj['set' + key.charAt(0).toUpperCase()](value)} );
-                        // r.push( () => { childObj['set' + key.charAt(0).toUpperCase()](childObj['get' + key.charAt(0).toUpperCase()])} );
+                    const propSet = 'set' + key.charAt(0).toUpperCase() + '' + key.slice(1);
+                    const propGet = 'get' + key.charAt(0).toUpperCase() + '' + key.slice(1);
+                    if (typeof childObj[propSet as keyof Task] === 'function' && typeof childObj[propGet as keyof Task] === 'function') {
+                        this.modifyPropertiesFunc.push( () => { childObj[propSet as keyof Task](value)} );
+                        const curPropValue = childObj[propGet as keyof Task]();
+                        this.restorePropertiesFunc.push( () => { childObj[propSet as keyof Task]( curPropValue )} );
                     }
                 }
             }
+        }
+    }
+
+    protected modifyPropertiesFromShared() {
+        console.log(this.modifyPropertiesFunc)
+        for (const func of this.modifyPropertiesFunc) {
+            func();
+        }
+    }
+
+    protected restorePropertiesFromShared() {
+        for (const func of this.restorePropertiesFunc) {
+            func();
         }
     }
 

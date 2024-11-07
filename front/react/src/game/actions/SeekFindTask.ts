@@ -49,6 +49,7 @@ export class SeekFindTask extends BaseTask implements Task {
         ];
         
         this.processQueue = [[this.areaToScan[0][0], this.areaToScan[0][1]]];
+        this.areaSet = new Set(this.areaToScan.map(coord => `${coord[0]},${coord[1]}`));
     }
 
     public setOutputDataTaskIds(data: {moveCoords: Array<number>, itemCoords: Array<number>}) {
@@ -64,7 +65,7 @@ export class SeekFindTask extends BaseTask implements Task {
             const y = characterPos.y;
 
             const pairIndex = this.areaToScan.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
-            if(pairIndex) {
+            if(pairIndex > -1) {
                 this.processQueue.splice(pairIndex, 1);
             }
             
@@ -152,15 +153,15 @@ export class SeekFindTask extends BaseTask implements Task {
 
     private setOutputData() {
         const m = {
-            forId: null,
-            posX:  null,
-            posY:  null,
+            forId: 0,
+            posX:  -1,
+            posY:  -1,
         }
 
         const i = {
-            forId: null,
-            posX:  null,
-            posY:  null,
+            forId: 0,
+            posX:  -1,
+            posY:  -1,
         }
 
         if(this.itemsFoundCoords.length > 0) {
@@ -182,7 +183,7 @@ export class SeekFindTask extends BaseTask implements Task {
 
         if(this.outputDataTaskIds.itemCoords.length > 0) {
             i.forId = this.outputDataTaskIds.itemCoords[0];
-            this.updateSharedDataPool(m);
+            this.updateSharedDataPool(i);
         }
     }
 }

@@ -37,7 +37,7 @@ export interface Task
 
 export type SharedDataItem = {
     'forId': number,
-    [key: string]: string | number
+    [key: string]: any
 }
 
 

@@ -124,6 +124,14 @@ export class OrderFactory {
         const moveTask = OrderFactory.createMoveTask(gridEngine, character, -1, -1, [1, 1]);
         const breakRockTask = OrderFactory.createBreakRockTask(gridEngine, character, -1, -1);
         seekAndFindTask.setOutputDataTaskIds({moveCoords: [moveTask.getId()], itemCoords: [breakRockTask.getId()]});
+
+        const order = new BaseOrder();
+
+        order.addTask(seekAndFindTask);
+        order.addTask(moveTask);
+        order.addTask(breakRockTask);
+ 
+        character.addOrder(order);
     }
 
 

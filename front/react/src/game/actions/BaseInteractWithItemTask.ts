@@ -31,6 +31,22 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
         this.status = TaskStatus.Initialized;
     }
 
+    public setPosX(posX: number) {
+        this.posX = posX;
+    }
+
+    public getPosX() {
+        return this.posX;
+    }
+
+    public setPosY(posY: number) {
+        this.posY = posY;
+    }
+
+    public getPosY() {
+        return this.posY;
+    }
+
     public getIntervalStep() {
         return this.intervalStep;
     }
@@ -75,6 +91,8 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
     public start() {
 
         if (this.status === TaskStatus.Initialized) {
+            super.start(this);
+            this.modifyPropertiesFromShared();
             this.setStatus(TaskStatus.Running);
         }
 
@@ -83,7 +101,7 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
     }
 
     public cancel () {
-
+        this.clearForExit();
         // this.setStatus(TaskStatus.Rollback);
         // this.gridEngine.stopMovement(this.character.getIdTag());
         // this.setStatus(TaskStatus.Completed);
@@ -94,6 +112,7 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
     }
 
     public complete () {
+        this.clearForExit();
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.setStatus(TaskStatus.Completed);

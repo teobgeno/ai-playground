@@ -47,6 +47,8 @@ export class MoveTask extends BaseTask implements Task{
     public start() {
 
         if (this.status === TaskStatus.Initialized) {
+            super.start(this);
+            this.modifyPropertiesFromShared();
             this.setStatus(TaskStatus.Running);
         }
 
@@ -55,7 +57,7 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     public cancel = () => {
-
+        this.clearForExit();
         this.setStatus(TaskStatus.Rollback);
         this.gridEngine.stopMovement(this.character.getIdTag());
         this.setStatus(TaskStatus.Completed);
@@ -71,6 +73,7 @@ export class MoveTask extends BaseTask implements Task{
                         this.pointer = 2;
                         this.next();
                     } else {
+                        this.clearForExit();
                         this.setStatus(TaskStatus.Error);
                         this.notifyOrder({characterIdTag: this.character.getIdTag()});
                         console.warn('error cannot move');
@@ -92,6 +95,7 @@ export class MoveTask extends BaseTask implements Task{
     }
 
     public complete = () => {
+        this.clearForExit();
         this.character.setCharState(CharacterState.IDLE);
         if (this.status === TaskStatus.Running) {
             this.setStatus(TaskStatus.Completed);

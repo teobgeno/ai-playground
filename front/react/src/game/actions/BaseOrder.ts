@@ -20,7 +20,7 @@ export class BaseOrder implements Order{
     private curIterations: number = 0;
     private taskPointer: number = 0;
     private status: OrderStatus;
-    private tasksSharedData: Array<object>;
+    private tasksSharedData: Array<object> = [];
 
     constructor() {
         this.status = OrderStatus.Initialized;
