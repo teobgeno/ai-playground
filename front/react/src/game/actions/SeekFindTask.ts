@@ -58,16 +58,16 @@ export class SeekFindTask extends BaseTask implements Task {
 
     private scanArea() {
        
-        if(this.processQueue.length > 0 && this.seen.size < this.areaSet.size) {
+        if(this.seen.size < this.areaSet.size) {
 
             const characterPos = this.gridEngine.getPosition(this.character.getIdTag());
             const x = characterPos.x;
             const y = characterPos.y;
 
-            const pairIndex = this.processQueue.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
-            if(pairIndex > -1) {
-                this.processQueue.splice(pairIndex, 1);
-            }
+            // const pairIndex = this.processQueue.findIndex(pair => pair[0] === characterPos.x && pair[1] === characterPos.y);
+            // if(pairIndex > -1) {
+            //     this.processQueue.splice(pairIndex, 1);
+            // }
             
             //const [x, y] = this.processQueue.shift()!;
             const key = `${x},${y}`;
@@ -78,17 +78,38 @@ export class SeekFindTask extends BaseTask implements Task {
                 this.markSeen(x, y);  // Mark all cells within vision radius as seen
             }
 
-            this.viewDirections.forEach(([dx, dy]) => {
-                const nx = x + dx;
-                const ny = y + dy;
-                const nkey = `${nx},${ny}`;
-                if (this.areaSet.has(nkey) && !this.visited.has(nkey)) {
-                    this.processQueue.push([nx, ny]);
-                }
-            });
+            // this.viewDirections.forEach(([dx, dy]) => {
+            //     const nx = x + dx;
+            //     const ny = y + dy;
+            //     const nkey = `${nx},${ny}`;
+            //     if (this.areaSet.has(nkey) && !this.visited.has(nkey)) {
+            //         this.processQueue.push([nx, ny]);
+            //     }
+            // });
         }
     }
 
+    private decideNextMove() {
+        let nextCoords: Array<number> = [];
+        for (let p = 0; p <= this.processQueue.length; p++) {
+            for (let d = 0; d <= this.viewDirections.length; d++) {
+                const tx = this.processQueue[p][0] + this.viewDirections[d][0];
+                const ty = this.processQueue[p][1] + this.viewDirections[d][1];
+                const key = `${tx},${ty}`;
+                if (
+                    this.areaSet.has(key) && 
+                    !this.seen.has(key) && 
+                    !this.gridEngine.isBlocked({ x: tx, y: ty },"CharLayer")
+                ) {
+                    nextCoords = [tx, ty];
+                    break;
+                }
+            }
+        }
+
+        return nextCoords;
+    }
+    
     private markSeen(x: number, y: number) {
         const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
         this.viewDirections.forEach(([dx, dy]) => {
@@ -104,6 +125,13 @@ export class SeekFindTask extends BaseTask implements Task {
 
                 if (this.areaSet.has(key) && !this.seen.has(key)) {
                     this.seen.add(key);
+                }
+
+                if (
+                    this.areaSet.has(key) && 
+                    !this.gridEngine.isBlocked({ x: nx, y: ny },"CharLayer")
+                ) {
+                    this.processQueue.push([nx, ny]);
                 }
             }
         });
@@ -147,6 +175,7 @@ export class SeekFindTask extends BaseTask implements Task {
 
     public complete() {
         this.setOutputData();
+        this.processQueue = [];
         if( this.seen.size === this.areaSet.size &&  this.itemsFoundCoords.length === 0 ){
             this.setStatus(TaskStatus.Completed);
         } else {
