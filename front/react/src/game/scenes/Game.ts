@@ -150,7 +150,12 @@ export class Game extends Scene {
        
 
         const stoneItem = new Rock(this, this.mapManager, {x:11, y:16, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
+        const stoneItem2 = new Rock(this, this.mapManager, {x:14, y:16, pixelX:(this.map.tileToWorldX(14) || 0), pixelY:(this.map.tileToWorldX(16) || 0)});
+        const stoneItem3 = new Rock(this, this.mapManager, {x:12, y:17, pixelX:(this.map.tileToWorldX(12) || 0), pixelY:(this.map.tileToWorldX(17) || 0)});
+
         stoneItem.setResource(new GenericItem(ObjectId.Stone, "stone", new InventoryItem().setIcon('https://assets.codepen.io/7237686/stone.svg?format=auto')));
+        stoneItem2.setResource(new GenericItem(ObjectId.Stone, "stone", new InventoryItem().setIcon('https://assets.codepen.io/7237686/stone.svg?format=auto')));
+        stoneItem3.setResource(new GenericItem(ObjectId.Stone, "stone", new InventoryItem().setIcon('https://assets.codepen.io/7237686/stone.svg?format=auto')));
 
         const treeItem = new Tree(this, this.mapManager, {x:11, y:10, pixelX:(this.map.tileToWorldX(11) || 0), pixelY:(this.map.tileToWorldY(10) || 0)});
         treeItem.setResource(new GenericItem(ObjectId.Wood, "wood", new InventoryItem().setIcon('https://assets.codepen.io/7237686/wood.svg?format=auto')));

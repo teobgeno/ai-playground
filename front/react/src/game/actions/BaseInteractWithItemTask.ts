@@ -55,14 +55,6 @@ export class BaseInteractWithItemTask extends BaseTask implements Task {
         this.intervalStep = intervalStep;
     }
 
-    public getIntervalTick() {
-        return this.intervalTick;
-    }
-
-    public setIntervalTick(intervalTick: number) {
-        return this.intervalTick = intervalTick;
-    }
-
     public getItem() {
         return this.item;
     }

@@ -16,7 +16,7 @@ export abstract class BaseTask {
     protected initTimestamp: number = 0;
     protected lastTimestamp: number = 0;
     protected IntervalProcess: ReturnType<typeof setInterval>;
-    protected IntervalTicks: number = 0;
+    protected intervalTick: number = 0;
     protected staminaCost: number = 0;
     // protected childtasks: Array<Task> = []; //in case task need to generate tasks and return them to order for execution
     // protected runOnce: boolean = false; // flag task for delete from the order after execution. Better add maxIterations like order.
@@ -56,6 +56,14 @@ export abstract class BaseTask {
         return this.character.getIdTag();
     }
 
+    protected getIntervalTick() {
+        return this.intervalTick;
+    }
+
+    protected setIntervalTick(intervalTick: number) {
+        return this.intervalTick = intervalTick;
+    }
+
     public setSharedDataPool(sharedDataPool: Array<SharedDataItem>) {
         this.sharedDataPool = sharedDataPool;
     }
@@ -70,6 +78,8 @@ export abstract class BaseTask {
 
     protected clearForExit() {
         this.restorePropertiesFromShared();
+        this.intervalTick = 0;
+        clearInterval(this.IntervalProcess);
         this.modifyPropertiesFunc = [];
         this.restorePropertiesFunc = [];
     }
