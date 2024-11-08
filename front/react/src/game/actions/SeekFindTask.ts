@@ -44,6 +44,7 @@ export class SeekFindTask extends BaseTask implements Task {
         this.status = TaskStatus.Initialized;
         this.areaToScan = areaToScan;
         this.viewDirections = [
+            [0, 0], // standing tile
             [0, 1], [1, 0], [0, -1], [-1, 0],  // right, down, left, up
             [1, 1], [1, -1], [-1, 1], [-1, -1] // diagonals
         ];
@@ -89,10 +90,39 @@ export class SeekFindTask extends BaseTask implements Task {
         }
     }
 
+    private markSeen(x: number, y: number) {
+        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
+        this.viewDirections.forEach(([dx, dy]) => {
+            for (let r = 0; r <= this.character.getVisionRange(); r++) {
+                const nx = x + dx * r;
+                const ny = y + dy * r;
+                const key = `${nx},${ny}`;
+                if (this.areaSet.has(key)) {
+
+                    const mapItem = mapManager.getPlotLandCoord(nx, ny);
+                    if(mapItem && mapItem.objectId === this.itemToFind) {
+                        this.itemsFoundCoords.push([nx, ny]);
+                    }
+    
+                    if (!this.seen.has(key)) {
+                        this.seen.add(key);
+                    }
+    
+                    if (!this.gridEngine.isBlocked({ x: nx, y: ny },"CharLayer")) {
+                        this.processQueue.push([nx, ny]);
+                    }
+                }
+            }
+        });
+    }
+
     private decideNextMove() {
         let nextCoords: Array<number> = [];
-        for (let p = 0; p <= this.processQueue.length; p++) {
-            for (let d = 0; d <= this.viewDirections.length; d++) {
+        for (let p = 0; p < this.processQueue.length; p++) {
+
+            if(nextCoords.length > 0) break;
+
+            for (let d = 0; d < this.viewDirections.length; d++) {
                 const tx = this.processQueue[p][0] + this.viewDirections[d][0];
                 const ty = this.processQueue[p][1] + this.viewDirections[d][1];
                 const key = `${tx},${ty}`;
@@ -107,34 +137,11 @@ export class SeekFindTask extends BaseTask implements Task {
             }
         }
 
+        // const odds = new Set([1, 3, 5, 7, 9]);
+        // const squares = new Set([1, 4, 9]);
+        // console.log(odds.difference(squares)); // Set(3) { 3, 5, 7 }
+
         return nextCoords;
-    }
-    
-    private markSeen(x: number, y: number) {
-        const mapManager = ServiceLocator.getInstance<MapManager>('mapManager')!;
-        this.viewDirections.forEach(([dx, dy]) => {
-            for (let r = 0; r <= this.character.getVisionRange(); r++) {
-                const nx = x + dx * r;
-                const ny = y + dy * r;
-                const key = `${nx},${ny}`;
-                
-                const mapItem = mapManager.getPlotLandCoord(nx, ny);
-                if(mapItem && mapItem.objectId === this.itemToFind) {
-                    this.itemsFoundCoords.push([nx, ny]);
-                 }
-
-                if (this.areaSet.has(key) && !this.seen.has(key)) {
-                    this.seen.add(key);
-                }
-
-                if (
-                    this.areaSet.has(key) && 
-                    !this.gridEngine.isBlocked({ x: nx, y: ny },"CharLayer")
-                ) {
-                    this.processQueue.push([nx, ny]);
-                }
-            }
-        });
     }
 
     public start() {
@@ -189,7 +196,7 @@ export class SeekFindTask extends BaseTask implements Task {
             forId: 0,
             posX:  -1,
             posY:  -1,
-            distanceFromTarget: [0, 0]
+            distanceFromTarget: [1, 1]
         }
 
         const i = {
@@ -206,8 +213,9 @@ export class SeekFindTask extends BaseTask implements Task {
             i.posY = y;
 
         } else {
-            m.posX = this.processQueue[0][0];
-            m.posY = this.processQueue[0][1];
+            const nextCoords = this.decideNextMove();
+            m.posX = nextCoords[0];
+            m.posY = nextCoords[1];
         }
 
         if(this.outputDataTaskIds.moveCoords.length > 0) {
