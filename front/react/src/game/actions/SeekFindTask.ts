@@ -141,6 +141,11 @@ export class SeekFindTask extends BaseTask implements Task {
         // const squares = new Set([1, 4, 9]);
         // console.log(odds.difference(squares)); // Set(3) { 3, 5, 7 }
 
+        if(nextCoords.length === 0) {
+            const characterPos = this.gridEngine.getPosition(this.character.getIdTag());
+            nextCoords = [characterPos.x, characterPos.y];
+        }
+
         return nextCoords;
     }
 
@@ -209,6 +214,7 @@ export class SeekFindTask extends BaseTask implements Task {
             const [x, y] = this.itemsFoundCoords.shift()!;
             m.posX = x;
             m.posY = y;
+            m.distanceFromTarget = [1, 1];
             i.posX = x;
             i.posY = y;
 
@@ -216,6 +222,7 @@ export class SeekFindTask extends BaseTask implements Task {
             const nextCoords = this.decideNextMove();
             m.posX = nextCoords[0];
             m.posY = nextCoords[1];
+            m.distanceFromTarget = [0, 0];
         }
 
         if(this.outputDataTaskIds.moveCoords.length > 0) {
