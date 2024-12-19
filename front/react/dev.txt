@@ -383,3 +383,27 @@ const startX = 2, startY = 5, visionRadius = 1;
 
 const path = exploreArea(area, startX, startY, visionRadius);
 console.log("Optimal path to cover area:", path);
+
+
+
+https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/
+
+
+https://legacy.reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html
+https://legacy.reactjs.org/docs/hooks-faq.html
+https://legacy.reactjs.org/docs/hooks-effect.html
+https://developer.chrome.com/blog/using-requestidlecallback
+
+
+https://www.swyx.io/hooks
+https://www.developerway.com/posts/use-transition
+https://medium.com/@azizhk/building-an-async-react-renderer-with-diffing-in-web-worker-f3be07f16d90
+
+
+
+https://overreacted.io/how-are-function-components-different-from-classes/ (check mutable this!!!!)
+https://github.com/vercel/next-learn/tree/main/dashboard/final-example (check server actions!!!)
+
+
+
+https://blog.logrocket.com/deep-dive-react-fiber/
